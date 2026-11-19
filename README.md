@@ -237,8 +237,8 @@ cluster that runs it:
 
 - [Durable Envision](https://github.com/iw/durable-envision), a discrete-event simulator that
   surfaces hotspots in Temporal Server clusters on EKS before they show up in production.
-- [Durable Inquiry](https://github.com/iw/kyumei), evidence-driven diagnostics that find
-  out why a running Temporal deployment is misbehaving.
+- [Durable Inquiry](https://github.com/iw/durable-inquiry), evidence-driven diagnostics
+  that find out why a running Temporal deployment is misbehaving.
 
 ## Built with Claude
 
