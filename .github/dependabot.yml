@@ -34,5 +34,15 @@ updates:
       # needs that version changed in it.
       - dependency-name: "com.jetbrains.intellij.platform:*"
       - dependency-name: "com.jetbrains.intellij.java:*"
+      # The Analysis API runs on these but leaves them out of its published metadata, so the
+      # catalogue names the versions it was built against. They move with Kotlin, by hand.
+      - dependency-name: "com.github.ben-manes.caffeine:caffeine"
+      - dependency-name: "org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm"
+      # The Temporal SDK reads event histories with this library and is built and tested with
+      # the catalogue's version. It moves with the SDK, by hand.
+      - dependency-name: "com.jayway.jsonpath:json-path"
+      # A new major version of JUnit is a change of its own, made deliberately.
+      - dependency-name: "org.junit:junit-bom"
+        update-types: ["version-update:semver-major"]
     # Not held back, but not routine: a new layout engine (org.eclipse.elk) or typeface
     # (flatlaf-fonts-inter) arranges every diagram anew. Compare drawings before merging.
