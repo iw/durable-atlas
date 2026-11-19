@@ -7,18 +7,18 @@ clikt = "5.1.0"
 temporal = "1.41.1"
 # The Temporal SDK reads event histories from JSON with this library but leaves it to its users
 # to supply. This is the version the SDK itself is built and tested with.
-json-path = "2.9.0"
+json-path = "3.0.0"
 # The Temporal SDK logs through SLF4J. The tool gives it nowhere to log to, on purpose.
 slf4j = "2.0.20"
-junit = "5.14.4"
+junit = "6.1.3"
 # The standalone Kotlin Analysis API. It is not a stable API: its artifacts must have exactly the
 # version of the Kotlin compiler they wrap, and the IntelliJ platform modules must have exactly the
 # version that Kotlin release was built against (`versions.intellijSdk` in the Kotlin repository's
 # gradle/versions.properties at the release tag).
 intellij-platform = "251.27812.49"
 # Used by the Analysis API but missing from its published metadata.
-caffeine = "2.9.3"
-kotlinx-collections-immutable = "0.5.1"
+caffeine = "3.3.1"
+kotlinx-collections-immutable = "0.5.2"
 json-schema-validator = "3.0.9"
 # Layout engine of the SVG diagrams (EPL-2.0). It asks for Guava as an open version range, so
 # Guava is left out of its dependencies and named here instead.
