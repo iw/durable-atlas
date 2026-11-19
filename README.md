@@ -235,7 +235,7 @@ are in [docs/decisions.md](docs/decisions.md).
 Durable Atlas shows what a workflow's code can do. Two sister projects look at the
 cluster that runs it:
 
-- [Durable Envision](https://github.com/iw/tempdes), a discrete-event simulator that
+- [Durable Envision](https://github.com/iw/durable-envision), a discrete-event simulator that
   surfaces hotspots in Temporal Server clusters on EKS before they show up in production.
 - [Durable Inquiry](https://github.com/iw/kyumei), evidence-driven diagnostics that find
   out why a running Temporal deployment is misbehaving.
