@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Named",
+  "interface": "extensions.Named",
+  "implementation": "extensions.NamedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Named",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1122075b21",
+      "kind": "activity",
+      "name": "state",
+      "taskQueue": "base",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Named.kt",
+        "line": 59
+      }
+    },
+    {
+      "id": "n13d1fc4d19",
+      "kind": "activity",
+      "name": "One",
+      "taskQueue": "base",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Named.kt",
+        "line": 53
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Named.kt",
+        "line": 52
+      }
+    },
+    {
+      "id": "n8eb539a969",
+      "kind": "signalExternal",
+      "name": "nudge",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Named.kt",
+        "line": 58
+      }
+    },
+    {
+      "id": "nd75573c7bc",
+      "kind": "childWorkflow",
+      "name": "SubFlow",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Named.kt",
+        "line": 55
+      }
+    },
+    {
+      "id": "ne389680c4b",
+      "kind": "childWorkflow",
+      "name": "SubFlow",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Named.kt",
+        "line": 57
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n1122075b21",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n13d1fc4d19",
+      "to": "nd75573c7bc"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n13d1fc4d19"
+    },
+    {
+      "from": "n8eb539a969",
+      "to": "n1122075b21"
+    },
+    {
+      "from": "nd75573c7bc",
+      "to": "ne389680c4b"
+    },
+    {
+      "from": "ne389680c4b",
+      "to": "n8eb539a969"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 0
+  }
+}

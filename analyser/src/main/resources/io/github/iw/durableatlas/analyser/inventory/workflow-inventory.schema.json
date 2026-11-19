@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:durable-atlas:schema:workflow-inventory:1",
+  "title": "Workflow inventory",
+  "description": "The Temporal workflow types and activity interfaces that one commit of a repository declares.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "commit",
+    "modelMode",
+    "workflows",
+    "activityInterfaces"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "description": "Version of this format.",
+      "const": 1
+    },
+    "commit": {
+      "description": "Commit of the analysed repository the inventory was produced from.",
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "modelMode": {
+      "description": "How the source model was obtained.",
+      "enum": ["gradle", "degraded"]
+    },
+    "workflows": {
+      "description": "Workflow types, ordered by workflow type and then by interface.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/workflow" }
+    },
+    "activityInterfaces": {
+      "description": "Activity interfaces, ordered by interface.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/activityInterface" }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "modulePath": {
+      "description": "Path of a module of the analysed repository.",
+      "type": "string",
+      "pattern": "^:"
+    },
+    "location": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file", "line"],
+      "properties": {
+        "file": {
+          "description": "Path relative to the root of the analysed repository, with / separators.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "line": {
+          "description": "1-based line number.",
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "entryPoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "name", "method"],
+      "properties": {
+        "kind": {
+          "enum": ["workflowMethod", "signal", "query", "update", "updateValidator"]
+        },
+        "name": {
+          "description": "Workflow type, signal, query or update name as registered with Temporal. An update validator carries the name of its update.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "method": {
+          "description": "Name of the interface method.",
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["class"],
+      "properties": {
+        "class": {
+          "description": "Fully qualified name of the implementing class.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "module": { "$ref": "#/$defs/modulePath" },
+        "loc": { "$ref": "#/$defs/location" },
+        "additionalEntryPoints": {
+          "description": "Handlers the class registers through workflow interfaces other than the one that names the workflow type and its supertypes.",
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/entryPoint" }
+        }
+      }
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workflowType", "interface", "entryPoints", "implementations"],
+      "properties": {
+        "workflowType": {
+          "description": "Workflow type name as registered with Temporal. A class that implements the SDK's DynamicWorkflow runs for every workflow type without an implementation of its own and has no such name: it is listed as 'dynamic-' followed by its simple name, with the SDK's interface as its interface.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "interface": {
+          "description": "Fully qualified name of the workflow interface.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "module": {
+          "description": "Module that declares the interface. Absent if the interface comes from a library.",
+          "$ref": "#/$defs/modulePath"
+        },
+        "loc": {
+          "description": "Where the interface is declared. Absent if the interface comes from a library.",
+          "$ref": "#/$defs/location"
+        },
+        "entryPoints": {
+          "description": "The workflow method first, then signals, queries, updates and update validators, each ordered by name.",
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/entryPoint" },
+          "prefixItems": [
+            {
+              "properties": { "kind": { "const": "workflowMethod" } }
+            }
+          ]
+        },
+        "implementations": {
+          "description": "Classes that implement the interface, ordered by name.",
+          "type": "array",
+          "items": { "$ref": "#/$defs/implementation" }
+        }
+      }
+    },
+    "activityInterface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["interface", "activities", "implementations"],
+      "properties": {
+        "interface": {
+          "description": "Fully qualified name of the activity interface.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "module": {
+          "description": "Module that declares the interface, in Kotlin or in Java. Absent if the interface comes from a library.",
+          "$ref": "#/$defs/modulePath"
+        },
+        "loc": {
+          "description": "Where the interface is declared. Absent if the interface comes from a library.",
+          "$ref": "#/$defs/location"
+        },
+        "namePrefix": {
+          "description": "Prefix of the interface's default activity type names.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "activities": {
+          "description": "The activity types the interface registers, ordered by name.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "method"],
+            "properties": {
+              "name": {
+                "description": "Activity type name as registered with Temporal.",
+                "$ref": "#/$defs/nonEmptyString"
+              },
+              "method": {
+                "description": "Name of the interface method.",
+                "$ref": "#/$defs/nonEmptyString"
+              }
+            }
+          }
+        },
+        "implementations": {
+          "description": "Classes that implement the interface, ordered by name.",
+          "type": "array",
+          "items": { "$ref": "#/$defs/implementation" }
+        }
+      }
+    }
+  }
+}

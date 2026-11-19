@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "SignalExternalWorkflow",
+  "interface": "com.example.fixture.workflows.primitives.SignalExternalWorkflow",
+  "implementation": "com.example.fixture.workflows.primitives.SignalExternalWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "SignalExternalWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/SignalExternalWorkflow.kt",
+        "line": 15
+      }
+    },
+    {
+      "id": "n974866628f",
+      "kind": "signalExternal",
+      "name": "approve",
+      "label": "ApprovalWorkflow.approve",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/SignalExternalWorkflow.kt",
+        "line": 18
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "n974866628f"
+    },
+    {
+      "from": "n974866628f",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 3,
+    "unknown": 0
+  }
+}

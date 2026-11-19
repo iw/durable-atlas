@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "TimerWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 5,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "TimerWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n4b6607a4c0",
+      "kind": "timer",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n7eca90a3ef",
+      "kind": "timer",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "neb81874bc3",
+      "kind": "timer",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n4b6607a4c0",
+      "to": "n7eca90a3ef",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "neb81874bc3",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n7eca90a3ef",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "neb81874bc3",
+      "to": "n4b6607a4c0",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "neverHit": [],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "TimerWorkflow.json",
+      "runId": "03c42ecb-44d5-4dc2-bdaf-75d404734538",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 5,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

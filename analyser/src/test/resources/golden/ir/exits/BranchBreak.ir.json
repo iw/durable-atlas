@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "BranchBreak",
+  "interface": "exits.BranchBreak",
+  "implementation": "exits.BranchBreakImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "BranchBreak",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n175c0e7a8e",
+      "kind": "activity",
+      "name": "Prepare",
+      "parent": "nec0d6c17d6",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/BranchBreak.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "n42250bd72f",
+      "kind": "branch",
+      "label": "id == \"last\"",
+      "parent": "nec0d6c17d6",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/BranchBreak.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "n63a08f05b2",
+      "kind": "activity",
+      "name": "Report",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/BranchBreak.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/BranchBreak.kt",
+        "line": 19
+      }
+    },
+    {
+      "id": "nec0d6c17d6",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/BranchBreak.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n175c0e7a8e",
+      "to": "n42250bd72f"
+    },
+    {
+      "from": "n42250bd72f",
+      "to": "n63a08f05b2",
+      "label": "yes"
+    },
+    {
+      "from": "n42250bd72f",
+      "to": "nec0d6c17d6",
+      "label": "no"
+    },
+    {
+      "from": "n63a08f05b2",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nec0d6c17d6"
+    },
+    {
+      "from": "nec0d6c17d6",
+      "to": "n63a08f05b2"
+    }
+  ],
+  "stats": {
+    "nodes": 6,
+    "unknown": 0
+  }
+}

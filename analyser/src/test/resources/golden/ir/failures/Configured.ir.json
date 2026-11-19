@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Configured",
+  "interface": "failing.Configured",
+  "implementation": "failing.ConfiguredImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Configured",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1b01def306",
+      "kind": "branch",
+      "label": "first == \"unbooked\"",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Configured.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n215f6702d4",
+      "kind": "fail",
+      "name": "LedgerFault",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Configured.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n2beeed7fc5",
+      "kind": "fail",
+      "name": "RejectedOrder",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Configured.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "n59a91943cf",
+      "kind": "branch",
+      "label": "count > 5",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Configured.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n5f69d7629b",
+      "kind": "fail",
+      "name": "RejectedPayment",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Configured.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Configured.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "nb8a6ef4c3b",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Configured.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nbd3e43b7f8",
+      "kind": "branch",
+      "label": "first == \"none\"",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Configured.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "ned0b251876",
+      "kind": "branch",
+      "label": "input.isBlank()",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Configured.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "ned1476e279",
+      "kind": "fail",
+      "name": "StockFault",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Configured.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf19e501376",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Configured.kt",
+        "line": 31
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n1b01def306",
+      "to": "n215f6702d4",
+      "label": "yes"
+    },
+    {
+      "from": "n1b01def306",
+      "to": "nb8a6ef4c3b",
+      "label": "no"
+    },
+    {
+      "from": "n59a91943cf",
+      "to": "n5f69d7629b",
+      "label": "yes"
+    },
+    {
+      "from": "n59a91943cf",
+      "to": "nf19e501376",
+      "label": "no"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "ned0b251876"
+    },
+    {
+      "from": "nb8a6ef4c3b",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nbd3e43b7f8",
+      "to": "n1b01def306",
+      "label": "no"
+    },
+    {
+      "from": "nbd3e43b7f8",
+      "to": "ned1476e279",
+      "label": "yes"
+    },
+    {
+      "from": "ned0b251876",
+      "to": "n2beeed7fc5",
+      "label": "yes"
+    },
+    {
+      "from": "ned0b251876",
+      "to": "n59a91943cf",
+      "label": "no"
+    },
+    {
+      "from": "nf19e501376",
+      "to": "nbd3e43b7f8"
+    }
+  ],
+  "stats": {
+    "nodes": 12,
+    "unknown": 0
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "AwaitingWorkflow",
+  "interface": "linear.AwaitingWorkflow",
+  "implementation": "linear.AwaitingWorkflowImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "AwaitingWorkflow",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-approve",
+      "kind": "signal",
+      "name": "approve",
+      "start": "n62b63817dd",
+      "writes": [
+        "approved"
+      ]
+    },
+    {
+      "id": "signal-cancel",
+      "kind": "signal",
+      "name": "cancel",
+      "start": "n5363e854ab",
+      "writes": [
+        "cancelled"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1479614b80",
+      "kind": "end"
+    },
+    {
+      "id": "n50961b338a",
+      "kind": "await",
+      "reads": [
+        "approved",
+        "cancelled"
+      ],
+      "label": "approved or cancelled",
+      "loc": {
+        "file": "app/src/main/kotlin/linear/Linear.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "n5363e854ab",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/linear/Linear.kt",
+        "line": 58
+      }
+    },
+    {
+      "id": "n62b63817dd",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/linear/Linear.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/linear/Linear.kt",
+        "line": 49
+      }
+    },
+    {
+      "id": "nb628d9b4b3",
+      "kind": "activity",
+      "name": "MailSend",
+      "taskQueue": "mail",
+      "timeout": "PT2H",
+      "loc": {
+        "file": "app/src/main/kotlin/linear/Linear.kt",
+        "line": 51
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf45401b72d",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n50961b338a",
+      "to": "nb628d9b4b3"
+    },
+    {
+      "from": "n5363e854ab",
+      "to": "n1479614b80"
+    },
+    {
+      "from": "n62b63817dd",
+      "to": "nf45401b72d"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n50961b338a"
+    },
+    {
+      "from": "nb628d9b4b3",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "signal-approve",
+      "to": "n50961b338a",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-cancel",
+      "to": "n50961b338a",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 8,
+    "unknown": 0
+  }
+}

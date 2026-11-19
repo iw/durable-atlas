@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "TypedActivityWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 10,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "TypedActivityWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0a5c8a347e",
+      "kind": "activity",
+      "name": "ReleaseStock",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n129648fc52",
+      "kind": "activity",
+      "name": "CapturePayment",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n3c5d78278e",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n3fdf75bb11",
+      "kind": "activity",
+      "name": "PaymentCharge",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0a5c8a347e",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n129648fc52",
+      "to": "n0a5c8a347e",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n3c5d78278e",
+      "to": "n3fdf75bb11",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n3fdf75bb11",
+      "to": "n129648fc52",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n3c5d78278e",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "neverHit": [],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "TypedActivityWorkflow.json",
+      "runId": "65ba41f7-a628-4452-a53e-9ae8d7ad7b85",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 10,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

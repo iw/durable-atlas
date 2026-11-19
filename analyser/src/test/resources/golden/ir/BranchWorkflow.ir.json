@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "BranchWorkflow",
+  "interface": "com.example.fixture.workflows.controlflow.BranchWorkflow",
+  "implementation": "com.example.fixture.workflows.controlflow.BranchWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "BranchWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1e0e831808",
+      "kind": "timer",
+      "duration": "PT1M",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/BranchWorkflow.kt",
+        "line": 26
+      }
+    },
+    {
+      "id": "n2ff7b340a6",
+      "kind": "activity",
+      "name": "NotifySms",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/BranchWorkflow.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "n37c8e4b5dd",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/BranchWorkflow.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n46371a38b7",
+      "kind": "activity",
+      "name": "NotifySms",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/BranchWorkflow.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/BranchWorkflow.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "n6beccee1c9",
+      "kind": "branch",
+      "label": "urgent",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/BranchWorkflow.kt",
+        "line": 23
+      }
+    },
+    {
+      "id": "n9f03e2b7d4",
+      "kind": "branch",
+      "label": "channel",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/BranchWorkflow.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n1e0e831808",
+      "to": "n9f03e2b7d4"
+    },
+    {
+      "from": "n2ff7b340a6",
+      "to": "n9f03e2b7d4"
+    },
+    {
+      "from": "n37c8e4b5dd",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n46371a38b7",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n6beccee1c9"
+    },
+    {
+      "from": "n6beccee1c9",
+      "to": "n1e0e831808",
+      "label": "no"
+    },
+    {
+      "from": "n6beccee1c9",
+      "to": "n2ff7b340a6",
+      "label": "yes"
+    },
+    {
+      "from": "n9f03e2b7d4",
+      "to": "n37c8e4b5dd",
+      "label": "\"email\""
+    },
+    {
+      "from": "n9f03e2b7d4",
+      "to": "n46371a38b7",
+      "label": "\"sms\""
+    },
+    {
+      "from": "n9f03e2b7d4",
+      "to": "nedd528afe0",
+      "label": "else"
+    }
+  ],
+  "stats": {
+    "nodes": 8,
+    "unknown": 0
+  }
+}

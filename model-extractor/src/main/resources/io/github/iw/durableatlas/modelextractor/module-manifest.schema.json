@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:durable-atlas:schema:module-manifest:1",
+  "title": "Module manifest",
+  "description": "Source directories, sibling module dependencies and compile classpath of one module of an analysed repository.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "commit",
+    "path",
+    "sources",
+    "projectDeps",
+    "jars",
+    "mode"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "description": "Version of this format.",
+      "const": 1
+    },
+    "commit": {
+      "description": "Full SHA of the commit the module was read from.",
+      "$ref": "#/$defs/commit"
+    },
+    "path": {
+      "description": "Gradle path of the module.",
+      "$ref": "#/$defs/modulePath"
+    },
+    "sources": {
+      "description": "Source directories, relative to the root of the analysed repository, sorted. The model holds a copy of each under its source directory.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/relativePath" },
+      "uniqueItems": true
+    },
+    "projectDeps": {
+      "description": "Paths of the other modules on the compile classpath, sorted.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/modulePath" },
+      "uniqueItems": true
+    },
+    "jars": {
+      "description": "Jars on the compile classpath, in classpath order. Absolute paths point outside the analysed repository; relative paths name files of the repository, copied to the model like the sources.",
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "mode": {
+      "description": "How the model was obtained.",
+      "enum": ["gradle", "degraded"]
+    }
+  },
+  "$defs": {
+    "commit": {
+      "type": "string",
+      "pattern": "^([0-9a-f]{40}|[0-9a-f]{64})$"
+    },
+    "modulePath": {
+      "type": "string",
+      "pattern": "^:"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[^/\\\\]"
+    }
+  }
+}

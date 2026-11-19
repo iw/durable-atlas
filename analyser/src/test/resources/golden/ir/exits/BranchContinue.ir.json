@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "BranchContinue",
+  "interface": "exits.BranchContinue",
+  "implementation": "exits.BranchContinueImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "BranchContinue",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1a05d8f4ec",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/BranchContinue.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "n33f7fad49f",
+      "kind": "branch",
+      "label": "id == \"skip\"",
+      "parent": "n1a05d8f4ec",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/BranchContinue.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/BranchContinue.kt",
+        "line": 19
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf000c3525e",
+      "kind": "activity",
+      "name": "Prepare",
+      "parent": "n1a05d8f4ec",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/BranchContinue.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "nfe9f4db109",
+      "kind": "activity",
+      "name": "Report",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/BranchContinue.kt",
+        "line": 24
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n1a05d8f4ec",
+      "to": "nfe9f4db109"
+    },
+    {
+      "from": "n33f7fad49f",
+      "to": "n1a05d8f4ec",
+      "label": "no"
+    },
+    {
+      "from": "n33f7fad49f",
+      "to": "n1a05d8f4ec",
+      "label": "yes"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n1a05d8f4ec"
+    },
+    {
+      "from": "nf000c3525e",
+      "to": "n33f7fad49f"
+    },
+    {
+      "from": "nfe9f4db109",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 6,
+    "unknown": 0
+  }
+}

@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "LastLoopBreak",
+  "interface": "ends.LastLoopBreak",
+  "implementation": "ends.LastLoopBreakImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "LastLoopBreak",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0b55f93927",
+      "kind": "activity",
+      "name": "Check",
+      "parent": "n8d7b79b0cd",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LastLoopBreak.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n1b5bfb5a5e",
+      "kind": "loop",
+      "label": "for each part",
+      "parent": "nb7ac58c9a7",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LastLoopBreak.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "n39042db338",
+      "kind": "activity",
+      "name": "Prepare",
+      "parent": "nb7ac58c9a7",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LastLoopBreak.kt",
+        "line": 19
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LastLoopBreak.kt",
+        "line": 17
+      }
+    },
+    {
+      "id": "n779b561d41",
+      "kind": "activity",
+      "name": "Work",
+      "parent": "n1b5bfb5a5e",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LastLoopBreak.kt",
+        "line": 23
+      }
+    },
+    {
+      "id": "n86aab8a3df",
+      "kind": "branch",
+      "label": "part == \"x\"",
+      "parent": "n1b5bfb5a5e",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LastLoopBreak.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "n8d0d0f86c1",
+      "kind": "activity",
+      "name": "Report",
+      "parent": "n8d7b79b0cd",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LastLoopBreak.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n8d7b79b0cd",
+      "kind": "loop",
+      "label": "while tasks.check(id)",
+      "parent": "nf56ddcbe53",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LastLoopBreak.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "nb7ac58c9a7",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LastLoopBreak.kt",
+        "line": 18
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf470654b89",
+      "kind": "branch",
+      "label": "part == \"y\"",
+      "parent": "n1b5bfb5a5e",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LastLoopBreak.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "nf56ddcbe53",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LastLoopBreak.kt",
+        "line": 26
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0b55f93927",
+      "to": "n8d0d0f86c1"
+    },
+    {
+      "from": "n39042db338",
+      "to": "n1b5bfb5a5e"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nb7ac58c9a7"
+    },
+    {
+      "from": "n86aab8a3df",
+      "to": "nb7ac58c9a7",
+      "label": "yes"
+    },
+    {
+      "from": "n86aab8a3df",
+      "to": "nf470654b89",
+      "label": "no"
+    },
+    {
+      "from": "n8d0d0f86c1",
+      "to": "nf56ddcbe53"
+    },
+    {
+      "from": "nb7ac58c9a7",
+      "to": "nf56ddcbe53"
+    },
+    {
+      "from": "nf470654b89",
+      "to": "n779b561d41",
+      "label": "no"
+    },
+    {
+      "from": "nf470654b89",
+      "to": "nb7ac58c9a7",
+      "label": "yes"
+    },
+    {
+      "from": "nf56ddcbe53",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 12,
+    "unknown": 0
+  }
+}

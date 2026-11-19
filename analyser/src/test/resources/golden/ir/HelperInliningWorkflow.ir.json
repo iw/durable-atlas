@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "HelperInliningWorkflow",
+  "interface": "com.example.fixture.workflows.inlining.HelperInliningWorkflow",
+  "implementation": "com.example.fixture.workflows.inlining.HelperInliningWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "HelperInliningWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n076f31a61c",
+      "kind": "timer",
+      "duration": "PT5S",
+      "loc": {
+        "file": "helpers/src/main/kotlin/com/example/fixture/helpers/Pauses.kt",
+        "line": 8
+      }
+    },
+    {
+      "id": "n1cbe1d2198",
+      "kind": "activity",
+      "name": "PaymentCharge",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "helpers/src/main/kotlin/com/example/fixture/helpers/PaymentProcessor.kt",
+        "line": 10
+      }
+    },
+    {
+      "id": "n3a10959ad2",
+      "kind": "activity",
+      "name": "NotifySms",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/inlining/HelperInliningWorkflow.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/inlining/HelperInliningWorkflow.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n7fccd92003",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "timeout": "PT30S",
+      "parent": "n949f088c62",
+      "loc": {
+        "file": "helpers/src/main/kotlin/com/example/fixture/helpers/InventoryHelpers.kt",
+        "line": 9
+      }
+    },
+    {
+      "id": "n8840af525a",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "helpers/src/main/kotlin/com/example/fixture/helpers/NotificationExtensions.kt",
+        "line": 7
+      }
+    },
+    {
+      "id": "n949f088c62",
+      "kind": "loop",
+      "label": "for each sku",
+      "loc": {
+        "file": "helpers/src/main/kotlin/com/example/fixture/helpers/InventoryHelpers.kt",
+        "line": 8
+      }
+    },
+    {
+      "id": "nc73f691eb1",
+      "kind": "activity",
+      "name": "CapturePayment",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "helpers/src/main/kotlin/com/example/fixture/helpers/PaymentProcessor.kt",
+        "line": 11
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "neeb81facf3",
+      "kind": "activity",
+      "name": "NotifyAudit",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "helpers/src/main/kotlin/com/example/fixture/helpers/AuditTrail.kt",
+        "line": 12
+      }
+    },
+    {
+      "id": "nf7da93fe86",
+      "kind": "activity",
+      "name": "QuoteShipping",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "helpers/src/main/kotlin/com/example/fixture/helpers/ShallowChain.kt",
+        "line": 10
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n076f31a61c",
+      "to": "nf7da93fe86"
+    },
+    {
+      "from": "n1cbe1d2198",
+      "to": "nc73f691eb1"
+    },
+    {
+      "from": "n3a10959ad2",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n949f088c62"
+    },
+    {
+      "from": "n8840af525a",
+      "to": "neeb81facf3"
+    },
+    {
+      "from": "n949f088c62",
+      "to": "n1cbe1d2198"
+    },
+    {
+      "from": "nc73f691eb1",
+      "to": "n076f31a61c"
+    },
+    {
+      "from": "neeb81facf3",
+      "to": "n3a10959ad2"
+    },
+    {
+      "from": "nf7da93fe86",
+      "to": "n8840af525a"
+    }
+  ],
+  "stats": {
+    "nodes": 11,
+    "unknown": 0
+  }
+}

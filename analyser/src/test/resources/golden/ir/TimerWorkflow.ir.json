@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "TimerWorkflow",
+  "interface": "com.example.fixture.workflows.primitives.TimerWorkflow",
+  "implementation": "com.example.fixture.workflows.primitives.TimerWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "TimerWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n4b6607a4c0",
+      "kind": "timer",
+      "duration": "PT1S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/TimerWorkflow.kt",
+        "line": 17
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/TimerWorkflow.kt",
+        "line": 15
+      }
+    },
+    {
+      "id": "n7eca90a3ef",
+      "kind": "timer",
+      "duration": "PT5M",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/TimerWorkflow.kt",
+        "line": 18
+      }
+    },
+    {
+      "id": "neb81874bc3",
+      "kind": "timer",
+      "duration": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/TimerWorkflow.kt",
+        "line": 16
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n4b6607a4c0",
+      "to": "n7eca90a3ef"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "neb81874bc3"
+    },
+    {
+      "from": "n7eca90a3ef",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "neb81874bc3",
+      "to": "n4b6607a4c0"
+    }
+  ],
+  "stats": {
+    "nodes": 5,
+    "unknown": 0
+  }
+}

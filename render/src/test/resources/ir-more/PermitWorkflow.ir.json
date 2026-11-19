@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 1,
+  "commit": "3f786850e387550fdab836ed7e6dc881de23001b",
+  "modelMode": "gradle",
+  "workflowType": "PermitWorkflow",
+  "interface": "com.example.packing.PermitWorkflow",
+  "implementation": "com.example.packing.PermitWorkflowImpl",
+  "module": ":packing",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "PermitWorkflow",
+      "start": "p00"
+    },
+    {
+      "id": "update-weigh",
+      "kind": "update",
+      "name": "weigh",
+      "start": "p20",
+      "reads": [
+        "permits"
+      ],
+      "writes": [
+        "permits"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "p00",
+      "kind": "start",
+      "loc": {
+        "file": "packing/src/main/kotlin/com/example/packing/PermitWorkflowImpl.kt",
+        "line": 18
+      }
+    },
+    {
+      "id": "p01",
+      "kind": "parallel",
+      "loc": {
+        "file": "packing/src/main/kotlin/com/example/packing/PermitWorkflowImpl.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "p02",
+      "kind": "await",
+      "reads": [
+        "permits"
+      ],
+      "label": "permits.acquire()",
+      "parent": "p01",
+      "loc": {
+        "file": "packing/src/main/kotlin/com/example/packing/PermitWorkflowImpl.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "p03",
+      "kind": "activity",
+      "name": "PackParcel",
+      "timeout": "PT30S",
+      "parent": "p01",
+      "loc": {
+        "file": "packing/src/main/kotlin/com/example/packing/PermitWorkflowImpl.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "p04",
+      "kind": "await",
+      "reads": [
+        "permits"
+      ],
+      "label": "permits.acquire()",
+      "parent": "p01",
+      "loc": {
+        "file": "packing/src/main/kotlin/com/example/packing/PermitWorkflowImpl.kt",
+        "line": 26
+      }
+    },
+    {
+      "id": "p05",
+      "kind": "activity",
+      "name": "PrintLabel",
+      "timeout": "PT30S",
+      "parent": "p01",
+      "loc": {
+        "file": "packing/src/main/kotlin/com/example/packing/PermitWorkflowImpl.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "p06",
+      "kind": "activity",
+      "name": "BookCourier",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "packing/src/main/kotlin/com/example/packing/PermitWorkflowImpl.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "p07",
+      "kind": "end"
+    },
+    {
+      "id": "p20",
+      "kind": "start",
+      "loc": {
+        "file": "packing/src/main/kotlin/com/example/packing/PermitWorkflowImpl.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "p21",
+      "kind": "await",
+      "timeout": "PT30S",
+      "reads": [
+        "permits"
+      ],
+      "label": "permits.tryAcquire()",
+      "loc": {
+        "file": "packing/src/main/kotlin/com/example/packing/PermitWorkflowImpl.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "p22",
+      "kind": "activity",
+      "name": "WeighParcel",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "packing/src/main/kotlin/com/example/packing/PermitWorkflowImpl.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "p23",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "main",
+      "to": "p02",
+      "kind": "wakes",
+      "label": "permits"
+    },
+    {
+      "from": "main",
+      "to": "p04",
+      "kind": "wakes",
+      "label": "permits"
+    },
+    {
+      "from": "main",
+      "to": "p21",
+      "kind": "wakes",
+      "label": "permits"
+    },
+    {
+      "from": "p00",
+      "to": "p01"
+    },
+    {
+      "from": "p01",
+      "to": "p06"
+    },
+    {
+      "from": "p02",
+      "to": "p03"
+    },
+    {
+      "from": "p04",
+      "to": "p05"
+    },
+    {
+      "from": "p06",
+      "to": "p07"
+    },
+    {
+      "from": "p20",
+      "to": "p21"
+    },
+    {
+      "from": "p21",
+      "to": "p22"
+    },
+    {
+      "from": "p21",
+      "to": "p23",
+      "kind": "timeout"
+    },
+    {
+      "from": "p22",
+      "to": "p23"
+    },
+    {
+      "from": "update-weigh",
+      "to": "p02",
+      "kind": "wakes"
+    },
+    {
+      "from": "update-weigh",
+      "to": "p04",
+      "kind": "wakes"
+    },
+    {
+      "from": "update-weigh",
+      "to": "p21",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 12,
+    "unknown": 0
+  }
+}

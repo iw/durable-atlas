@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "SignalExternalWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 3,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "SignalExternalWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n974866628f",
+      "kind": "signalExternal",
+      "name": "approve",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "n974866628f",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n974866628f",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "neverHit": [],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "SignalExternalWorkflow.json",
+      "runId": "13bf2545-d365-4a2f-9eac-a443fca10ff0",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 3,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

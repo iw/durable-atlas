@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:durable-atlas:schema:model-index:1",
+  "title": "Model index",
+  "description": "Table of contents of a model: the modules it describes and the modules that were left out.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "commit",
+    "mode",
+    "modules",
+    "dropped"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "description": "Version of this format.",
+      "const": 1
+    },
+    "commit": {
+      "description": "Full SHA of the commit the model was extracted from.",
+      "type": "string",
+      "pattern": "^([0-9a-f]{40}|[0-9a-f]{64})$"
+    },
+    "mode": {
+      "description": "How the model was obtained.",
+      "enum": ["gradle", "degraded"]
+    },
+    "modules": {
+      "description": "Modules with a manifest, sorted by path.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "manifest"],
+        "properties": {
+          "path": { "$ref": "#/$defs/modulePath" },
+          "manifest": {
+            "description": "Location of the module manifest, relative to the directory of the index.",
+            "type": "string",
+            "pattern": "^modules/[^/]+\\.json$"
+          }
+        }
+      }
+    },
+    "dropped": {
+      "description": "Modules of the repository that are not part of the model, sorted by path.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "reason"],
+        "properties": {
+          "path": { "$ref": "#/$defs/modulePath" },
+          "reason": {
+            "description": "Why the module was left out.",
+            "enum": ["no-temporal-usage", "not-a-jvm-module"]
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "modulePath": {
+      "type": "string",
+      "pattern": "^:"
+    }
+  }
+}

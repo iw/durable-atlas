@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Escaping",
+  "interface": "plain.Escaping",
+  "implementation": "plain.EscapingImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Escaping",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n2809287951",
+      "kind": "fail",
+      "name": "IllegalArgumentException",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Escaping.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n3f53826d76",
+      "kind": "fail",
+      "name": "IllegalStateException",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Escaping.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Escaping.kt",
+        "line": 26
+      }
+    },
+    {
+      "id": "n8386aa4b25",
+      "kind": "branch",
+      "label": "table[first] == null",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Escaping.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "n9889648615",
+      "kind": "fail",
+      "name": "IllegalStateException",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Escaping.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "na33d2e456b",
+      "kind": "branch",
+      "label": "EscapingImpl.validate throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Escaping.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "nabe50aaa2f",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Escaping.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "nb6f6ba22c0",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Escaping.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nfc4f4d3d90",
+      "kind": "branch",
+      "label": "EscapingImpl.limit throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Escaping.kt",
+        "line": 30
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "na33d2e456b"
+    },
+    {
+      "from": "n8386aa4b25",
+      "to": "n3f53826d76",
+      "label": "yes"
+    },
+    {
+      "from": "n8386aa4b25",
+      "to": "nfc4f4d3d90",
+      "label": "no"
+    },
+    {
+      "from": "na33d2e456b",
+      "to": "n2809287951",
+      "label": "yes"
+    },
+    {
+      "from": "na33d2e456b",
+      "to": "nabe50aaa2f",
+      "label": "no"
+    },
+    {
+      "from": "nabe50aaa2f",
+      "to": "n8386aa4b25"
+    },
+    {
+      "from": "nb6f6ba22c0",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nfc4f4d3d90",
+      "to": "n9889648615",
+      "label": "yes"
+    },
+    {
+      "from": "nfc4f4d3d90",
+      "to": "nb6f6ba22c0",
+      "label": "no"
+    }
+  ],
+  "stats": {
+    "nodes": 10,
+    "unknown": 0
+  }
+}

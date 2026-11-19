@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Race",
+  "interface": "patterns.Race",
+  "implementation": "patterns.RaceImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Race",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1172c6bd19",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Race.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n1c06ac49eb",
+      "kind": "cancelScope",
+      "label": "scope",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Race.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n249f50dd4e",
+      "kind": "parallel",
+      "join": "first",
+      "parent": "n1172c6bd19",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Race.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Race.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n8ec85feb10",
+      "kind": "activity",
+      "name": "Prepare",
+      "parent": "n249f50dd4e",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Race.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "ned3663927c",
+      "kind": "activity",
+      "name": "Report",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Race.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n1172c6bd19",
+      "to": "n1c06ac49eb"
+    },
+    {
+      "from": "n1c06ac49eb",
+      "to": "n1172c6bd19",
+      "kind": "cancels"
+    },
+    {
+      "from": "n1c06ac49eb",
+      "to": "ned3663927c"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n1172c6bd19"
+    },
+    {
+      "from": "ned3663927c",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 0
+  }
+}

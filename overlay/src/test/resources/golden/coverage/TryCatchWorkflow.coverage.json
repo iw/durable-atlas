@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "TryCatchWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 8,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "TryCatchWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n096d24196f",
+      "kind": "fail",
+      "name": "CanceledFailure",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "n4f9474c131",
+      "kind": "activity",
+      "name": "PaymentCharge",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n7cefdb5503",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "naaf91d28de",
+      "kind": "activity",
+      "name": "NotifyAudit",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "neec4be92b3",
+      "kind": "activity",
+      "name": "NotifyAudit",
+      "hits": 0,
+      "executions": 0
+    }
+  ],
+  "edges": [
+    {
+      "from": "n4f9474c131",
+      "to": "n7cefdb5503",
+      "kind": "exception",
+      "label": "ActivityFailure",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n4f9474c131",
+      "to": "naaf91d28de",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n4f9474c131",
+      "to": "neec4be92b3",
+      "kind": "exception",
+      "label": "CanceledFailure",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n4f9474c131",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n7cefdb5503",
+      "to": "naaf91d28de",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "naaf91d28de",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "neec4be92b3",
+      "to": "n096d24196f",
+      "hits": 0,
+      "executions": 0
+    }
+  ],
+  "neverHit": [
+    "n096d24196f",
+    "neec4be92b3"
+  ],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "TryCatchWorkflow.json",
+      "runId": "480f6e14-fbb3-4fac-9950-a73cd76d7e25",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 8,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

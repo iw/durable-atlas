@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Unjoined",
+  "interface": "patterns.Unjoined",
+  "implementation": "patterns.UnjoinedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Unjoined",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n20f5ea1fac",
+      "kind": "activity",
+      "name": "CleanUp",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Unjoined.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "n26920a2492",
+      "kind": "branch",
+      "label": "tasks.weigh(id)",
+      "parent": "n43038f27fb",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Unjoined.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n38f98022de",
+      "kind": "activity",
+      "name": "Check",
+      "parent": "n842942c806",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Unjoined.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n43038f27fb",
+      "kind": "parallel",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Unjoined.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n501c2c7786",
+      "kind": "activity",
+      "name": "Weigh",
+      "parent": "n43038f27fb",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Unjoined.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Unjoined.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n74c90cdc21",
+      "kind": "activity",
+      "name": "Prepare",
+      "waitsFor": "nothing",
+      "parent": "n842942c806",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Unjoined.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n75f61ce365",
+      "kind": "activity",
+      "name": "Load",
+      "parent": "n43038f27fb",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Unjoined.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n842942c806",
+      "kind": "parallel",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Unjoined.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "naa2324c4bc",
+      "kind": "activity",
+      "name": "Report",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Unjoined.kt",
+        "line": 45
+      }
+    },
+    {
+      "id": "nab4e2d5c0b",
+      "kind": "activity",
+      "name": "Audit",
+      "parent": "n43038f27fb",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Unjoined.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nc59a9cd78d",
+      "kind": "activity",
+      "name": "Announce",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Unjoined.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "nd69e4f7339",
+      "kind": "activity",
+      "name": "Undo",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Unjoined.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "ndf6d5d3a4c",
+      "kind": "activity",
+      "name": "Work",
+      "parent": "n842942c806",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Unjoined.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n20f5ea1fac",
+      "to": "naa2324c4bc",
+      "kind": "exception",
+      "label": "RuntimeException"
+    },
+    {
+      "from": "n20f5ea1fac",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n26920a2492",
+      "to": "n43038f27fb",
+      "label": "yes"
+    },
+    {
+      "from": "n26920a2492",
+      "to": "nab4e2d5c0b",
+      "label": "no"
+    },
+    {
+      "from": "n43038f27fb",
+      "to": "n842942c806"
+    },
+    {
+      "from": "n501c2c7786",
+      "to": "n26920a2492"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nc59a9cd78d"
+    },
+    {
+      "from": "n74c90cdc21",
+      "to": "ndf6d5d3a4c"
+    },
+    {
+      "from": "n75f61ce365",
+      "to": "n501c2c7786"
+    },
+    {
+      "from": "n842942c806",
+      "to": "nd69e4f7339"
+    },
+    {
+      "from": "naa2324c4bc",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nc59a9cd78d",
+      "to": "n43038f27fb"
+    },
+    {
+      "from": "nd69e4f7339",
+      "to": "n20f5ea1fac"
+    }
+  ],
+  "stats": {
+    "nodes": 15,
+    "unknown": 0
+  }
+}

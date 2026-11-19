@@ -1,0 +1,43 @@
+flowchart TD
+    n_p00(["start"])
+    subgraph n_p01_region ["parallel"]
+        n_p01(("fork"))
+        subgraph n_p01_lane1 ["branch 1"]
+            n_p02{{"await permits"}}
+            n_p03["PackParcel"]
+        end
+        subgraph n_p01_lane2 ["branch 2"]
+            n_p04{{"await permits"}}
+            n_p05["PrintLabel"]
+        end
+        n_p01_join(("join"))
+    end
+    n_p06["BookCourier"]
+    n_p07(["end"])
+    subgraph handlers ["handlers"]
+        subgraph h_update_weigh ["update weigh · reads#58; permits · writes#58; permits"]
+            n_p20(["start"])
+            n_p21{{"await permits<br/>timeout 30s"}}
+            n_p22["WeighParcel"]
+            n_p23(["end"])
+        end
+    end
+    n_p00 --> n_p01
+    n_p00 -.->|"permits"| n_p02
+    n_p00 -.->|"permits"| n_p04
+    n_p00 -.->|"permits"| n_p21
+    n_p01 --> n_p02
+    n_p01 --> n_p04
+    n_p01_join --> n_p06
+    n_p02 --> n_p03
+    n_p03 --> n_p01_join
+    n_p04 --> n_p05
+    n_p05 --> n_p01_join
+    n_p06 --> n_p07
+    n_p20 -.->|"permits"| n_p02
+    n_p20 -.->|"permits"| n_p04
+    n_p20 --> n_p21
+    n_p20 -.->|"permits"| n_p21
+    n_p21 --> n_p22
+    n_p21 -->|"timeout"| n_p23
+    n_p22 --> n_p23

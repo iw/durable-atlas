@@ -1,0 +1,984 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflows": [
+    {
+      "workflowType": "ApplicationFailureWorkflow",
+      "interface": "com.example.fixture.workflows.primitives.ApplicationFailureWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ApplicationFailureWorkflow.kt",
+        "line": 12
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "ApplicationFailureWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.primitives.ApplicationFailureWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ApplicationFailureWorkflow.kt",
+            "line": 17
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "ApprovalWorkflow",
+      "interface": "com.example.fixture.workflows.handlers.ApprovalWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/handlers/ApprovalWorkflow.kt",
+        "line": 11
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "ApprovalWorkflow",
+          "method": "run"
+        },
+        {
+          "kind": "signal",
+          "name": "approve",
+          "method": "onApprove"
+        },
+        {
+          "kind": "signal",
+          "name": "reject",
+          "method": "reject"
+        },
+        {
+          "kind": "query",
+          "name": "approvalCount",
+          "method": "approvalCount"
+        },
+        {
+          "kind": "query",
+          "name": "status",
+          "method": "currentStatus"
+        },
+        {
+          "kind": "update",
+          "name": "addNote",
+          "method": "addNote"
+        },
+        {
+          "kind": "update",
+          "name": "set-required-approvals",
+          "method": "setRequiredApprovals"
+        },
+        {
+          "kind": "updateValidator",
+          "name": "set-required-approvals",
+          "method": "validateRequiredApprovals"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.handlers.ApprovalWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/handlers/ApprovalWorkflowImpl.kt",
+            "line": 9
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "AwaitWorkflow",
+      "interface": "com.example.fixture.workflows.primitives.AwaitWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/AwaitWorkflow.kt",
+        "line": 10
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "AwaitWorkflow",
+          "method": "run"
+        },
+        {
+          "kind": "signal",
+          "name": "release",
+          "method": "release"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.primitives.AwaitWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/AwaitWorkflow.kt",
+            "line": 18
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "BranchWorkflow",
+      "interface": "com.example.fixture.workflows.controlflow.BranchWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/BranchWorkflow.kt",
+        "line": 13
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "BranchWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.controlflow.BranchWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/BranchWorkflow.kt",
+            "line": 18
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "ComputedActivityNameWorkflow",
+      "interface": "com.example.fixture.workflows.hardcases.ComputedActivityNameWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/hardcases/ComputedActivityNameWorkflow.kt",
+        "line": 9
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "ComputedActivityNameWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.hardcases.ComputedActivityNameWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/hardcases/ComputedActivityNameWorkflow.kt",
+            "line": 14
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "ContinueAsNewWorkflow",
+      "interface": "com.example.fixture.workflows.primitives.ContinueAsNewWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ContinueAsNewWorkflow.kt",
+        "line": 9
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "ContinueAsNewWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.primitives.ContinueAsNewWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ContinueAsNewWorkflow.kt",
+            "line": 14
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "DeepHelperChainWorkflow",
+      "interface": "com.example.fixture.workflows.hardcases.DeepHelperChainWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/hardcases/DeepHelperChainWorkflow.kt",
+        "line": 10
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "DeepHelperChainWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.hardcases.DeepHelperChainWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/hardcases/DeepHelperChainWorkflow.kt",
+            "line": 15
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "DynamicDispatchWorkflow",
+      "interface": "com.example.fixture.workflows.hardcases.DynamicDispatchWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/hardcases/DynamicDispatchWorkflow.kt",
+        "line": 12
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "DynamicDispatchWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.hardcases.DynamicDispatchWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/hardcases/DynamicDispatchWorkflow.kt",
+            "line": 17
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "DynamicFanOutWorkflow",
+      "interface": "com.example.fixture.workflows.controlflow.DynamicFanOutWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/DynamicFanOutWorkflow.kt",
+        "line": 11
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "DynamicFanOutWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.controlflow.DynamicFanOutWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/DynamicFanOutWorkflow.kt",
+            "line": 16
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "EarlyReturnWorkflow",
+      "interface": "com.example.fixture.workflows.controlflow.EarlyReturnWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/EarlyReturnWorkflow.kt",
+        "line": 11
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "EarlyReturnWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.controlflow.EarlyReturnWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/EarlyReturnWorkflow.kt",
+            "line": 16
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "GreetingChildWorkflow",
+      "interface": "com.example.fixture.workflows.primitives.GreetingChildWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ParentWorkflow.kt",
+        "line": 27
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "GreetingChildWorkflow",
+          "method": "greet"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.primitives.GreetingChildWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ParentWorkflow.kt",
+            "line": 33
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "HelperInliningWorkflow",
+      "interface": "com.example.fixture.workflows.inlining.HelperInliningWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/inlining/HelperInliningWorkflow.kt",
+        "line": 19
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "HelperInliningWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.inlining.HelperInliningWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/inlining/HelperInliningWorkflow.kt",
+            "line": 24
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "LocalActivityWorkflow",
+      "interface": "com.example.fixture.workflows.primitives.LocalActivityWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/LocalActivityWorkflow.kt",
+        "line": 12
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "LocalActivityWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.primitives.LocalActivityWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/LocalActivityWorkflow.kt",
+            "line": 17
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "LoopWorkflow",
+      "interface": "com.example.fixture.workflows.controlflow.LoopWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/LoopWorkflow.kt",
+        "line": 12
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "LoopWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.controlflow.LoopWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/LoopWorkflow.kt",
+            "line": 17
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "MethodReferenceWorkflow",
+      "interface": "com.example.fixture.workflows.primitives.MethodReferenceWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/MethodReferenceWorkflow.kt",
+        "line": 22
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "MethodReferenceWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.primitives.MethodReferenceWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/MethodReferenceWorkflow.kt",
+            "line": 27
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "NexusOperationWorkflow",
+      "interface": "com.example.fixture.workflows.primitives.NexusOperationWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/NexusOperationWorkflow.kt",
+        "line": 14
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "NexusOperationWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.primitives.NexusOperationWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/NexusOperationWorkflow.kt",
+            "line": 19
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "OrderWorkflow",
+      "interface": "com.example.fixture.workflows.order.OrderWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflow.kt",
+        "line": 11
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "OrderWorkflow",
+          "method": "processOrder"
+        },
+        {
+          "kind": "signal",
+          "name": "cancelOrder",
+          "method": "cancelOrder"
+        },
+        {
+          "kind": "signal",
+          "name": "payment-received",
+          "method": "paymentReceived"
+        },
+        {
+          "kind": "query",
+          "name": "order-status",
+          "method": "status"
+        },
+        {
+          "kind": "update",
+          "name": "change-address",
+          "method": "changeAddress"
+        },
+        {
+          "kind": "updateValidator",
+          "name": "change-address",
+          "method": "validateAddress"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.order.OrderWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+            "line": 20
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "ParallelWorkflow",
+      "interface": "com.example.fixture.workflows.primitives.ParallelWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ParallelWorkflow.kt",
+        "line": 17
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "ParallelWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.primitives.ParallelWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ParallelWorkflow.kt",
+            "line": 22
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "ParentWorkflow",
+      "interface": "com.example.fixture.workflows.primitives.ParentWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ParentWorkflow.kt",
+        "line": 9
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "ParentWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.primitives.ParentWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ParentWorkflow.kt",
+            "line": 14
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "RecursionWorkflow",
+      "interface": "com.example.fixture.workflows.hardcases.RecursionWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/hardcases/RecursionWorkflow.kt",
+        "line": 10
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "RecursionWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.hardcases.RecursionWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/hardcases/RecursionWorkflow.kt",
+            "line": 15
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "SagaWorkflow",
+      "interface": "com.example.fixture.workflows.primitives.SagaWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/SagaWorkflow.kt",
+        "line": 15
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "SagaWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.primitives.SagaWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/SagaWorkflow.kt",
+            "line": 20
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "ScopeFunctionWorkflow",
+      "interface": "com.example.fixture.workflows.controlflow.ScopeFunctionWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/ScopeFunctionWorkflow.kt",
+        "line": 14
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "ScopeFunctionWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.controlflow.ScopeFunctionWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/ScopeFunctionWorkflow.kt",
+            "line": 19
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "Shipment",
+      "interface": "com.example.fixture.workflows.order.ShipmentWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/ShipmentWorkflow.kt",
+        "line": 9
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "Shipment",
+          "method": "ship"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.order.ShipmentWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/ShipmentWorkflow.kt",
+            "line": 15
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "SideEffectWorkflow",
+      "interface": "com.example.fixture.workflows.primitives.SideEffectWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/SideEffectWorkflow.kt",
+        "line": 8
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "SideEffectWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.primitives.SideEffectWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/SideEffectWorkflow.kt",
+            "line": 13
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "SignalExternalWorkflow",
+      "interface": "com.example.fixture.workflows.primitives.SignalExternalWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/SignalExternalWorkflow.kt",
+        "line": 9
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "SignalExternalWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.primitives.SignalExternalWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/SignalExternalWorkflow.kt",
+            "line": 14
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "TimerWorkflow",
+      "interface": "com.example.fixture.workflows.primitives.TimerWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/TimerWorkflow.kt",
+        "line": 9
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "TimerWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.primitives.TimerWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/TimerWorkflow.kt",
+            "line": 14
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "TryCatchWorkflow",
+      "interface": "com.example.fixture.workflows.controlflow.TryCatchWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/TryCatchWorkflow.kt",
+        "line": 13
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "TryCatchWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.controlflow.TryCatchWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/TryCatchWorkflow.kt",
+            "line": 18
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "TypedActivityWorkflow",
+      "interface": "com.example.fixture.workflows.primitives.TypedActivityWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/TypedActivityWorkflow.kt",
+        "line": 12
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "TypedActivityWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.primitives.TypedActivityWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/TypedActivityWorkflow.kt",
+            "line": 17
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "UntypedActivityWorkflow",
+      "interface": "com.example.fixture.workflows.primitives.UntypedActivityWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/UntypedActivityWorkflow.kt",
+        "line": 12
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "UntypedActivityWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.primitives.UntypedActivityWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/UntypedActivityWorkflow.kt",
+            "line": 17
+          }
+        }
+      ]
+    },
+    {
+      "workflowType": "VersionGateWorkflow",
+      "interface": "com.example.fixture.workflows.primitives.VersionGateWorkflow",
+      "module": ":workflows",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/VersionGateWorkflow.kt",
+        "line": 11
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "VersionGateWorkflow",
+          "method": "run"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.workflows.primitives.VersionGateWorkflowImpl",
+          "module": ":workflows",
+          "loc": {
+            "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/VersionGateWorkflow.kt",
+            "line": 16
+          }
+        }
+      ]
+    }
+  ],
+  "activityInterfaces": [
+    {
+      "interface": "com.example.fixture.activities.InventoryActivities",
+      "module": ":activities",
+      "loc": {
+        "file": "activities/src/main/kotlin/com/example/fixture/activities/InventoryActivities.kt",
+        "line": 8
+      },
+      "activities": [
+        {
+          "name": "CheckAvailability",
+          "method": "checkAvailability"
+        },
+        {
+          "name": "ReleaseStock",
+          "method": "release"
+        },
+        {
+          "name": "ReserveStock",
+          "method": "reserveStock"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.activities.InventoryActivitiesImpl",
+          "module": ":activities",
+          "loc": {
+            "file": "activities/src/main/kotlin/com/example/fixture/activities/InventoryActivitiesImpl.kt",
+            "line": 3
+          }
+        }
+      ]
+    },
+    {
+      "interface": "com.example.fixture.activities.NotificationActivities",
+      "module": ":activities",
+      "loc": {
+        "file": "activities/src/main/kotlin/com/example/fixture/activities/NotificationActivities.kt",
+        "line": 6
+      },
+      "namePrefix": "Notify",
+      "activities": [
+        {
+          "name": "NotifyAudit",
+          "method": "audit"
+        },
+        {
+          "name": "NotifyEmail",
+          "method": "email"
+        },
+        {
+          "name": "NotifySms",
+          "method": "sms"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.activities.NotificationActivitiesImpl",
+          "module": ":activities",
+          "loc": {
+            "file": "activities/src/main/kotlin/com/example/fixture/activities/NotificationActivitiesImpl.kt",
+            "line": 3
+          }
+        }
+      ]
+    },
+    {
+      "interface": "com.example.fixture.activities.PaymentActivities",
+      "module": ":activities",
+      "loc": {
+        "file": "activities/src/main/kotlin/com/example/fixture/activities/PaymentActivities.kt",
+        "line": 8
+      },
+      "namePrefix": "Payment",
+      "activities": [
+        {
+          "name": "CapturePayment",
+          "method": "capture"
+        },
+        {
+          "name": "PaymentCharge",
+          "method": "charge"
+        },
+        {
+          "name": "PaymentRefund",
+          "method": "refund"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.activities.PaymentActivitiesImpl",
+          "module": ":activities",
+          "loc": {
+            "file": "activities/src/main/kotlin/com/example/fixture/activities/PaymentActivitiesImpl.kt",
+            "line": 5
+          }
+        }
+      ]
+    },
+    {
+      "interface": "com.example.fixture.activities.ShippingActivities",
+      "module": ":activities",
+      "loc": {
+        "file": "activities/src/main/kotlin/com/example/fixture/activities/ShippingActivities.kt",
+        "line": 6
+      },
+      "activities": [
+        {
+          "name": "QuoteShipping",
+          "method": "quoteShipping"
+        },
+        {
+          "name": "ShipExpress",
+          "method": "shipExpress"
+        },
+        {
+          "name": "ShipItem",
+          "method": "shipItem"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "com.example.fixture.activities.ShippingActivitiesImpl",
+          "module": ":activities",
+          "loc": {
+            "file": "activities/src/main/kotlin/com/example/fixture/activities/ShippingActivitiesImpl.kt",
+            "line": 3
+          }
+        }
+      ]
+    }
+  ]
+}

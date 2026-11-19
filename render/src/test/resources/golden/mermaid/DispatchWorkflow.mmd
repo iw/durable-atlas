@@ -1,0 +1,41 @@
+flowchart TD
+    n_d00(["start"])
+    n_d01["ReserveVan<br/>not awaited"]
+    subgraph n_d02_region ["parallel#58; not awaited"]
+        n_d02(("fork"))
+        subgraph n_d02_lane1 ["branch 1"]
+            n_d03["LoadParcel"]
+            n_d04["PrintLabels"]
+        end
+        n_d02_join(("not awaited"))
+    end
+    n_d05[["TrackingWorkflow<br/>waits for start only<br/>parent close#58; abandon"]]
+    n_d06{{"timer 30m"}}
+    n_d07["cancel scope#58; loading"]
+    n_d08["cancel external#58; RouteWorkflow"]
+    n_d09[["AuditWorkflow"]]
+    n_d10(["end"])
+    subgraph handlers ["handlers"]
+        subgraph h_signal_recall ["signal recall"]
+            n_d20(["start"])
+            n_d21["cancel scope#58; loading"]
+            n_d22(["end"])
+        end
+    end
+    n_d00 --> n_d01
+    n_d01 --> n_d02
+    n_d02 --> n_d03
+    n_d02 --> n_d05
+    n_d03 --> n_d04
+    n_d04 --> n_d02_join
+    n_d05 --> n_d06
+    n_d06 --> n_d07
+    n_d07 -.->|"cancels"| n_d01
+    n_d07 -.->|"cancels"| n_d02
+    n_d07 --> n_d08
+    n_d08 --> n_d09
+    n_d09 --> n_d10
+    n_d20 --> n_d21
+    n_d21 -.->|"cancels"| n_d01
+    n_d21 -.->|"cancels"| n_d02
+    n_d21 --> n_d22

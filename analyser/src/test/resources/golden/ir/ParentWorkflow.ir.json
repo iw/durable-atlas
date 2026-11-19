@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "ParentWorkflow",
+  "interface": "com.example.fixture.workflows.primitives.ParentWorkflow",
+  "implementation": "com.example.fixture.workflows.primitives.ParentWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "ParentWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n2124e32d35",
+      "kind": "childWorkflow",
+      "name": "GreetingChildWorkflow",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ParentWorkflow.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ParentWorkflow.kt",
+        "line": 15
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n2124e32d35",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n2124e32d35"
+    }
+  ],
+  "stats": {
+    "nodes": 3,
+    "unknown": 0
+  }
+}

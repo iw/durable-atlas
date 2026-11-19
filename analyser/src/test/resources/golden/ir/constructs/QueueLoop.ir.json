@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "QueueLoop",
+  "interface": "constructs.QueueLoop",
+  "implementation": "constructs.QueueLoopImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "QueueLoop",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-add",
+      "kind": "signal",
+      "name": "add",
+      "start": "n194cd3e575",
+      "writes": [
+        "queue"
+      ]
+    },
+    {
+      "id": "signal-finish",
+      "kind": "signal",
+      "name": "finish",
+      "start": "nabbc9884c7",
+      "writes": [
+        "done"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n194cd3e575",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/QueueLoop.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "n371882134d",
+      "kind": "end"
+    },
+    {
+      "id": "n4e340ec2c5",
+      "kind": "end"
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/QueueLoop.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "nabbc9884c7",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/QueueLoop.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "nbf18d6e4f3",
+      "kind": "loop",
+      "label": "while true",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/QueueLoop.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "nc234ef9433",
+      "kind": "activity",
+      "name": "Work",
+      "parent": "nbf18d6e4f3",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/QueueLoop.kt",
+        "line": 45
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf36bad8513",
+      "kind": "await",
+      "reads": [
+        "done",
+        "queue"
+      ],
+      "label": "not queue.isEmpty() or done",
+      "parent": "nbf18d6e4f3",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/QueueLoop.kt",
+        "line": 43
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n194cd3e575",
+      "to": "n4e340ec2c5"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nbf18d6e4f3"
+    },
+    {
+      "from": "nabbc9884c7",
+      "to": "n371882134d"
+    },
+    {
+      "from": "nf36bad8513",
+      "to": "nc234ef9433",
+      "label": "not queue.isEmpty()"
+    },
+    {
+      "from": "nf36bad8513",
+      "to": "nedd528afe0",
+      "label": "queue.isEmpty() and done"
+    },
+    {
+      "from": "signal-add",
+      "to": "nf36bad8513",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-finish",
+      "to": "nf36bad8513",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 9,
+    "unknown": 0
+  }
+}

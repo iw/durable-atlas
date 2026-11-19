@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:durable-atlas:schema:version-map:1",
+  "title": "Version map",
+  "description": "Says which commit of a repository each worker version was built from. An overlay uses it to lay every history over the workflow documents of the commit that ran it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "versions"],
+  "properties": {
+    "schemaVersion": {
+      "description": "Version of this format.",
+      "const": 1
+    },
+    "versions": {
+      "description": "One entry per worker version. No two entries name the same deployment and build id.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/entry" }
+    },
+    "unversioned": {
+      "description": "The commit for histories whose workers reported no version. Without it such histories are left out.",
+      "$ref": "#/$defs/commit"
+    }
+  },
+  "$defs": {
+    "nonBlankString": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "commit": {
+      "description": "A commit, written as the directory that holds its workflow documents is named. A SHA may be abbreviated to its first four or more characters, as long as no other directory begins the same way.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["buildId", "commit"],
+      "properties": {
+        "deployment": {
+          "description": "Name of the Worker Deployment the version belongs to. An entry without it stands for its build id in every deployment and for workers that report a build id alone (WorkerOptions.setBuildId), and yields to an entry that names the deployment.",
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "buildId": {
+          "description": "Build id of the workers.",
+          "$ref": "#/$defs/nonBlankString"
+        },
+        "commit": {
+          "description": "The commit the workers were built from.",
+          "$ref": "#/$defs/commit"
+        }
+      }
+    }
+  }
+}

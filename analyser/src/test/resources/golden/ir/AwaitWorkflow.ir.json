@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "AwaitWorkflow",
+  "interface": "com.example.fixture.workflows.primitives.AwaitWorkflow",
+  "implementation": "com.example.fixture.workflows.primitives.AwaitWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "AwaitWorkflow",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-release",
+      "kind": "signal",
+      "name": "release",
+      "start": "n3de7c4cadd",
+      "writes": [
+        "released"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n3de7c4cadd",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/AwaitWorkflow.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n680334ad51",
+      "kind": "timer",
+      "duration": "PT1S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/AwaitWorkflow.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/AwaitWorkflow.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "n77bd82c586",
+      "kind": "end"
+    },
+    {
+      "id": "n94d1036341",
+      "kind": "await",
+      "reads": [
+        "released"
+      ],
+      "label": "released",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/AwaitWorkflow.kt",
+        "line": 23
+      }
+    },
+    {
+      "id": "nd364debe44",
+      "kind": "await",
+      "timeout": "PT10M",
+      "reads": [
+        "released"
+      ],
+      "label": "released",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/AwaitWorkflow.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n3de7c4cadd",
+      "to": "n77bd82c586"
+    },
+    {
+      "from": "n680334ad51",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n94d1036341"
+    },
+    {
+      "from": "n94d1036341",
+      "to": "nd364debe44"
+    },
+    {
+      "from": "nd364debe44",
+      "to": "n680334ad51",
+      "kind": "timeout"
+    },
+    {
+      "from": "nd364debe44",
+      "to": "nedd528afe0",
+      "label": "released"
+    },
+    {
+      "from": "signal-release",
+      "to": "n94d1036341",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-release",
+      "to": "nd364debe44",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 0
+  }
+}

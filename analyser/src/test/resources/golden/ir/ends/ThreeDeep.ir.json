@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "ThreeDeep",
+  "interface": "ends.ThreeDeep",
+  "implementation": "ends.ThreeDeepImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "ThreeDeep",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n03bb4baebc",
+      "kind": "activity",
+      "name": "Work",
+      "parent": "nfc1cf09961",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/ThreeDeep.kt",
+        "line": 25
+      }
+    },
+    {
+      "id": "n0c0ca4e3b0",
+      "kind": "loop",
+      "label": "for each id",
+      "parent": "nb1ea204e7d",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/ThreeDeep.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "n4814480f86",
+      "kind": "branch",
+      "label": "part == \"next\"",
+      "parent": "nfc1cf09961",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/ThreeDeep.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/ThreeDeep.kt",
+        "line": 17
+      }
+    },
+    {
+      "id": "nadb05a403c",
+      "kind": "activity",
+      "name": "Prepare",
+      "parent": "nb1ea204e7d",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/ThreeDeep.kt",
+        "line": 19
+      }
+    },
+    {
+      "id": "nb1ea204e7d",
+      "kind": "loop",
+      "label": "for each batch",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/ThreeDeep.kt",
+        "line": 18
+      }
+    },
+    {
+      "id": "ne2b1963733",
+      "kind": "branch",
+      "label": "part == \"stop\"",
+      "parent": "nfc1cf09961",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/ThreeDeep.kt",
+        "line": 23
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nfa15193bd4",
+      "kind": "branch",
+      "label": "part == \"skip\"",
+      "parent": "nfc1cf09961",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/ThreeDeep.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "nfc1cf09961",
+      "kind": "loop",
+      "label": "for each part",
+      "parent": "n0c0ca4e3b0",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/ThreeDeep.kt",
+        "line": 21
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n4814480f86",
+      "to": "n03bb4baebc",
+      "label": "no"
+    },
+    {
+      "from": "n4814480f86",
+      "to": "n0c0ca4e3b0",
+      "label": "yes"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nb1ea204e7d"
+    },
+    {
+      "from": "nadb05a403c",
+      "to": "n0c0ca4e3b0"
+    },
+    {
+      "from": "nb1ea204e7d",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "ne2b1963733",
+      "to": "n4814480f86",
+      "label": "no"
+    },
+    {
+      "from": "ne2b1963733",
+      "to": "nb1ea204e7d",
+      "label": "yes"
+    },
+    {
+      "from": "nfa15193bd4",
+      "to": "n0c0ca4e3b0",
+      "label": "yes"
+    },
+    {
+      "from": "nfa15193bd4",
+      "to": "ne2b1963733",
+      "label": "no"
+    }
+  ],
+  "stats": {
+    "nodes": 10,
+    "unknown": 0
+  }
+}

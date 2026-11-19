@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "LoopWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 18,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "LoopWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n23ffd71b1f",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "hits": 2,
+      "executions": 1
+    },
+    {
+      "id": "n2b5165ea37",
+      "kind": "loop",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n3e0652906f",
+      "kind": "loop",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n3f3048bd37",
+      "kind": "activity",
+      "name": "CheckAvailability",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n66afbeac3b",
+      "kind": "timer",
+      "hits": 2,
+      "executions": 1
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n79350bd4e9",
+      "kind": "loop",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n9dba688770",
+      "kind": "activity",
+      "name": "ShipItem",
+      "hits": 2,
+      "executions": 1
+    },
+    {
+      "id": "na884ce5506",
+      "kind": "activity",
+      "name": "QuoteShipping",
+      "hits": 2,
+      "executions": 1
+    },
+    {
+      "id": "nc0f51eb601",
+      "kind": "loop",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "ndf19fa52b3",
+      "kind": "loop",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n2b5165ea37",
+      "to": "n79350bd4e9",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n3e0652906f",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n2b5165ea37",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n79350bd4e9",
+      "to": "nc0f51eb601",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "nc0f51eb601",
+      "to": "ndf19fa52b3",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "ndf19fa52b3",
+      "to": "n3e0652906f",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n2b5165ea37",
+      "to": "n23ffd71b1f",
+      "implied": true,
+      "hits": 2,
+      "executions": 1
+    },
+    {
+      "from": "n23ffd71b1f",
+      "to": "n2b5165ea37",
+      "implied": true,
+      "hits": 2,
+      "executions": 1
+    },
+    {
+      "from": "n3e0652906f",
+      "to": "na884ce5506",
+      "implied": true,
+      "hits": 2,
+      "executions": 1
+    },
+    {
+      "from": "na884ce5506",
+      "to": "n3e0652906f",
+      "implied": true,
+      "hits": 2,
+      "executions": 1
+    },
+    {
+      "from": "n79350bd4e9",
+      "to": "n66afbeac3b",
+      "implied": true,
+      "hits": 2,
+      "executions": 1
+    },
+    {
+      "from": "n66afbeac3b",
+      "to": "n79350bd4e9",
+      "implied": true,
+      "hits": 2,
+      "executions": 1
+    },
+    {
+      "from": "nc0f51eb601",
+      "to": "n3f3048bd37",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n3f3048bd37",
+      "to": "nc0f51eb601",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "ndf19fa52b3",
+      "to": "n9dba688770",
+      "implied": true,
+      "hits": 2,
+      "executions": 1
+    },
+    {
+      "from": "n9dba688770",
+      "to": "ndf19fa52b3",
+      "implied": true,
+      "hits": 2,
+      "executions": 1
+    }
+  ],
+  "neverHit": [],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "LoopWorkflow.json",
+      "runId": "b660f522-99ea-4711-8f6f-da83fa768cc4",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 18,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

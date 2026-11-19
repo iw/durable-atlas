@@ -1,0 +1,43 @@
+call io.temporal.workflow.Workflow.newActivityStub(java.lang.Class,io.temporal.activity.ActivityOptions) [library] <extensions.Chores @io.temporal.activity.ActivityInterface>: extensions.Chores app/src/main/kotlin/extensions/Optioned.kt:51
+  argument activityInterface `Chores::class.java`
+    read kotlin.jvm.java: java.lang.Class<extensions.Chores> :52
+      receiver
+        class-literal extensions.Chores @io.temporal.activity.ActivityInterface :52
+  argument options `ActivityOptions { setStartToCloseTimeout(Duration.ofSeconds(7)) setTaskQueue("w…`
+    call io.temporal.activity.ActivityOptions.Builder.build() [library]: io.temporal.activity.ActivityOptions :53
+      on io.temporal.activity.ActivityOptions.Builder
+      receiver
+        call kotlin.apply(kotlin.Function1) on T [library] <io.temporal.activity.ActivityOptions.Builder>: io.temporal.activity.ActivityOptions.Builder :53
+          on io.temporal.activity.ActivityOptions.Builder
+          receiver
+            call io.temporal.activity.ActivityOptions.newBuilder() [library]: io.temporal.activity.ActivityOptions.Builder :53
+          argument block `{ setStartToCloseTimeout(Duration.ofSeconds(7)) setTaskQueue("written") setRetr…`
+            lambda () :53
+              block :54
+                call io.temporal.activity.ActivityOptions.Builder.setStartToCloseTimeout(java.time.Duration) [library]: io.temporal.activity.ActivityOptions.Builder :54
+                  on io.temporal.activity.ActivityOptions.Builder
+                  argument startToCloseTimeout `Duration.ofSeconds(7)`
+                    call java.time.Duration.ofSeconds(kotlin.Long) [library]: java.time.Duration :54
+                      argument seconds `7` = 7
+                        literal 7 :54
+                call io.temporal.activity.ActivityOptions.Builder.setTaskQueue(kotlin.String) [library]: io.temporal.activity.ActivityOptions.Builder :55
+                  on io.temporal.activity.ActivityOptions.Builder
+                  argument taskQueue `"written"` = "written"
+                    literal "written" :55
+                call io.temporal.activity.ActivityOptions.Builder.setRetryOptions(io.temporal.common.RetryOptions) [library]: kotlin.Unit :56
+                  on io.temporal.activity.ActivityOptions.Builder
+                  argument retryOptions `{ setMaximumAttempts(3) }`
+                    call io.temporal.common.RetryOptions.Builder.build() [library]: io.temporal.common.RetryOptions :56
+                      on io.temporal.common.RetryOptions.Builder
+                      receiver
+                        call kotlin.apply(kotlin.Function1) on T [library] <io.temporal.common.RetryOptions.Builder>: io.temporal.common.RetryOptions.Builder :56
+                          on io.temporal.common.RetryOptions.Builder
+                          receiver
+                            call io.temporal.common.RetryOptions.newBuilder() [library]: io.temporal.common.RetryOptions.Builder :56
+                          argument block `{ setMaximumAttempts(3) }`
+                            lambda () :56
+                              block :56
+                                call io.temporal.common.RetryOptions.Builder.setMaximumAttempts(kotlin.Int) [library]: io.temporal.common.RetryOptions.Builder :56
+                                  on io.temporal.common.RetryOptions.Builder
+                                  argument maximumAttempts `3` = 3
+                                    literal 3 :56

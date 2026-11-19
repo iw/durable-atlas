@@ -1,0 +1,229 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Buffer",
+  "interface": "open.Buffer",
+  "implementation": "open.BufferImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Buffer",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-add",
+      "kind": "signal",
+      "name": "add",
+      "start": "n194cd3e575",
+      "writes": [
+        "items"
+      ]
+    },
+    {
+      "id": "signal-drain",
+      "kind": "signal",
+      "name": "drain",
+      "start": "n4f3b475aa1",
+      "writes": [
+        "items"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n194cd3e575",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Buffer.kt",
+        "line": 48
+      }
+    },
+    {
+      "id": "n1cfe8b5464",
+      "kind": "activity",
+      "name": "Fetch",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Buffer.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n2e63c19855",
+      "kind": "await",
+      "reads": [
+        "items"
+      ],
+      "label": "items.cancellablePut()",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Buffer.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "n4e340ec2c5",
+      "kind": "end"
+    },
+    {
+      "id": "n4f3b475aa1",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Buffer.kt",
+        "line": 52
+      }
+    },
+    {
+      "id": "n665a370e7d",
+      "kind": "end"
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Buffer.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "n928c93c19f",
+      "kind": "await",
+      "reads": [
+        "items"
+      ],
+      "label": "items.put()",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Buffer.kt",
+        "line": 49
+      }
+    },
+    {
+      "id": "n92e20970ac",
+      "kind": "await",
+      "timeout": "PT5S",
+      "reads": [
+        "items"
+      ],
+      "label": "items.cancellableOffer()",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Buffer.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "na3805e8ea6",
+      "kind": "activity",
+      "name": "Store",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Buffer.kt",
+        "line": 45
+      }
+    },
+    {
+      "id": "naf05c1052c",
+      "kind": "await",
+      "reads": [
+        "items"
+      ],
+      "label": "items.put()",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Buffer.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "nd14ca4138b",
+      "kind": "await",
+      "timeout": "PT10S",
+      "reads": [
+        "items"
+      ],
+      "label": "items.offer()",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Buffer.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n194cd3e575",
+      "to": "n928c93c19f"
+    },
+    {
+      "from": "n1cfe8b5464",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n2e63c19855",
+      "to": "n92e20970ac"
+    },
+    {
+      "from": "n4f3b475aa1",
+      "to": "n665a370e7d"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "naf05c1052c"
+    },
+    {
+      "from": "n928c93c19f",
+      "to": "n4e340ec2c5"
+    },
+    {
+      "from": "n92e20970ac",
+      "to": "na3805e8ea6"
+    },
+    {
+      "from": "na3805e8ea6",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "naf05c1052c",
+      "to": "nd14ca4138b"
+    },
+    {
+      "from": "nd14ca4138b",
+      "to": "n1cfe8b5464",
+      "kind": "timeout"
+    },
+    {
+      "from": "nd14ca4138b",
+      "to": "n2e63c19855"
+    },
+    {
+      "from": "signal-drain",
+      "to": "n2e63c19855",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-drain",
+      "to": "n928c93c19f",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-drain",
+      "to": "n92e20970ac",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-drain",
+      "to": "naf05c1052c",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-drain",
+      "to": "nd14ca4138b",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 13,
+    "unknown": 0
+  }
+}

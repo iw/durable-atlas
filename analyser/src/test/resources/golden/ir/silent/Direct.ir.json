@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Direct",
+  "interface": "silent.Direct",
+  "implementation": "silent.DirectImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Direct",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n103962e4f8",
+      "kind": "activity",
+      "name": "Notify",
+      "timeout": "PT5S",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Direct.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n4fda9b00b2",
+      "kind": "activity",
+      "name": "Store",
+      "timeout": "PT5S",
+      "parent": "nf20225a95a",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Direct.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Direct.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "n85f90ff11c",
+      "kind": "activity",
+      "name": "Fetch",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Direct.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "nd162a469f2",
+      "kind": "localActivity",
+      "name": "Notify",
+      "timeout": "PT2S",
+      "parent": "nf20225a95a",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Direct.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf20225a95a",
+      "kind": "parallel",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Direct.kt",
+        "line": 32
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n103962e4f8",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n85f90ff11c"
+    },
+    {
+      "from": "n85f90ff11c",
+      "to": "nf20225a95a"
+    },
+    {
+      "from": "nf20225a95a",
+      "to": "n103962e4f8"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 0
+  }
+}

@@ -1,0 +1,239 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Keeping",
+  "interface": "plain.Keeping",
+  "implementation": "plain.KeepingImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Keeping",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-approve",
+      "kind": "signal",
+      "name": "approve",
+      "start": "n62b63817dd",
+      "writes": [
+        "approvedBy"
+      ]
+    },
+    {
+      "id": "query-status",
+      "kind": "query",
+      "name": "status",
+      "start": "n1f4643f22a",
+      "reads": [
+        "approvedBy",
+        "stage"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n10e060db0a",
+      "kind": "branch",
+      "label": "KeepingImpl.advance throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Keeping.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n1a6a52a541",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Keeping.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n1f4643f22a",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Keeping.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "n333d5356df",
+      "kind": "branch",
+      "label": "KeepingImpl.advance throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Keeping.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n486c779a8f",
+      "kind": "fail",
+      "name": "IllegalStateException",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Keeping.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n62b63817dd",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Keeping.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Keeping.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n824ba67918",
+      "kind": "fail",
+      "name": "IllegalStateException",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Keeping.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n8605245c96",
+      "kind": "await",
+      "reads": [
+        "approvedBy"
+      ],
+      "label": "isApproved()",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Keeping.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n8ab542f439",
+      "kind": "branch",
+      "label": "KeepingImpl.record throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Keeping.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n9320930c1f",
+      "kind": "branch",
+      "label": "KeepingImpl.approver throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Keeping.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nb777360ca0",
+      "kind": "end"
+    },
+    {
+      "id": "nbc84dbe21a",
+      "kind": "fail",
+      "name": "IllegalArgumentException",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Keeping.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf24782efb3",
+      "kind": "fail",
+      "name": "IllegalStateException",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Keeping.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "nf45401b72d",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n10e060db0a",
+      "to": "n8605245c96",
+      "label": "no"
+    },
+    {
+      "from": "n10e060db0a",
+      "to": "nf24782efb3",
+      "label": "yes"
+    },
+    {
+      "from": "n1a6a52a541",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n1f4643f22a",
+      "to": "nb777360ca0"
+    },
+    {
+      "from": "n333d5356df",
+      "to": "n486c779a8f",
+      "label": "yes"
+    },
+    {
+      "from": "n333d5356df",
+      "to": "n9320930c1f",
+      "label": "no"
+    },
+    {
+      "from": "n62b63817dd",
+      "to": "n8ab542f439"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n10e060db0a"
+    },
+    {
+      "from": "n8605245c96",
+      "to": "n333d5356df"
+    },
+    {
+      "from": "n8ab542f439",
+      "to": "nbc84dbe21a",
+      "label": "yes"
+    },
+    {
+      "from": "n8ab542f439",
+      "to": "nf45401b72d",
+      "label": "no"
+    },
+    {
+      "from": "n9320930c1f",
+      "to": "n1a6a52a541",
+      "label": "no"
+    },
+    {
+      "from": "n9320930c1f",
+      "to": "n824ba67918",
+      "label": "yes"
+    },
+    {
+      "from": "signal-approve",
+      "to": "n8605245c96",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 16,
+    "unknown": 0
+  }
+}

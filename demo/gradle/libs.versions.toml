@@ -1,0 +1,20 @@
+[versions]
+kotlin = "2.4.21"
+temporal = "1.41.1"
+nexus = "0.6.0-alpha"
+jspecify = "1.0.0"
+junit = "5.14.4"
+slf4j = "2.0.20"
+
+[libraries]
+temporal-sdk = { module = "io.temporal:temporal-sdk", version.ref = "temporal" }
+temporal-testing = { module = "io.temporal:temporal-testing", version.ref = "temporal" }
+nexus-sdk = { module = "io.nexusrpc:nexus-sdk", version.ref = "nexus" }
+jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

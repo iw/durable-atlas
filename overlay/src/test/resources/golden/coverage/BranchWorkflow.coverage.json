@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "BranchWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 6,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "BranchWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1e0e831808",
+      "kind": "timer",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "n2ff7b340a6",
+      "kind": "activity",
+      "name": "NotifySms",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n37c8e4b5dd",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n46371a38b7",
+      "kind": "activity",
+      "name": "NotifySms",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n6beccee1c9",
+      "kind": "branch",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n9f03e2b7d4",
+      "kind": "branch",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n1e0e831808",
+      "to": "n9f03e2b7d4",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n2ff7b340a6",
+      "to": "n9f03e2b7d4",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n37c8e4b5dd",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n46371a38b7",
+      "to": "nedd528afe0",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n6beccee1c9",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n6beccee1c9",
+      "to": "n1e0e831808",
+      "label": "no",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n6beccee1c9",
+      "to": "n2ff7b340a6",
+      "label": "yes",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n9f03e2b7d4",
+      "to": "n37c8e4b5dd",
+      "label": "\"email\"",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n9f03e2b7d4",
+      "to": "n46371a38b7",
+      "label": "\"sms\"",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n9f03e2b7d4",
+      "to": "nedd528afe0",
+      "label": "else",
+      "hits": 0,
+      "executions": 0
+    }
+  ],
+  "neverHit": [
+    "n1e0e831808",
+    "n46371a38b7"
+  ],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "BranchWorkflow.json",
+      "runId": "8f3967c1-3f2a-442d-b66f-36182d5adca2",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 6,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

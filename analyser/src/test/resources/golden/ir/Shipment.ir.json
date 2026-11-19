@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "Shipment",
+  "interface": "com.example.fixture.workflows.order.ShipmentWorkflow",
+  "implementation": "com.example.fixture.workflows.order.ShipmentWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Shipment",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/ShipmentWorkflow.kt",
+        "line": 18
+      }
+    },
+    {
+      "id": "nac19344d56",
+      "kind": "activity",
+      "name": "ShipItem",
+      "timeout": "PT30S",
+      "parent": "ne62fc776c1",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/ShipmentWorkflow.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "ne62fc776c1",
+      "kind": "loop",
+      "label": "for each sku",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/ShipmentWorkflow.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "ne62fc776c1"
+    },
+    {
+      "from": "ne62fc776c1",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 0
+  }
+}

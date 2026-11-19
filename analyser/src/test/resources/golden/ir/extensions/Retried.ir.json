@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Retried",
+  "interface": "extensions.Retried",
+  "implementation": "extensions.RetriedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Retried",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n36fea4d70d",
+      "kind": "parallel",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Retried.kt",
+        "line": 55
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Retried.kt",
+        "line": 53
+      }
+    },
+    {
+      "id": "n727746e4cf",
+      "kind": "loop",
+      "label": "retry on failure, up to 3 attempts, for up to 5m",
+      "retry": true,
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Retried.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "nb082eb8bcf",
+      "kind": "activity",
+      "name": "Two",
+      "taskQueue": "base",
+      "timeout": "PT5S",
+      "parent": "nd1ed1e82a6",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Retried.kt",
+        "line": 55
+      }
+    },
+    {
+      "id": "nd1ed1e82a6",
+      "kind": "loop",
+      "label": "retry on failure, up to 5 attempts",
+      "retry": true,
+      "parent": "n36fea4d70d",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Retried.kt",
+        "line": 55
+      }
+    },
+    {
+      "id": "ne941339104",
+      "kind": "activity",
+      "name": "One",
+      "taskQueue": "base",
+      "timeout": "PT5S",
+      "parent": "n727746e4cf",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Retried.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n36fea4d70d",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n727746e4cf"
+    },
+    {
+      "from": "n727746e4cf",
+      "to": "n36fea4d70d"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 0
+  }
+}

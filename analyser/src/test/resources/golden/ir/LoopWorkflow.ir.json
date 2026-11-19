@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "LoopWorkflow",
+  "interface": "com.example.fixture.workflows.controlflow.LoopWorkflow",
+  "implementation": "com.example.fixture.workflows.controlflow.LoopWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "LoopWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n23ffd71b1f",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "timeout": "PT30S",
+      "parent": "n2b5165ea37",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/LoopWorkflow.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "n2b5165ea37",
+      "kind": "loop",
+      "label": "for each sku",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/LoopWorkflow.kt",
+        "line": 23
+      }
+    },
+    {
+      "id": "n3e0652906f",
+      "kind": "loop",
+      "label": "for each sku",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/LoopWorkflow.kt",
+        "line": 46
+      }
+    },
+    {
+      "id": "n3f3048bd37",
+      "kind": "activity",
+      "name": "CheckAvailability",
+      "timeout": "PT30S",
+      "parent": "nc0f51eb601",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/LoopWorkflow.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n66afbeac3b",
+      "kind": "timer",
+      "duration": "PT10S",
+      "parent": "n79350bd4e9",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/LoopWorkflow.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/LoopWorkflow.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "n79350bd4e9",
+      "kind": "loop",
+      "label": "while pauses < 2",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/LoopWorkflow.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "n9dba688770",
+      "kind": "activity",
+      "name": "ShipItem",
+      "timeout": "PT30S",
+      "parent": "ndf19fa52b3",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/LoopWorkflow.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "na884ce5506",
+      "kind": "activity",
+      "name": "QuoteShipping",
+      "timeout": "PT30S",
+      "parent": "n3e0652906f",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/LoopWorkflow.kt",
+        "line": 46
+      }
+    },
+    {
+      "id": "nc0f51eb601",
+      "kind": "loop",
+      "label": "do while !available",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/LoopWorkflow.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "ndf19fa52b3",
+      "kind": "loop",
+      "label": "for each sku",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/LoopWorkflow.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n2b5165ea37",
+      "to": "n79350bd4e9"
+    },
+    {
+      "from": "n3e0652906f",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n2b5165ea37"
+    },
+    {
+      "from": "n79350bd4e9",
+      "to": "nc0f51eb601"
+    },
+    {
+      "from": "nc0f51eb601",
+      "to": "ndf19fa52b3"
+    },
+    {
+      "from": "ndf19fa52b3",
+      "to": "n3e0652906f"
+    }
+  ],
+  "stats": {
+    "nodes": 12,
+    "unknown": 0
+  }
+}

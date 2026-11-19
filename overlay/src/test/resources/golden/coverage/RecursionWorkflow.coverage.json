@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "RecursionWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 19,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "RecursionWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n022d9b0ffe",
+      "kind": "branch",
+      "hits": 6,
+      "executions": 1
+    },
+    {
+      "id": "n02e7a8e19d",
+      "kind": "activity",
+      "name": "CheckAvailability",
+      "hits": 6,
+      "executions": 1
+    },
+    {
+      "id": "n13ae1705c9",
+      "kind": "branch",
+      "hits": 6,
+      "uncertain": 1,
+      "executions": 1
+    },
+    {
+      "id": "n2ebbb58af7",
+      "kind": "unknown",
+      "hits": 5,
+      "executions": 1
+    },
+    {
+      "id": "n34843bdfac",
+      "kind": "timer",
+      "hits": 5,
+      "executions": 1
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n022d9b0ffe",
+      "to": "n13ae1705c9",
+      "label": "no",
+      "hits": 6,
+      "uncertain": 1,
+      "executions": 1
+    },
+    {
+      "from": "n022d9b0ffe",
+      "to": "nedd528afe0",
+      "label": "yes",
+      "hits": 1,
+      "uncertain": 1,
+      "executions": 1
+    },
+    {
+      "from": "n02e7a8e19d",
+      "to": "n022d9b0ffe",
+      "hits": 6,
+      "executions": 1
+    },
+    {
+      "from": "n13ae1705c9",
+      "to": "n34843bdfac",
+      "label": "no",
+      "hits": 5,
+      "executions": 1
+    },
+    {
+      "from": "n13ae1705c9",
+      "to": "nedd528afe0",
+      "label": "yes",
+      "hits": 1,
+      "uncertain": 1,
+      "executions": 1
+    },
+    {
+      "from": "n2ebbb58af7",
+      "to": "nedd528afe0",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n34843bdfac",
+      "to": "n2ebbb58af7",
+      "hits": 5,
+      "executions": 1
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n02e7a8e19d",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "neverHit": [],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [
+    {
+      "history": "RecursionWorkflow.json",
+      "eventId": 66,
+      "eventType": "WorkflowExecutionCompleted",
+      "doubt": "paths",
+      "nodes": [
+        "n13ae1705c9"
+      ],
+      "edges": [
+        {
+          "from": "n022d9b0ffe",
+          "to": "n13ae1705c9",
+          "label": "no"
+        },
+        {
+          "from": "n022d9b0ffe",
+          "to": "nedd528afe0",
+          "label": "yes"
+        },
+        {
+          "from": "n13ae1705c9",
+          "to": "nedd528afe0",
+          "label": "yes"
+        }
+      ]
+    }
+  ],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "RecursionWorkflow.json",
+      "runId": "ec238874-93e1-43cb-a41c-f60cd7b464f5",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 19,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

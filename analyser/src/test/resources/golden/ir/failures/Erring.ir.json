@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Erring",
+  "interface": "failing.Erring",
+  "implementation": "failing.ErringImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Erring",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n6963ff61f1",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Erring.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Erring.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "nc8178707a6",
+      "kind": "branch",
+      "label": "count",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Erring.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "ncc0cded1df",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Erring.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n6963ff61f1",
+      "to": "nc8178707a6"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n6963ff61f1"
+    },
+    {
+      "from": "nc8178707a6",
+      "to": "ncc0cded1df",
+      "label": "1"
+    },
+    {
+      "from": "nc8178707a6",
+      "to": "nedd528afe0",
+      "label": "0"
+    },
+    {
+      "from": "ncc0cded1df",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 5,
+    "unknown": 0
+  }
+}

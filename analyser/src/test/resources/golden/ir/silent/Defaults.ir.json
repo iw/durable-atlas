@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Defaults",
+  "interface": "silent.Defaults",
+  "implementation": "silent.DefaultsImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Defaults",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0d136d1f34",
+      "kind": "activity",
+      "name": "Notify",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Defaults.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n1dadd0fefc",
+      "kind": "activity",
+      "name": "Notify",
+      "taskQueue": "other",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Defaults.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Defaults.kt",
+        "line": 26
+      }
+    },
+    {
+      "id": "na3bc2efd05",
+      "kind": "localActivity",
+      "name": "Store",
+      "timeout": "PT2S",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Defaults.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf4ffaa0667",
+      "kind": "activity",
+      "name": "Fetch",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Defaults.kt",
+        "line": 31
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0d136d1f34",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n1dadd0fefc",
+      "to": "n0d136d1f34"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nf4ffaa0667"
+    },
+    {
+      "from": "na3bc2efd05",
+      "to": "n1dadd0fefc"
+    },
+    {
+      "from": "nf4ffaa0667",
+      "to": "na3bc2efd05"
+    }
+  ],
+  "stats": {
+    "nodes": 6,
+    "unknown": 0
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "NotifyBreak",
+  "interface": "exits.NotifyBreak",
+  "implementation": "exits.NotifyBreakImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "NotifyBreak",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0fab477566",
+      "kind": "activity",
+      "name": "Report",
+      "parent": "nb5aaf1cce6",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/NotifyBreak.kt",
+        "line": 23
+      }
+    },
+    {
+      "id": "n3b529132f1",
+      "kind": "activity",
+      "name": "Prepare",
+      "parent": "nb5aaf1cce6",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/NotifyBreak.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "n5676463c6a",
+      "kind": "branch",
+      "label": "id == \"last\"",
+      "parent": "nb5aaf1cce6",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/NotifyBreak.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/NotifyBreak.kt",
+        "line": 19
+      }
+    },
+    {
+      "id": "nb5aaf1cce6",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/NotifyBreak.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nede4e1107b",
+      "kind": "activity",
+      "name": "CleanUp",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/NotifyBreak.kt",
+        "line": 27
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0fab477566",
+      "to": "nede4e1107b"
+    },
+    {
+      "from": "n3b529132f1",
+      "to": "n5676463c6a"
+    },
+    {
+      "from": "n5676463c6a",
+      "to": "n0fab477566",
+      "label": "yes"
+    },
+    {
+      "from": "n5676463c6a",
+      "to": "nb5aaf1cce6",
+      "label": "no"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nb5aaf1cce6"
+    },
+    {
+      "from": "nb5aaf1cce6",
+      "to": "nede4e1107b"
+    },
+    {
+      "from": "nede4e1107b",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 0
+  }
+}

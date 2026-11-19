@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Copies",
+  "interface": "options.Copies",
+  "implementation": "options.CopiesImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Copies",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n105bd19249",
+      "kind": "localActivity",
+      "name": "Store",
+      "timeout": "PT8S",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Copies.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n3581c7cb1a",
+      "kind": "activity",
+      "name": "Fetch",
+      "taskQueue": "fast",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Copies.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n47082e9d5a",
+      "kind": "activity",
+      "name": "Fetch",
+      "taskQueue": "fast",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Copies.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n612bd24ebd",
+      "kind": "localActivity",
+      "name": "Store",
+      "timeout": "PT2S",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Copies.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Copies.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n93f9fe7c27",
+      "kind": "activity",
+      "name": "Fetch",
+      "timeout": "PT7S",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Copies.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nb792f1618f",
+      "kind": "activity",
+      "name": "Notify",
+      "taskQueue": "slower",
+      "timeout": "PT2M",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Copies.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "nba31165aa1",
+      "kind": "activity",
+      "name": "Sweep",
+      "taskQueue": "fast",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Copies.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "nd275a7abad",
+      "kind": "activity",
+      "name": "Fetch",
+      "taskQueue": "slow",
+      "timeout": "PT2M",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Copies.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "ned786aaaef",
+      "kind": "activity",
+      "name": "Fetch",
+      "taskQueue": "slow",
+      "timeout": "PT2M",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Copies.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nfc4522b32e",
+      "kind": "activity",
+      "name": "Fetch",
+      "taskQueue": "slow",
+      "timeout": "PT1M",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Copies.kt",
+        "line": 33
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n105bd19249",
+      "to": "n612bd24ebd"
+    },
+    {
+      "from": "n3581c7cb1a",
+      "to": "n93f9fe7c27"
+    },
+    {
+      "from": "n47082e9d5a",
+      "to": "nd275a7abad"
+    },
+    {
+      "from": "n612bd24ebd",
+      "to": "nba31165aa1"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n47082e9d5a"
+    },
+    {
+      "from": "n93f9fe7c27",
+      "to": "ned786aaaef"
+    },
+    {
+      "from": "nb792f1618f",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nba31165aa1",
+      "to": "nb792f1618f"
+    },
+    {
+      "from": "nd275a7abad",
+      "to": "nfc4522b32e"
+    },
+    {
+      "from": "ned786aaaef",
+      "to": "n105bd19249"
+    },
+    {
+      "from": "nfc4522b32e",
+      "to": "n3581c7cb1a"
+    }
+  ],
+  "stats": {
+    "nodes": 12,
+    "unknown": 0
+  }
+}

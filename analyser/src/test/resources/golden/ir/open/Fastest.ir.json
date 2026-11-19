@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Fastest",
+  "interface": "open.Fastest",
+  "implementation": "open.FastestImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Fastest",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n2769981e47",
+      "kind": "activity",
+      "name": "Store",
+      "parent": "n2d6d8310aa",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Fastest.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n284a987626",
+      "kind": "parallel",
+      "join": "first",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Fastest.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n2d6d8310aa",
+      "kind": "parallel",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Fastest.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Fastest.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n8a9a1e8cb3",
+      "kind": "activity",
+      "name": "Store",
+      "parent": "n284a987626",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Fastest.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "n8ac49a7f12",
+      "kind": "activity",
+      "name": "Notify",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Fastest.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "nb266a1e363",
+      "kind": "activity",
+      "name": "Fetch",
+      "parent": "n2d6d8310aa",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Fastest.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "nd27461632a",
+      "kind": "activity",
+      "name": "Fetch",
+      "parent": "n284a987626",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Fastest.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n284a987626",
+      "to": "n8ac49a7f12"
+    },
+    {
+      "from": "n2d6d8310aa",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n284a987626"
+    },
+    {
+      "from": "n8ac49a7f12",
+      "to": "n2d6d8310aa"
+    }
+  ],
+  "stats": {
+    "nodes": 9,
+    "unknown": 0
+  }
+}

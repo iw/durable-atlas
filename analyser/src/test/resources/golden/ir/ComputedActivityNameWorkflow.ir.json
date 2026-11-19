@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "ComputedActivityNameWorkflow",
+  "interface": "com.example.fixture.workflows.hardcases.ComputedActivityNameWorkflow",
+  "implementation": "com.example.fixture.workflows.hardcases.ComputedActivityNameWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "ComputedActivityNameWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/hardcases/ComputedActivityNameWorkflow.kt",
+        "line": 17
+      }
+    },
+    {
+      "id": "n9ed987fb7a",
+      "kind": "unknown",
+      "label": "activityName",
+      "reason": "computed-name",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/hardcases/ComputedActivityNameWorkflow.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "n9ed987fb7a"
+    },
+    {
+      "from": "n9ed987fb7a",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 3,
+    "unknown": 1
+  }
+}

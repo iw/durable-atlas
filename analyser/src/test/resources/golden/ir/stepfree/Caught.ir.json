@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Caught",
+  "interface": "plain.Caught",
+  "implementation": "plain.CaughtImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Caught",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0675d14a6f",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Caught.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n5e1c737952",
+      "kind": "branch",
+      "label": "Events.create throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Caught.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Caught.kt",
+        "line": 25
+      }
+    },
+    {
+      "id": "n8f494f9a13",
+      "kind": "fail",
+      "label": "IllegalArgumentException, IllegalStateException",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Caught.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "na27507af43",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Caught.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "ndeca11c399",
+      "kind": "branch",
+      "label": "Mapper.write throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Caught.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "ndf6439fc7a",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Caught.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0675d14a6f",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n5e1c737952",
+      "to": "n8f494f9a13",
+      "label": "yes"
+    },
+    {
+      "from": "n5e1c737952",
+      "to": "ndeca11c399",
+      "label": "no"
+    },
+    {
+      "from": "n5e1c737952",
+      "to": "ndf6439fc7a",
+      "kind": "exception",
+      "label": "UnknownEvent"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n5e1c737952"
+    },
+    {
+      "from": "na27507af43",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "ndeca11c399",
+      "to": "n0675d14a6f",
+      "kind": "exception",
+      "label": "MappingException"
+    },
+    {
+      "from": "ndeca11c399",
+      "to": "na27507af43",
+      "label": "no"
+    },
+    {
+      "from": "ndf6439fc7a",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 8,
+    "unknown": 0
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Logged",
+  "interface": "calls.Logged",
+  "implementation": "calls.LoggedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Logged",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Logged.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "nbfa4f32277",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Logged.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "nde28179211",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Logged.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "nbfa4f32277"
+    },
+    {
+      "from": "nbfa4f32277",
+      "to": "nde28179211"
+    },
+    {
+      "from": "nde28179211",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 0
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Logged.kt",
+        "line": 27
+      },
+      "text": "KotlinLogging.logger(\"logged\")"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Logged.kt",
+        "line": 33
+      },
+      "text": "logger.info(\"done: \" + chores.two(input))"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/LoggerExtensions.kt",
+        "line": 22
+      },
+      "text": "log.info { message }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/LoggerExtensions.kt",
+        "line": 23
+      },
+      "text": "log.atInfo()"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/LoggerExtensions.kt",
+        "line": 23
+      },
+      "text": "log.atInfo().log(message)"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/LoggerExtensions.kt",
+        "line": 26
+      },
+      "text": "debug { message }"
+    }
+  ]
+}

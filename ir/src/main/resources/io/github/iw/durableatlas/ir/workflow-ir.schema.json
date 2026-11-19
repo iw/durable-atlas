@@ -1,0 +1,307 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:durable-atlas:schema:workflow-ir:1",
+  "title": "Workflow IR",
+  "description": "Graph of one Temporal workflow type: a flat list of nodes and a flat list of edges, with regions expressed through each node's parent. A region (loop, parallel or compensation node) is one step of the flow around it: edges into it and out of it once it is done end and start at the region's node. Inside a region only edges between its children are written; entering the children no sibling leads to is implied, and so is that a child goes on to the end of the region unless it ends the flow or one of its edges says where it goes: an edge of any kind to a sibling or to the node of a region around it, or a flow edge to a node outside the region. An edge from a child to a node outside its region (early return, break, failure) is written out; an exception or timeout edge among these leaves the implied way to the end of the region in place. An edge from a node to the node of a region around it, its own or one further out, leads to the end of that region and leaves every region in between. A parallel node with waitsFor is not waited for: the edges that leave it are taken while its lanes run. A parallel node with join 'first' is left when the first of its lanes has ended. Edges of the kinds wakes and cancels are no part of the flow: they say what a handler, the workflow method or a cancel point does to another node, and count for none of this.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "commit",
+    "modelMode",
+    "workflowType",
+    "interface",
+    "implementation",
+    "module",
+    "entryPoints",
+    "nodes",
+    "edges",
+    "stats"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "description": "Version of this format.",
+      "const": 1
+    },
+    "commit": {
+      "description": "Commit of the analysed repository the document was produced from.",
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "modelMode": {
+      "description": "How the source model was obtained.",
+      "enum": ["gradle", "degraded"]
+    },
+    "workflowType": {
+      "description": "Workflow type name as registered with Temporal. A class that runs for every workflow type without an implementation of its own has no such name: it is called 'dynamic-' followed by the simple name of the class, and its interface is that of the SDK.",
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "interface": {
+      "description": "Fully qualified name of the workflow interface.",
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "implementation": {
+      "description": "Fully qualified name of the implementation class.",
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "module": {
+      "description": "Gradle path of the module that contains the implementation.",
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "entryPoints": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/entryPoint" }
+    },
+    "nodes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/node" }
+    },
+    "edges": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/edge" }
+    },
+    "stats": { "$ref": "#/$defs/stats" },
+    "skippedCalls": {
+      "description": "The calls in the code of the workflow that did not resolve and that no node stands for, ordered by file, line and text. Only a document whose modelMode is degraded has any: such a model lacks the libraries the analysed sources use, so a call that does not resolve there and cannot be a step of the workflow is taken for a call into one of them, as a model made from the build would resolve it. Absent where nothing was skipped.",
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/skippedCall" }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stringSet": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" },
+      "uniqueItems": true
+    },
+    "entryPoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "name", "start"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "kind": {
+          "enum": ["workflowMethod", "signal", "query", "update", "updateValidator"]
+        },
+        "name": {
+          "description": "Workflow type, signal, query or update name as registered with Temporal. '(any name)' for a handler that takes every signal, query or update without a handler of its own.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "start": {
+          "description": "Id of the start node of this entry point's graph.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "reads": {
+          "description": "Workflow properties the handler reads, itself or in the functions it calls. A handler that the workflow method registers as it runs also names the variables of the workflow method that it sees and that hold a queue, a promise, a lock or a semaphore.",
+          "$ref": "#/$defs/stringSet"
+        },
+        "writes": {
+          "description": "Workflow properties the handler writes, itself or in the functions it calls, and such variables of the workflow method as reads names.",
+          "$ref": "#/$defs/stringSet"
+        }
+      }
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "kind": {
+          "enum": [
+            "start",
+            "end",
+            "activity",
+            "localActivity",
+            "childWorkflow",
+            "signalExternal",
+            "nexusOperation",
+            "timer",
+            "await",
+            "sideEffect",
+            "versionGate",
+            "branch",
+            "loop",
+            "parallel",
+            "compensation",
+            "continueAsNew",
+            "fail",
+            "unknown",
+            "cancelScope",
+            "cancelExternal",
+            "upsertSearchAttributes",
+            "upsertMemo"
+          ],
+          "description": "What the node is. Besides the steps and regions of a workflow: cancelScope, the place where a cancellation scope is cancelled, with cancels edges to what the scope holds; cancelExternal, a request to another workflow to cancel, made through an external workflow stub; upsertSearchAttributes and upsertMemo, the places where the workflow sets or removes search attributes of its own, or entries of its memo. An await is a wait for a condition, for a workflow queue or a promise to be given something, or for a workflow lock or semaphore to be free. A branch is a place where the code decides which way to go, or a call of a function of the analysed sources that is not drawn from the inside, because no step is certain to lie in it, and that may fail: the label of such a branch is the function called and 'throws?', its 'yes' edge leads to a fail node whose name is the failure the function may raise or, where it may raise several, whose label lists their names, its exception edges lead to the clauses that catch what it may throw, and its 'no' edge leads on. A fail node is a place where the execution of the workflow fails: an exception leaves the workflow method or a signal handler that is a failure of Temporal (an ApplicationFailure, the failure of an activity or a child workflow, a cancellation) or of a type that a worker of the analysed sources is told to fail workflows on; in the graph of an update handler it says that the update fails, in that of a query or an update validator it stands for any exception, which fails the query or rejects the update. An exception of any other type fails the workflow task, which is tried again until the code is fixed: a way that only leads there is not part of the graph, nor is a branch with no other way, and a branch that asks whether a function throws has no 'yes' edge where the function only throws such exceptions. Only where a node has no other way to go is such an end written as a fail node as well."
+        },
+        "name": {
+          "description": "Temporal name of the thing invoked: activity type, child workflow type, signal name or Nexus operation. For cancelExternal, the workflow type of the workflow that is asked to cancel, where the stub says it. For fail, what the failure is called: the type given to an ApplicationFailure, or else the class of the exception.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "interface": {
+          "description": "Fully qualified name of the workflow interface that the stub of a childWorkflow node was made for. Written where the workflow type does not say it, because the analysed sources hold another workflow interface of the same type: the child is the workflow whose document has this interface.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "service": {
+          "description": "Nexus service name.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "taskQueue": { "$ref": "#/$defs/nonEmptyString" },
+        "duration": {
+          "description": "ISO-8601 duration of a timer.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "timeout": {
+          "description": "ISO-8601 duration after which the step gives up. On an await, the time it waits for at most; the way it then takes is its timeout edge.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "waitsFor": {
+          "description": "How far the flow waits for work it started to run beside it, where it does not wait for it to end: 'nothing', it goes on at once; 'start', it goes on once the step, a child workflow, has started. On a step, the step is started where it stands and the flow goes on from it. On a parallel node, the lanes are started and the flow goes on with what follows the region without waiting for them to end: at once for 'nothing'; for 'start', once the child workflows among the direct children of the region that say 'start' as well have started, each of which its own lane waits for to end like any of its steps. Absent wherever the flow waits for the step or the region to be done.",
+          "enum": ["start", "nothing"]
+        },
+        "join": {
+          "description": "On a parallel node, which of its lanes the flow waits for, where that is not all of them: 'first', the flow goes on as soon as the first lane has ended, as with Promise.anyOf, and the edges that leave the region are taken then. The other lanes run on beside what follows until they end or a cancelScope node cancels them. Where the region stands in a loop that starts one lane in each round, the lanes of all the rounds are meant. Absent where the flow waits for every lane, and on every other node.",
+          "enum": ["first"]
+        },
+        "parentClosePolicy": {
+          "description": "What becomes of a child workflow when this workflow closes, where the options of its stub say that it is not ended with it: 'abandon', the child runs on and outlives this workflow. Absent where the child is terminated or asked to cancel, or where the options do not say.",
+          "enum": ["abandon"]
+        },
+        "reads": {
+          "description": "Workflow properties an await waits on: those its condition reads, the queue or promise it waits to be given something through, the queue it waits for room in, or the lock or semaphore it waits to be free. A queue, promise, lock or semaphore that the workflow method keeps in a variable of its own is named by that variable.",
+          "$ref": "#/$defs/stringSet"
+        },
+        "keys": {
+          "description": "On an upsertSearchAttributes or upsertMemo node: the names of the search attributes, or of the entries of the memo, that the step sets or removes, in the order the code gives them. They are all the step writes unless otherKeys is true; then they are the names the code gives, and the step writes others as well. Absent where the analysis could not tell any name.",
+          "$ref": "#/$defs/stringSet"
+        },
+        "otherKeys": {
+          "description": "True on an upsertSearchAttributes or upsertMemo node whose keys are not all it writes: the step sets or removes further names that the analysis could not tell. Only written together with keys. Absent where keys is the whole list, and where no name is known.",
+          "const": true
+        },
+        "changeId": {
+          "description": "Change id of a version gate.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "label": { "type": "string" },
+        "retry": {
+          "description": "True on a loop node that is a retry: what it holds runs once, and again for as long as it fails and the retry options allow. Between two attempts the workflow pauses; the timer of that pause is a step of the loop that no node of its own stands for. Absent on every other node.",
+          "const": true
+        },
+        "reason": {
+          "description": "Why a call could not be resolved: depth-limit, the call lies deeper than calls are followed and a step lies behind it; recursion, the call leads back into a function that is already being followed and that holds a step; dynamic-dispatch, the call may run one of several functions of which one holds a step, or a function that no class of the analysed sources implements; computed-name, the name of the step is only known at run time; unsupported, the construct is not modelled; unresolved, the call did not resolve to a declaration; unseen-code, the call is one of a function of the analysed sources that is not drawn from the inside, because no step is certain to lie in it, and that calls, itself or through the functions it calls, a function without a body that no class of the analysed sources implements, so that a step may lie behind it: label names the function called, candidates the functions that could not be followed. In a document whose modelMode is degraded, the reason unresolved is only given to a call that may be a step: one made through a stub whose interface did not resolve, one that names the Temporal API, or one that names several functions of the analysed sources; the other calls that did not resolve are listed in skippedCalls. Whatever the modelMode, the reason unresolved is also given to a call of a function, or of a function or constructor of a class, that the analysed sources declare more than once under one fully qualified name, where nothing tells which declaration the call means.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "candidates": {
+          "description": "Possible targets of an unresolved call: for the reason dynamic-dispatch, the classes whose function the call may run; for the reason unresolved, the functions of the analysed sources that the compiler could not choose among; for the reason unseen-code, the functions without a body that are called behind the call and that no class of the analysed sources implements.",
+          "$ref": "#/$defs/stringSet"
+        },
+        "parent": {
+          "description": "Id of the enclosing loop, parallel or compensation node. An edge from this node to its parent, or to a region further out, leads to the end of that region.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "loc": { "$ref": "#/$defs/sourceLocation" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["kind"],
+            "properties": {
+              "kind": {
+                "enum": ["activity", "localActivity", "childWorkflow", "signalExternal", "nexusOperation"]
+              }
+            }
+          },
+          "then": { "required": ["name"] }
+        },
+        {
+          "if": {
+            "required": ["kind"],
+            "properties": { "kind": { "const": "versionGate" } }
+          },
+          "then": { "required": ["changeId"] }
+        },
+        {
+          "if": {
+            "required": ["kind"],
+            "properties": { "kind": { "const": "unknown" } }
+          },
+          "then": { "required": ["reason"] }
+        }
+      ]
+    },
+    "sourceLocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file", "line"],
+      "properties": {
+        "file": {
+          "description": "Path relative to the root of the analysed repository.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "line": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to"],
+      "properties": {
+        "from": {
+          "description": "Id of a node, or of an entry point for a wakes edge: a handler, or the workflow method where its own code ends the await from another lane or while a handler waits. A cancels edge starts at a cancelScope node.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "to": {
+          "description": "Id of a node. If it is a region the edge's source lies in, at any depth, the edge leads to the end of that region: the end of the round of a loop, of a lane of a parallel region, or of the chain of a compensation. A cancels edge ends at what is cancelled if it still runs: a step, or a region for all it holds.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "kind": {
+          "enum": ["flow", "exception", "timeout", "wakes", "cancels"],
+          "default": "flow",
+          "description": "flow, exception and timeout edges are ways the flow takes. A timeout edge leaves an await whose time is up; where the wait raises a TimeoutException then, it leads to the clause that catches it. A wakes edge leads from a handler to an await it can end, or from the workflow method to an await that its own code ends from elsewhere. A cancels edge leads from a cancelScope node to what that scope holds."
+        },
+        "label": {
+          "description": "What the edge is called: the outcome or condition that takes it, or the type of failure caught. On a wakes edge that starts at the workflow method: the workflow properties in question, sorted and separated by ', '.",
+          "type": "string"
+        }
+      }
+    },
+    "skippedCall": {
+      "description": "A call that did not resolve and was taken for a call into a library that the degraded model lacks: it is not made through a stub, does not name the Temporal API and names no function of the analysed sources, so it is no step, and the code handed to it is read as for any library function. It is listed once, whether it stands in the code that was read for the workflow, in whichever entry point, or in a function that was looked through and found to hold nothing else.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["loc", "text"],
+      "properties": {
+        "loc": {
+          "description": "Where the call is written.",
+          "$ref": "#/$defs/sourceLocation"
+        },
+        "text": {
+          "description": "The call as it is written, on one line and shortened where it is long.",
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "stats": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nodes", "unknown"],
+      "properties": {
+        "nodes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unknown": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

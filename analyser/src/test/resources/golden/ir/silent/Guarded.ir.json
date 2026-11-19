@@ -1,0 +1,232 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Guarded",
+  "interface": "silent.Guarded",
+  "implementation": "silent.GuardedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Guarded",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-release",
+      "kind": "signal",
+      "name": "release",
+      "start": "n3de7c4cadd",
+      "reads": [
+        "lock"
+      ],
+      "writes": [
+        "lock"
+      ]
+    },
+    {
+      "id": "update-change",
+      "kind": "update",
+      "name": "change",
+      "start": "n93a4bd29e0",
+      "reads": [
+        "lock"
+      ],
+      "writes": [
+        "lock"
+      ]
+    },
+    {
+      "id": "update-tryChange",
+      "kind": "update",
+      "name": "tryChange",
+      "start": "n08d5fd2748",
+      "reads": [
+        "lock"
+      ],
+      "writes": [
+        "lock"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n08d5fd2748",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Guarded.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "n0b7283d7d3",
+      "kind": "end"
+    },
+    {
+      "id": "n31da001c8f",
+      "kind": "activity",
+      "name": "Fetch",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Guarded.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "n3de7c4cadd",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Guarded.kt",
+        "line": 57
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Guarded.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n77bd82c586",
+      "kind": "end"
+    },
+    {
+      "id": "n93a4bd29e0",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Guarded.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "na59df2fd01",
+      "kind": "await",
+      "label": "isEveryHandlerFinished()",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Guarded.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "nacf4d8c1af",
+      "kind": "activity",
+      "name": "Store",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Guarded.kt",
+        "line": 52
+      }
+    },
+    {
+      "id": "nd6b9e33329",
+      "kind": "end"
+    },
+    {
+      "id": "ndc73852233",
+      "kind": "await",
+      "reads": [
+        "lock"
+      ],
+      "label": "lock.lock()",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Guarded.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf09b70d031",
+      "kind": "await",
+      "timeout": "PT30S",
+      "reads": [
+        "lock"
+      ],
+      "label": "lock.tryLock()",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Guarded.kt",
+        "line": 51
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n08d5fd2748",
+      "to": "nf09b70d031"
+    },
+    {
+      "from": "n31da001c8f",
+      "to": "nd6b9e33329"
+    },
+    {
+      "from": "n3de7c4cadd",
+      "to": "n77bd82c586"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "na59df2fd01"
+    },
+    {
+      "from": "n93a4bd29e0",
+      "to": "ndc73852233"
+    },
+    {
+      "from": "na59df2fd01",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nacf4d8c1af",
+      "to": "n0b7283d7d3"
+    },
+    {
+      "from": "ndc73852233",
+      "to": "n31da001c8f"
+    },
+    {
+      "from": "nf09b70d031",
+      "to": "n0b7283d7d3",
+      "kind": "timeout"
+    },
+    {
+      "from": "nf09b70d031",
+      "to": "nacf4d8c1af"
+    },
+    {
+      "from": "signal-release",
+      "to": "ndc73852233",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-release",
+      "to": "nf09b70d031",
+      "kind": "wakes"
+    },
+    {
+      "from": "update-change",
+      "to": "ndc73852233",
+      "kind": "wakes"
+    },
+    {
+      "from": "update-change",
+      "to": "nf09b70d031",
+      "kind": "wakes"
+    },
+    {
+      "from": "update-tryChange",
+      "to": "ndc73852233",
+      "kind": "wakes"
+    },
+    {
+      "from": "update-tryChange",
+      "to": "nf09b70d031",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 13,
+    "unknown": 0
+  }
+}

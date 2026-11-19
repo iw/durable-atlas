@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "AwaitTimeout",
+  "interface": "exits.AwaitTimeout",
+  "implementation": "exits.AwaitTimeoutImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "AwaitTimeout",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-answer",
+      "kind": "signal",
+      "name": "answer",
+      "start": "n8f9362e2f9",
+      "writes": [
+        "answered"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n2571136a56",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/AwaitTimeout.kt",
+        "line": 25
+      }
+    },
+    {
+      "id": "n2892fb4dd1",
+      "kind": "await",
+      "timeout": "PT5M",
+      "reads": [
+        "answered"
+      ],
+      "label": "answered",
+      "parent": "n2571136a56",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/AwaitTimeout.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/AwaitTimeout.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "n70908a1e92",
+      "kind": "activity",
+      "name": "Prepare",
+      "parent": "n2571136a56",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/AwaitTimeout.kt",
+        "line": 26
+      }
+    },
+    {
+      "id": "n818239cef7",
+      "kind": "activity",
+      "name": "Report",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/AwaitTimeout.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "n8f9362e2f9",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/AwaitTimeout.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "ne4985f5336",
+      "kind": "end"
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n2571136a56",
+      "to": "n818239cef7"
+    },
+    {
+      "from": "n2892fb4dd1",
+      "to": "n2571136a56",
+      "label": "answered"
+    },
+    {
+      "from": "n2892fb4dd1",
+      "to": "n818239cef7",
+      "kind": "timeout"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n2571136a56"
+    },
+    {
+      "from": "n70908a1e92",
+      "to": "n2892fb4dd1"
+    },
+    {
+      "from": "n818239cef7",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n8f9362e2f9",
+      "to": "ne4985f5336"
+    },
+    {
+      "from": "signal-answer",
+      "to": "n2892fb4dd1",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 8,
+    "unknown": 0
+  }
+}

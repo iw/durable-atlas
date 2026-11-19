@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "ParallelWorkflow",
+  "interface": "com.example.fixture.workflows.primitives.ParallelWorkflow",
+  "implementation": "com.example.fixture.workflows.primitives.ParallelWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "ParallelWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0460788354",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "timeout": "PT30S",
+      "parent": "n39bcb89b2c",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ParallelWorkflow.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n157d76d649",
+      "kind": "parallel",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ParallelWorkflow.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "n39bcb89b2c",
+      "kind": "parallel",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ParallelWorkflow.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n4fc881d34b",
+      "kind": "activity",
+      "name": "NotifySms",
+      "timeout": "PT30S",
+      "parent": "nba3222923c",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ParallelWorkflow.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ParallelWorkflow.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n9b5de163ff",
+      "kind": "activity",
+      "name": "QuoteShipping",
+      "timeout": "PT30S",
+      "parent": "n39bcb89b2c",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ParallelWorkflow.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "nba3222923c",
+      "kind": "parallel",
+      "join": "first",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ParallelWorkflow.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "ne6beb65037",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "timeout": "PT30S",
+      "parent": "nba3222923c",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ParallelWorkflow.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "nec13c605a6",
+      "kind": "activity",
+      "name": "NotifyAudit",
+      "timeout": "PT30S",
+      "parent": "n157d76d649",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ParallelWorkflow.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n157d76d649",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n39bcb89b2c",
+      "to": "nba3222923c"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n39bcb89b2c"
+    },
+    {
+      "from": "nba3222923c",
+      "to": "n157d76d649"
+    }
+  ],
+  "stats": {
+    "nodes": 10,
+    "unknown": 0
+  }
+}

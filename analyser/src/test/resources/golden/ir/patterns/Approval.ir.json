@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Approval",
+  "interface": "patterns.Approval",
+  "implementation": "patterns.ApprovalImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Approval",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-approve",
+      "kind": "signal",
+      "name": "approve",
+      "start": "n62b63817dd",
+      "reads": [
+        "decision"
+      ],
+      "writes": [
+        "decision",
+        "second"
+      ]
+    },
+    {
+      "id": "signal-reject",
+      "kind": "signal",
+      "name": "reject",
+      "start": "n40f04dc3b2",
+      "writes": [
+        "decision"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n16d1f43116",
+      "kind": "activity",
+      "name": "Work",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Approval.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "n2dccf41ee6",
+      "kind": "end"
+    },
+    {
+      "id": "n344b71ddac",
+      "kind": "activity",
+      "name": "Prepare",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Approval.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "n40f04dc3b2",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Approval.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "n62b63817dd",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Approval.kt",
+        "line": 46
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Approval.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "na5bdfc4200",
+      "kind": "await",
+      "reads": [
+        "decision"
+      ],
+      "label": "decision.get()",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Approval.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "nbb08741e85",
+      "kind": "await",
+      "timeout": "PT1H",
+      "reads": [
+        "second"
+      ],
+      "label": "second.cancellableGet()",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Approval.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf45401b72d",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n16d1f43116",
+      "to": "nbb08741e85"
+    },
+    {
+      "from": "n344b71ddac",
+      "to": "na5bdfc4200"
+    },
+    {
+      "from": "n40f04dc3b2",
+      "to": "n2dccf41ee6"
+    },
+    {
+      "from": "n62b63817dd",
+      "to": "nf45401b72d"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n344b71ddac"
+    },
+    {
+      "from": "na5bdfc4200",
+      "to": "n16d1f43116"
+    },
+    {
+      "from": "nbb08741e85",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "signal-approve",
+      "to": "na5bdfc4200",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-approve",
+      "to": "nbb08741e85",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-reject",
+      "to": "na5bdfc4200",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 10,
+    "unknown": 0
+  }
+}

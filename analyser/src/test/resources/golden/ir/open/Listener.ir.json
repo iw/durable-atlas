@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Listener",
+  "interface": "open.Listener",
+  "implementation": "open.ListenerImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Listener",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "dynamic-signal",
+      "kind": "signal",
+      "name": "(any name)",
+      "start": "n9b2c686b30",
+      "writes": [
+        "done",
+        "items"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Listener.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n6da42b5e62",
+      "kind": "await",
+      "reads": [
+        "items"
+      ],
+      "label": "items.take()",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Listener.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n9b2c686b30",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Listener.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "nbcc10e0828",
+      "kind": "await",
+      "reads": [
+        "done"
+      ],
+      "label": "done.get()",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Listener.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nd29bb856fa",
+      "kind": "end"
+    },
+    {
+      "id": "nedc0bcd537",
+      "kind": "activity",
+      "name": "Store",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Listener.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "dynamic-signal",
+      "to": "n6da42b5e62",
+      "kind": "wakes"
+    },
+    {
+      "from": "dynamic-signal",
+      "to": "nbcc10e0828",
+      "kind": "wakes"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n6da42b5e62"
+    },
+    {
+      "from": "n6da42b5e62",
+      "to": "nedc0bcd537"
+    },
+    {
+      "from": "n9b2c686b30",
+      "to": "nd29bb856fa"
+    },
+    {
+      "from": "nbcc10e0828",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nedc0bcd537",
+      "to": "nbcc10e0828"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 0
+  }
+}

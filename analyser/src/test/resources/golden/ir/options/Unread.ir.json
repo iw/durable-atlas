@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Unread",
+  "interface": "options.Unread",
+  "implementation": "options.UnreadImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Unread",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n10292a26b8",
+      "kind": "activity",
+      "name": "Store",
+      "timeout": "PT3M",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Unread.kt",
+        "line": 23
+      }
+    },
+    {
+      "id": "n4ebba62869",
+      "kind": "activity",
+      "name": "Sweep",
+      "taskQueue": "kept",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Unread.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n56ddd791f2",
+      "kind": "activity",
+      "name": "Notify",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Unread.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Unread.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "n7a6e90ed1f",
+      "kind": "activity",
+      "name": "Notify",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Unread.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "nbde7f27aec",
+      "kind": "activity",
+      "name": "Fetch",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Unread.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "nc9f22c7dcd",
+      "kind": "activity",
+      "name": "Store",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Unread.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nfcdb4a36a1",
+      "kind": "activity",
+      "name": "Fetch",
+      "taskQueue": "mine",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Unread.kt",
+        "line": 22
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n10292a26b8",
+      "to": "n56ddd791f2"
+    },
+    {
+      "from": "n4ebba62869",
+      "to": "nbde7f27aec"
+    },
+    {
+      "from": "n56ddd791f2",
+      "to": "n4ebba62869"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nfcdb4a36a1"
+    },
+    {
+      "from": "n7a6e90ed1f",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nbde7f27aec",
+      "to": "nc9f22c7dcd"
+    },
+    {
+      "from": "nc9f22c7dcd",
+      "to": "n7a6e90ed1f"
+    },
+    {
+      "from": "nfcdb4a36a1",
+      "to": "n10292a26b8"
+    }
+  ],
+  "stats": {
+    "nodes": 9,
+    "unknown": 0
+  }
+}

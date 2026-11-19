@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "LaneBreak",
+  "interface": "exits.LaneBreak",
+  "implementation": "exits.LaneBreakImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "LaneBreak",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n18bcddf389",
+      "kind": "activity",
+      "name": "CleanUp",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/LaneBreak.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "n1961275cd6",
+      "kind": "activity",
+      "name": "Prepare",
+      "parent": "n7cb7d2bd20",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/LaneBreak.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "n4f468025a9",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/LaneBreak.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "n689b5ed9ac",
+      "kind": "activity",
+      "name": "Check",
+      "parent": "n7cb7d2bd20",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/LaneBreak.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/LaneBreak.kt",
+        "line": 19
+      }
+    },
+    {
+      "id": "n6b135adcc9",
+      "kind": "branch",
+      "label": "id == \"last\"",
+      "parent": "n7cb7d2bd20",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/LaneBreak.kt",
+        "line": 23
+      }
+    },
+    {
+      "id": "n7cb7d2bd20",
+      "kind": "parallel",
+      "parent": "n4f468025a9",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/LaneBreak.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "n91cb855699",
+      "kind": "activity",
+      "name": "Report",
+      "parent": "n7cb7d2bd20",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/LaneBreak.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n18bcddf389",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n1961275cd6",
+      "to": "n6b135adcc9"
+    },
+    {
+      "from": "n4f468025a9",
+      "to": "n18bcddf389"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n4f468025a9"
+    },
+    {
+      "from": "n6b135adcc9",
+      "to": "n7cb7d2bd20",
+      "label": "no"
+    },
+    {
+      "from": "n6b135adcc9",
+      "to": "n91cb855699",
+      "label": "yes"
+    },
+    {
+      "from": "n91cb855699",
+      "to": "n18bcddf389"
+    }
+  ],
+  "stats": {
+    "nodes": 9,
+    "unknown": 0
+  }
+}

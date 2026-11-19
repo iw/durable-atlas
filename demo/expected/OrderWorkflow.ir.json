@@ -1,0 +1,462 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "OrderWorkflow",
+  "interface": "com.example.orders.OrderWorkflow",
+  "implementation": "com.example.orders.OrderWorkflowImpl",
+  "module": ":orders",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "OrderWorkflow",
+      "start": "n00-start"
+    },
+    {
+      "id": "signal-approvePayment",
+      "kind": "signal",
+      "name": "approvePayment",
+      "start": "signal-approvePayment.start",
+      "writes": [
+        "paid"
+      ]
+    },
+    {
+      "id": "signal-cancelOrder",
+      "kind": "signal",
+      "name": "cancelOrder",
+      "start": "signal-cancelOrder.start",
+      "writes": [
+        "cancelled"
+      ]
+    },
+    {
+      "id": "query-getStatus",
+      "kind": "query",
+      "name": "getStatus",
+      "start": "query-getStatus.start",
+      "reads": [
+        "status"
+      ]
+    },
+    {
+      "id": "update-changeAddress",
+      "kind": "update",
+      "name": "changeAddress",
+      "start": "update-changeAddress.start",
+      "reads": [
+        "shippingAddress"
+      ],
+      "writes": [
+        "shippingAddress"
+      ]
+    },
+    {
+      "id": "validator-changeAddress",
+      "kind": "updateValidator",
+      "name": "changeAddress",
+      "start": "validator-changeAddress.start",
+      "reads": [
+        "status"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n00-start",
+      "kind": "start",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 57
+      }
+    },
+    {
+      "id": "n01-validate-order",
+      "kind": "localActivity",
+      "name": "ValidateOrder",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 59
+      }
+    },
+    {
+      "id": "n02-fraud-check-version",
+      "kind": "versionGate",
+      "changeId": "fraud-check-v2",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 62
+      }
+    },
+    {
+      "id": "n03-fraud-check",
+      "kind": "activity",
+      "name": "FraudCheck",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 64
+      }
+    },
+    {
+      "id": "n04-parallel",
+      "kind": "parallel",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 72
+      }
+    },
+    {
+      "id": "n05-reserve-stock",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "timeout": "PT30S",
+      "parent": "n04-parallel",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 74
+      }
+    },
+    {
+      "id": "n06-authorise-payment",
+      "kind": "activity",
+      "name": "AuthorisePayment",
+      "timeout": "PT30S",
+      "parent": "n04-parallel",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 72
+      }
+    },
+    {
+      "id": "n07-await-payment",
+      "kind": "await",
+      "timeout": "PT30M",
+      "reads": [
+        "cancelled",
+        "paid"
+      ],
+      "label": "paid or cancelled",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 80
+      }
+    },
+    {
+      "id": "n08-compensation",
+      "kind": "compensation",
+      "label": "detached",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 83
+      }
+    },
+    {
+      "id": "n09-release-stock",
+      "kind": "activity",
+      "name": "ReleaseStock",
+      "timeout": "PT30S",
+      "parent": "n08-compensation",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 73
+      }
+    },
+    {
+      "id": "n10-void-payment",
+      "kind": "activity",
+      "name": "VoidPayment",
+      "timeout": "PT30S",
+      "parent": "n08-compensation",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 71
+      }
+    },
+    {
+      "id": "n11-order-cancelled",
+      "kind": "fail",
+      "name": "OrderCancelled",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 85
+      }
+    },
+    {
+      "id": "n12-shipments",
+      "kind": "loop",
+      "label": "for each shipment",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 90
+      }
+    },
+    {
+      "id": "n13-shipment-workflow",
+      "kind": "childWorkflow",
+      "name": "ShipmentWorkflow",
+      "parent": "n12-shipments",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 97
+      }
+    },
+    {
+      "id": "n14-shipment-ready",
+      "kind": "signalExternal",
+      "name": "shipmentReady",
+      "label": "Warehouse.shipmentReady",
+      "parent": "n12-shipments",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 106
+      }
+    },
+    {
+      "id": "n15-invoice-number",
+      "kind": "sideEffect",
+      "label": "invoice number",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 110
+      }
+    },
+    {
+      "id": "n16-award-points",
+      "kind": "nexusOperation",
+      "name": "awardPoints",
+      "service": "Loyalty",
+      "timeout": "PT1M",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 113
+      }
+    },
+    {
+      "id": "n17-discount-policy",
+      "kind": "unknown",
+      "reason": "dynamic-dispatch",
+      "candidates": [
+        "com.example.orders.pricing.PromotionDiscount",
+        "com.example.orders.pricing.TierDiscount"
+      ],
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 118
+      }
+    },
+    {
+      "id": "n18-returns-window",
+      "kind": "timer",
+      "duration": "PT336H",
+      "label": "returns window",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 121
+      }
+    },
+    {
+      "id": "n19-continue-as-new-suggested",
+      "kind": "branch",
+      "label": "continue-as-new suggested?",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 123
+      }
+    },
+    {
+      "id": "n20-continue-as-new",
+      "kind": "continueAsNew",
+      "name": "OrderWorkflow",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 125
+      }
+    },
+    {
+      "id": "n21-end",
+      "kind": "end"
+    },
+    {
+      "id": "query-getStatus.end",
+      "kind": "end"
+    },
+    {
+      "id": "query-getStatus.start",
+      "kind": "start",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 146
+      }
+    },
+    {
+      "id": "signal-approvePayment.end",
+      "kind": "end"
+    },
+    {
+      "id": "signal-approvePayment.start",
+      "kind": "start",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 138
+      }
+    },
+    {
+      "id": "signal-cancelOrder.end",
+      "kind": "end"
+    },
+    {
+      "id": "signal-cancelOrder.start",
+      "kind": "start",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 142
+      }
+    },
+    {
+      "id": "update-changeAddress.end",
+      "kind": "end"
+    },
+    {
+      "id": "update-changeAddress.start",
+      "kind": "start",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 148
+      }
+    },
+    {
+      "id": "validator-changeAddress.end",
+      "kind": "end"
+    },
+    {
+      "id": "validator-changeAddress.start",
+      "kind": "start",
+      "loc": {
+        "file": "orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 154
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n00-start",
+      "to": "n01-validate-order"
+    },
+    {
+      "from": "n01-validate-order",
+      "to": "n02-fraud-check-version"
+    },
+    {
+      "from": "n02-fraud-check-version",
+      "to": "n03-fraud-check",
+      "label": "v2"
+    },
+    {
+      "from": "n02-fraud-check-version",
+      "to": "n04-parallel",
+      "label": "v1"
+    },
+    {
+      "from": "n03-fraud-check",
+      "to": "n04-parallel"
+    },
+    {
+      "from": "n04-parallel",
+      "to": "n07-await-payment"
+    },
+    {
+      "from": "n07-await-payment",
+      "to": "n08-compensation",
+      "label": "cancelled"
+    },
+    {
+      "from": "n07-await-payment",
+      "to": "n08-compensation",
+      "kind": "timeout"
+    },
+    {
+      "from": "n07-await-payment",
+      "to": "n12-shipments",
+      "label": "paid"
+    },
+    {
+      "from": "n08-compensation",
+      "to": "n11-order-cancelled"
+    },
+    {
+      "from": "n09-release-stock",
+      "to": "n10-void-payment"
+    },
+    {
+      "from": "n12-shipments",
+      "to": "n15-invoice-number"
+    },
+    {
+      "from": "n13-shipment-workflow",
+      "to": "n14-shipment-ready"
+    },
+    {
+      "from": "n15-invoice-number",
+      "to": "n16-award-points"
+    },
+    {
+      "from": "n16-award-points",
+      "to": "n17-discount-policy"
+    },
+    {
+      "from": "n17-discount-policy",
+      "to": "n18-returns-window"
+    },
+    {
+      "from": "n18-returns-window",
+      "to": "n19-continue-as-new-suggested"
+    },
+    {
+      "from": "n19-continue-as-new-suggested",
+      "to": "n20-continue-as-new",
+      "label": "yes"
+    },
+    {
+      "from": "n19-continue-as-new-suggested",
+      "to": "n21-end",
+      "label": "no"
+    },
+    {
+      "from": "query-getStatus.start",
+      "to": "query-getStatus.end"
+    },
+    {
+      "from": "signal-approvePayment",
+      "to": "n07-await-payment",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-approvePayment.start",
+      "to": "signal-approvePayment.end"
+    },
+    {
+      "from": "signal-cancelOrder",
+      "to": "n07-await-payment",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-cancelOrder.start",
+      "to": "signal-cancelOrder.end"
+    },
+    {
+      "from": "update-changeAddress.start",
+      "to": "update-changeAddress.end"
+    },
+    {
+      "from": "validator-changeAddress.start",
+      "to": "validator-changeAddress.end"
+    }
+  ],
+  "stats": {
+    "nodes": 32,
+    "unknown": 1
+  }
+}

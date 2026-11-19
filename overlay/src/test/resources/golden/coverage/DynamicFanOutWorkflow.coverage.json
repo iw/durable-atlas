@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "DynamicFanOutWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 8,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "DynamicFanOutWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n2911b50e3e",
+      "kind": "activity",
+      "name": "QuoteShipping",
+      "hits": 3,
+      "executions": 1
+    },
+    {
+      "id": "n4f8eb1994c",
+      "kind": "loop",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nf54970af9d",
+      "kind": "parallel",
+      "hits": 3,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n4f8eb1994c",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n4f8eb1994c",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n4f8eb1994c",
+      "to": "nf54970af9d",
+      "implied": true,
+      "hits": 3,
+      "executions": 1
+    },
+    {
+      "from": "nf54970af9d",
+      "to": "n4f8eb1994c",
+      "implied": true,
+      "hits": 3,
+      "executions": 1
+    },
+    {
+      "from": "nf54970af9d",
+      "to": "n2911b50e3e",
+      "implied": true,
+      "hits": 3,
+      "executions": 1
+    },
+    {
+      "from": "n2911b50e3e",
+      "to": "nf54970af9d",
+      "implied": true,
+      "hits": 3,
+      "executions": 1
+    }
+  ],
+  "neverHit": [],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "DynamicFanOutWorkflow.json",
+      "runId": "44c67d9f-c847-449f-bf19-7f29698744d0",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 8,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

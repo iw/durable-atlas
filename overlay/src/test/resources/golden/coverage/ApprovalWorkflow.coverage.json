@@ -1,0 +1,356 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "ApprovalWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 13,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "ApprovalWorkflow",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "signal-approve",
+      "kind": "signal",
+      "name": "approve",
+      "hits": 2,
+      "executions": 1
+    },
+    {
+      "id": "signal-reject",
+      "kind": "signal",
+      "name": "reject",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "query-approvalCount",
+      "kind": "query",
+      "name": "approvalCount",
+      "recorded": false,
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "query-status",
+      "kind": "query",
+      "name": "status",
+      "recorded": false,
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "update-addNote",
+      "kind": "update",
+      "name": "addNote",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "update-set-required-approvals",
+      "kind": "update",
+      "name": "set-required-approvals",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "validator-set-required-approvals",
+      "kind": "updateValidator",
+      "name": "set-required-approvals",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n04adeb7c0c",
+      "kind": "activity",
+      "name": "NotifyAudit",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n194162b7f7",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "n19ae31aae7",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n1e244d9125",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n1f4643f22a",
+      "kind": "start",
+      "recorded": false,
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "n2dccf41ee6",
+      "kind": "end",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "n40f04dc3b2",
+      "kind": "start",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "n60ee52405a",
+      "kind": "end",
+      "recorded": false,
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "n62b63817dd",
+      "kind": "start",
+      "hits": 2,
+      "executions": 1
+    },
+    {
+      "id": "n6691e80c57",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n82276031f7",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n89dbd07b98",
+      "kind": "await",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n92d4492d30",
+      "kind": "start",
+      "recorded": false,
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "nb777360ca0",
+      "kind": "end",
+      "recorded": false,
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "nd193561861",
+      "kind": "activity",
+      "name": "NotifyAudit",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nda6cf50e8d",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nf45401b72d",
+      "kind": "end",
+      "hits": 2,
+      "executions": 1
+    },
+    {
+      "id": "nf467893f31",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nfdc744e6df",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n04adeb7c0c",
+      "to": "nda6cf50e8d",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n194162b7f7",
+      "to": "nedd528afe0",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n19ae31aae7",
+      "to": "n04adeb7c0c",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n1e244d9125",
+      "to": "nf467893f31",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n1f4643f22a",
+      "to": "nb777360ca0",
+      "recorded": false,
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n40f04dc3b2",
+      "to": "n2dccf41ee6",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n62b63817dd",
+      "to": "nf45401b72d",
+      "hits": 2,
+      "executions": 1
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n82276031f7",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n82276031f7",
+      "to": "n89dbd07b98",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n89dbd07b98",
+      "to": "n194162b7f7",
+      "kind": "timeout",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n89dbd07b98",
+      "to": "nd193561861",
+      "label": "approvals >= requiredApprovals",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n89dbd07b98",
+      "to": "nedd528afe0",
+      "label": "rejectionReason != null",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n92d4492d30",
+      "to": "n60ee52405a",
+      "recorded": false,
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "nd193561861",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "nfdc744e6df",
+      "to": "n6691e80c57",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "signal-approve",
+      "to": "n89dbd07b98",
+      "kind": "wakes",
+      "hits": 2,
+      "executions": 1
+    },
+    {
+      "from": "signal-reject",
+      "to": "n89dbd07b98",
+      "kind": "wakes",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "update-set-required-approvals",
+      "to": "n89dbd07b98",
+      "kind": "wakes",
+      "hits": 0,
+      "executions": 0
+    }
+  ],
+  "neverHit": [
+    "n194162b7f7",
+    "n2dccf41ee6",
+    "n40f04dc3b2"
+  ],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "ApprovalWorkflow.json",
+      "runId": "a2427bcb-c581-486f-a336-f20b10bae25b",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 13,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "LaneEnds",
+  "interface": "ends.LaneEnds",
+  "implementation": "ends.LaneEndsImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "LaneEnds",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n099728b3d7",
+      "kind": "compensation",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LaneEnds.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n2ba7060ce8",
+      "kind": "activity",
+      "name": "Prepare",
+      "parent": "nd3611ccfaa",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LaneEnds.kt",
+        "line": 25
+      }
+    },
+    {
+      "id": "n4251dd6fd9",
+      "kind": "parallel",
+      "parent": "ne573315c71",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LaneEnds.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n51911e9091",
+      "kind": "activity",
+      "name": "Check",
+      "parent": "n4251dd6fd9",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LaneEnds.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LaneEnds.kt",
+        "line": 17
+      }
+    },
+    {
+      "id": "n8cbdf30549",
+      "kind": "branch",
+      "label": "id.isEmpty()",
+      "parent": "n4251dd6fd9",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LaneEnds.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "na990d742d5",
+      "kind": "branch",
+      "label": "id == \"kept\"",
+      "parent": "nc109eab801",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LaneEnds.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nae45645756",
+      "kind": "loop",
+      "label": "for each id",
+      "parent": "nd3611ccfaa",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LaneEnds.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "nb300ca166f",
+      "kind": "activity",
+      "name": "Undo",
+      "parent": "nc109eab801",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LaneEnds.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "nbf14743bd6",
+      "kind": "activity",
+      "name": "Report",
+      "parent": "n4251dd6fd9",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LaneEnds.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "nc109eab801",
+      "kind": "loop",
+      "label": "for each id",
+      "parent": "n099728b3d7",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LaneEnds.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "nd3611ccfaa",
+      "kind": "parallel",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LaneEnds.kt",
+        "line": 19
+      }
+    },
+    {
+      "id": "ne573315c71",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LaneEnds.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "neb9bb5bfea",
+      "kind": "branch",
+      "label": "id == \"stop\"",
+      "parent": "nae45645756",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LaneEnds.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf5bb97c910",
+      "kind": "activity",
+      "name": "Work",
+      "parent": "nae45645756",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LaneEnds.kt",
+        "line": 22
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n099728b3d7",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nd3611ccfaa"
+    },
+    {
+      "from": "n8cbdf30549",
+      "to": "nbf14743bd6",
+      "label": "no"
+    },
+    {
+      "from": "n8cbdf30549",
+      "to": "ne573315c71",
+      "label": "yes"
+    },
+    {
+      "from": "na990d742d5",
+      "to": "n099728b3d7",
+      "label": "yes"
+    },
+    {
+      "from": "na990d742d5",
+      "to": "nb300ca166f",
+      "label": "no"
+    },
+    {
+      "from": "nd3611ccfaa",
+      "to": "ne573315c71"
+    },
+    {
+      "from": "ne573315c71",
+      "to": "n099728b3d7"
+    },
+    {
+      "from": "neb9bb5bfea",
+      "to": "nd3611ccfaa",
+      "label": "yes"
+    },
+    {
+      "from": "neb9bb5bfea",
+      "to": "nf5bb97c910",
+      "label": "no"
+    }
+  ],
+  "stats": {
+    "nodes": 16,
+    "unknown": 0
+  }
+}

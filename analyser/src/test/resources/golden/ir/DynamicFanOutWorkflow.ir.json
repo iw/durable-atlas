@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "DynamicFanOutWorkflow",
+  "interface": "com.example.fixture.workflows.controlflow.DynamicFanOutWorkflow",
+  "implementation": "com.example.fixture.workflows.controlflow.DynamicFanOutWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "DynamicFanOutWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n2911b50e3e",
+      "kind": "activity",
+      "name": "QuoteShipping",
+      "timeout": "PT30S",
+      "parent": "nf54970af9d",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/DynamicFanOutWorkflow.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "n4f8eb1994c",
+      "kind": "loop",
+      "label": "for each sku",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/DynamicFanOutWorkflow.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/DynamicFanOutWorkflow.kt",
+        "line": 19
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf54970af9d",
+      "kind": "parallel",
+      "parent": "n4f8eb1994c",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/DynamicFanOutWorkflow.kt",
+        "line": 21
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n4f8eb1994c",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n4f8eb1994c"
+    }
+  ],
+  "stats": {
+    "nodes": 5,
+    "unknown": 0
+  }
+}

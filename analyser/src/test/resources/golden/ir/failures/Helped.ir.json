@@ -1,0 +1,249 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Helped",
+  "interface": "failing.Helped",
+  "implementation": "failing.HelpedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Helped",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0a2f4f1479",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Helped.kt",
+        "line": 45
+      }
+    },
+    {
+      "id": "n3c36d0121f",
+      "kind": "branch",
+      "label": "Checks.positive throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Helped.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n412988bcf8",
+      "kind": "fail",
+      "name": "RejectedPayment",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Helped.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n4762f95179",
+      "kind": "fail",
+      "name": "StockFault",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Helped.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n4ab590764b",
+      "kind": "fail",
+      "name": "Refused",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Helped.kt",
+        "line": 49
+      }
+    },
+    {
+      "id": "n53c611907c",
+      "kind": "fail",
+      "name": "CustomerBlocked",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Helped.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n5d1fdeb0ca",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Helped.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n60050e9bde",
+      "kind": "branch",
+      "label": "Checks.inStock throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Helped.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Helped.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n76c666c933",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Helped.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "n846bfd9d95",
+      "kind": "branch",
+      "label": "again > 100",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Helped.kt",
+        "line": 49
+      }
+    },
+    {
+      "id": "na0b044b2a0",
+      "kind": "branch",
+      "label": "Checks.allowed throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Helped.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "na71ee3d428",
+      "kind": "branch",
+      "label": "Checks.known throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Helped.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "na7c7e69555",
+      "kind": "branch",
+      "label": "Checks.payable throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Helped.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "nba46bcda0a",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Helped.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0a2f4f1479",
+      "to": "n846bfd9d95"
+    },
+    {
+      "from": "n3c36d0121f",
+      "to": "na71ee3d428",
+      "label": "no"
+    },
+    {
+      "from": "n3c36d0121f",
+      "to": "nba46bcda0a",
+      "kind": "exception",
+      "label": "DomainFault"
+    },
+    {
+      "from": "n5d1fdeb0ca",
+      "to": "n3c36d0121f"
+    },
+    {
+      "from": "n60050e9bde",
+      "to": "n4762f95179",
+      "label": "yes"
+    },
+    {
+      "from": "n60050e9bde",
+      "to": "na7c7e69555",
+      "label": "no"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "na0b044b2a0"
+    },
+    {
+      "from": "n76c666c933",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n846bfd9d95",
+      "to": "n4ab590764b",
+      "label": "yes"
+    },
+    {
+      "from": "n846bfd9d95",
+      "to": "n76c666c933",
+      "label": "no"
+    },
+    {
+      "from": "na0b044b2a0",
+      "to": "n53c611907c",
+      "label": "yes"
+    },
+    {
+      "from": "na0b044b2a0",
+      "to": "n60050e9bde",
+      "label": "no"
+    },
+    {
+      "from": "na71ee3d428",
+      "to": "n0a2f4f1479",
+      "kind": "exception",
+      "label": "CodeFault"
+    },
+    {
+      "from": "na71ee3d428",
+      "to": "n846bfd9d95",
+      "label": "no"
+    },
+    {
+      "from": "na7c7e69555",
+      "to": "n412988bcf8",
+      "label": "yes"
+    },
+    {
+      "from": "na7c7e69555",
+      "to": "n5d1fdeb0ca",
+      "label": "no"
+    },
+    {
+      "from": "nba46bcda0a",
+      "to": "na71ee3d428"
+    }
+  ],
+  "stats": {
+    "nodes": 16,
+    "unknown": 0
+  }
+}

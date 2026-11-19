@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Compensated",
+  "interface": "extensions.Compensated",
+  "implementation": "extensions.CompensatedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Compensated",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n213929c329",
+      "kind": "fail",
+      "name": "ActivityFailure",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Compensated.kt",
+        "line": 61
+      }
+    },
+    {
+      "id": "n56c22b738a",
+      "kind": "activity",
+      "name": "One",
+      "taskQueue": "base",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Compensated.kt",
+        "line": 56
+      }
+    },
+    {
+      "id": "n6185743070",
+      "kind": "activity",
+      "name": "Two",
+      "taskQueue": "base",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Compensated.kt",
+        "line": 58
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Compensated.kt",
+        "line": 52
+      }
+    },
+    {
+      "id": "n970001f345",
+      "kind": "activity",
+      "name": "One",
+      "taskQueue": "base",
+      "timeout": "PT5S",
+      "parent": "ne0ce572c2b",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Compensated.kt",
+        "line": 55
+      }
+    },
+    {
+      "id": "nb3de00dc1d",
+      "kind": "compensation",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Compensated.kt",
+        "line": 60
+      }
+    },
+    {
+      "id": "nb653cfd2fc",
+      "kind": "activity",
+      "name": "Two",
+      "taskQueue": "base",
+      "timeout": "PT5S",
+      "parent": "ne0ce572c2b",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Compensated.kt",
+        "line": 57
+      }
+    },
+    {
+      "id": "ne0ce572c2b",
+      "kind": "parallel",
+      "parent": "nb3de00dc1d",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Compensated.kt",
+        "line": 60
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n56c22b738a",
+      "to": "n6185743070"
+    },
+    {
+      "from": "n56c22b738a",
+      "to": "nb3de00dc1d",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "n6185743070",
+      "to": "nb3de00dc1d",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "n6185743070",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n56c22b738a"
+    },
+    {
+      "from": "nb3de00dc1d",
+      "to": "n213929c329"
+    }
+  ],
+  "stats": {
+    "nodes": 9,
+    "unknown": 0
+  }
+}

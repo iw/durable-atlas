@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Notices",
+  "interface": "patterns.Notices",
+  "implementation": "patterns.NoticesImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Notices",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0c4bed32de",
+      "kind": "childWorkflow",
+      "name": "Notice",
+      "interface": "patterns.Notify",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Notices.kt",
+        "line": 56
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Notices.kt",
+        "line": 55
+      }
+    },
+    {
+      "id": "n86c42e445c",
+      "kind": "childWorkflow",
+      "name": "Notice",
+      "interface": "patterns.Remind",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Notices.kt",
+        "line": 57
+      }
+    },
+    {
+      "id": "ne98aaf5afa",
+      "kind": "childWorkflow",
+      "name": "Courier",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Notices.kt",
+        "line": 58
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0c4bed32de",
+      "to": "n86c42e445c"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n0c4bed32de"
+    },
+    {
+      "from": "n86c42e445c",
+      "to": "ne98aaf5afa"
+    },
+    {
+      "from": "ne98aaf5afa",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 5,
+    "unknown": 0
+  }
+}

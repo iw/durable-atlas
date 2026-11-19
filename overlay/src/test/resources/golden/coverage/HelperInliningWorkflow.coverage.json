@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "HelperInliningWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 19,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "HelperInliningWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n076f31a61c",
+      "kind": "timer",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n1cbe1d2198",
+      "kind": "activity",
+      "name": "PaymentCharge",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n3a10959ad2",
+      "kind": "activity",
+      "name": "NotifySms",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n7fccd92003",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "hits": 2,
+      "executions": 1
+    },
+    {
+      "id": "n8840af525a",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n949f088c62",
+      "kind": "loop",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nc73f691eb1",
+      "kind": "activity",
+      "name": "CapturePayment",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "neeb81facf3",
+      "kind": "activity",
+      "name": "NotifyAudit",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nf7da93fe86",
+      "kind": "activity",
+      "name": "QuoteShipping",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n076f31a61c",
+      "to": "nf7da93fe86",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n1cbe1d2198",
+      "to": "nc73f691eb1",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n3a10959ad2",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n949f088c62",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n8840af525a",
+      "to": "neeb81facf3",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n949f088c62",
+      "to": "n1cbe1d2198",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "nc73f691eb1",
+      "to": "n076f31a61c",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "neeb81facf3",
+      "to": "n3a10959ad2",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "nf7da93fe86",
+      "to": "n8840af525a",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n949f088c62",
+      "to": "n7fccd92003",
+      "implied": true,
+      "hits": 2,
+      "executions": 1
+    },
+    {
+      "from": "n7fccd92003",
+      "to": "n949f088c62",
+      "implied": true,
+      "hits": 2,
+      "executions": 1
+    }
+  ],
+  "neverHit": [],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "HelperInliningWorkflow.json",
+      "runId": "1302ac88-532d-4c3e-a592-5f3fd651d7ac",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 19,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

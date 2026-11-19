@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Stubbed",
+  "interface": "extensions.Stubbed",
+  "implementation": "extensions.StubbedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Stubbed",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n10beea7470",
+      "kind": "childWorkflow",
+      "name": "Beside",
+      "parent": "n5785f9ae43",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Stubbed.kt",
+        "line": 63
+      }
+    },
+    {
+      "id": "n11482c457e",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT6S",
+      "parent": "nee550516f2",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Stubbed.kt",
+        "line": 56
+      }
+    },
+    {
+      "id": "n1bd6ff489d",
+      "kind": "activity",
+      "name": "Named",
+      "timeout": "PT6S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Stubbed.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "n553a36f656",
+      "kind": "activity",
+      "name": "Forgotten",
+      "timeout": "PT6S",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Stubbed.kt",
+        "line": 58
+      }
+    },
+    {
+      "id": "n5785f9ae43",
+      "kind": "parallel",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Stubbed.kt",
+        "line": 63
+      }
+    },
+    {
+      "id": "n6004dcba92",
+      "kind": "activity",
+      "name": "Meanwhile",
+      "timeout": "PT6S",
+      "parent": "n5785f9ae43",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Stubbed.kt",
+        "line": 64
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Stubbed.kt",
+        "line": 53
+      }
+    },
+    {
+      "id": "nbd0d421b12",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT6S",
+      "parent": "nee550516f2",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Stubbed.kt",
+        "line": 55
+      }
+    },
+    {
+      "id": "nd2c971c111",
+      "kind": "localActivity",
+      "name": "Nearby",
+      "timeout": "PT2S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Stubbed.kt",
+        "line": 59
+      }
+    },
+    {
+      "id": "ne93cb78f68",
+      "kind": "childWorkflow",
+      "name": "Waited",
+      "timeout": "PT3M",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Stubbed.kt",
+        "line": 61
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nee550516f2",
+      "kind": "parallel",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Stubbed.kt",
+        "line": 55
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n1bd6ff489d",
+      "to": "nee550516f2"
+    },
+    {
+      "from": "n553a36f656",
+      "to": "nd2c971c111"
+    },
+    {
+      "from": "n5785f9ae43",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n1bd6ff489d"
+    },
+    {
+      "from": "nd2c971c111",
+      "to": "ne93cb78f68"
+    },
+    {
+      "from": "ne93cb78f68",
+      "to": "n5785f9ae43"
+    },
+    {
+      "from": "nee550516f2",
+      "to": "n553a36f656"
+    }
+  ],
+  "stats": {
+    "nodes": 12,
+    "unknown": 0
+  }
+}

@@ -1,0 +1,313 @@
+block workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt:35
+  val saga: io.temporal.workflow.Saga :36
+    call constructor io.temporal.workflow.Saga.<init>(io.temporal.workflow.Saga.Options) [library]: io.temporal.workflow.Saga :36
+      argument options `Saga.Options.Builder().build()`
+        call io.temporal.workflow.Saga.Options.Builder.build() [library]: io.temporal.workflow.Saga.Options :36
+          on io.temporal.workflow.Saga.Options.Builder
+          receiver
+            call constructor io.temporal.workflow.Saga.Options.Builder.<init>() [library]: io.temporal.workflow.Saga.Options.Builder :36
+  try :37
+    block :37
+      for `line in order.lines` :39
+        header
+          read com.example.fixture.workflows.order.Order.lines: kotlin.collections.List<com.example.fixture.workflows.order.OrderLine> :39
+            receiver
+              local order: com.example.fixture.workflows.order.Order :39
+        body
+          block :39
+            if `!localInventory.checkAvailability(line.sku)` :40
+              condition
+                other ! `!localInventory.checkAvailability(line.sku)` :40
+                  call com.example.fixture.activities.InventoryActivities.checkAvailability(kotlin.String) [source]: kotlin.Boolean :40
+                    on com.example.fixture.activities.InventoryActivities @io.temporal.activity.ActivityInterface
+                    receiver
+                      read com.example.fixture.workflows.order.OrderWorkflowImpl.localInventory on this: com.example.fixture.activities.InventoryActivities :40
+                    argument sku `line.sku`
+                      read com.example.fixture.workflows.order.OrderLine.sku: kotlin.String :40
+                        receiver
+                          local line: com.example.fixture.workflows.order.OrderLine :40
+              then
+                block :40
+                  throw: io.temporal.failure.ApplicationFailure :41
+                    call io.temporal.failure.ApplicationFailure.newFailure(kotlin.String,kotlin.String,kotlin.Any...) [library]: io.temporal.failure.ApplicationFailure :41
+                      argument message `"${line.sku} is out of stock"`
+                        other template `"${line.sku} is out of stock"` :41
+                          read com.example.fixture.workflows.order.OrderLine.sku: kotlin.String :41
+                            receiver
+                              local line: com.example.fixture.workflows.order.OrderLine :41
+                      argument type `"OutOfStock"` = "OutOfStock"
+                        literal "OutOfStock" :41
+            val reservationId: kotlin.String :43
+              call com.example.fixture.activities.InventoryActivities.reserveStock(kotlin.String,kotlin.Int) [source]: kotlin.String :43
+                on com.example.fixture.activities.InventoryActivities @io.temporal.activity.ActivityInterface
+                receiver
+                  read com.example.fixture.workflows.order.OrderWorkflowImpl.inventory on this: com.example.fixture.activities.InventoryActivities :43
+                argument sku `line.sku`
+                  read com.example.fixture.workflows.order.OrderLine.sku: kotlin.String :43
+                    receiver
+                      local line: com.example.fixture.workflows.order.OrderLine :43
+                argument quantity `line.quantity`
+                  read com.example.fixture.workflows.order.OrderLine.quantity: kotlin.Int :43
+                    receiver
+                      local line: com.example.fixture.workflows.order.OrderLine :43
+            call io.temporal.workflow.Saga.addCompensation(io.temporal.workflow.Functions.Proc) [library]: kotlin.Unit :44
+              on io.temporal.workflow.Saga
+              receiver
+                local saga: io.temporal.workflow.Saga :44
+              argument operation `{ inventory.release(reservationId) }`
+                lambda () :44
+                  block :44
+                    call com.example.fixture.activities.InventoryActivities.release(kotlin.String) [source]: kotlin.Unit :44
+                      on com.example.fixture.activities.InventoryActivities @io.temporal.activity.ActivityInterface
+                      receiver
+                        read com.example.fixture.workflows.order.OrderWorkflowImpl.inventory on this: com.example.fixture.activities.InventoryActivities :44
+                      argument reservationId `reservationId`
+                        local reservationId: kotlin.String :44
+      write com.example.fixture.workflows.order.OrderWorkflowImpl.status on this = :48
+        value
+          literal "AWAITING_PAYMENT" :48
+      call com.example.fixture.activities.NotificationActivities.email(kotlin.String,kotlin.String) [source]: kotlin.Unit :49
+        on com.example.fixture.activities.NotificationActivities @io.temporal.activity.ActivityInterface(namePrefix = "Notify")
+        receiver
+          read com.example.fixture.workflows.order.OrderWorkflowImpl.notifications on this: com.example.fixture.activities.NotificationActivities :49
+        argument recipient `order.customerEmail`
+          read com.example.fixture.workflows.order.Order.customerEmail: kotlin.String :49
+            receiver
+              local order: com.example.fixture.workflows.order.Order :49
+        argument message `"Payment requested for order ${order.orderId}"`
+          other template `"Payment requested for order ${order.orderId}"` :49
+            read com.example.fixture.workflows.order.Order.orderId: kotlin.String :49
+              receiver
+                local order: com.example.fixture.workflows.order.Order :49
+      val signalled: kotlin.Boolean :50
+        call io.temporal.workflow.Workflow.await(java.time.Duration,java.util.function.Supplier) [library]: kotlin.Boolean :50
+          argument timeout `Duration.ofMinutes(30)`
+            call java.time.Duration.ofMinutes(kotlin.Long) [library]: java.time.Duration :50
+              argument minutes `30` = 30
+                literal 30 :50
+          argument unblockCondition `{ paymentReference != null || cancelReason != null }`
+            lambda () :50
+              block :51
+                other || `paymentReference != null || cancelReason != null` :51
+                  other != `paymentReference != null` :51
+                    read com.example.fixture.workflows.order.OrderWorkflowImpl.paymentReference on this: kotlin.String? :51
+                    literal null :51
+                  other != `cancelReason != null` :51
+                    read com.example.fixture.workflows.order.OrderWorkflowImpl.cancelReason on this: kotlin.String? :51
+                    literal null :51
+      if `!signalled || cancelReason != null` :53
+        condition
+          other || `!signalled || cancelReason != null` :53
+            other ! `!signalled` :53
+              local signalled: kotlin.Boolean :53
+            other != `cancelReason != null` :53
+              read com.example.fixture.workflows.order.OrderWorkflowImpl.cancelReason on this: kotlin.String? :53
+              literal null :53
+        then
+          block :53
+            call io.temporal.workflow.Saga.compensate() [library]: kotlin.Unit :54
+              on io.temporal.workflow.Saga
+              receiver
+                local saga: io.temporal.workflow.Saga :54
+            call com.example.fixture.activities.NotificationActivities.email(kotlin.String,kotlin.String) [source]: kotlin.Unit :55
+              on com.example.fixture.activities.NotificationActivities @io.temporal.activity.ActivityInterface(namePrefix = "Notify")
+              receiver
+                read com.example.fixture.workflows.order.OrderWorkflowImpl.notifications on this: com.example.fixture.activities.NotificationActivities :55
+              argument recipient `order.customerEmail`
+                read com.example.fixture.workflows.order.Order.customerEmail: kotlin.String :55
+                  receiver
+                    local order: com.example.fixture.workflows.order.Order :55
+              argument message `"Order ${order.orderId} was cancelled"`
+                other template `"Order ${order.orderId} was cancelled"` :55
+                  read com.example.fixture.workflows.order.Order.orderId: kotlin.String :55
+                    receiver
+                      local order: com.example.fixture.workflows.order.Order :55
+            write com.example.fixture.workflows.order.OrderWorkflowImpl.status on this = :56
+              value
+                literal "CANCELLED" :56
+            return :57
+              call constructor com.example.fixture.workflows.order.OrderResult.<init>(kotlin.String,kotlin.String,kotlin.collections.List) [source]: com.example.fixture.workflows.order.OrderResult :57
+                argument status `status`
+                  read com.example.fixture.workflows.order.OrderWorkflowImpl.status on this: kotlin.String :57
+      val totalCents: kotlin.Long :61
+        call kotlin.collections.sumOf(kotlin.Function1) on kotlin.collections.Iterable [library] <com.example.fixture.workflows.order.OrderLine>: kotlin.Long :61
+          on kotlin.collections.List<com.example.fixture.workflows.order.OrderLine>
+          receiver
+            read com.example.fixture.workflows.order.Order.lines: kotlin.collections.List<com.example.fixture.workflows.order.OrderLine> :61
+              receiver
+                local order: com.example.fixture.workflows.order.Order :61
+          argument selector `{ it.quantity * it.unitPriceCents }`
+            lambda (it) :61
+              block :61
+                other * `it.quantity * it.unitPriceCents` :61
+                  read com.example.fixture.workflows.order.OrderLine.quantity: kotlin.Int :61
+                    receiver
+                      local it: com.example.fixture.workflows.order.OrderLine :61
+                  read com.example.fixture.workflows.order.OrderLine.unitPriceCents: kotlin.Long :61
+                    receiver
+                      local it: com.example.fixture.workflows.order.OrderLine :61
+      val paymentId: kotlin.String :62
+        call com.example.fixture.helpers.PaymentProcessor.chargeAndCapture(kotlin.String,kotlin.Long) [source]: kotlin.String :62
+          on com.example.fixture.helpers.PaymentProcessor
+          receiver
+            read com.example.fixture.workflows.order.OrderWorkflowImpl.paymentProcessor on this: com.example.fixture.helpers.PaymentProcessor :62
+          argument orderId `order.orderId`
+            read com.example.fixture.workflows.order.Order.orderId: kotlin.String :62
+              receiver
+                local order: com.example.fixture.workflows.order.Order :62
+          argument amountCents `totalCents`
+            local totalCents: kotlin.Long :62
+      call io.temporal.workflow.Saga.addCompensation(io.temporal.workflow.Functions.Proc) [library]: kotlin.Unit :63
+        on io.temporal.workflow.Saga
+        receiver
+          local saga: io.temporal.workflow.Saga :63
+        argument operation `{ payments.refund(paymentId) }`
+          lambda () :63
+            block :63
+              call com.example.fixture.activities.PaymentActivities.refund(kotlin.String) [source]: kotlin.Unit :63
+                on com.example.fixture.activities.PaymentActivities @io.temporal.activity.ActivityInterface(namePrefix = "Payment")
+                receiver
+                  read com.example.fixture.workflows.order.OrderWorkflowImpl.payments on this: com.example.fixture.activities.PaymentActivities :63
+                argument paymentId `paymentId`
+                  local paymentId: kotlin.String :63
+      val version: kotlin.Int :66
+        call io.temporal.workflow.Workflow.getVersion(kotlin.String,kotlin.Int,kotlin.Int) [library]: kotlin.Int :66
+          argument changeId `"order-audit"` = "order-audit"
+            literal "order-audit" :66
+          argument minSupported `Workflow.DEFAULT_VERSION` = -1
+            read io.temporal.workflow.Workflow.DEFAULT_VERSION: kotlin.Int = -1 :66
+          argument maxSupported `1` = 1
+            literal 1 :66
+      if `version >= 1` :67
+        condition
+          other >= `version >= 1` :67
+            local version: kotlin.Int :67
+            literal 1 :67
+        then
+          block :67
+            call com.example.fixture.activities.NotificationActivities.audit(kotlin.String) [source]: kotlin.Unit :68
+              on com.example.fixture.activities.NotificationActivities @io.temporal.activity.ActivityInterface(namePrefix = "Notify")
+              receiver
+                read com.example.fixture.workflows.order.OrderWorkflowImpl.notifications on this: com.example.fixture.activities.NotificationActivities :68
+              argument entry `"order ${order.orderId} paid with $paymentId"`
+                other template `"order ${order.orderId} paid with $paymentId"` :68
+                  read com.example.fixture.workflows.order.Order.orderId: kotlin.String :68
+                    receiver
+                      local order: com.example.fixture.workflows.order.Order :68
+                  local paymentId: kotlin.String :68
+      val confirmation: io.temporal.workflow.Promise<java.lang.Void> :72
+        call io.temporal.workflow.Async.procedure(io.temporal.workflow.Functions.Proc) [library]: io.temporal.workflow.Promise<java.lang.Void> :72
+          argument procedure `{ notifications.email(order.customerEmail, "Order ${order.orderId} confirmed") }`
+            lambda () :72
+              block :73
+                call com.example.fixture.activities.NotificationActivities.email(kotlin.String,kotlin.String) [source]: kotlin.Unit :73
+                  on com.example.fixture.activities.NotificationActivities @io.temporal.activity.ActivityInterface(namePrefix = "Notify")
+                  receiver
+                    read com.example.fixture.workflows.order.OrderWorkflowImpl.notifications on this: com.example.fixture.activities.NotificationActivities :73
+                  argument recipient `order.customerEmail`
+                    read com.example.fixture.workflows.order.Order.customerEmail: kotlin.String :73
+                      receiver
+                        local order: com.example.fixture.workflows.order.Order :73
+                  argument message `"Order ${order.orderId} confirmed"`
+                    other template `"Order ${order.orderId} confirmed"` :73
+                      read com.example.fixture.workflows.order.Order.orderId: kotlin.String :73
+                        receiver
+                          local order: com.example.fixture.workflows.order.Order :73
+      val pickRequest: io.temporal.workflow.Promise<java.lang.Void> :75
+        call io.temporal.workflow.Async.procedure(io.temporal.workflow.Functions.Proc) [library]: io.temporal.workflow.Promise<java.lang.Void> :75
+          argument procedure `{ notifications.sms(WAREHOUSE_PHONE, "Pick order ${order.orderId} for $shipping…`
+            lambda () :75
+              block :76
+                call com.example.fixture.activities.NotificationActivities.sms(kotlin.String,kotlin.String) [source]: kotlin.Unit :76
+                  on com.example.fixture.activities.NotificationActivities @io.temporal.activity.ActivityInterface(namePrefix = "Notify")
+                  receiver
+                    read com.example.fixture.workflows.order.OrderWorkflowImpl.notifications on this: com.example.fixture.activities.NotificationActivities :76
+                  argument recipient `WAREHOUSE_PHONE` = "+15550100"
+                    read com.example.fixture.helpers.WAREHOUSE_PHONE: kotlin.String = "+15550100" :76
+                  argument message `"Pick order ${order.orderId} for $shippingAddress"`
+                    other template `"Pick order ${order.orderId} for $shippingAddress"` :76
+                      read com.example.fixture.workflows.order.Order.orderId: kotlin.String :76
+                        receiver
+                          local order: com.example.fixture.workflows.order.Order :76
+                      read com.example.fixture.workflows.order.OrderWorkflowImpl.shippingAddress on this: kotlin.String :76
+      call io.temporal.workflow.Promise.get() [library]: java.lang.Void :78
+        on io.temporal.workflow.Promise<java.lang.Void>
+        receiver
+          call io.temporal.workflow.Promise.allOf(io.temporal.workflow.Promise...) [library]: io.temporal.workflow.Promise<java.lang.Void> :78
+            argument promises `confirmation`
+              local confirmation: io.temporal.workflow.Promise<java.lang.Void> :78
+            argument promises `pickRequest`
+              local pickRequest: io.temporal.workflow.Promise<java.lang.Void> :78
+      write com.example.fixture.workflows.order.OrderWorkflowImpl.status on this = :81
+        value
+          literal "SHIPPING" :81
+      val shipment: com.example.fixture.workflows.order.ShipmentWorkflow :82
+        call io.temporal.workflow.Workflow.newChildWorkflowStub(java.lang.Class,io.temporal.workflow.ChildWorkflowOptions) [library] <com.example.fixture.workflows.order.ShipmentWorkflow @io.temporal.workflow.WorkflowInterface>: com.example.fixture.workflows.order.ShipmentWorkflow :82
+          argument workflowInterface `ShipmentWorkflow::class.java`
+            read kotlin.jvm.java: java.lang.Class<com.example.fixture.workflows.order.ShipmentWorkflow> :83
+              receiver
+                class-literal com.example.fixture.workflows.order.ShipmentWorkflow @io.temporal.workflow.WorkflowInterface :83
+          argument options `ChildWorkflowOptions.newBuilder() .setWorkflowId("shipment-${order.orderId}") .…`
+            call io.temporal.workflow.ChildWorkflowOptions.Builder.build() [library]: io.temporal.workflow.ChildWorkflowOptions :87
+              on io.temporal.workflow.ChildWorkflowOptions.Builder
+              receiver
+                call io.temporal.workflow.ChildWorkflowOptions.Builder.setTaskQueue(kotlin.String) [library]: io.temporal.workflow.ChildWorkflowOptions.Builder :86
+                  on io.temporal.workflow.ChildWorkflowOptions.Builder
+                  receiver
+                    call io.temporal.workflow.ChildWorkflowOptions.Builder.setWorkflowId(kotlin.String) [library]: io.temporal.workflow.ChildWorkflowOptions.Builder :85
+                      on io.temporal.workflow.ChildWorkflowOptions.Builder
+                      receiver
+                        call io.temporal.workflow.ChildWorkflowOptions.newBuilder() [library]: io.temporal.workflow.ChildWorkflowOptions.Builder :84
+                      argument workflowId `"shipment-${order.orderId}"`
+                        other template `"shipment-${order.orderId}"` :85
+                          read com.example.fixture.workflows.order.Order.orderId: kotlin.String :85
+                            receiver
+                              local order: com.example.fixture.workflows.order.Order :85
+                  argument taskQueue `TaskQueues.SHIPPING` = "shipping"
+                    read com.example.fixture.helpers.TaskQueues.SHIPPING: kotlin.String = "shipping" :86
+                      receiver
+                        class com.example.fixture.helpers.TaskQueues :86
+      val trackingIds: kotlin.collections.List<kotlin.String> :89
+        call com.example.fixture.workflows.order.ShipmentWorkflow.ship(kotlin.String,kotlin.collections.List) [source]: kotlin.collections.List<kotlin.String> :89
+          on com.example.fixture.workflows.order.ShipmentWorkflow @io.temporal.workflow.WorkflowInterface
+          receiver
+            local shipment: com.example.fixture.workflows.order.ShipmentWorkflow :89
+          argument orderId `order.orderId`
+            read com.example.fixture.workflows.order.Order.orderId: kotlin.String :89
+              receiver
+                local order: com.example.fixture.workflows.order.Order :89
+          argument skus `order.lines.map { it.sku }`
+            call kotlin.collections.map(kotlin.Function1) on kotlin.collections.Iterable [library] <com.example.fixture.workflows.order.OrderLine, kotlin.String>: kotlin.collections.List<kotlin.String> :89
+              on kotlin.collections.List<com.example.fixture.workflows.order.OrderLine>
+              receiver
+                read com.example.fixture.workflows.order.Order.lines: kotlin.collections.List<com.example.fixture.workflows.order.OrderLine> :89
+                  receiver
+                    local order: com.example.fixture.workflows.order.Order :89
+              argument transform `{ it.sku }`
+                lambda (it) :89
+                  block :89
+                    read com.example.fixture.workflows.order.OrderLine.sku: kotlin.String :89
+                      receiver
+                        local it: com.example.fixture.workflows.order.OrderLine :89
+      write com.example.fixture.workflows.order.OrderWorkflowImpl.status on this = :91
+        value
+          literal "COMPLETED" :91
+      return :92
+        call constructor com.example.fixture.workflows.order.OrderResult.<init>(kotlin.String,kotlin.String,kotlin.collections.List) [source]: com.example.fixture.workflows.order.OrderResult :92
+          argument status `status`
+            read com.example.fixture.workflows.order.OrderWorkflowImpl.status on this: kotlin.String :92
+          argument paymentId `paymentId`
+            local paymentId: kotlin.String :92
+          argument trackingIds `trackingIds`
+            local trackingIds: kotlin.collections.List<kotlin.String> :92
+    catch e: io.temporal.failure.TemporalFailure :93
+      block :93
+        call io.temporal.workflow.Saga.compensate() [library]: kotlin.Unit :94
+          on io.temporal.workflow.Saga
+          receiver
+            local saga: io.temporal.workflow.Saga :94
+        write com.example.fixture.workflows.order.OrderWorkflowImpl.status on this = :95
+          value
+            literal "FAILED" :95
+        throw: io.temporal.failure.TemporalFailure :96
+          local e: io.temporal.failure.TemporalFailure :96

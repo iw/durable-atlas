@@ -1,0 +1,78 @@
+flowchart TD
+    n_start(["start"])
+    subgraph n_batches_region ["for each batch"]
+        n_batches(("loop"))
+        n_load["LoadBatch"]
+        subgraph n_orders_region ["for each order"]
+            n_orders(("loop"))
+            subgraph n_items_region ["for each item"]
+                n_items(("loop"))
+                n_cancelled{"order cancelled?"}
+                n_close["CloseOrder"]
+                n_full{"van full?"}
+                n_stock{"in stock?"}
+                n_pick["PickItem"]
+            end
+            n_reserve["ReserveOrder"]
+        end
+    end
+    subgraph notify_region ["parallel"]
+        notify(("fork"))
+        subgraph notify_lane1 ["branch 1"]
+            subgraph n_calls_region ["repeat 3 times"]
+                n_calls(("loop"))
+                n_answered{"answered?"}
+                n_page["PageOnCall"]
+            end
+        end
+        subgraph notify_lane2 ["branch 2"]
+            n_mail["SendMail"]
+        end
+        notify_join(("join"))
+    end
+    n_dispatch["DispatchVan"]
+    n_end(["end"])
+    subgraph n_undo_region ["compensation"]
+        n_undo["compensation"]
+        subgraph n_refunds_region ["for each payment"]
+            n_refunds(("loop"))
+            n_refund["RefundPayment"]
+            n_settled{"settled?"}
+        end
+    end
+    n_failed(["fail<br/>DispatchFailed"])
+    n_start --> n_batches
+    n_batches --> n_load
+    n_batches --> notify
+    n_load --> n_orders
+    n_orders -->|"repeat"| n_batches
+    n_orders --> n_reserve
+    n_items -->|"repeat"| n_orders
+    n_items --> n_cancelled
+    n_cancelled -->|"yes"| n_close
+    n_cancelled -->|"no"| n_full
+    n_close -->|"repeat"| n_orders
+    n_full -->|"yes"| n_batches
+    n_full -->|"no"| n_stock
+    n_stock -->|"no"| n_items
+    n_stock -->|"yes"| n_pick
+    n_pick -->|"ActivityFailure"| n_orders
+    n_pick -->|"repeat"| n_items
+    n_reserve --> n_items
+    notify --> n_calls
+    notify --> n_mail
+    notify_join --> n_dispatch
+    n_calls --> notify_join
+    n_calls --> n_page
+    n_answered -->|"yes"| notify_join
+    n_answered -->|"no"| n_calls
+    n_page --> n_answered
+    n_mail --> notify_join
+    n_dispatch --> n_end
+    n_dispatch -->|"ActivityFailure"| n_undo
+    n_undo --> n_refunds
+    n_undo --> n_failed
+    n_refunds --> n_settled
+    n_refund -->|"repeat"| n_refunds
+    n_settled -->|"yes"| n_undo
+    n_settled -->|"no"| n_refund

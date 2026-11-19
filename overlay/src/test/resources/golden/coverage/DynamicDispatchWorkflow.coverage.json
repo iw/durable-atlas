@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "DynamicDispatchWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 2,
+    "ambiguous": 0,
+    "unmapped": 1
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "DynamicDispatchWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n5716450e96",
+      "kind": "unknown",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n5716450e96",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n5716450e96",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "neverHit": [],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [
+    {
+      "history": "DynamicDispatchWorkflow.json",
+      "eventId": 5,
+      "eventType": "ActivityTaskScheduled",
+      "name": "NotifySms",
+      "likelySources": [
+        "n5716450e96"
+      ]
+    }
+  ],
+  "histories": [
+    {
+      "file": "DynamicDispatchWorkflow.json",
+      "runId": "f2d58f71-be82-486f-805c-8eed4037f0e4",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 2,
+        "ambiguous": 0,
+        "unmapped": 1
+      }
+    }
+  ]
+}

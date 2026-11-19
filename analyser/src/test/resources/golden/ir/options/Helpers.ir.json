@@ -1,0 +1,211 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Helpers",
+  "interface": "options.Helpers",
+  "implementation": "options.HelpersImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Helpers",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n007c212cf8",
+      "kind": "activity",
+      "name": "Fetch",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Helpers.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "n24ee2a858b",
+      "kind": "activity",
+      "name": "Fetch",
+      "taskQueue": "slow",
+      "timeout": "PT2M",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Helpers.kt",
+        "line": 52
+      }
+    },
+    {
+      "id": "n2c7c7539da",
+      "kind": "activity",
+      "name": "Fetch",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Helpers.kt",
+        "line": 48
+      }
+    },
+    {
+      "id": "n453d597420",
+      "kind": "localActivity",
+      "name": "Store",
+      "timeout": "PT2S",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Helpers.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "n4df5fea7e1",
+      "kind": "activity",
+      "name": "Notify",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Helpers.kt",
+        "line": 53
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Helpers.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "na7d4b4964d",
+      "kind": "activity",
+      "name": "Store",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Helpers.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "nbb40346400",
+      "kind": "activity",
+      "name": "Fetch",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Helpers.kt",
+        "line": 49
+      }
+    },
+    {
+      "id": "nce0a549b13",
+      "kind": "activity",
+      "name": "Notify",
+      "taskQueue": "slow",
+      "timeout": "PT2M",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Helpers.kt",
+        "line": 51
+      }
+    },
+    {
+      "id": "nda425b36c7",
+      "kind": "activity",
+      "name": "Sweep",
+      "timeout": "PT9S",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Helpers.kt",
+        "line": 46
+      }
+    },
+    {
+      "id": "ne7ff0a6156",
+      "kind": "activity",
+      "name": "Store",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Helpers.kt",
+        "line": 56
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf0f51d0347",
+      "kind": "activity",
+      "name": "Sweep",
+      "timeout": "PT9S",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Helpers.kt",
+        "line": 45
+      }
+    },
+    {
+      "id": "nf673d6c59d",
+      "kind": "activity",
+      "name": "Store",
+      "taskQueue": "slow",
+      "timeout": "PT2M",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Helpers.kt",
+        "line": 57
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n007c212cf8",
+      "to": "nf0f51d0347"
+    },
+    {
+      "from": "n24ee2a858b",
+      "to": "n4df5fea7e1"
+    },
+    {
+      "from": "n2c7c7539da",
+      "to": "nbb40346400"
+    },
+    {
+      "from": "n453d597420",
+      "to": "nce0a549b13"
+    },
+    {
+      "from": "n4df5fea7e1",
+      "to": "na7d4b4964d"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n007c212cf8"
+    },
+    {
+      "from": "na7d4b4964d",
+      "to": "ne7ff0a6156"
+    },
+    {
+      "from": "nbb40346400",
+      "to": "n453d597420"
+    },
+    {
+      "from": "nce0a549b13",
+      "to": "n24ee2a858b"
+    },
+    {
+      "from": "nda425b36c7",
+      "to": "n2c7c7539da"
+    },
+    {
+      "from": "ne7ff0a6156",
+      "to": "nf673d6c59d"
+    },
+    {
+      "from": "nf0f51d0347",
+      "to": "nda425b36c7"
+    },
+    {
+      "from": "nf673d6c59d",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 14,
+    "unknown": 0
+  }
+}

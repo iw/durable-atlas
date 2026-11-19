@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "ApplicationFailureWorkflow",
+  "interface": "com.example.fixture.workflows.primitives.ApplicationFailureWorkflow",
+  "implementation": "com.example.fixture.workflows.primitives.ApplicationFailureWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "ApplicationFailureWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n14a789c9d8",
+      "kind": "activity",
+      "name": "PaymentCharge",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ApplicationFailureWorkflow.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ApplicationFailureWorkflow.kt",
+        "line": 23
+      }
+    },
+    {
+      "id": "nc152ca3976",
+      "kind": "branch",
+      "label": "amountCents <= 0",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ApplicationFailureWorkflow.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf647bc3ca4",
+      "kind": "fail",
+      "name": "InvalidAmount",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ApplicationFailureWorkflow.kt",
+        "line": 25
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n14a789c9d8",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nc152ca3976"
+    },
+    {
+      "from": "nc152ca3976",
+      "to": "n14a789c9d8",
+      "label": "no"
+    },
+    {
+      "from": "nc152ca3976",
+      "to": "nf647bc3ca4",
+      "label": "yes"
+    }
+  ],
+  "stats": {
+    "nodes": 5,
+    "unknown": 0
+  }
+}

@@ -1,0 +1,267 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "LoopKinds",
+  "interface": "ends.LoopKinds",
+  "implementation": "ends.LoopKindsImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "LoopKinds",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1c54249cd3",
+      "kind": "branch",
+      "label": "part.isEmpty()",
+      "parent": "nb03d6ff9bd",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LoopKinds.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n1c56a6abc6",
+      "kind": "activity",
+      "name": "CleanUp",
+      "parent": "nb03d6ff9bd",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LoopKinds.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n24fea67760",
+      "kind": "loop",
+      "label": "do while round < 3",
+      "parent": "n7f750cf60d",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LoopKinds.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "n5ed7921659",
+      "kind": "loop",
+      "label": "repeat 3 times",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LoopKinds.kt",
+        "line": 26
+      }
+    },
+    {
+      "id": "n61ae3d3385",
+      "kind": "branch",
+      "label": "id.isEmpty()",
+      "parent": "nbf527eb732",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LoopKinds.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LoopKinds.kt",
+        "line": 17
+      }
+    },
+    {
+      "id": "n6e07a1918c",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LoopKinds.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n7139526242",
+      "kind": "activity",
+      "name": "Undo",
+      "parent": "nce8a5e3ae5",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LoopKinds.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "n7f750cf60d",
+      "kind": "loop",
+      "label": "while round < ids.size",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LoopKinds.kt",
+        "line": 19
+      }
+    },
+    {
+      "id": "n840b3564b0",
+      "kind": "activity",
+      "name": "Report",
+      "parent": "nbf527eb732",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LoopKinds.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "n9cd9f7df97",
+      "kind": "branch",
+      "label": "part.isEmpty()",
+      "parent": "nce8a5e3ae5",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LoopKinds.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "nb03d6ff9bd",
+      "kind": "loop",
+      "label": "for each part",
+      "parent": "nb9db9e213e",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LoopKinds.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "nb300795d57",
+      "kind": "branch",
+      "label": "tasks.check(\"again\")",
+      "parent": "n24fea67760",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LoopKinds.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "nb9db9e213e",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LoopKinds.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "nbf527eb732",
+      "kind": "loop",
+      "label": "for each id",
+      "parent": "n5ed7921659",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LoopKinds.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "nce8a5e3ae5",
+      "kind": "loop",
+      "label": "for each part",
+      "parent": "n6e07a1918c",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LoopKinds.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "ndb1d3662db",
+      "kind": "activity",
+      "name": "Work",
+      "parent": "n24fea67760",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LoopKinds.kt",
+        "line": 23
+      }
+    },
+    {
+      "id": "nea12e0c712",
+      "kind": "activity",
+      "name": "Check",
+      "parent": "n24fea67760",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/LoopKinds.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n1c54249cd3",
+      "to": "n1c56a6abc6",
+      "label": "no"
+    },
+    {
+      "from": "n1c54249cd3",
+      "to": "nb9db9e213e",
+      "label": "yes"
+    },
+    {
+      "from": "n5ed7921659",
+      "to": "nb9db9e213e"
+    },
+    {
+      "from": "n61ae3d3385",
+      "to": "n5ed7921659",
+      "label": "yes"
+    },
+    {
+      "from": "n61ae3d3385",
+      "to": "n840b3564b0",
+      "label": "no"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n7f750cf60d"
+    },
+    {
+      "from": "n6e07a1918c",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n7f750cf60d",
+      "to": "n5ed7921659"
+    },
+    {
+      "from": "n9cd9f7df97",
+      "to": "n6e07a1918c",
+      "label": "yes"
+    },
+    {
+      "from": "n9cd9f7df97",
+      "to": "n7139526242",
+      "label": "no"
+    },
+    {
+      "from": "nb300795d57",
+      "to": "n7f750cf60d",
+      "label": "yes"
+    },
+    {
+      "from": "nb300795d57",
+      "to": "ndb1d3662db",
+      "label": "no"
+    },
+    {
+      "from": "nb9db9e213e",
+      "to": "n6e07a1918c"
+    },
+    {
+      "from": "nea12e0c712",
+      "to": "nb300795d57"
+    }
+  ],
+  "stats": {
+    "nodes": 19,
+    "unknown": 0
+  }
+}

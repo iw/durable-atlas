@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "CaughtAfterFork",
+  "interface": "caught.CaughtAfterFork",
+  "implementation": "caught.CaughtAfterForkImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "CaughtAfterFork",
+      "start": "start"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "end",
+      "kind": "end"
+    },
+    {
+      "id": "n01",
+      "kind": "branch",
+      "label": "express?"
+    },
+    {
+      "id": "n02",
+      "kind": "activity",
+      "name": "BookCourier"
+    },
+    {
+      "id": "n03",
+      "kind": "activity",
+      "name": "PostParcel"
+    },
+    {
+      "id": "n04",
+      "kind": "branch",
+      "label": "f throws?"
+    },
+    {
+      "id": "n05",
+      "kind": "activity",
+      "name": "Two"
+    },
+    {
+      "id": "n06",
+      "kind": "branch",
+      "label": "f throws?"
+    },
+    {
+      "id": "n07",
+      "kind": "activity",
+      "name": "Two"
+    },
+    {
+      "id": "n08",
+      "kind": "loop",
+      "label": "for each item"
+    },
+    {
+      "id": "n09",
+      "kind": "activity",
+      "name": "Pack",
+      "parent": "n08"
+    },
+    {
+      "id": "n10",
+      "kind": "activity",
+      "name": "Done"
+    },
+    {
+      "id": "start",
+      "kind": "start"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n01",
+      "to": "n02",
+      "label": "yes"
+    },
+    {
+      "from": "n01",
+      "to": "n03",
+      "label": "no"
+    },
+    {
+      "from": "n02",
+      "to": "n04"
+    },
+    {
+      "from": "n03",
+      "to": "n04"
+    },
+    {
+      "from": "n04",
+      "to": "n05",
+      "kind": "exception",
+      "label": "IllegalArgumentException"
+    },
+    {
+      "from": "n04",
+      "to": "n06",
+      "label": "no"
+    },
+    {
+      "from": "n05",
+      "to": "n06"
+    },
+    {
+      "from": "n06",
+      "to": "n07",
+      "kind": "exception",
+      "label": "DomainFault"
+    },
+    {
+      "from": "n06",
+      "to": "n08",
+      "label": "no"
+    },
+    {
+      "from": "n07",
+      "to": "n08"
+    },
+    {
+      "from": "n08",
+      "to": "n10"
+    },
+    {
+      "from": "n10",
+      "to": "end"
+    },
+    {
+      "from": "start",
+      "to": "n01"
+    }
+  ],
+  "stats": {
+    "nodes": 12,
+    "unknown": 0
+  }
+}

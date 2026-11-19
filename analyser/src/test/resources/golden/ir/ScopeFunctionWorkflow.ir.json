@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "ScopeFunctionWorkflow",
+  "interface": "com.example.fixture.workflows.controlflow.ScopeFunctionWorkflow",
+  "implementation": "com.example.fixture.workflows.controlflow.ScopeFunctionWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "ScopeFunctionWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0cf25a2735",
+      "kind": "activity",
+      "name": "NotifySms",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/ScopeFunctionWorkflow.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n5762f6d2f8",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/ScopeFunctionWorkflow.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/ScopeFunctionWorkflow.kt",
+        "line": 25
+      }
+    },
+    {
+      "id": "n78cfa59bd8",
+      "kind": "activity",
+      "name": "CapturePayment",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/ScopeFunctionWorkflow.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n7ddc84ed11",
+      "kind": "activity",
+      "name": "PaymentCharge",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/ScopeFunctionWorkflow.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n86487dcffe",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/ScopeFunctionWorkflow.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "n95f5a939fb",
+      "kind": "activity",
+      "name": "ShipItem",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/ScopeFunctionWorkflow.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0cf25a2735",
+      "to": "n95f5a939fb"
+    },
+    {
+      "from": "n5762f6d2f8",
+      "to": "n7ddc84ed11"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n5762f6d2f8"
+    },
+    {
+      "from": "n78cfa59bd8",
+      "to": "n86487dcffe"
+    },
+    {
+      "from": "n7ddc84ed11",
+      "to": "n78cfa59bd8"
+    },
+    {
+      "from": "n86487dcffe",
+      "to": "n0cf25a2735"
+    },
+    {
+      "from": "n95f5a939fb",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 8,
+    "unknown": 0
+  }
+}

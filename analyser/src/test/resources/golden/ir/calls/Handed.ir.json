@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Handed",
+  "interface": "calls.Handed",
+  "implementation": "calls.HandedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Handed",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n2ebeecdc36",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Handed.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "n545d9666a0",
+      "kind": "unknown",
+      "label": "each",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Handed.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Handed.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n6f2cda81c2",
+      "kind": "unknown",
+      "label": "Retry.retrying",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Handed.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf9e2dee401",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Handed.kt",
+        "line": 31
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n2ebeecdc36",
+      "to": "n545d9666a0"
+    },
+    {
+      "from": "n545d9666a0",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n545d9666a0",
+      "to": "nf9e2dee401"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n6f2cda81c2"
+    },
+    {
+      "from": "n6f2cda81c2",
+      "to": "n2ebeecdc36"
+    },
+    {
+      "from": "n6f2cda81c2",
+      "to": "n545d9666a0"
+    },
+    {
+      "from": "nf9e2dee401",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 6,
+    "unknown": 2
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Handed.kt",
+        "line": 29
+      },
+      "text": "Retry.retrying(3) { chores.one(input) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Handed.kt",
+        "line": 30
+      },
+      "text": "Money.of(2)"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Handed.kt",
+        "line": 31
+      },
+      "text": "money.each { chores.two(input) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Handed.kt",
+        "line": 32
+      },
+      "text": "money.text()"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Handed.kt",
+        "line": 33
+      },
+      "text": "tally(input)"
+    }
+  ]
+}

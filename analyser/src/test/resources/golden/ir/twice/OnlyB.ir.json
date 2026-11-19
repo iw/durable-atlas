@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "OnlyB",
+  "interface": "shared.OnlyB",
+  "implementation": "shared.OnlyBImpl",
+  "module": ":",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "OnlyB",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n019f7ef5c8",
+      "kind": "unknown",
+      "label": "stamp",
+      "reason": "unresolved",
+      "loc": {
+        "file": "root/src/main/kotlin/b/Shared.kt",
+        "line": 53
+      }
+    },
+    {
+      "id": "n1acd411bb9",
+      "kind": "unknown",
+      "label": "JavaLimits.QUEUE",
+      "reason": "computed-name",
+      "loc": {
+        "file": "root/src/main/kotlin/b/Shared.kt",
+        "line": 55
+      }
+    },
+    {
+      "id": "n6118cdf092",
+      "kind": "activity",
+      "name": "Own",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "root/src/main/kotlin/b/Shared.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "root/src/main/kotlin/b/Shared.kt",
+        "line": 52
+      }
+    },
+    {
+      "id": "n70768130db",
+      "kind": "unknown",
+      "label": "Helper.wrap",
+      "reason": "unresolved",
+      "loc": {
+        "file": "root/src/main/kotlin/b/Shared.kt",
+        "line": 53
+      }
+    },
+    {
+      "id": "nb1ef9dc2b5",
+      "kind": "activity",
+      "name": "One",
+      "loc": {
+        "file": "root/src/main/kotlin/b/Shared.kt",
+        "line": 53
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n019f7ef5c8",
+      "to": "n6118cdf092"
+    },
+    {
+      "from": "n1acd411bb9",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n6118cdf092",
+      "to": "n1acd411bb9"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nb1ef9dc2b5"
+    },
+    {
+      "from": "n70768130db",
+      "to": "n019f7ef5c8"
+    },
+    {
+      "from": "nb1ef9dc2b5",
+      "to": "n70768130db"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 3
+  }
+}

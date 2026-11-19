@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "MethodReferenceWorkflow",
+  "interface": "com.example.fixture.workflows.primitives.MethodReferenceWorkflow",
+  "implementation": "com.example.fixture.workflows.primitives.MethodReferenceWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "MethodReferenceWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n078119b556",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "timeout": "PT30S",
+      "parent": "n0c5efb8c60",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/MethodReferenceWorkflow.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n0c5efb8c60",
+      "kind": "parallel",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/MethodReferenceWorkflow.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n5665ff7265",
+      "kind": "fail",
+      "name": "ActivityFailure",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/MethodReferenceWorkflow.kt",
+        "line": 49
+      }
+    },
+    {
+      "id": "n640f2247e1",
+      "kind": "compensation",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/MethodReferenceWorkflow.kt",
+        "line": 48
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/MethodReferenceWorkflow.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nc95c6889ea",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "timeout": "PT30S",
+      "parent": "n0c5efb8c60",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/MethodReferenceWorkflow.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "ne79885a51b",
+      "kind": "activity",
+      "name": "ReleaseStock",
+      "timeout": "PT30S",
+      "parent": "n640f2247e1",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/MethodReferenceWorkflow.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nfcf1bffb8b",
+      "kind": "activity",
+      "name": "PaymentCharge",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/MethodReferenceWorkflow.kt",
+        "line": 46
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n078119b556",
+      "to": "n640f2247e1",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "n0c5efb8c60",
+      "to": "nfcf1bffb8b"
+    },
+    {
+      "from": "n640f2247e1",
+      "to": "n5665ff7265"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n0c5efb8c60"
+    },
+    {
+      "from": "nc95c6889ea",
+      "to": "n640f2247e1",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "nfcf1bffb8b",
+      "to": "n640f2247e1",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "nfcf1bffb8b",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 9,
+    "unknown": 0
+  }
+}

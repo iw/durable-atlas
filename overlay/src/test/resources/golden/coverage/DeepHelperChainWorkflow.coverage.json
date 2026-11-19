@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "DeepHelperChainWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 2,
+    "ambiguous": 0,
+    "unmapped": 1
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "DeepHelperChainWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1b4f65491c",
+      "kind": "unknown",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n1b4f65491c",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n1b4f65491c",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "neverHit": [],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [
+    {
+      "history": "DeepHelperChainWorkflow.json",
+      "eventId": 5,
+      "eventType": "ActivityTaskScheduled",
+      "name": "ReserveStock",
+      "likelySources": [
+        "n1b4f65491c"
+      ]
+    }
+  ],
+  "histories": [
+    {
+      "file": "DeepHelperChainWorkflow.json",
+      "runId": "55fe6b39-4e6f-47dc-a22d-0aeb4ebe6251",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 2,
+        "ambiguous": 0,
+        "unmapped": 1
+      }
+    }
+  ]
+}

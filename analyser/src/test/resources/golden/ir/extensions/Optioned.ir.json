@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Optioned",
+  "interface": "extensions.Optioned",
+  "implementation": "extensions.OptionedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Optioned",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1c58065464",
+      "kind": "activity",
+      "name": "One",
+      "taskQueue": "written",
+      "timeout": "PT7S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Optioned.kt",
+        "line": 70
+      }
+    },
+    {
+      "id": "n60d71b4f94",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT2S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Optioned.kt",
+        "line": 72
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Optioned.kt",
+        "line": 69
+      }
+    },
+    {
+      "id": "n7764d023ec",
+      "kind": "localActivity",
+      "name": "One",
+      "timeout": "PT3S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Optioned.kt",
+        "line": 73
+      }
+    },
+    {
+      "id": "nd0ea2ca6e3",
+      "kind": "localActivity",
+      "name": "Two",
+      "timeout": "PT8S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Optioned.kt",
+        "line": 74
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf1481b9b57",
+      "kind": "activity",
+      "name": "One",
+      "taskQueue": "base",
+      "timeout": "PT9S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Optioned.kt",
+        "line": 71
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n1c58065464",
+      "to": "nf1481b9b57"
+    },
+    {
+      "from": "n60d71b4f94",
+      "to": "n7764d023ec"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n1c58065464"
+    },
+    {
+      "from": "n7764d023ec",
+      "to": "nd0ea2ca6e3"
+    },
+    {
+      "from": "nd0ea2ca6e3",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nf1481b9b57",
+      "to": "n60d71b4f94"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 0
+  }
+}

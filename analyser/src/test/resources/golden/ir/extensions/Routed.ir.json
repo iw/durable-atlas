@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Routed",
+  "interface": "extensions.Routed",
+  "implementation": "extensions.RoutedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Routed",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Routed.kt",
+        "line": 52
+      }
+    },
+    {
+      "id": "n6bc0672978",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT4S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Routed.kt",
+        "line": 60
+      }
+    },
+    {
+      "id": "na864ff5beb",
+      "kind": "activity",
+      "name": "One",
+      "taskQueue": "base",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Routed.kt",
+        "line": 57
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "na864ff5beb"
+    },
+    {
+      "from": "n6bc0672978",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "na864ff5beb",
+      "to": "n6bc0672978"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 0
+  }
+}

@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Precedence",
+  "interface": "silent.Precedence",
+  "implementation": "silent.PrecedenceImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Precedence",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-nudge",
+      "kind": "signal",
+      "name": "nudge",
+      "start": "nd0062f8b04",
+      "writes": [
+        "ready"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0e0b847b3f",
+      "kind": "activity",
+      "name": "Store",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Precedence.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "n3422326694",
+      "kind": "end"
+    },
+    {
+      "id": "n4ebaa9a712",
+      "kind": "await",
+      "reads": [
+        "ready"
+      ],
+      "label": "ready",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Precedence.kt",
+        "line": 47
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Precedence.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n6db4be7751",
+      "kind": "activity",
+      "name": "Fetch",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Precedence.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n9ced45c4a0",
+      "kind": "activity",
+      "name": "Notify",
+      "timeout": "PT1H",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Precedence.kt",
+        "line": 46
+      }
+    },
+    {
+      "id": "nc5406365c9",
+      "kind": "activity",
+      "name": "Store",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Precedence.kt",
+        "line": 53
+      }
+    },
+    {
+      "id": "ncc1268d735",
+      "kind": "activity",
+      "name": "Fetch",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Precedence.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "nd0062f8b04",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Precedence.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf125df90e8",
+      "kind": "activity",
+      "name": "Notify",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Precedence.kt",
+        "line": 52
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0e0b847b3f",
+      "to": "n9ced45c4a0"
+    },
+    {
+      "from": "n4ebaa9a712",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n6db4be7751"
+    },
+    {
+      "from": "n6db4be7751",
+      "to": "ncc1268d735"
+    },
+    {
+      "from": "n9ced45c4a0",
+      "to": "n4ebaa9a712"
+    },
+    {
+      "from": "nc5406365c9",
+      "to": "n3422326694"
+    },
+    {
+      "from": "ncc1268d735",
+      "to": "n0e0b847b3f"
+    },
+    {
+      "from": "nd0062f8b04",
+      "to": "nf125df90e8"
+    },
+    {
+      "from": "nf125df90e8",
+      "to": "nc5406365c9"
+    },
+    {
+      "from": "signal-nudge",
+      "to": "n4ebaa9a712",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 11,
+    "unknown": 0
+  }
+}

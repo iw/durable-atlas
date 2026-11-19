@@ -1,0 +1,127 @@
+# FulfilmentWorkflow
+
+[All workflows](index.md)
+
+| Property | Value |
+|---|---|
+| Workflow type | `FulfilmentWorkflow` |
+| Interface | `com.example.fulfilment.FulfilmentWorkflow` |
+| Implementation | `com.example.fulfilment.FulfilmentWorkflowImpl` |
+| Module | `:fulfilment` |
+| Commit | `3f786850e387550fdab836ed7e6dc881de23001b` |
+| Model mode | gradle |
+| Nodes | 34 |
+| Unknown nodes | 2 |
+
+```mermaid
+flowchart TD
+    n100(["start"])
+    n101{"version#58; add-fraud-check"}
+    n102["FraudCheck"]
+    n103["side effect#58; generate idempotency key"]
+    subgraph n104_region ["parallel"]
+        n104(("fork"))
+        subgraph n104_lane1 ["branch 1"]
+            n105["ChargeCard"]
+            subgraph n106_region ["compensation"]
+                n106["compensation"]
+                n126["RefundCard"]
+                n127["RecordRefund (local)"]
+            end
+        end
+        subgraph n104_lane2 ["branch 2"]
+            n107["nexus#58; inventory.reserve"]
+        end
+        subgraph n104_lane3 ["branch 3"]
+            subgraph n108_region ["while (attempts #lt; 3)"]
+                n108(("loop"))
+                n109["PollCarrier (local)"]
+                n110{{"timer 10s"}}
+            end
+        end
+        n104_join(("join"))
+    end
+    n122(["fail<br/>PaymentDeclinedException"])
+    n111{{"await approved<br/>timeout 1d"}}
+    n112{"order.total #gt; 1000"}
+    n113["signal external#58; notifyWarehouse"]
+    n114[["ShippingWorkflow"]]
+    n115{{"timer 1d 2h"}}
+    subgraph n116_region ["do … while (!delivered)"]
+        n116(("loop"))
+        n117["CheckStatus"]
+        n118{"status"}
+        n119{{"await carrierStatus<br/>timeout 1m"}}
+    end
+    n123["unknown#58; depth-limit<br/>auditTrail.record(order)"]
+    n124["unknown#58; recursion"]
+    n120(["continueAsNew"])
+    n121(["end"])
+    n125["compensation#58; ReleaseInventory"]
+    subgraph handlers ["handlers"]
+        subgraph h_sig_approve ["signal approve · writes#58; approved"]
+            n200(["start"])
+            n201(["end"])
+        end
+        subgraph h_sig_status ["signal statusChanged · writes#58; carrierStatus"]
+            n210(["start"])
+            n211(["end"])
+        end
+        subgraph h_upd_priority ["update setPriority · writes#58; priority"]
+            n220(["start"])
+            n221(["end"])
+        end
+    end
+    n100 --> n101
+    n101 -->|"v1"| n102
+    n101 -->|"default"| n103
+    n102 --> n103
+    n103 --> n104
+    n104 --> n105
+    n104 --> n107
+    n104 --> n108
+    n104_join --> n111
+    n105 --> n106
+    n105 -->|"CardDeclinedException"| n122
+    n106 --> n104_join
+    n106 --> n126
+    n126 --> n127
+    n107 --> n104_join
+    n108 --> n104_join
+    n108 --> n109
+    n109 --> n110
+    n110 -->|"repeat"| n108
+    n111 --> n112
+    n111 -->|"timeout"| n125
+    n112 -->|"true"| n113
+    n112 -->|"false"| n114
+    n113 --> n114
+    n114 --> n115
+    n115 --> n116
+    n116 --> n117
+    n117 --> n118
+    n118 -->|"IN_TRANSIT"| n119
+    n118 -->|"DELIVERED"| n123
+    n119 -->|"repeat"| n116
+    n119 -->|"timeout"| n123
+    n123 --> n124
+    n123 -->|"exception"| n121
+    n124 --> n120
+    n125 --> n122
+    n200 -.->|"approved"| n111
+    n200 --> n201
+    n210 -.->|"carrierStatus"| n119
+    n210 --> n211
+    n220 --> n221
+    classDef unknown fill:#fff7e6,stroke:#b45309,color:#7c2d12,stroke-width:2px,stroke-dasharray:6 4
+    class n123,n124 unknown
+```
+
+## Child workflows
+
+- `ShippingWorkflow`: no diagram
+
+## Unknown nodes
+
+- `depth-limit`: `auditTrail.record(order)` at `fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt:66`
+- `recursion` at `fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt:67`

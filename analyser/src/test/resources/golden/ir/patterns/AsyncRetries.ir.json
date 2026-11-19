@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "AsyncRetries",
+  "interface": "patterns.AsyncRetries",
+  "implementation": "patterns.AsyncRetriesImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "AsyncRetries",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/AsyncRetries.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n967d69352a",
+      "kind": "activity",
+      "name": "Work",
+      "parent": "ne1dd698db9",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/AsyncRetries.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "na10504efba",
+      "kind": "loop",
+      "label": "retry on failure, up to 3 attempts, for up to 10m",
+      "retry": true,
+      "parent": "nc584dc1f1a",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/AsyncRetries.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "nb265c024b7",
+      "kind": "activity",
+      "name": "Check",
+      "parent": "nc584dc1f1a",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/AsyncRetries.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "nc2931bb6f9",
+      "kind": "parallel",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/AsyncRetries.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nc2fd842729",
+      "kind": "activity",
+      "name": "Report",
+      "parent": "ne1dd698db9",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/AsyncRetries.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "nc584dc1f1a",
+      "kind": "parallel",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/AsyncRetries.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "ne1dd698db9",
+      "kind": "loop",
+      "label": "retry on failure",
+      "retry": true,
+      "parent": "nc2931bb6f9",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/AsyncRetries.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf8adf0380e",
+      "kind": "activity",
+      "name": "Prepare",
+      "parent": "na10504efba",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/AsyncRetries.kt",
+        "line": 32
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "nc584dc1f1a"
+    },
+    {
+      "from": "n967d69352a",
+      "to": "nc2fd842729"
+    },
+    {
+      "from": "nc2931bb6f9",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nc584dc1f1a",
+      "to": "nc2931bb6f9"
+    }
+  ],
+  "stats": {
+    "nodes": 10,
+    "unknown": 0
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Foreign",
+  "interface": "calls.Foreign",
+  "implementation": "calls.ForeignImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Foreign",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0078e0b954",
+      "kind": "unknown",
+      "label": "JavaJobs.charge",
+      "reason": "unresolved",
+      "parent": "n70b312744b",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Foreign.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n08a3cf5ef2",
+      "kind": "continueAsNew",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Foreign.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Foreign.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n70b312744b",
+      "kind": "parallel",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Foreign.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n8db7ad13d1",
+      "kind": "unknown",
+      "label": "JavaChild.poke",
+      "reason": "unresolved",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Foreign.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "na571cf548e",
+      "kind": "unknown",
+      "label": "JavaChild.start",
+      "reason": "unresolved",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Foreign.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nabee39d7f8",
+      "kind": "unknown",
+      "label": "JavaJobs.charge",
+      "reason": "unresolved",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Foreign.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "nb2331301d9",
+      "kind": "unknown",
+      "label": "JavaJobs.charge",
+      "reason": "unresolved",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Foreign.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "nf85756c682",
+      "kind": "unknown",
+      "label": "JavaJobs.refund",
+      "reason": "unresolved",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Foreign.kt",
+        "line": 34
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "nabee39d7f8"
+    },
+    {
+      "from": "n70b312744b",
+      "to": "nf85756c682"
+    },
+    {
+      "from": "n8db7ad13d1",
+      "to": "n08a3cf5ef2"
+    },
+    {
+      "from": "na571cf548e",
+      "to": "n8db7ad13d1"
+    },
+    {
+      "from": "nabee39d7f8",
+      "to": "nb2331301d9"
+    },
+    {
+      "from": "nb2331301d9",
+      "to": "n70b312744b"
+    },
+    {
+      "from": "nf85756c682",
+      "to": "na571cf548e"
+    }
+  ],
+  "stats": {
+    "nodes": 9,
+    "unknown": 6
+  }
+}

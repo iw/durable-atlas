@@ -1,0 +1,56 @@
+flowchart TD
+    n_t00(["start"])
+    n_t01[("upsert search attributes#58; Stage, …")]
+    subgraph n_t02_region ["parallel#58; first to finish"]
+        n_t02(("fork"))
+        subgraph n_t02_lane1 ["branch 1"]
+            n_t03["RequestQuote"]
+        end
+        subgraph n_t02_lane2 ["branch 2"]
+            n_t04["RequestQuote"]
+        end
+        subgraph n_t02_lane3 ["branch 3"]
+            n_t05{{"timer 1h"}}
+        end
+        n_t02_join(("first to finish"))
+    end
+    n_t06["cancel scope#58; quotes"]
+    n_t07{{"await approval<br/>timeout 10m"}}
+    subgraph n_t09_region ["parallel#58; waits for start only"]
+        n_t09(("fork"))
+        subgraph n_t09_lane1 ["branch 1"]
+            n_t10["ArchiveQuotes"]
+            n_t11[["ContractWorkflow<br/>waits for start only<br/>parent close#58; abandon"]]
+        end
+        n_t09_join(("waits for start only"))
+    end
+    n_t12[("upsert memo#58; winner, note, …")]
+    n_t13(["end"])
+    n_t08["Escalate"]
+    subgraph handlers ["handlers"]
+        subgraph h_signal_approve ["signal approve · writes#58; approval"]
+            n_t20(["start"])
+            n_t21(["end"])
+        end
+    end
+    n_t00 --> n_t01
+    n_t01 --> n_t02
+    n_t02 --> n_t03
+    n_t02 --> n_t04
+    n_t02 --> n_t05
+    n_t02_join --> n_t06
+    n_t03 --> n_t02_join
+    n_t04 --> n_t02_join
+    n_t05 --> n_t02_join
+    n_t06 -.->|"cancels"| n_t02
+    n_t06 --> n_t07
+    n_t07 --> n_t09
+    n_t07 -->|"timeout"| n_t08
+    n_t09 --> n_t10
+    n_t09 --> n_t12
+    n_t10 --> n_t11
+    n_t11 --> n_t09_join
+    n_t12 --> n_t13
+    n_t08 --> n_t09
+    n_t20 -.->|"approval"| n_t07
+    n_t20 --> n_t21

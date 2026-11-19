@@ -1,0 +1,26 @@
+block workflows/src/main/kotlin/com/example/fixture/workflows/primitives/NexusOperationWorkflow.kt:32
+  val hello: kotlin.String :34
+    call com.example.fixture.nexus.GreetingService.greet(kotlin.String) [source]: kotlin.String :34
+      on com.example.fixture.nexus.GreetingService @io.nexusrpc.Service
+      receiver
+        read com.example.fixture.workflows.primitives.NexusOperationWorkflowImpl.greetings on this: com.example.fixture.nexus.GreetingService :34
+      argument name `name`
+        local name: kotlin.String :34
+  val goodbye: io.temporal.workflow.NexusOperationHandle<kotlin.String> :36
+    call io.temporal.workflow.Workflow.startNexusOperation(io.temporal.workflow.Functions.Func1,T) [library] <kotlin.String, kotlin.String>: io.temporal.workflow.NexusOperationHandle<kotlin.String> :36
+      argument operation `greetings::farewell`
+        reference com.example.fixture.nexus.GreetingService.farewell(kotlin.String) [source] `greetings::farewell` :36
+          on com.example.fixture.nexus.GreetingService @io.nexusrpc.Service
+          receiver
+            read com.example.fixture.workflows.primitives.NexusOperationWorkflowImpl.greetings on this: com.example.fixture.nexus.GreetingService :36
+      argument arg `name`
+        local name: kotlin.String :36
+  return :37
+    other template `"$hello / ${goodbye.result.get()}"` :37
+      local hello: kotlin.String :37
+      call io.temporal.workflow.Promise.get() [library]: kotlin.String :37
+        on io.temporal.workflow.Promise<kotlin.String>
+        receiver
+          read io.temporal.workflow.NexusOperationHandle.result: io.temporal.workflow.Promise<kotlin.String> :37
+            receiver
+              local goodbye: io.temporal.workflow.NexusOperationHandle<kotlin.String> :37

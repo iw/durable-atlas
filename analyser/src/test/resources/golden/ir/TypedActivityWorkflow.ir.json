@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "TypedActivityWorkflow",
+  "interface": "com.example.fixture.workflows.primitives.TypedActivityWorkflow",
+  "implementation": "com.example.fixture.workflows.primitives.TypedActivityWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "TypedActivityWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0a5c8a347e",
+      "kind": "activity",
+      "name": "ReleaseStock",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/TypedActivityWorkflow.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n129648fc52",
+      "kind": "activity",
+      "name": "CapturePayment",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/TypedActivityWorkflow.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n3c5d78278e",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/TypedActivityWorkflow.kt",
+        "line": 25
+      }
+    },
+    {
+      "id": "n3fdf75bb11",
+      "kind": "activity",
+      "name": "PaymentCharge",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/TypedActivityWorkflow.kt",
+        "line": 26
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/TypedActivityWorkflow.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0a5c8a347e",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n129648fc52",
+      "to": "n0a5c8a347e"
+    },
+    {
+      "from": "n3c5d78278e",
+      "to": "n3fdf75bb11"
+    },
+    {
+      "from": "n3fdf75bb11",
+      "to": "n129648fc52"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n3c5d78278e"
+    }
+  ],
+  "stats": {
+    "nodes": 6,
+    "unknown": 0
+  }
+}

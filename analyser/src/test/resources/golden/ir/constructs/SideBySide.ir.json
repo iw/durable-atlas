@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "SideBySide",
+  "interface": "constructs.SideBySide",
+  "implementation": "constructs.SideBySideImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "SideBySide",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n111d6b8d6a",
+      "kind": "activity",
+      "name": "Release",
+      "parent": "n8a3e9ea412",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/SideBySide.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "n366c8d476c",
+      "kind": "activity",
+      "name": "Undo",
+      "parent": "n8a3e9ea412",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/SideBySide.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n42fbb4c52d",
+      "kind": "activity",
+      "name": "Report",
+      "parent": "n8a3e9ea412",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/SideBySide.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n5f37b60e55",
+      "kind": "activity",
+      "name": "Prepare",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/SideBySide.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/SideBySide.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n76210947f2",
+      "kind": "activity",
+      "name": "CleanUp",
+      "parent": "n8a3e9ea412",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/SideBySide.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n8a3e9ea412",
+      "kind": "parallel",
+      "parent": "nd787b01bac",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/SideBySide.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "nbc61eaa2a7",
+      "kind": "activity",
+      "name": "Work",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/SideBySide.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "nd787b01bac",
+      "kind": "compensation",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/SideBySide.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "ned851e532b",
+      "kind": "activity",
+      "name": "Check",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/SideBySide.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf699cb72fd",
+      "kind": "fail",
+      "name": "ActivityFailure",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/SideBySide.kt",
+        "line": 45
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n42fbb4c52d",
+      "to": "n366c8d476c"
+    },
+    {
+      "from": "n5f37b60e55",
+      "to": "nbc61eaa2a7"
+    },
+    {
+      "from": "n5f37b60e55",
+      "to": "nd787b01bac",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n5f37b60e55"
+    },
+    {
+      "from": "nbc61eaa2a7",
+      "to": "nd787b01bac",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "nbc61eaa2a7",
+      "to": "ned851e532b"
+    },
+    {
+      "from": "nd787b01bac",
+      "to": "nf699cb72fd"
+    },
+    {
+      "from": "ned851e532b",
+      "to": "nd787b01bac",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "ned851e532b",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 12,
+    "unknown": 0
+  }
+}

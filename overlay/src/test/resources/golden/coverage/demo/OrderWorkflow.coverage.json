@@ -1,0 +1,583 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "OrderWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 5,
+  "events": {
+    "mapped": 95,
+    "ambiguous": 0,
+    "unmapped": 1
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "OrderWorkflow",
+      "hits": 5,
+      "executions": 5
+    },
+    {
+      "id": "signal-approvePayment",
+      "kind": "signal",
+      "name": "approvePayment",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "id": "signal-cancelOrder",
+      "kind": "signal",
+      "name": "cancelOrder",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "query-getStatus",
+      "kind": "query",
+      "name": "getStatus",
+      "recorded": false,
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "update-changeAddress",
+      "kind": "update",
+      "name": "changeAddress",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "validator-changeAddress",
+      "kind": "updateValidator",
+      "name": "changeAddress",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n00-start",
+      "kind": "start",
+      "hits": 5,
+      "executions": 5
+    },
+    {
+      "id": "n01-validate-order",
+      "kind": "localActivity",
+      "name": "ValidateOrder",
+      "hits": 5,
+      "executions": 5
+    },
+    {
+      "id": "n02-fraud-check-version",
+      "kind": "versionGate",
+      "hits": 5,
+      "executions": 5
+    },
+    {
+      "id": "n03-fraud-check",
+      "kind": "activity",
+      "name": "FraudCheck",
+      "hits": 5,
+      "executions": 5
+    },
+    {
+      "id": "n04-parallel",
+      "kind": "parallel",
+      "hits": 5,
+      "executions": 5
+    },
+    {
+      "id": "n05-reserve-stock",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "hits": 5,
+      "executions": 5
+    },
+    {
+      "id": "n06-authorise-payment",
+      "kind": "activity",
+      "name": "AuthorisePayment",
+      "hits": 5,
+      "executions": 5
+    },
+    {
+      "id": "n07-await-payment",
+      "kind": "await",
+      "hits": 5,
+      "executions": 5
+    },
+    {
+      "id": "n08-compensation",
+      "kind": "compensation",
+      "hits": 2,
+      "executions": 2
+    },
+    {
+      "id": "n09-release-stock",
+      "kind": "activity",
+      "name": "ReleaseStock",
+      "hits": 2,
+      "executions": 2
+    },
+    {
+      "id": "n10-void-payment",
+      "kind": "activity",
+      "name": "VoidPayment",
+      "hits": 2,
+      "executions": 2
+    },
+    {
+      "id": "n11-order-cancelled",
+      "kind": "fail",
+      "name": "OrderCancelled",
+      "hits": 2,
+      "executions": 2
+    },
+    {
+      "id": "n12-shipments",
+      "kind": "loop",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "id": "n13-shipment-workflow",
+      "kind": "childWorkflow",
+      "name": "ShipmentWorkflow",
+      "hits": 6,
+      "executions": 3
+    },
+    {
+      "id": "n14-shipment-ready",
+      "kind": "signalExternal",
+      "name": "shipmentReady",
+      "hits": 6,
+      "executions": 3
+    },
+    {
+      "id": "n15-invoice-number",
+      "kind": "sideEffect",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "id": "n16-award-points",
+      "kind": "nexusOperation",
+      "name": "awardPoints",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "id": "n17-discount-policy",
+      "kind": "unknown",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "id": "n18-returns-window",
+      "kind": "timer",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "id": "n19-continue-as-new-suggested",
+      "kind": "branch",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "id": "n20-continue-as-new",
+      "kind": "continueAsNew",
+      "name": "OrderWorkflow",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n21-end",
+      "kind": "end",
+      "hits": 2,
+      "executions": 2
+    },
+    {
+      "id": "query-getStatus.end",
+      "kind": "end",
+      "recorded": false,
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "query-getStatus.start",
+      "kind": "start",
+      "recorded": false,
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "signal-approvePayment.end",
+      "kind": "end",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "id": "signal-approvePayment.start",
+      "kind": "start",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "id": "signal-cancelOrder.end",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "signal-cancelOrder.start",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "update-changeAddress.end",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "update-changeAddress.start",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "validator-changeAddress.end",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "validator-changeAddress.start",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n00-start",
+      "to": "n01-validate-order",
+      "hits": 5,
+      "executions": 5
+    },
+    {
+      "from": "n01-validate-order",
+      "to": "n02-fraud-check-version",
+      "hits": 5,
+      "executions": 5
+    },
+    {
+      "from": "n02-fraud-check-version",
+      "to": "n03-fraud-check",
+      "label": "v2",
+      "hits": 5,
+      "executions": 5
+    },
+    {
+      "from": "n02-fraud-check-version",
+      "to": "n04-parallel",
+      "label": "v1",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n03-fraud-check",
+      "to": "n04-parallel",
+      "hits": 5,
+      "executions": 5
+    },
+    {
+      "from": "n04-parallel",
+      "to": "n07-await-payment",
+      "hits": 5,
+      "executions": 5
+    },
+    {
+      "from": "n07-await-payment",
+      "to": "n08-compensation",
+      "label": "cancelled",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n07-await-payment",
+      "to": "n08-compensation",
+      "kind": "timeout",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n07-await-payment",
+      "to": "n12-shipments",
+      "label": "paid",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "from": "n08-compensation",
+      "to": "n11-order-cancelled",
+      "hits": 2,
+      "executions": 2
+    },
+    {
+      "from": "n09-release-stock",
+      "to": "n10-void-payment",
+      "hits": 2,
+      "executions": 2
+    },
+    {
+      "from": "n12-shipments",
+      "to": "n15-invoice-number",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "from": "n13-shipment-workflow",
+      "to": "n14-shipment-ready",
+      "hits": 6,
+      "executions": 3
+    },
+    {
+      "from": "n15-invoice-number",
+      "to": "n16-award-points",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "from": "n16-award-points",
+      "to": "n17-discount-policy",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "from": "n17-discount-policy",
+      "to": "n18-returns-window",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "from": "n18-returns-window",
+      "to": "n19-continue-as-new-suggested",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "from": "n19-continue-as-new-suggested",
+      "to": "n20-continue-as-new",
+      "label": "yes",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n19-continue-as-new-suggested",
+      "to": "n21-end",
+      "label": "no",
+      "hits": 2,
+      "executions": 2
+    },
+    {
+      "from": "query-getStatus.start",
+      "to": "query-getStatus.end",
+      "recorded": false,
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "signal-approvePayment",
+      "to": "n07-await-payment",
+      "kind": "wakes",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "from": "signal-approvePayment.start",
+      "to": "signal-approvePayment.end",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "from": "signal-cancelOrder",
+      "to": "n07-await-payment",
+      "kind": "wakes",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "signal-cancelOrder.start",
+      "to": "signal-cancelOrder.end",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "update-changeAddress.start",
+      "to": "update-changeAddress.end",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "validator-changeAddress.start",
+      "to": "validator-changeAddress.end",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n04-parallel",
+      "to": "n05-reserve-stock",
+      "implied": true,
+      "hits": 5,
+      "executions": 5
+    },
+    {
+      "from": "n05-reserve-stock",
+      "to": "n04-parallel",
+      "implied": true,
+      "hits": 5,
+      "executions": 5
+    },
+    {
+      "from": "n04-parallel",
+      "to": "n06-authorise-payment",
+      "implied": true,
+      "hits": 5,
+      "executions": 5
+    },
+    {
+      "from": "n06-authorise-payment",
+      "to": "n04-parallel",
+      "implied": true,
+      "hits": 5,
+      "executions": 5
+    },
+    {
+      "from": "n08-compensation",
+      "to": "n09-release-stock",
+      "implied": true,
+      "hits": 2,
+      "executions": 2
+    },
+    {
+      "from": "n12-shipments",
+      "to": "n13-shipment-workflow",
+      "implied": true,
+      "hits": 6,
+      "executions": 3
+    },
+    {
+      "from": "n14-shipment-ready",
+      "to": "n12-shipments",
+      "implied": true,
+      "hits": 6,
+      "executions": 3
+    }
+  ],
+  "neverHit": [],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "n21-end"
+      ],
+      "executions": 2
+    },
+    {
+      "status": "continuedAsNew",
+      "nodes": [
+        "n20-continue-as-new"
+      ],
+      "executions": 1
+    },
+    {
+      "status": "failed",
+      "nodes": [
+        "n11-order-cancelled"
+      ],
+      "executions": 2
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [
+    {
+      "history": "OrderWorkflow.promotion.json",
+      "eventId": 68,
+      "eventType": "ActivityTaskScheduled",
+      "name": "LookUpPromotion",
+      "likelySources": [
+        "n17-discount-policy"
+      ]
+    }
+  ],
+  "histories": [
+    {
+      "file": "OrderWorkflow.cancelled.json",
+      "runId": "20c2834c-5254-41d8-94f2-1604e1257302",
+      "status": "failed",
+      "closedAt": [
+        "n11-order-cancelled"
+      ],
+      "events": {
+        "mapped": 16,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    },
+    {
+      "file": "OrderWorkflow.continue-as-new.json",
+      "runId": "1da8f4a7-b727-4558-a095-3aeb5203f540",
+      "status": "continuedAsNew",
+      "closedAt": [
+        "n20-continue-as-new"
+      ],
+      "events": {
+        "mapped": 21,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    },
+    {
+      "file": "OrderWorkflow.paid.json",
+      "runId": "4e0605f5-6c79-4d9a-90b1-2533b8aac29c",
+      "status": "completed",
+      "closedAt": [
+        "n21-end"
+      ],
+      "events": {
+        "mapped": 22,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    },
+    {
+      "file": "OrderWorkflow.promotion.json",
+      "runId": "c6a09fba-0f05-4c6d-9ff1-57e249852420",
+      "status": "completed",
+      "closedAt": [
+        "n21-end"
+      ],
+      "events": {
+        "mapped": 21,
+        "ambiguous": 0,
+        "unmapped": 1
+      }
+    },
+    {
+      "file": "OrderWorkflow.timeout.json",
+      "runId": "695d154e-a7bd-4b8a-8b0d-02041445c300",
+      "status": "failed",
+      "closedAt": [
+        "n11-order-cancelled"
+      ],
+      "events": {
+        "mapped": 15,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

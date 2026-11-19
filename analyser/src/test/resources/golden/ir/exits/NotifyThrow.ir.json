@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "NotifyThrow",
+  "interface": "exits.NotifyThrow",
+  "implementation": "exits.NotifyThrowImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "NotifyThrow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n5ee0326f08",
+      "kind": "activity",
+      "name": "Report",
+      "parent": "na931d9d23a",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/NotifyThrow.kt",
+        "line": 23
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/NotifyThrow.kt",
+        "line": 19
+      }
+    },
+    {
+      "id": "n96bcf65653",
+      "kind": "activity",
+      "name": "Prepare",
+      "parent": "na931d9d23a",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/NotifyThrow.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "na931d9d23a",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/NotifyThrow.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf4af460609",
+      "kind": "fail",
+      "name": "IllegalStateException",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/NotifyThrow.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "nff299f0059",
+      "kind": "branch",
+      "label": "id == \"bad\"",
+      "parent": "na931d9d23a",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/NotifyThrow.kt",
+        "line": 22
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n5ee0326f08",
+      "to": "nf4af460609"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "na931d9d23a"
+    },
+    {
+      "from": "n96bcf65653",
+      "to": "nff299f0059"
+    },
+    {
+      "from": "na931d9d23a",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nff299f0059",
+      "to": "n5ee0326f08",
+      "label": "yes"
+    },
+    {
+      "from": "nff299f0059",
+      "to": "na931d9d23a",
+      "label": "no"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 0
+  }
+}

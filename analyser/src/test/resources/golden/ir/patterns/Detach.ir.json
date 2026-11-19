@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Detach",
+  "interface": "patterns.Detach",
+  "implementation": "patterns.DetachImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Detach",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n22259c0e61",
+      "kind": "childWorkflow",
+      "name": "Courier",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Detach.kt",
+        "line": 48
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Detach.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "n81132498d9",
+      "kind": "childWorkflow",
+      "name": "Courier",
+      "waitsFor": "start",
+      "parentClosePolicy": "abandon",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Detach.kt",
+        "line": 45
+      }
+    },
+    {
+      "id": "n9bacd5d222",
+      "kind": "childWorkflow",
+      "name": "Courier",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Detach.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n22259c0e61",
+      "to": "n9bacd5d222"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n81132498d9"
+    },
+    {
+      "from": "n81132498d9",
+      "to": "n22259c0e61"
+    },
+    {
+      "from": "n9bacd5d222",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 5,
+    "unknown": 0
+  }
+}

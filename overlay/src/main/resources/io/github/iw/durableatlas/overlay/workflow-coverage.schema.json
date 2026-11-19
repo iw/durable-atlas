@@ -1,0 +1,337 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:durable-atlas:schema:workflow-coverage:1",
+  "title": "Workflow coverage",
+  "description": "What the executions of one Temporal workflow type reached in the graph of that type: hit counts for every node, edge and handler, taken from event histories, and the events that found no place in the graph or no certain one.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "workflowType",
+    "commit",
+    "executions",
+    "events",
+    "entryPoints",
+    "nodes",
+    "edges",
+    "neverHit",
+    "closes",
+    "ambiguous",
+    "unmapped",
+    "histories"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "description": "Version of this format.",
+      "const": 1
+    },
+    "workflowType": {
+      "description": "Workflow type name as registered with Temporal.",
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "commit": {
+      "description": "Commit of the analysed repository the graph was produced from.",
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "executions": {
+      "description": "Number of event histories laid over the graph.",
+      "$ref": "#/$defs/count"
+    },
+    "events": {
+      "description": "Events laid on the graph, over all executions.",
+      "$ref": "#/$defs/eventCounts"
+    },
+    "entryPoints": {
+      "description": "Every entry point of the graph, in the order of the graph.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/entryPoint" }
+    },
+    "nodes": {
+      "description": "Every node of the graph, by id.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/node" }
+    },
+    "edges": {
+      "description": "Every edge of the graph, followed by the edges it implies between regions and their children.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/edge" }
+    },
+    "neverHit": {
+      "description": "Ids of the nodes that no execution reached. Nodes a history cannot show, those of query handlers, are left out.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" },
+      "uniqueItems": true
+    },
+    "closes": {
+      "description": "How the executions ended, and at which nodes.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/close" }
+    },
+    "ambiguous": {
+      "description": "Matches the histories do not settle. Whatever is in doubt was counted, and its hits are marked uncertain.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/ambiguousEvent" }
+    },
+    "unmapped": {
+      "description": "Events that are a step of the workflow and have no node in the graph.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/unmappedStep" }
+    },
+    "recognised": {
+      "description": "Events that are no step of a workflow and have no node, because they say what was done to an execution from outside: a request to cancel it, a pause, a change of its options. They are known for what they are and are not among the unmapped events. Absent when there are none.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/outsideEvent" }
+    },
+    "histories": {
+      "description": "The executions, by the name of their history.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/history" }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "eventCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mapped", "ambiguous", "unmapped"],
+      "properties": {
+        "mapped": {
+          "description": "Events with exactly one node.",
+          "$ref": "#/$defs/count"
+        },
+        "ambiguous": {
+          "description": "Events that fit several nodes and were counted for each of them.",
+          "$ref": "#/$defs/count"
+        },
+        "unmapped": {
+          "description": "Events that are a step of the workflow and have no node.",
+          "$ref": "#/$defs/count"
+        },
+        "recognised": {
+          "description": "Events that are no step of the workflow and have no node: what was done to the execution from outside, as when it is asked to cancel. Zero when left out.",
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "entryPoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "name", "hits", "executions"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "kind": { "enum": ["workflowMethod", "signal", "query", "update", "updateValidator"] },
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "recorded": {
+          "description": "False if histories do not show calls of this entry point: queries leave no event. True when left out.",
+          "type": "boolean"
+        },
+        "hits": {
+          "description": "How often it was called, over all executions.",
+          "$ref": "#/$defs/count"
+        },
+        "executions": {
+          "description": "In how many executions it was called.",
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "hits", "executions"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "kind": {
+          "enum": [
+            "start",
+            "end",
+            "activity",
+            "localActivity",
+            "childWorkflow",
+            "signalExternal",
+            "nexusOperation",
+            "timer",
+            "await",
+            "sideEffect",
+            "versionGate",
+            "branch",
+            "loop",
+            "parallel",
+            "compensation",
+            "continueAsNew",
+            "fail",
+            "unknown",
+            "cancelScope",
+            "cancelExternal",
+            "upsertSearchAttributes",
+            "upsertMemo"
+          ]
+        },
+        "name": { "type": "string" },
+        "recorded": {
+          "description": "False if histories cannot show this node: it belongs to a query handler. True when left out.",
+          "type": "boolean"
+        },
+        "hits": {
+          "description": "How often the node was reached, over all executions. A region counts once each time it is entered, however many rounds a loop takes.",
+          "$ref": "#/$defs/count"
+        },
+        "uncertain": {
+          "description": "How many of the hits are not certain. Zero when left out.",
+          "$ref": "#/$defs/count"
+        },
+        "executions": {
+          "description": "How many executions reached the node.",
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to", "hits", "executions"],
+      "properties": {
+        "from": { "$ref": "#/$defs/nonEmptyString" },
+        "to": { "$ref": "#/$defs/nonEmptyString" },
+        "kind": {
+          "description": "Kind of the edge; flow when left out.",
+          "enum": ["flow", "exception", "timeout", "wakes", "cancels"]
+        },
+        "label": { "type": "string" },
+        "implied": {
+          "description": "True for an edge between a region and one of its children that the graph leaves unwritten: from the region to a child it begins with, or from a child it ends with to the region.",
+          "type": "boolean"
+        },
+        "recorded": {
+          "description": "False if histories cannot show this edge. True when left out.",
+          "type": "boolean"
+        },
+        "hits": {
+          "description": "How often the edge was taken, over all executions. A wakes edge is taken once for every call of its handler that arrives while the execution waits at its await. A cancels edge is taken once for every event that says the step at its end was asked to cancel where the scope was cancelled.",
+          "$ref": "#/$defs/count"
+        },
+        "uncertain": {
+          "description": "How many of the hits are not certain. Zero when left out.",
+          "$ref": "#/$defs/count"
+        },
+        "executions": {
+          "description": "How many executions took the edge.",
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "edgeName": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "$ref": "#/$defs/nonEmptyString" },
+        "to": { "$ref": "#/$defs/nonEmptyString" },
+        "kind": { "enum": ["flow", "exception", "timeout", "wakes", "cancels"] },
+        "label": { "type": "string" }
+      }
+    },
+    "close": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "nodes", "executions"],
+      "properties": {
+        "status": { "$ref": "#/$defs/status" },
+        "nodes": {
+          "description": "Where these executions ended. Empty if the end has no node: the execution was terminated or timed out, is still running, or failed with a failure that no throw in the workflow raised.",
+          "type": "array",
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "executions": { "$ref": "#/$defs/count" }
+      }
+    },
+    "status": {
+      "description": "How an execution ended; running if its history ends before it does.",
+      "enum": ["completed", "failed", "timedOut", "canceled", "terminated", "continuedAsNew", "running"]
+    },
+    "ambiguousEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["history", "eventId", "eventType", "doubt", "nodes"],
+      "properties": {
+        "history": { "$ref": "#/$defs/nonEmptyString" },
+        "eventId": { "type": "integer", "minimum": 1 },
+        "eventType": { "$ref": "#/$defs/nonEmptyString" },
+        "name": {
+          "description": "What the step is called in the history: an activity type, a signal name, the length of a timer.",
+          "type": "string"
+        },
+        "doubt": {
+          "description": "candidates: several nodes fit the event, and each was counted. paths: the event has one node, but several ways lead there from the node before, and what lies on only some of them was counted too. outOfOrder: the event was laid on the only node of its name although the execution had no way to it.",
+          "enum": ["candidates", "paths", "outOfOrder"]
+        },
+        "nodes": {
+          "description": "The nodes in doubt.",
+          "type": "array",
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "edges": {
+          "description": "The edges in doubt.",
+          "type": "array",
+          "items": { "$ref": "#/$defs/edgeName" }
+        }
+      }
+    },
+    "unmappedStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["history", "eventId", "eventType"],
+      "properties": {
+        "history": { "$ref": "#/$defs/nonEmptyString" },
+        "eventId": { "type": "integer", "minimum": 1 },
+        "eventType": { "$ref": "#/$defs/nonEmptyString" },
+        "name": { "type": "string" },
+        "likelySources": {
+          "description": "Ids of unknown nodes the execution had reached when the event was written. Any of them may hide the step.",
+          "type": "array",
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        }
+      }
+    },
+    "outsideEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["history", "eventId", "eventType"],
+      "properties": {
+        "history": { "$ref": "#/$defs/nonEmptyString" },
+        "eventId": { "type": "integer", "minimum": 1 },
+        "eventType": {
+          "description": "The type of the event as the Temporal UI spells it, for example WorkflowExecutionCancelRequested.",
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "history": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file", "status", "closedAt", "events"],
+      "properties": {
+        "file": {
+          "description": "Name of the history, as it was read.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "workflowId": { "type": "string" },
+        "runId": { "type": "string" },
+        "status": { "$ref": "#/$defs/status" },
+        "closedAt": {
+          "description": "The nodes the execution ended at; empty if its end has no node.",
+          "type": "array",
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "events": { "$ref": "#/$defs/eventCounts" }
+      }
+    }
+  }
+}

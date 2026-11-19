@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "CaughtByRegions",
+  "interface": "caught.CaughtByRegions",
+  "implementation": "caught.CaughtByRegionsImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "CaughtByRegions",
+      "start": "start"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "end",
+      "kind": "end"
+    },
+    {
+      "id": "n01",
+      "kind": "branch",
+      "label": "Checks.known throws?"
+    },
+    {
+      "id": "n02",
+      "kind": "loop",
+      "label": "for each item"
+    },
+    {
+      "id": "n03",
+      "kind": "activity",
+      "name": "Two",
+      "parent": "n02"
+    },
+    {
+      "id": "n04",
+      "kind": "branch",
+      "label": "f throws?"
+    },
+    {
+      "id": "n05",
+      "kind": "compensation"
+    },
+    {
+      "id": "n06",
+      "kind": "activity",
+      "name": "Two",
+      "parent": "n05"
+    },
+    {
+      "id": "n07",
+      "kind": "branch",
+      "label": "Checks.known throws?"
+    },
+    {
+      "id": "n08",
+      "kind": "parallel"
+    },
+    {
+      "id": "n09",
+      "kind": "activity",
+      "name": "Two",
+      "parent": "n08"
+    },
+    {
+      "id": "n10",
+      "kind": "activity",
+      "name": "Other",
+      "parent": "n08"
+    },
+    {
+      "id": "n11",
+      "kind": "branch",
+      "label": "Checks.known throws?"
+    },
+    {
+      "id": "n12",
+      "kind": "activity",
+      "name": "Two"
+    },
+    {
+      "id": "n13",
+      "kind": "fail",
+      "name": "Refused"
+    },
+    {
+      "id": "n14",
+      "kind": "activity",
+      "name": "Done"
+    },
+    {
+      "id": "start",
+      "kind": "start"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n01",
+      "to": "n02",
+      "kind": "exception",
+      "label": "IllegalArgumentException"
+    },
+    {
+      "from": "n01",
+      "to": "n04",
+      "label": "no"
+    },
+    {
+      "from": "n02",
+      "to": "n04"
+    },
+    {
+      "from": "n04",
+      "to": "n05",
+      "kind": "exception",
+      "label": "com.example.orders.payments.PaymentAuthorisationDeclinedException"
+    },
+    {
+      "from": "n04",
+      "to": "n07",
+      "label": "no"
+    },
+    {
+      "from": "n05",
+      "to": "n07"
+    },
+    {
+      "from": "n07",
+      "to": "n08",
+      "kind": "exception",
+      "label": "java.util.concurrent.CancellationException"
+    },
+    {
+      "from": "n07",
+      "to": "n11",
+      "label": "no"
+    },
+    {
+      "from": "n08",
+      "to": "n11"
+    },
+    {
+      "from": "n11",
+      "to": "n12",
+      "kind": "exception",
+      "label": "IllegalArgumentException"
+    },
+    {
+      "from": "n11",
+      "to": "n14",
+      "label": "no"
+    },
+    {
+      "from": "n12",
+      "to": "n13"
+    },
+    {
+      "from": "n14",
+      "to": "end"
+    },
+    {
+      "from": "start",
+      "to": "n01"
+    }
+  ],
+  "stats": {
+    "nodes": 16,
+    "unknown": 0
+  }
+}

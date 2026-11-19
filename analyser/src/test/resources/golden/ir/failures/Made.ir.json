@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Made",
+  "interface": "failing.Made",
+  "implementation": "failing.MadeImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Made",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Made.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "na77599cb77",
+      "kind": "branch",
+      "label": "getenv(\"REGION\") == null",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Made.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "nbfcd712596",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Made.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nfd8b8cf4bb",
+      "kind": "fail",
+      "name": "NoRegion",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Made.kt",
+        "line": 28
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "na77599cb77"
+    },
+    {
+      "from": "na77599cb77",
+      "to": "nbfcd712596",
+      "label": "no"
+    },
+    {
+      "from": "na77599cb77",
+      "to": "nfd8b8cf4bb",
+      "label": "yes"
+    },
+    {
+      "from": "nbfcd712596",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 5,
+    "unknown": 0
+  }
+}

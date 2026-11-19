@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "ByConstructor",
+  "interface": "options.ByConstructor",
+  "implementation": "options.ByConstructorImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "ByConstructor",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0a6f2ccd46",
+      "kind": "activity",
+      "name": "Store",
+      "taskQueue": "slow",
+      "timeout": "PT2M",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Wired.kt",
+        "line": 60
+      }
+    },
+    {
+      "id": "n451e201c71",
+      "kind": "localActivity",
+      "name": "Fetch",
+      "timeout": "PT2S",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Wired.kt",
+        "line": 61
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Wired.kt",
+        "line": 58
+      }
+    },
+    {
+      "id": "n698dd957d3",
+      "kind": "activity",
+      "name": "Fetch",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Wired.kt",
+        "line": 59
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0a6f2ccd46",
+      "to": "n451e201c71"
+    },
+    {
+      "from": "n451e201c71",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n698dd957d3"
+    },
+    {
+      "from": "n698dd957d3",
+      "to": "n0a6f2ccd46"
+    }
+  ],
+  "stats": {
+    "nodes": 5,
+    "unknown": 0
+  }
+}

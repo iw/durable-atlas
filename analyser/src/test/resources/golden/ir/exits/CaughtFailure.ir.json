@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "CaughtFailure",
+  "interface": "exits.CaughtFailure",
+  "implementation": "exits.CaughtFailureImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "CaughtFailure",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1d0b8270a1",
+      "kind": "activity",
+      "name": "Work",
+      "parent": "n1f138720de",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/CaughtFailure.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "n1f138720de",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/CaughtFailure.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "n5770be07a3",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/CaughtFailure.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/CaughtFailure.kt",
+        "line": 19
+      }
+    },
+    {
+      "id": "n93b9f48405",
+      "kind": "activity",
+      "name": "Prepare",
+      "parent": "n5770be07a3",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/CaughtFailure.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "nb2bc65a701",
+      "kind": "activity",
+      "name": "CleanUp",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/CaughtFailure.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n1d0b8270a1",
+      "to": "n1f138720de"
+    },
+    {
+      "from": "n1d0b8270a1",
+      "to": "n1f138720de",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "n1f138720de",
+      "to": "n5770be07a3"
+    },
+    {
+      "from": "n5770be07a3",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n1f138720de"
+    },
+    {
+      "from": "n93b9f48405",
+      "to": "nb2bc65a701",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "nb2bc65a701",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 0
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Newer",
+  "interface": "calls.Newer",
+  "implementation": "calls.NewerImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Newer",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n2bddd7d2db",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Newer.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n5521062010",
+      "kind": "unknown",
+      "label": "NewThing.create",
+      "reason": "unresolved",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Newer.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n5614839b59",
+      "kind": "unknown",
+      "label": "launch",
+      "reason": "unresolved",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Newer.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Newer.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n889e95d501",
+      "kind": "timer",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Newer.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf00cf9495e",
+      "kind": "unknown",
+      "label": "Workflow.brandNew",
+      "reason": "unresolved",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Newer.kt",
+        "line": 29
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n2bddd7d2db",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n5521062010",
+      "to": "n5614839b59"
+    },
+    {
+      "from": "n5614839b59",
+      "to": "n889e95d501"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nf00cf9495e"
+    },
+    {
+      "from": "n889e95d501",
+      "to": "n2bddd7d2db"
+    },
+    {
+      "from": "nf00cf9495e",
+      "to": "n5521062010"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 3
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Newer.kt",
+        "line": 31
+      },
+      "text": "Money.of(3)"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Newer.kt",
+        "line": 31
+      },
+      "text": "Money.of(3).pause()"
+    }
+  ]
+}

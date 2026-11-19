@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Patience",
+  "interface": "open.Patience",
+  "implementation": "open.PatienceImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Patience",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-approve",
+      "kind": "signal",
+      "name": "approve",
+      "start": "n62b63817dd",
+      "writes": [
+        "approval"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n357a575d28",
+      "kind": "activity",
+      "name": "Fetch",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Patience.kt",
+        "line": 45
+      }
+    },
+    {
+      "id": "n4d7845b27d",
+      "kind": "await",
+      "timeout": "PT30S",
+      "reads": [
+        "approval"
+      ],
+      "label": "approval.get()",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Patience.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n62b63817dd",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Patience.kt",
+        "line": 48
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Patience.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n891035208a",
+      "kind": "activity",
+      "name": "Store",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Patience.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "na336df870c",
+      "kind": "activity",
+      "name": "Notify",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Patience.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "naaa1ad5b7c",
+      "kind": "await",
+      "timeout": "PT1H",
+      "reads": [
+        "approval"
+      ],
+      "label": "approval.cancellableGet()",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Patience.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "nb1334aad68",
+      "kind": "activity",
+      "name": "Audit",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Patience.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "neb505353f1",
+      "kind": "await",
+      "timeout": "PT5M",
+      "reads": [
+        "approval"
+      ],
+      "label": "approval.get()",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Patience.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf45401b72d",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n357a575d28",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n4d7845b27d",
+      "to": "n891035208a"
+    },
+    {
+      "from": "n4d7845b27d",
+      "to": "na336df870c",
+      "kind": "timeout"
+    },
+    {
+      "from": "n62b63817dd",
+      "to": "nf45401b72d"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n4d7845b27d"
+    },
+    {
+      "from": "n891035208a",
+      "to": "nb1334aad68",
+      "kind": "exception",
+      "label": "Exception"
+    },
+    {
+      "from": "n891035208a",
+      "to": "neb505353f1"
+    },
+    {
+      "from": "na336df870c",
+      "to": "naaa1ad5b7c"
+    },
+    {
+      "from": "naaa1ad5b7c",
+      "to": "n891035208a"
+    },
+    {
+      "from": "nb1334aad68",
+      "to": "n357a575d28"
+    },
+    {
+      "from": "neb505353f1",
+      "to": "n357a575d28"
+    },
+    {
+      "from": "neb505353f1",
+      "to": "nb1334aad68",
+      "kind": "exception",
+      "label": "Exception"
+    },
+    {
+      "from": "neb505353f1",
+      "to": "nb1334aad68",
+      "kind": "timeout"
+    },
+    {
+      "from": "signal-approve",
+      "to": "n4d7845b27d",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-approve",
+      "to": "naaa1ad5b7c",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-approve",
+      "to": "neb505353f1",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 11,
+    "unknown": 0
+  }
+}

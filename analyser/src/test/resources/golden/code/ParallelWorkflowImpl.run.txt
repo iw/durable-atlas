@@ -1,0 +1,90 @@
+block workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ParallelWorkflow.kt:30
+  val reservation: io.temporal.workflow.Promise<kotlin.String> :32
+    call io.temporal.workflow.Async.function(io.temporal.workflow.Functions.Func) [library] <kotlin.String>: io.temporal.workflow.Promise<kotlin.String> :32
+      argument function `{ inventory.reserveStock(sku, 1) }`
+        lambda () :32
+          block :32
+            call com.example.fixture.activities.InventoryActivities.reserveStock(kotlin.String,kotlin.Int) [source]: kotlin.String :32
+              on com.example.fixture.activities.InventoryActivities @io.temporal.activity.ActivityInterface
+              receiver
+                read com.example.fixture.workflows.primitives.ParallelWorkflowImpl.inventory on this: com.example.fixture.activities.InventoryActivities :32
+              argument sku `sku`
+                local sku: kotlin.String :32
+              argument quantity `1` = 1
+                literal 1 :32
+  val quote: io.temporal.workflow.Promise<kotlin.Long> :33
+    call io.temporal.workflow.Async.function(io.temporal.workflow.Functions.Func) [library] <kotlin.Long>: io.temporal.workflow.Promise<kotlin.Long> :33
+      argument function `{ shipping.quoteShipping(sku) }`
+        lambda () :33
+          block :33
+            call com.example.fixture.activities.ShippingActivities.quoteShipping(kotlin.String) [source]: kotlin.Long :33
+              on com.example.fixture.activities.ShippingActivities @io.temporal.activity.ActivityInterface
+              receiver
+                read com.example.fixture.workflows.primitives.ParallelWorkflowImpl.shipping on this: com.example.fixture.activities.ShippingActivities :33
+              argument sku `sku`
+                local sku: kotlin.String :33
+  call io.temporal.workflow.Promise.get() [library]: java.lang.Void :34
+    on io.temporal.workflow.Promise<java.lang.Void>
+    receiver
+      call io.temporal.workflow.Promise.allOf(io.temporal.workflow.Promise...) [library]: io.temporal.workflow.Promise<java.lang.Void> :34
+        argument promises `reservation`
+          local reservation: io.temporal.workflow.Promise<kotlin.String> :34
+        argument promises `quote`
+          local quote: io.temporal.workflow.Promise<kotlin.Long> :34
+  val email: io.temporal.workflow.Promise<java.lang.Void> :37
+    call io.temporal.workflow.Async.procedure(io.temporal.workflow.Functions.Proc) [library]: io.temporal.workflow.Promise<java.lang.Void> :37
+      argument procedure `{ notifications.email(OPS_EMAIL, "reserved $sku") }`
+        lambda () :37
+          block :37
+            call com.example.fixture.activities.NotificationActivities.email(kotlin.String,kotlin.String) [source]: kotlin.Unit :37
+              on com.example.fixture.activities.NotificationActivities @io.temporal.activity.ActivityInterface(namePrefix = "Notify")
+              receiver
+                read com.example.fixture.workflows.primitives.ParallelWorkflowImpl.notifications on this: com.example.fixture.activities.NotificationActivities :37
+              argument recipient `OPS_EMAIL` = "ops@example.com"
+                read com.example.fixture.helpers.OPS_EMAIL: kotlin.String = "ops@example.com" :37
+              argument message `"reserved $sku"`
+                other template `"reserved $sku"` :37
+                  local sku: kotlin.String :37
+  val sms: io.temporal.workflow.Promise<java.lang.Void> :38
+    call io.temporal.workflow.Async.procedure(io.temporal.workflow.Functions.Proc) [library]: io.temporal.workflow.Promise<java.lang.Void> :38
+      argument procedure `{ notifications.sms(WAREHOUSE_PHONE, "reserved $sku") }`
+        lambda () :38
+          block :38
+            call com.example.fixture.activities.NotificationActivities.sms(kotlin.String,kotlin.String) [source]: kotlin.Unit :38
+              on com.example.fixture.activities.NotificationActivities @io.temporal.activity.ActivityInterface(namePrefix = "Notify")
+              receiver
+                read com.example.fixture.workflows.primitives.ParallelWorkflowImpl.notifications on this: com.example.fixture.activities.NotificationActivities :38
+              argument recipient `WAREHOUSE_PHONE` = "+15550100"
+                read com.example.fixture.helpers.WAREHOUSE_PHONE: kotlin.String = "+15550100" :38
+              argument message `"reserved $sku"`
+                other template `"reserved $sku"` :38
+                  local sku: kotlin.String :38
+  call io.temporal.workflow.Promise.get() [library]: kotlin.Any :39
+    on io.temporal.workflow.Promise<kotlin.Any>
+    receiver
+      call io.temporal.workflow.Promise.anyOf(io.temporal.workflow.Promise...) [library]: io.temporal.workflow.Promise<kotlin.Any> :39
+        argument promises `email`
+          local email: io.temporal.workflow.Promise<java.lang.Void> :39
+        argument promises `sms`
+          local sms: io.temporal.workflow.Promise<java.lang.Void> :39
+  val audit: io.temporal.workflow.Promise<java.lang.Void> :42
+    call io.temporal.workflow.Async.procedure(io.temporal.workflow.Functions.Proc) [library]: io.temporal.workflow.Promise<java.lang.Void> :42
+      argument procedure `{ notifications.audit("reserved $sku") }`
+        lambda () :42
+          block :42
+            call com.example.fixture.activities.NotificationActivities.audit(kotlin.String) [source]: kotlin.Unit :42
+              on com.example.fixture.activities.NotificationActivities @io.temporal.activity.ActivityInterface(namePrefix = "Notify")
+              receiver
+                read com.example.fixture.workflows.primitives.ParallelWorkflowImpl.notifications on this: com.example.fixture.activities.NotificationActivities :42
+              argument entry `"reserved $sku"`
+                other template `"reserved $sku"` :42
+                  local sku: kotlin.String :42
+  call io.temporal.workflow.Promise.get() [library]: java.lang.Void :43
+    on io.temporal.workflow.Promise<java.lang.Void>
+    receiver
+      local audit: io.temporal.workflow.Promise<java.lang.Void> :43
+  return :45
+    call io.temporal.workflow.Promise.get() [library]: kotlin.String :45
+      on io.temporal.workflow.Promise<kotlin.String>
+      receiver
+        local reservation: io.temporal.workflow.Promise<kotlin.String> :45

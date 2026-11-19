@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "NexusOperationWorkflow",
+  "interface": "com.example.fixture.workflows.primitives.NexusOperationWorkflow",
+  "implementation": "com.example.fixture.workflows.primitives.NexusOperationWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "NexusOperationWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/NexusOperationWorkflow.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n6f54b25be9",
+      "kind": "nexusOperation",
+      "name": "greet",
+      "service": "GreetingService",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/NexusOperationWorkflow.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "nc47f317ae4",
+      "kind": "nexusOperation",
+      "name": "say-goodbye",
+      "service": "GreetingService",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/NexusOperationWorkflow.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "n6f54b25be9"
+    },
+    {
+      "from": "n6f54b25be9",
+      "to": "nc47f317ae4"
+    },
+    {
+      "from": "nc47f317ae4",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 0
+  }
+}

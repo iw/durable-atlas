@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Ordered",
+  "interface": "extensions.Ordered",
+  "implementation": "extensions.OrderedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Ordered",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n59a764883c",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT2S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Ordered.kt",
+        "line": 73
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Ordered.kt",
+        "line": 51
+      }
+    },
+    {
+      "id": "n9c793c0350",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT4S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Ordered.kt",
+        "line": 75
+      }
+    },
+    {
+      "id": "ne44f131c57",
+      "kind": "activity",
+      "name": "Two",
+      "taskQueue": "either",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Ordered.kt",
+        "line": 74
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n59a764883c",
+      "to": "ne44f131c57"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n59a764883c"
+    },
+    {
+      "from": "n9c793c0350",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "ne44f131c57",
+      "to": "n9c793c0350"
+    }
+  ],
+  "stats": {
+    "nodes": 5,
+    "unknown": 0
+  }
+}

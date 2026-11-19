@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "StubMaps",
+  "interface": "silent.StubMaps",
+  "implementation": "silent.StubMapsImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "StubMaps",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n4566bd0cca",
+      "kind": "activity",
+      "name": "Fetch",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/StubMaps.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/StubMaps.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n7bc998615f",
+      "kind": "activity",
+      "name": "Store",
+      "taskQueue": "slow",
+      "timeout": "PT2M",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/StubMaps.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "nb58f108cca",
+      "kind": "localActivity",
+      "name": "Store",
+      "timeout": "PT4S",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/StubMaps.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf20bb632a2",
+      "kind": "activity",
+      "name": "Fetch",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/StubMaps.kt",
+        "line": 35
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n4566bd0cca",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nf20bb632a2"
+    },
+    {
+      "from": "n7bc998615f",
+      "to": "nb58f108cca"
+    },
+    {
+      "from": "nb58f108cca",
+      "to": "n4566bd0cca"
+    },
+    {
+      "from": "nf20bb632a2",
+      "to": "n7bc998615f"
+    }
+  ],
+  "stats": {
+    "nodes": 6,
+    "unknown": 0
+  }
+}

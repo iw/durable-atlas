@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "CaughtInLoop",
+  "interface": "caught.CaughtInLoop",
+  "implementation": "caught.CaughtInLoopImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "CaughtInLoop",
+      "start": "start"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "end",
+      "kind": "end"
+    },
+    {
+      "id": "n01",
+      "kind": "loop",
+      "label": "while open"
+    },
+    {
+      "id": "n02",
+      "kind": "activity",
+      "name": "First",
+      "parent": "n01"
+    },
+    {
+      "id": "n03",
+      "kind": "branch",
+      "label": "Checks.known throws?",
+      "parent": "n01"
+    },
+    {
+      "id": "n04",
+      "kind": "activity",
+      "name": "Two",
+      "parent": "n01"
+    },
+    {
+      "id": "n05",
+      "kind": "branch",
+      "label": "f throws?",
+      "parent": "n01"
+    },
+    {
+      "id": "n06",
+      "kind": "activity",
+      "name": "Two",
+      "parent": "n01"
+    },
+    {
+      "id": "n07",
+      "kind": "activity",
+      "name": "Three",
+      "parent": "n01"
+    },
+    {
+      "id": "n08",
+      "kind": "branch",
+      "label": "Checks.known throws?",
+      "parent": "n01"
+    },
+    {
+      "id": "n09",
+      "kind": "loop",
+      "label": "for each item",
+      "parent": "n01"
+    },
+    {
+      "id": "n10",
+      "kind": "activity",
+      "name": "Two",
+      "parent": "n09"
+    },
+    {
+      "id": "n11",
+      "kind": "activity",
+      "name": "Done",
+      "parent": "n01"
+    },
+    {
+      "id": "start",
+      "kind": "start"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n01",
+      "to": "end"
+    },
+    {
+      "from": "n02",
+      "to": "n03"
+    },
+    {
+      "from": "n03",
+      "to": "n04",
+      "kind": "exception",
+      "label": "IllegalArgumentException"
+    },
+    {
+      "from": "n03",
+      "to": "n05",
+      "label": "no"
+    },
+    {
+      "from": "n04",
+      "to": "n05"
+    },
+    {
+      "from": "n05",
+      "to": "n06",
+      "kind": "exception",
+      "label": "java.util.concurrent.CancellationException"
+    },
+    {
+      "from": "n05",
+      "to": "n07",
+      "kind": "exception",
+      "label": "IllegalStateException"
+    },
+    {
+      "from": "n05",
+      "to": "n08",
+      "label": "no"
+    },
+    {
+      "from": "n06",
+      "to": "n08"
+    },
+    {
+      "from": "n07",
+      "to": "n08"
+    },
+    {
+      "from": "n08",
+      "to": "n09",
+      "kind": "exception",
+      "label": "ConcurrentModificationException"
+    },
+    {
+      "from": "n08",
+      "to": "n11",
+      "label": "no"
+    },
+    {
+      "from": "n09",
+      "to": "n11"
+    },
+    {
+      "from": "start",
+      "to": "n01"
+    }
+  ],
+  "stats": {
+    "nodes": 13,
+    "unknown": 0
+  }
+}

@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Labels",
+  "interface": "silent.Labels",
+  "implementation": "silent.LabelsImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Labels",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0a9a1f3b59",
+      "kind": "activity",
+      "name": "Fetch",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Labels.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n1cea41f20d",
+      "kind": "upsertMemo",
+      "keys": [
+        "note"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Labels.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n5042a130c2",
+      "kind": "upsertSearchAttributes",
+      "keys": [
+        "Stage",
+        "Attempts"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Labels.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n5a51cdb43d",
+      "kind": "upsertSearchAttributes",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Labels.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Labels.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n73f6e699cb",
+      "kind": "upsertSearchAttributes",
+      "keys": [
+        "Stage",
+        "Attempts"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Labels.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n9f2d7ee5e4",
+      "kind": "upsertSearchAttributes",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Labels.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "naa28059095",
+      "kind": "upsertSearchAttributes",
+      "keys": [
+        "Stage",
+        "Owner"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Labels.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nb3e6dc9d2e",
+      "kind": "upsertMemo",
+      "keys": [
+        "note",
+        "by"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Labels.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "nc2e4e4fa6d",
+      "kind": "upsertMemo",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Labels.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0a9a1f3b59",
+      "to": "n73f6e699cb"
+    },
+    {
+      "from": "n1cea41f20d",
+      "to": "n0a9a1f3b59"
+    },
+    {
+      "from": "n5042a130c2",
+      "to": "n1cea41f20d"
+    },
+    {
+      "from": "n5a51cdb43d",
+      "to": "nc2e4e4fa6d"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n5042a130c2"
+    },
+    {
+      "from": "n73f6e699cb",
+      "to": "naa28059095"
+    },
+    {
+      "from": "n9f2d7ee5e4",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "naa28059095",
+      "to": "nb3e6dc9d2e"
+    },
+    {
+      "from": "nb3e6dc9d2e",
+      "to": "n5a51cdb43d"
+    },
+    {
+      "from": "nc2e4e4fa6d",
+      "to": "n9f2d7ee5e4"
+    }
+  ],
+  "stats": {
+    "nodes": 11,
+    "unknown": 0
+  }
+}

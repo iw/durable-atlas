@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Notice",
+  "interface": "patterns.Remind",
+  "implementation": "patterns.RemindImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Notice",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n2beab9fc3b",
+      "kind": "activity",
+      "name": "Report",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Notices.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "n40c21b4bda",
+      "kind": "activity",
+      "name": "Check",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Notices.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Notices.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n2beab9fc3b",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n40c21b4bda",
+      "to": "n2beab9fc3b"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n40c21b4bda"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 0
+  }
+}

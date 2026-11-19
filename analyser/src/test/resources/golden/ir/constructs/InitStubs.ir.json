@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "InitStubs",
+  "interface": "constructs.InitStubs",
+  "implementation": "constructs.InitStubsImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "InitStubs",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n506e85165a",
+      "kind": "activity",
+      "name": "Work",
+      "taskQueue": "slow",
+      "timeout": "PT5M",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/InitStubs.kt",
+        "line": 46
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/InitStubs.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "nb14e052524",
+      "kind": "activity",
+      "name": "Prepare",
+      "timeout": "PT20S",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/InitStubs.kt",
+        "line": 45
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n506e85165a",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nb14e052524"
+    },
+    {
+      "from": "nb14e052524",
+      "to": "n506e85165a"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 0
+  }
+}

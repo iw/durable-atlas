@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "RejectingWorkflow",
+  "interface": "linear.RejectingWorkflow",
+  "implementation": "linear.RejectingWorkflowImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "RejectingWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/linear/Linear.kt",
+        "line": 101
+      }
+    },
+    {
+      "id": "n8299b6e0ea",
+      "kind": "fail",
+      "name": "Rejected",
+      "loc": {
+        "file": "app/src/main/kotlin/linear/Linear.kt",
+        "line": 103
+      }
+    },
+    {
+      "id": "ne199cd1590",
+      "kind": "localActivity",
+      "name": "Archive",
+      "timeout": "PT2S",
+      "loc": {
+        "file": "app/src/main/kotlin/linear/Linear.kt",
+        "line": 102
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "ne199cd1590"
+    },
+    {
+      "from": "ne199cd1590",
+      "to": "n8299b6e0ea"
+    }
+  ],
+  "stats": {
+    "nodes": 3,
+    "unknown": 0
+  }
+}

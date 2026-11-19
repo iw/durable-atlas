@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Stoppable",
+  "interface": "patterns.Stoppable",
+  "implementation": "patterns.StoppableImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Stoppable",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-stop",
+      "kind": "signal",
+      "name": "stop",
+      "start": "nec6da4d85f"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n342d189af9",
+      "kind": "activity",
+      "name": "Prepare",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Stoppable.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n41c51e14b9",
+      "kind": "cancelScope",
+      "label": "scope",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Stoppable.kt",
+        "line": 48
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Stoppable.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "naea2e8f62b",
+      "kind": "activity",
+      "name": "Work",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Stoppable.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "nb2fe49d2f1",
+      "kind": "end"
+    },
+    {
+      "id": "nb5cde77f82",
+      "kind": "activity",
+      "name": "CleanUp",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Stoppable.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "nd1b43e3d7c",
+      "kind": "timer",
+      "duration": "PT1H",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Stoppable.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "nec6da4d85f",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Stoppable.kt",
+        "line": 47
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n342d189af9",
+      "to": "nb5cde77f82",
+      "kind": "exception",
+      "label": "CanceledFailure"
+    },
+    {
+      "from": "n342d189af9",
+      "to": "nd1b43e3d7c"
+    },
+    {
+      "from": "n41c51e14b9",
+      "to": "n342d189af9",
+      "kind": "cancels"
+    },
+    {
+      "from": "n41c51e14b9",
+      "to": "naea2e8f62b",
+      "kind": "cancels"
+    },
+    {
+      "from": "n41c51e14b9",
+      "to": "nb2fe49d2f1"
+    },
+    {
+      "from": "n41c51e14b9",
+      "to": "nd1b43e3d7c",
+      "kind": "cancels"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n342d189af9"
+    },
+    {
+      "from": "naea2e8f62b",
+      "to": "nb5cde77f82",
+      "kind": "exception",
+      "label": "CanceledFailure"
+    },
+    {
+      "from": "naea2e8f62b",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nb5cde77f82",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nd1b43e3d7c",
+      "to": "naea2e8f62b"
+    },
+    {
+      "from": "nd1b43e3d7c",
+      "to": "nb5cde77f82",
+      "kind": "exception",
+      "label": "CanceledFailure"
+    },
+    {
+      "from": "nec6da4d85f",
+      "to": "n41c51e14b9"
+    }
+  ],
+  "stats": {
+    "nodes": 9,
+    "unknown": 0
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Courier",
+  "interface": "patterns.Courier",
+  "implementation": "patterns.CourierImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Courier",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Detach.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "nb0702fd19b",
+      "kind": "activity",
+      "name": "Work",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Detach.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "nb0702fd19b"
+    },
+    {
+      "from": "nb0702fd19b",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 3,
+    "unknown": 0
+  }
+}

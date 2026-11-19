@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Pool",
+  "interface": "silent.Pool",
+  "implementation": "silent.PoolImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Pool",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-grant",
+      "kind": "signal",
+      "name": "grant",
+      "start": "n17593ce081",
+      "writes": [
+        "permits"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n17593ce081",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Pool.kt",
+        "line": 47
+      }
+    },
+    {
+      "id": "n1fd68c9ae6",
+      "kind": "activity",
+      "name": "Notify",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Pool.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "n2e67a625eb",
+      "kind": "activity",
+      "name": "Fetch",
+      "parent": "nc70768d84e",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Pool.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n427eb96a4d",
+      "kind": "activity",
+      "name": "Notify",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Pool.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "n50dbcba9d2",
+      "kind": "await",
+      "reads": [
+        "permits"
+      ],
+      "label": "permits.acquire()",
+      "parent": "nc70768d84e",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Pool.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Pool.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n98cd396f8e",
+      "kind": "branch",
+      "label": "permits.tryAcquire()",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Pool.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "n98d5caa5fd",
+      "kind": "await",
+      "reads": [
+        "permits"
+      ],
+      "label": "permits.acquire()",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Pool.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "nafbaa3403b",
+      "kind": "end"
+    },
+    {
+      "id": "nc70768d84e",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Pool.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "nd4fe59f3d3",
+      "kind": "await",
+      "timeout": "PT1M",
+      "reads": [
+        "permits"
+      ],
+      "label": "permits.tryAcquire()",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Pool.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "ndf00f030b4",
+      "kind": "activity",
+      "name": "Store",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Pool.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n17593ce081",
+      "to": "nafbaa3403b"
+    },
+    {
+      "from": "n1fd68c9ae6",
+      "to": "n98cd396f8e"
+    },
+    {
+      "from": "n427eb96a4d",
+      "to": "n98d5caa5fd"
+    },
+    {
+      "from": "n50dbcba9d2",
+      "to": "n2e67a625eb"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nc70768d84e"
+    },
+    {
+      "from": "n98cd396f8e",
+      "to": "n427eb96a4d",
+      "label": "yes"
+    },
+    {
+      "from": "n98cd396f8e",
+      "to": "n98d5caa5fd",
+      "label": "no"
+    },
+    {
+      "from": "n98d5caa5fd",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nc70768d84e",
+      "to": "nd4fe59f3d3"
+    },
+    {
+      "from": "nd4fe59f3d3",
+      "to": "n1fd68c9ae6",
+      "kind": "timeout"
+    },
+    {
+      "from": "nd4fe59f3d3",
+      "to": "ndf00f030b4"
+    },
+    {
+      "from": "ndf00f030b4",
+      "to": "n98cd396f8e"
+    },
+    {
+      "from": "signal-grant",
+      "to": "n50dbcba9d2",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-grant",
+      "to": "n98d5caa5fd",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-grant",
+      "to": "nd4fe59f3d3",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 13,
+    "unknown": 0
+  }
+}

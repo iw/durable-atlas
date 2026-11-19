@@ -1,0 +1,541 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "OrderWorkflow",
+  "interface": "com.example.fixture.workflows.order.OrderWorkflow",
+  "implementation": "com.example.fixture.workflows.order.OrderWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "OrderWorkflow",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-cancelOrder",
+      "kind": "signal",
+      "name": "cancelOrder",
+      "start": "na3b381d2b7",
+      "writes": [
+        "cancelReason"
+      ]
+    },
+    {
+      "id": "signal-payment-received",
+      "kind": "signal",
+      "name": "payment-received",
+      "start": "ned5ce74c43",
+      "writes": [
+        "paymentReference"
+      ]
+    },
+    {
+      "id": "query-order-status",
+      "kind": "query",
+      "name": "order-status",
+      "start": "nc64f43f15b",
+      "reads": [
+        "status"
+      ]
+    },
+    {
+      "id": "update-change-address",
+      "kind": "update",
+      "name": "change-address",
+      "start": "n29fafff145",
+      "reads": [
+        "shippingAddress"
+      ],
+      "writes": [
+        "shippingAddress"
+      ]
+    },
+    {
+      "id": "validator-change-address",
+      "kind": "updateValidator",
+      "name": "change-address",
+      "start": "ne5afccada7",
+      "reads": [
+        "status"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0338baaa15",
+      "kind": "childWorkflow",
+      "name": "Shipment",
+      "taskQueue": "shipping",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 89
+      }
+    },
+    {
+      "id": "n072c926288",
+      "kind": "end"
+    },
+    {
+      "id": "n242f0180f4",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 49
+      }
+    },
+    {
+      "id": "n29fafff145",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 110
+      }
+    },
+    {
+      "id": "n2a112d4d73",
+      "kind": "compensation",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 94
+      }
+    },
+    {
+      "id": "n42d82e9e8f",
+      "kind": "parallel",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 72
+      }
+    },
+    {
+      "id": "n504742ee74",
+      "kind": "activity",
+      "name": "NotifyAudit",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 68
+      }
+    },
+    {
+      "id": "n565cdac5f8",
+      "kind": "branch",
+      "label": "!localInventory.checkAvailability(line.sku)",
+      "parent": "n80e599d2b1",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "n633ec518e3",
+      "kind": "end"
+    },
+    {
+      "id": "n66efc755f3",
+      "kind": "activity",
+      "name": "CapturePayment",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "helpers/src/main/kotlin/com/example/fixture/helpers/PaymentProcessor.kt",
+        "line": 11
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n6bef237187",
+      "kind": "versionGate",
+      "changeId": "order-audit",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 66
+      }
+    },
+    {
+      "id": "n7608a53b3c",
+      "kind": "localActivity",
+      "name": "CheckAvailability",
+      "timeout": "PT5S",
+      "parent": "n80e599d2b1",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "n76b58e8a15",
+      "kind": "compensation",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "n7c3c3141e7",
+      "kind": "activity",
+      "name": "NotifySms",
+      "timeout": "PT30S",
+      "parent": "n42d82e9e8f",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 76
+      }
+    },
+    {
+      "id": "n7ef831f8ac",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "timeout": "PT30S",
+      "parent": "n80e599d2b1",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "n80e599d2b1",
+      "kind": "loop",
+      "label": "for each line",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n944373c168",
+      "kind": "activity",
+      "name": "ReleaseStock",
+      "timeout": "PT30S",
+      "parent": "n2a112d4d73",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "n9b70c6df23",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "timeout": "PT30S",
+      "parent": "n42d82e9e8f",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 73
+      }
+    },
+    {
+      "id": "na3b381d2b7",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 104
+      }
+    },
+    {
+      "id": "nb1a93ca840",
+      "kind": "fail",
+      "name": "TemporalFailure",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 96
+      }
+    },
+    {
+      "id": "nb3c34feafc",
+      "kind": "activity",
+      "name": "PaymentRefund",
+      "timeout": "PT30S",
+      "parent": "n2a112d4d73",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 63
+      }
+    },
+    {
+      "id": "nbc62940991",
+      "kind": "activity",
+      "name": "ReleaseStock",
+      "timeout": "PT30S",
+      "parent": "n76b58e8a15",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "nc64f43f15b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 108
+      }
+    },
+    {
+      "id": "nc6fa067e62",
+      "kind": "end"
+    },
+    {
+      "id": "nc741a508ee",
+      "kind": "activity",
+      "name": "PaymentCharge",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "helpers/src/main/kotlin/com/example/fixture/helpers/PaymentProcessor.kt",
+        "line": 10
+      }
+    },
+    {
+      "id": "nd57b86d8f3",
+      "kind": "end"
+    },
+    {
+      "id": "ndc9b26cbf5",
+      "kind": "await",
+      "timeout": "PT30M",
+      "reads": [
+        "cancelReason",
+        "paymentReference"
+      ],
+      "label": "paymentReference != null or cancelReason != null",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "ne11df5b0a5",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 55
+      }
+    },
+    {
+      "id": "ne5afccada7",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 116
+      }
+    },
+    {
+      "id": "ne958ad93f7",
+      "kind": "end"
+    },
+    {
+      "id": "ned5ce74c43",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/order/OrderWorkflowImpl.kt",
+        "line": 100
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0338baaa15",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure"
+    },
+    {
+      "from": "n0338baaa15",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n242f0180f4",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure"
+    },
+    {
+      "from": "n242f0180f4",
+      "to": "ndc9b26cbf5"
+    },
+    {
+      "from": "n29fafff145",
+      "to": "ne958ad93f7"
+    },
+    {
+      "from": "n2a112d4d73",
+      "to": "nb1a93ca840"
+    },
+    {
+      "from": "n42d82e9e8f",
+      "to": "n0338baaa15"
+    },
+    {
+      "from": "n504742ee74",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure"
+    },
+    {
+      "from": "n504742ee74",
+      "to": "n42d82e9e8f"
+    },
+    {
+      "from": "n565cdac5f8",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure"
+    },
+    {
+      "from": "n565cdac5f8",
+      "to": "n7ef831f8ac",
+      "label": "no"
+    },
+    {
+      "from": "n66efc755f3",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure"
+    },
+    {
+      "from": "n66efc755f3",
+      "to": "n6bef237187"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n80e599d2b1"
+    },
+    {
+      "from": "n6bef237187",
+      "to": "n42d82e9e8f",
+      "label": "default"
+    },
+    {
+      "from": "n6bef237187",
+      "to": "n504742ee74",
+      "label": "v1"
+    },
+    {
+      "from": "n7608a53b3c",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure"
+    },
+    {
+      "from": "n7608a53b3c",
+      "to": "n565cdac5f8"
+    },
+    {
+      "from": "n76b58e8a15",
+      "to": "ne11df5b0a5"
+    },
+    {
+      "from": "n7c3c3141e7",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure"
+    },
+    {
+      "from": "n7ef831f8ac",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure"
+    },
+    {
+      "from": "n80e599d2b1",
+      "to": "n242f0180f4"
+    },
+    {
+      "from": "n9b70c6df23",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure"
+    },
+    {
+      "from": "na3b381d2b7",
+      "to": "n633ec518e3"
+    },
+    {
+      "from": "nb3c34feafc",
+      "to": "n944373c168"
+    },
+    {
+      "from": "nc64f43f15b",
+      "to": "n072c926288"
+    },
+    {
+      "from": "nc741a508ee",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure"
+    },
+    {
+      "from": "nc741a508ee",
+      "to": "n66efc755f3"
+    },
+    {
+      "from": "ndc9b26cbf5",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure"
+    },
+    {
+      "from": "ndc9b26cbf5",
+      "to": "n76b58e8a15",
+      "label": "cancelReason != null"
+    },
+    {
+      "from": "ndc9b26cbf5",
+      "to": "n76b58e8a15",
+      "kind": "timeout"
+    },
+    {
+      "from": "ndc9b26cbf5",
+      "to": "nc741a508ee",
+      "label": "paymentReference != null"
+    },
+    {
+      "from": "ne11df5b0a5",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure"
+    },
+    {
+      "from": "ne11df5b0a5",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "ne5afccada7",
+      "to": "nc6fa067e62"
+    },
+    {
+      "from": "ned5ce74c43",
+      "to": "nd57b86d8f3"
+    },
+    {
+      "from": "signal-cancelOrder",
+      "to": "ndc9b26cbf5",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-payment-received",
+      "to": "ndc9b26cbf5",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 33,
+    "unknown": 0
+  }
+}

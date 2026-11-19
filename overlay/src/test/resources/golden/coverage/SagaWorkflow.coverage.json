@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "SagaWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 8,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "SagaWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1350bf6b89",
+      "kind": "activity",
+      "name": "ReleaseStock",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n40aa217fdd",
+      "kind": "activity",
+      "name": "PaymentRefund",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n6b73e19e3e",
+      "kind": "activity",
+      "name": "PaymentCharge",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n868457c834",
+      "kind": "activity",
+      "name": "ShipItem",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "nc45a78abf2",
+      "kind": "compensation",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nd3f8fd4d4e",
+      "kind": "fail",
+      "name": "ActivityFailure",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "ne40a8fd502",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 0,
+      "executions": 0
+    }
+  ],
+  "edges": [
+    {
+      "from": "n40aa217fdd",
+      "to": "n1350bf6b89",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "ne40a8fd502",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n6b73e19e3e",
+      "to": "n868457c834",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n6b73e19e3e",
+      "to": "nc45a78abf2",
+      "kind": "exception",
+      "label": "ActivityFailure",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n868457c834",
+      "to": "nc45a78abf2",
+      "kind": "exception",
+      "label": "ActivityFailure",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n868457c834",
+      "to": "nedd528afe0",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "nc45a78abf2",
+      "to": "nd3f8fd4d4e",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "ne40a8fd502",
+      "to": "n6b73e19e3e",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "ne40a8fd502",
+      "to": "nc45a78abf2",
+      "kind": "exception",
+      "label": "ActivityFailure",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "nc45a78abf2",
+      "to": "n40aa217fdd",
+      "implied": true,
+      "hits": 0,
+      "executions": 0
+    }
+  ],
+  "neverHit": [
+    "n40aa217fdd",
+    "n868457c834",
+    "nedd528afe0"
+  ],
+  "closes": [
+    {
+      "status": "failed",
+      "nodes": [
+        "nd3f8fd4d4e"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "SagaWorkflow.json",
+      "runId": "3a2ab46e-5798-4307-b415-bbb80a79c753",
+      "status": "failed",
+      "closedAt": [
+        "nd3f8fd4d4e"
+      ],
+      "events": {
+        "mapped": 8,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

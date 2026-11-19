@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Winner",
+  "interface": "open.Winner",
+  "implementation": "open.WinnerImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Winner",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n173be276a6",
+      "kind": "activity",
+      "name": "Store",
+      "parent": "nd6ff357922",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Winner.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n277073fe17",
+      "kind": "activity",
+      "name": "Fetch",
+      "parent": "nd6ff357922",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Winner.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n3c7a48b375",
+      "kind": "activity",
+      "name": "Store",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Winner.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Winner.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n6fe53152ea",
+      "kind": "timer",
+      "duration": "PT10S",
+      "parent": "nd6ff357922",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Winner.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "nba859ee2d6",
+      "kind": "cancelScope",
+      "label": "scope",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Winner.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "nd6ff357922",
+      "kind": "parallel",
+      "join": "first",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Winner.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n3c7a48b375",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nd6ff357922"
+    },
+    {
+      "from": "n6fe53152ea",
+      "to": "n173be276a6"
+    },
+    {
+      "from": "nba859ee2d6",
+      "to": "n3c7a48b375"
+    },
+    {
+      "from": "nba859ee2d6",
+      "to": "nd6ff357922",
+      "kind": "cancels"
+    },
+    {
+      "from": "nd6ff357922",
+      "to": "nba859ee2d6"
+    }
+  ],
+  "stats": {
+    "nodes": 8,
+    "unknown": 0
+  }
+}

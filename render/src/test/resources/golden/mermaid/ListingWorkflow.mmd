@@ -1,0 +1,32 @@
+flowchart TD
+    n_l00(["start"])
+    n_l01[("upsert search attributes#58; Stage, Seller")]
+    n_l02[("upsert memo#58; note")]
+    n_l03{{"await shelf<br/>timeout 1m"}}
+    subgraph n_l04_region ["retry on failure, up to 3 attempts"]
+        n_l04(("loop"))
+        n_l05["PublishListing"]
+    end
+    n_l06[("upsert search attributes")]
+    n_l08(["end"])
+    n_l07[("upsert memo")]
+    subgraph handlers ["handlers"]
+        subgraph h_signal_withdraw ["signal withdraw · writes#58; shelf"]
+            n_l20(["start"])
+            n_l21[("upsert search attributes#58; Stage")]
+            n_l22(["end"])
+        end
+    end
+    n_l00 --> n_l01
+    n_l01 --> n_l02
+    n_l02 --> n_l03
+    n_l03 --> n_l04
+    n_l03 -->|"timeout"| n_l07
+    n_l04 --> n_l05
+    n_l04 --> n_l06
+    n_l05 -->|"repeat"| n_l04
+    n_l06 --> n_l08
+    n_l07 --> n_l08
+    n_l20 -.->|"shelf"| n_l03
+    n_l20 --> n_l21
+    n_l21 --> n_l22

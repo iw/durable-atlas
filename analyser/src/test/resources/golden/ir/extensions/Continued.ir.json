@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Continued",
+  "interface": "extensions.Continued",
+  "implementation": "extensions.ContinuedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Continued",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0a84b0ce7e",
+      "kind": "branch",
+      "label": "next.isEmpty()",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Continued.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "n6030582da1",
+      "kind": "branch",
+      "label": "next.length > 3",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Continued.kt",
+        "line": 56
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Continued.kt",
+        "line": 52
+      }
+    },
+    {
+      "id": "n73b845e75e",
+      "kind": "activity",
+      "name": "One",
+      "taskQueue": "base",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Continued.kt",
+        "line": 53
+      }
+    },
+    {
+      "id": "n823b911297",
+      "kind": "continueAsNew",
+      "name": "Continued",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Continued.kt",
+        "line": 56
+      }
+    },
+    {
+      "id": "na8293983cf",
+      "kind": "continueAsNew",
+      "name": "Continued",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Continued.kt",
+        "line": 57
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0a84b0ce7e",
+      "to": "n6030582da1",
+      "label": "no"
+    },
+    {
+      "from": "n0a84b0ce7e",
+      "to": "nedd528afe0",
+      "label": "yes"
+    },
+    {
+      "from": "n6030582da1",
+      "to": "n823b911297",
+      "label": "yes"
+    },
+    {
+      "from": "n6030582da1",
+      "to": "na8293983cf",
+      "label": "no"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n73b845e75e"
+    },
+    {
+      "from": "n73b845e75e",
+      "to": "n0a84b0ce7e"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 0
+  }
+}

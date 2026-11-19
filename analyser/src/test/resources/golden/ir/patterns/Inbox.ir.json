@@ -1,0 +1,242 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Inbox",
+  "interface": "patterns.Inbox",
+  "implementation": "patterns.InboxImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Inbox",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-add",
+      "kind": "signal",
+      "name": "add",
+      "start": "n194cd3e575",
+      "writes": [
+        "items"
+      ]
+    },
+    {
+      "id": "update-push",
+      "kind": "update",
+      "name": "push",
+      "start": "nc679b69ca5",
+      "writes": [
+        "items"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n194cd3e575",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Inbox.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "n2b9d04413a",
+      "kind": "await",
+      "timeout": "PT5M",
+      "reads": [
+        "items"
+      ],
+      "label": "items.poll()",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Inbox.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "n4e340ec2c5",
+      "kind": "end"
+    },
+    {
+      "id": "n5f372668cd",
+      "kind": "activity",
+      "name": "Work",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Inbox.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Inbox.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n6ff741dcc7",
+      "kind": "await",
+      "reads": [
+        "items"
+      ],
+      "label": "items.put()",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Inbox.kt",
+        "line": 51
+      }
+    },
+    {
+      "id": "n9ad52c629d",
+      "kind": "await",
+      "reads": [
+        "items"
+      ],
+      "label": "items.take()",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Inbox.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n9d757401d4",
+      "kind": "activity",
+      "name": "Report",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Inbox.kt",
+        "line": 45
+      }
+    },
+    {
+      "id": "nc191c92cfe",
+      "kind": "await",
+      "timeout": "PT30S",
+      "reads": [
+        "items"
+      ],
+      "label": "items.cancellablePoll()",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Inbox.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "nc679b69ca5",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Inbox.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "ne70297992c",
+      "kind": "activity",
+      "name": "Work",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Inbox.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "nec58be6fab",
+      "kind": "end"
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "main",
+      "to": "n6ff741dcc7",
+      "kind": "wakes",
+      "label": "items"
+    },
+    {
+      "from": "n194cd3e575",
+      "to": "n6ff741dcc7"
+    },
+    {
+      "from": "n2b9d04413a",
+      "to": "ne70297992c"
+    },
+    {
+      "from": "n2b9d04413a",
+      "to": "nedd528afe0",
+      "kind": "timeout"
+    },
+    {
+      "from": "n5f372668cd",
+      "to": "n2b9d04413a"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n9ad52c629d"
+    },
+    {
+      "from": "n6ff741dcc7",
+      "to": "n4e340ec2c5"
+    },
+    {
+      "from": "n9ad52c629d",
+      "to": "n5f372668cd"
+    },
+    {
+      "from": "n9d757401d4",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nc191c92cfe",
+      "to": "n9d757401d4",
+      "kind": "timeout"
+    },
+    {
+      "from": "nc191c92cfe",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nc679b69ca5",
+      "to": "nec58be6fab"
+    },
+    {
+      "from": "ne70297992c",
+      "to": "nc191c92cfe"
+    },
+    {
+      "from": "signal-add",
+      "to": "n2b9d04413a",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-add",
+      "to": "n9ad52c629d",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-add",
+      "to": "nc191c92cfe",
+      "kind": "wakes"
+    },
+    {
+      "from": "update-push",
+      "to": "n2b9d04413a",
+      "kind": "wakes"
+    },
+    {
+      "from": "update-push",
+      "to": "n9ad52c629d",
+      "kind": "wakes"
+    },
+    {
+      "from": "update-push",
+      "to": "nc191c92cfe",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 13,
+    "unknown": 0
+  }
+}

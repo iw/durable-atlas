@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Circling",
+  "interface": "plain.Circling",
+  "implementation": "plain.CirclingImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Circling",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Circling.kt",
+        "line": 23
+      }
+    },
+    {
+      "id": "n879fd854db",
+      "kind": "unknown",
+      "label": "drain",
+      "reason": "recursion",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Chains.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "n9c2b9aeade",
+      "kind": "branch",
+      "label": "value.isEmpty()",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Chains.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "na838b4bc28",
+      "kind": "fail",
+      "name": "IllegalStateException",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Circling.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "nb580173abc",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Chains.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "nb6c0cf3a1c",
+      "kind": "branch",
+      "label": "depthOf throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Circling.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "nb6c0cf3a1c"
+    },
+    {
+      "from": "n879fd854db",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n9c2b9aeade",
+      "to": "nb580173abc",
+      "label": "no"
+    },
+    {
+      "from": "n9c2b9aeade",
+      "to": "nedd528afe0",
+      "label": "yes"
+    },
+    {
+      "from": "nb580173abc",
+      "to": "n879fd854db"
+    },
+    {
+      "from": "nb6c0cf3a1c",
+      "to": "n9c2b9aeade",
+      "label": "no"
+    },
+    {
+      "from": "nb6c0cf3a1c",
+      "to": "na838b4bc28",
+      "label": "yes"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 1
+  }
+}

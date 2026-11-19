@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "UntypedActivityWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 6,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "UntypedActivityWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n71a16639e0",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n87a398f39f",
+      "kind": "activity",
+      "name": "ReleaseStock",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "n71a16639e0",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n71a16639e0",
+      "to": "n87a398f39f",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n87a398f39f",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "neverHit": [],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "UntypedActivityWorkflow.json",
+      "runId": "10c8d115-5abf-4ed6-a143-89304d8f5795",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 6,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

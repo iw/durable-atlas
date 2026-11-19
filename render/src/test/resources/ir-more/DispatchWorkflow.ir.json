@@ -1,0 +1,215 @@
+{
+  "schemaVersion": 1,
+  "commit": "3f786850e387550fdab836ed7e6dc881de23001b",
+  "modelMode": "gradle",
+  "workflowType": "DispatchWorkflow",
+  "interface": "com.example.dispatch.DispatchWorkflow",
+  "implementation": "com.example.dispatch.DispatchWorkflowImpl",
+  "module": ":dispatch",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "DispatchWorkflow",
+      "start": "d00"
+    },
+    {
+      "id": "signal-recall",
+      "kind": "signal",
+      "name": "recall",
+      "start": "d20"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "d00",
+      "kind": "start",
+      "loc": {
+        "file": "dispatch/src/main/kotlin/com/example/dispatch/DispatchWorkflowImpl.kt",
+        "line": 18
+      }
+    },
+    {
+      "id": "d01",
+      "kind": "activity",
+      "name": "ReserveVan",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "dispatch/src/main/kotlin/com/example/dispatch/DispatchWorkflowImpl.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "d02",
+      "kind": "parallel",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "dispatch/src/main/kotlin/com/example/dispatch/DispatchWorkflowImpl.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "d03",
+      "kind": "activity",
+      "name": "LoadParcel",
+      "parent": "d02",
+      "loc": {
+        "file": "dispatch/src/main/kotlin/com/example/dispatch/DispatchWorkflowImpl.kt",
+        "line": 23
+      }
+    },
+    {
+      "id": "d04",
+      "kind": "activity",
+      "name": "PrintLabels",
+      "parent": "d02",
+      "loc": {
+        "file": "dispatch/src/main/kotlin/com/example/dispatch/DispatchWorkflowImpl.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "d05",
+      "kind": "childWorkflow",
+      "name": "TrackingWorkflow",
+      "interface": "com.example.dispatch.TrackingWorkflow",
+      "waitsFor": "start",
+      "parentClosePolicy": "abandon",
+      "loc": {
+        "file": "dispatch/src/main/kotlin/com/example/dispatch/DispatchWorkflowImpl.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "d06",
+      "kind": "timer",
+      "duration": "PT30M",
+      "loc": {
+        "file": "dispatch/src/main/kotlin/com/example/dispatch/DispatchWorkflowImpl.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "d07",
+      "kind": "cancelScope",
+      "label": "loading",
+      "loc": {
+        "file": "dispatch/src/main/kotlin/com/example/dispatch/DispatchWorkflowImpl.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "d08",
+      "kind": "cancelExternal",
+      "name": "RouteWorkflow",
+      "loc": {
+        "file": "dispatch/src/main/kotlin/com/example/dispatch/DispatchWorkflowImpl.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "d09",
+      "kind": "childWorkflow",
+      "name": "AuditWorkflow",
+      "loc": {
+        "file": "dispatch/src/main/kotlin/com/example/dispatch/DispatchWorkflowImpl.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "d10",
+      "kind": "end"
+    },
+    {
+      "id": "d20",
+      "kind": "start",
+      "loc": {
+        "file": "dispatch/src/main/kotlin/com/example/dispatch/DispatchWorkflowImpl.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "d21",
+      "kind": "cancelScope",
+      "label": "loading",
+      "loc": {
+        "file": "dispatch/src/main/kotlin/com/example/dispatch/DispatchWorkflowImpl.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "d22",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "d00",
+      "to": "d01"
+    },
+    {
+      "from": "d01",
+      "to": "d02"
+    },
+    {
+      "from": "d02",
+      "to": "d05"
+    },
+    {
+      "from": "d03",
+      "to": "d04"
+    },
+    {
+      "from": "d05",
+      "to": "d06"
+    },
+    {
+      "from": "d06",
+      "to": "d07"
+    },
+    {
+      "from": "d07",
+      "to": "d01",
+      "kind": "cancels"
+    },
+    {
+      "from": "d07",
+      "to": "d02",
+      "kind": "cancels"
+    },
+    {
+      "from": "d07",
+      "to": "d08"
+    },
+    {
+      "from": "d08",
+      "to": "d09"
+    },
+    {
+      "from": "d09",
+      "to": "d10"
+    },
+    {
+      "from": "d20",
+      "to": "d21"
+    },
+    {
+      "from": "d21",
+      "to": "d01",
+      "kind": "cancels"
+    },
+    {
+      "from": "d21",
+      "to": "d02",
+      "kind": "cancels"
+    },
+    {
+      "from": "d21",
+      "to": "d22"
+    }
+  ],
+  "stats": {
+    "nodes": 14,
+    "unknown": 0
+  }
+}

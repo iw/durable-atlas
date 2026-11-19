@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Retries",
+  "interface": "constructs.Retries",
+  "implementation": "constructs.RetriesImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Retries",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0b789a93b0",
+      "kind": "loop",
+      "label": "retry on failure, up to 3 attempts, for up to 10m",
+      "retry": true,
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Retries.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n0bc1ee9e65",
+      "kind": "activity",
+      "name": "Report",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Retries.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n61bc3a2844",
+      "kind": "activity",
+      "name": "Work",
+      "parent": "n0b789a93b0",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Retries.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Retries.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n8659beeb8a",
+      "kind": "activity",
+      "name": "Prepare",
+      "parent": "n0b789a93b0",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Retries.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n9f3484897f",
+      "kind": "branch",
+      "label": "fine",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Retries.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "nb10e1f5788",
+      "kind": "loop",
+      "label": "retry on failure",
+      "retry": true,
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Retries.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "neb10b33ebf",
+      "kind": "activity",
+      "name": "Check",
+      "parent": "nb10e1f5788",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Retries.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0b789a93b0",
+      "to": "nb10e1f5788"
+    },
+    {
+      "from": "n0bc1ee9e65",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n0b789a93b0"
+    },
+    {
+      "from": "n8659beeb8a",
+      "to": "n61bc3a2844"
+    },
+    {
+      "from": "n9f3484897f",
+      "to": "n0bc1ee9e65",
+      "label": "yes"
+    },
+    {
+      "from": "n9f3484897f",
+      "to": "nedd528afe0",
+      "label": "no"
+    },
+    {
+      "from": "nb10e1f5788",
+      "to": "n9f3484897f"
+    }
+  ],
+  "stats": {
+    "nodes": 9,
+    "unknown": 0
+  }
+}

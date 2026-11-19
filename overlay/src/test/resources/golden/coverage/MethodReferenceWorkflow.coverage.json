@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "MethodReferenceWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 10,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "MethodReferenceWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n078119b556",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n0c5efb8c60",
+      "kind": "parallel",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n5665ff7265",
+      "kind": "fail",
+      "name": "ActivityFailure",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n640f2247e1",
+      "kind": "compensation",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nc95c6889ea",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "ne79885a51b",
+      "kind": "activity",
+      "name": "ReleaseStock",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "nfcf1bffb8b",
+      "kind": "activity",
+      "name": "PaymentCharge",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n078119b556",
+      "to": "n640f2247e1",
+      "kind": "exception",
+      "label": "ActivityFailure",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n0c5efb8c60",
+      "to": "nfcf1bffb8b",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n640f2247e1",
+      "to": "n5665ff7265",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n0c5efb8c60",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "nc95c6889ea",
+      "to": "n640f2247e1",
+      "kind": "exception",
+      "label": "ActivityFailure",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "nfcf1bffb8b",
+      "to": "n640f2247e1",
+      "kind": "exception",
+      "label": "ActivityFailure",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "nfcf1bffb8b",
+      "to": "nedd528afe0",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n0c5efb8c60",
+      "to": "n078119b556",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n078119b556",
+      "to": "n0c5efb8c60",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n0c5efb8c60",
+      "to": "nc95c6889ea",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "nc95c6889ea",
+      "to": "n0c5efb8c60",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n640f2247e1",
+      "to": "ne79885a51b",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "neverHit": [
+    "nedd528afe0"
+  ],
+  "closes": [
+    {
+      "status": "failed",
+      "nodes": [
+        "n5665ff7265"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "MethodReferenceWorkflow.json",
+      "runId": "e1e55c41-3722-49a8-8e74-347c414c9906",
+      "status": "failed",
+      "closedAt": [
+        "n5665ff7265"
+      ],
+      "events": {
+        "mapped": 10,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "SideEffectWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 4,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "SideEffectWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n849a51754f",
+      "kind": "sideEffect",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "na8cc404c35",
+      "kind": "sideEffect",
+      "name": "batch-size",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "n849a51754f",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n849a51754f",
+      "to": "na8cc404c35",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "na8cc404c35",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "neverHit": [],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "SideEffectWorkflow.json",
+      "runId": "ad34277a-2710-454f-8349-cb157a8002cd",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 4,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

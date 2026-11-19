@@ -1,0 +1,782 @@
+{
+  "events": [
+    {
+      "eventId": "1",
+      "eventTime": "2026-01-01T00:00:00.008Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_EXECUTION_STARTED",
+      "workflowExecutionStartedEventAttributes": {
+        "workflowType": {
+          "name": "OrderWorkflow"
+        },
+        "taskQueue": {
+          "name": "orders"
+        },
+        "input": {
+          "payloads": [
+            {
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg\u003d\u003d"
+              },
+              "data": "eyJvcmRlcklkIjoiMTAwMiIsImN1c3RvbWVySWQiOiJjdXN0b21lci00MiIsInNoaXBwaW5nQWRkcmVzcyI6IjEgRXhhbXBsZSBTdHJlZXQiLCJsaW5lcyI6W3sic2t1IjoiU0tVLUNIQUlSIiwicXVhbnRpdHkiOjIsInVuaXRQcmljZUNlbnRzIjo0NTAwfSx7InNrdSI6IlNLVS1MQU1QIiwicXVhbnRpdHkiOjEsInVuaXRQcmljZUNlbnRzIjoxOTk5fV0sInNoaXBtZW50cyI6W3sic2hpcG1lbnRJZCI6IlMxIiwid2FyZWhvdXNlSWQiOiJub3J0aCIsInNrdXMiOlsiU0tVLUNIQUlSIl19LHsic2hpcG1lbnRJZCI6IlMyIiwid2FyZWhvdXNlSWQiOiJzb3V0aCIsInNrdXMiOlsiU0tVLUxBTVAiXX1dLCJwcm9tb3Rpb25Db2RlIjpudWxsfQ\u003d\u003d"
+            }
+          ]
+        },
+        "workflowExecutionTimeout": "315360000s",
+        "workflowRunTimeout": "315360000s",
+        "workflowTaskTimeout": "10s",
+        "originalExecutionRunId": "20c2834c-5254-41d8-94f2-1604e1257302",
+        "identity": "orders-test",
+        "firstExecutionRunId": "20c2834c-5254-41d8-94f2-1604e1257302",
+        "attempt": 1,
+        "firstWorkflowTaskBackoff": "0s",
+        "header": {}
+      }
+    },
+    {
+      "eventId": "2",
+      "eventTime": "2026-01-01T00:00:00.008Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "taskQueue": {
+          "name": "orders"
+        },
+        "startToCloseTimeout": "10s",
+        "attempt": 1
+      }
+    },
+    {
+      "eventId": "3",
+      "eventTime": "2026-01-01T00:00:00.008Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "scheduledEventId": "2",
+        "identity": "orders-test",
+        "historySizeBytes": "595"
+      }
+    },
+    {
+      "eventId": "4",
+      "eventTime": "2026-01-01T00:00:00.012Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "scheduledEventId": "2",
+        "identity": "orders-test",
+        "sdkMetadata": {
+          "langUsedFlags": [
+            1,
+            2,
+            3,
+            5
+          ],
+          "sdkName": "temporal-java",
+          "sdkVersion": "1.41.1"
+        },
+        "meteringMetadata": {}
+      }
+    },
+    {
+      "eventId": "5",
+      "eventTime": "2026-01-01T00:00:00.012Z",
+      "eventType": "EVENT_TYPE_MARKER_RECORDED",
+      "markerRecordedEventAttributes": {
+        "markerName": "LocalActivity",
+        "details": {
+          "activityId": {
+            "payloads": [
+              {
+                "metadata": {
+                  "encoding": "anNvbi9wbGFpbg\u003d\u003d"
+                },
+                "data": "Ijg3NWZkMmZkLWYyMWItMzZlMy04NWZmLTFkMGQ0N2M3YzM4MSI\u003d"
+              }
+            ]
+          },
+          "input": {
+            "payloads": [
+              {
+                "metadata": {
+                  "encoding": "anNvbi9wbGFpbg\u003d\u003d"
+                },
+                "data": "eyJvcmRlcklkIjoiMTAwMiIsImN1c3RvbWVySWQiOiJjdXN0b21lci00MiIsInNoaXBwaW5nQWRkcmVzcyI6IjEgRXhhbXBsZSBTdHJlZXQiLCJsaW5lcyI6W3sic2t1IjoiU0tVLUNIQUlSIiwicXVhbnRpdHkiOjIsInVuaXRQcmljZUNlbnRzIjo0NTAwfSx7InNrdSI6IlNLVS1MQU1QIiwicXVhbnRpdHkiOjEsInVuaXRQcmljZUNlbnRzIjoxOTk5fV0sInNoaXBtZW50cyI6W3sic2hpcG1lbnRJZCI6IlMxIiwid2FyZWhvdXNlSWQiOiJub3J0aCIsInNrdXMiOlsiU0tVLUNIQUlSIl19LHsic2hpcG1lbnRJZCI6IlMyIiwid2FyZWhvdXNlSWQiOiJzb3V0aCIsInNrdXMiOlsiU0tVLUxBTVAiXX1dLCJwcm9tb3Rpb25Db2RlIjpudWxsfQ\u003d\u003d"
+              }
+            ]
+          },
+          "meta": {
+            "payloads": [
+              {
+                "metadata": {
+                  "encoding": "anNvbi9wbGFpbg\u003d\u003d"
+                },
+                "data": "eyJmaXJzdFNrZCI6MTc5NDkyMjM1NzYyOCwiYXRwdCI6MSwiYmFja29mZiI6bnVsbH0\u003d"
+              }
+            ]
+          },
+          "time": {
+            "payloads": [
+              {
+                "metadata": {
+                  "encoding": "anNvbi9wbGFpbg\u003d\u003d"
+                },
+                "data": "MTc2NzIyNTYwMDAwOA\u003d\u003d"
+              }
+            ]
+          },
+          "type": {
+            "payloads": [
+              {
+                "metadata": {
+                  "encoding": "anNvbi9wbGFpbg\u003d\u003d"
+                },
+                "data": "IlZhbGlkYXRlT3JkZXIi"
+              }
+            ]
+          }
+        },
+        "workflowTaskCompletedEventId": "3"
+      }
+    },
+    {
+      "eventId": "6",
+      "eventTime": "2026-01-01T00:00:00.012Z",
+      "eventType": "EVENT_TYPE_MARKER_RECORDED",
+      "markerRecordedEventAttributes": {
+        "markerName": "Version",
+        "details": {
+          "changeId": {
+            "payloads": [
+              {
+                "metadata": {
+                  "encoding": "anNvbi9wbGFpbg\u003d\u003d"
+                },
+                "data": "ImZyYXVkLWNoZWNrLXYyIg\u003d\u003d"
+              }
+            ]
+          },
+          "version": {
+            "payloads": [
+              {
+                "metadata": {
+                  "encoding": "anNvbi9wbGFpbg\u003d\u003d"
+                },
+                "data": "Mg\u003d\u003d"
+              }
+            ]
+          }
+        },
+        "workflowTaskCompletedEventId": "3"
+      }
+    },
+    {
+      "eventId": "7",
+      "eventTime": "2026-01-01T00:00:00.012Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_SCHEDULED",
+      "activityTaskScheduledEventAttributes": {
+        "activityId": "fa2d7dbe-faaa-3dd2-bd51-e4f2e0c2791c",
+        "activityType": {
+          "name": "FraudCheck"
+        },
+        "taskQueue": {
+          "name": "orders"
+        },
+        "header": {},
+        "input": {
+          "payloads": [
+            {
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg\u003d\u003d"
+              },
+              "data": "eyJvcmRlcklkIjoiMTAwMiIsImN1c3RvbWVySWQiOiJjdXN0b21lci00MiIsInNoaXBwaW5nQWRkcmVzcyI6IjEgRXhhbXBsZSBTdHJlZXQiLCJsaW5lcyI6W3sic2t1IjoiU0tVLUNIQUlSIiwicXVhbnRpdHkiOjIsInVuaXRQcmljZUNlbnRzIjo0NTAwfSx7InNrdSI6IlNLVS1MQU1QIiwicXVhbnRpdHkiOjEsInVuaXRQcmljZUNlbnRzIjoxOTk5fV0sInNoaXBtZW50cyI6W3sic2hpcG1lbnRJZCI6IlMxIiwid2FyZWhvdXNlSWQiOiJub3J0aCIsInNrdXMiOlsiU0tVLUNIQUlSIl19LHsic2hpcG1lbnRJZCI6IlMyIiwid2FyZWhvdXNlSWQiOiJzb3V0aCIsInNrdXMiOlsiU0tVLUxBTVAiXX1dLCJwcm9tb3Rpb25Db2RlIjpudWxsfQ\u003d\u003d"
+            }
+          ]
+        },
+        "scheduleToCloseTimeout": "315360000s",
+        "scheduleToStartTimeout": "315360000s",
+        "startToCloseTimeout": "30s",
+        "heartbeatTimeout": "0s",
+        "workflowTaskCompletedEventId": "3",
+        "retryPolicy": {
+          "initialInterval": "1s",
+          "backoffCoefficient": 2.0,
+          "maximumInterval": "100s"
+        }
+      }
+    },
+    {
+      "eventId": "8",
+      "eventTime": "2026-01-01T00:00:00.012Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "taskQueue": {
+          "name": "orders"
+        },
+        "startToCloseTimeout": "10s",
+        "attempt": 2
+      }
+    },
+    {
+      "eventId": "9",
+      "eventTime": "2026-01-01T00:00:00.012Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "scheduledEventId": "8",
+        "identity": "orders-test",
+        "historySizeBytes": "2102"
+      }
+    },
+    {
+      "eventId": "10",
+      "eventTime": "2026-01-01T00:00:00.013Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "scheduledEventId": "8",
+        "identity": "orders-test",
+        "sdkMetadata": {
+          "sdkName": "temporal-java",
+          "sdkVersion": "1.41.1"
+        },
+        "meteringMetadata": {}
+      }
+    },
+    {
+      "eventId": "11",
+      "eventTime": "2026-01-01T00:00:00.012Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_STARTED",
+      "activityTaskStartedEventAttributes": {
+        "scheduledEventId": "7",
+        "identity": "orders-test",
+        "attempt": 1
+      }
+    },
+    {
+      "eventId": "12",
+      "eventTime": "2026-01-01T00:00:00.013Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_COMPLETED",
+      "activityTaskCompletedEventAttributes": {
+        "result": {},
+        "scheduledEventId": "7",
+        "startedEventId": "10",
+        "identity": "orders-test"
+      }
+    },
+    {
+      "eventId": "13",
+      "eventTime": "2026-01-01T00:00:00.013Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "taskQueue": {
+          "name": "orders"
+        },
+        "startToCloseTimeout": "10s",
+        "attempt": 1
+      }
+    },
+    {
+      "eventId": "14",
+      "eventTime": "2026-01-01T00:00:00.013Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "scheduledEventId": "13",
+        "identity": "orders-test",
+        "historySizeBytes": "2311"
+      }
+    },
+    {
+      "eventId": "15",
+      "eventTime": "2026-01-01T00:00:00.015Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "scheduledEventId": "13",
+        "identity": "orders-test",
+        "sdkMetadata": {
+          "sdkName": "temporal-java",
+          "sdkVersion": "1.41.1"
+        },
+        "meteringMetadata": {}
+      }
+    },
+    {
+      "eventId": "16",
+      "eventTime": "2026-01-01T00:00:00.015Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_SCHEDULED",
+      "activityTaskScheduledEventAttributes": {
+        "activityId": "7aaea9b9-ca78-3ea5-b452-7ab03afb03aa",
+        "activityType": {
+          "name": "AuthorisePayment"
+        },
+        "taskQueue": {
+          "name": "orders"
+        },
+        "header": {},
+        "input": {
+          "payloads": [
+            {
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg\u003d\u003d"
+              },
+              "data": "IjEwMDIi"
+            },
+            {
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg\u003d\u003d"
+              },
+              "data": "MTA5OTk\u003d"
+            }
+          ]
+        },
+        "scheduleToCloseTimeout": "315360000s",
+        "scheduleToStartTimeout": "315360000s",
+        "startToCloseTimeout": "30s",
+        "heartbeatTimeout": "0s",
+        "workflowTaskCompletedEventId": "14",
+        "retryPolicy": {
+          "initialInterval": "1s",
+          "backoffCoefficient": 2.0,
+          "maximumInterval": "100s"
+        }
+      }
+    },
+    {
+      "eventId": "17",
+      "eventTime": "2026-01-01T00:00:00.015Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_SCHEDULED",
+      "activityTaskScheduledEventAttributes": {
+        "activityId": "9e3e09cb-79f8-390a-9507-d446e95a9502",
+        "activityType": {
+          "name": "ReserveStock"
+        },
+        "taskQueue": {
+          "name": "orders"
+        },
+        "header": {},
+        "input": {
+          "payloads": [
+            {
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg\u003d\u003d"
+              },
+              "data": "IjEwMDIi"
+            },
+            {
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg\u003d\u003d"
+              },
+              "data": "W3sic2t1IjoiU0tVLUNIQUlSIiwicXVhbnRpdHkiOjIsInVuaXRQcmljZUNlbnRzIjo0NTAwfSx7InNrdSI6IlNLVS1MQU1QIiwicXVhbnRpdHkiOjEsInVuaXRQcmljZUNlbnRzIjoxOTk5fV0\u003d"
+            }
+          ]
+        },
+        "scheduleToCloseTimeout": "315360000s",
+        "scheduleToStartTimeout": "315360000s",
+        "startToCloseTimeout": "30s",
+        "heartbeatTimeout": "0s",
+        "workflowTaskCompletedEventId": "14",
+        "retryPolicy": {
+          "initialInterval": "1s",
+          "backoffCoefficient": 2.0,
+          "maximumInterval": "100s"
+        }
+      }
+    },
+    {
+      "eventId": "18",
+      "eventTime": "2026-01-01T00:00:00.015Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_STARTED",
+      "activityTaskStartedEventAttributes": {
+        "scheduledEventId": "16",
+        "identity": "orders-test",
+        "attempt": 1
+      }
+    },
+    {
+      "eventId": "19",
+      "eventTime": "2026-01-01T00:00:00.016Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_COMPLETED",
+      "activityTaskCompletedEventAttributes": {
+        "result": {
+          "payloads": [
+            {
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg\u003d\u003d"
+              },
+              "data": "ImF1dGgtMTAwMiI\u003d"
+            }
+          ]
+        },
+        "scheduledEventId": "16",
+        "startedEventId": "18",
+        "identity": "orders-test"
+      }
+    },
+    {
+      "eventId": "20",
+      "eventTime": "2026-01-01T00:00:00.016Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "taskQueue": {
+          "name": "orders"
+        },
+        "startToCloseTimeout": "10s",
+        "attempt": 1
+      }
+    },
+    {
+      "eventId": "21",
+      "eventTime": "2026-01-01T00:00:00.016Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "scheduledEventId": "20",
+        "identity": "orders-test",
+        "historySizeBytes": "3066"
+      }
+    },
+    {
+      "eventId": "22",
+      "eventTime": "2026-01-01T00:00:00.017Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "scheduledEventId": "20",
+        "identity": "orders-test",
+        "sdkMetadata": {
+          "sdkName": "temporal-java",
+          "sdkVersion": "1.41.1"
+        },
+        "meteringMetadata": {}
+      }
+    },
+    {
+      "eventId": "23",
+      "eventTime": "2026-01-01T00:00:00.015Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_STARTED",
+      "activityTaskStartedEventAttributes": {
+        "scheduledEventId": "17",
+        "identity": "orders-test",
+        "attempt": 1
+      }
+    },
+    {
+      "eventId": "24",
+      "eventTime": "2026-01-01T00:00:00.017Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_COMPLETED",
+      "activityTaskCompletedEventAttributes": {
+        "result": {
+          "payloads": [
+            {
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg\u003d\u003d"
+              },
+              "data": "InJlcy0xMDAyIg\u003d\u003d"
+            }
+          ]
+        },
+        "scheduledEventId": "17",
+        "startedEventId": "22",
+        "identity": "orders-test"
+      }
+    },
+    {
+      "eventId": "25",
+      "eventTime": "2026-01-01T00:00:00.017Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "taskQueue": {
+          "name": "orders"
+        },
+        "startToCloseTimeout": "10s",
+        "attempt": 2
+      }
+    },
+    {
+      "eventId": "26",
+      "eventTime": "2026-01-01T00:00:00.017Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "scheduledEventId": "25",
+        "identity": "orders-test",
+        "historySizeBytes": "3313"
+      }
+    },
+    {
+      "eventId": "27",
+      "eventTime": "2026-01-01T00:00:00.018Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "scheduledEventId": "25",
+        "identity": "orders-test",
+        "sdkMetadata": {
+          "langUsedFlags": [
+            4
+          ],
+          "sdkName": "temporal-java",
+          "sdkVersion": "1.41.1"
+        },
+        "meteringMetadata": {}
+      }
+    },
+    {
+      "eventId": "28",
+      "eventTime": "2026-01-01T00:00:00.018Z",
+      "eventType": "EVENT_TYPE_TIMER_STARTED",
+      "timerStartedEventAttributes": {
+        "timerId": "631b8341-fc4c-3ccc-8f48-ca4c6ae10395",
+        "startToFireTimeout": "1800s",
+        "workflowTaskCompletedEventId": "26"
+      }
+    },
+    {
+      "eventId": "29",
+      "eventTime": "2026-01-01T00:00:00.039Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_EXECUTION_SIGNALED",
+      "workflowExecutionSignaledEventAttributes": {
+        "signalName": "cancelOrder",
+        "input": {},
+        "identity": "orders-test",
+        "header": {}
+      }
+    },
+    {
+      "eventId": "30",
+      "eventTime": "2026-01-01T00:00:00.039Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "taskQueue": {
+          "name": "orders"
+        },
+        "startToCloseTimeout": "10s",
+        "attempt": 1
+      }
+    },
+    {
+      "eventId": "31",
+      "eventTime": "2026-01-01T00:00:00.040Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "scheduledEventId": "30",
+        "identity": "orders-test",
+        "historySizeBytes": "3564"
+      }
+    },
+    {
+      "eventId": "32",
+      "eventTime": "2026-01-01T00:00:00.041Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "scheduledEventId": "30",
+        "identity": "orders-test",
+        "sdkMetadata": {
+          "sdkName": "temporal-java",
+          "sdkVersion": "1.41.1"
+        },
+        "meteringMetadata": {}
+      }
+    },
+    {
+      "eventId": "33",
+      "eventTime": "2026-01-01T00:00:00.041Z",
+      "eventType": "EVENT_TYPE_TIMER_CANCELED",
+      "timerCanceledEventAttributes": {
+        "timerId": "631b8341-fc4c-3ccc-8f48-ca4c6ae10395",
+        "startedEventId": "28",
+        "workflowTaskCompletedEventId": "31"
+      }
+    },
+    {
+      "eventId": "34",
+      "eventTime": "2026-01-01T00:00:00.041Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_SCHEDULED",
+      "activityTaskScheduledEventAttributes": {
+        "activityId": "f29a4761-ae4a-3c4c-8245-e25db59587ba",
+        "activityType": {
+          "name": "ReleaseStock"
+        },
+        "taskQueue": {
+          "name": "orders"
+        },
+        "header": {},
+        "input": {
+          "payloads": [
+            {
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg\u003d\u003d"
+              },
+              "data": "IjEwMDIi"
+            }
+          ]
+        },
+        "scheduleToCloseTimeout": "315360000s",
+        "scheduleToStartTimeout": "315360000s",
+        "startToCloseTimeout": "30s",
+        "heartbeatTimeout": "0s",
+        "workflowTaskCompletedEventId": "31",
+        "retryPolicy": {
+          "initialInterval": "1s",
+          "backoffCoefficient": 2.0,
+          "maximumInterval": "100s"
+        }
+      }
+    },
+    {
+      "eventId": "35",
+      "eventTime": "2026-01-01T00:00:00.041Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_STARTED",
+      "activityTaskStartedEventAttributes": {
+        "scheduledEventId": "34",
+        "identity": "orders-test",
+        "attempt": 1
+      }
+    },
+    {
+      "eventId": "36",
+      "eventTime": "2026-01-01T00:00:00.042Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_COMPLETED",
+      "activityTaskCompletedEventAttributes": {
+        "result": {},
+        "scheduledEventId": "34",
+        "startedEventId": "35",
+        "identity": "orders-test"
+      }
+    },
+    {
+      "eventId": "37",
+      "eventTime": "2026-01-01T00:00:00.042Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "taskQueue": {
+          "name": "orders"
+        },
+        "startToCloseTimeout": "10s",
+        "attempt": 1
+      }
+    },
+    {
+      "eventId": "38",
+      "eventTime": "2026-01-01T00:00:00.042Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "scheduledEventId": "37",
+        "identity": "orders-test",
+        "historySizeBytes": "4000"
+      }
+    },
+    {
+      "eventId": "39",
+      "eventTime": "2026-01-01T00:00:00.043Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "scheduledEventId": "37",
+        "identity": "orders-test",
+        "sdkMetadata": {
+          "sdkName": "temporal-java",
+          "sdkVersion": "1.41.1"
+        },
+        "meteringMetadata": {}
+      }
+    },
+    {
+      "eventId": "40",
+      "eventTime": "2026-01-01T00:00:00.043Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_SCHEDULED",
+      "activityTaskScheduledEventAttributes": {
+        "activityId": "1d273037-2616-3f98-b3fa-37907a202e86",
+        "activityType": {
+          "name": "VoidPayment"
+        },
+        "taskQueue": {
+          "name": "orders"
+        },
+        "header": {},
+        "input": {
+          "payloads": [
+            {
+              "metadata": {
+                "encoding": "anNvbi9wbGFpbg\u003d\u003d"
+              },
+              "data": "IjEwMDIi"
+            }
+          ]
+        },
+        "scheduleToCloseTimeout": "315360000s",
+        "scheduleToStartTimeout": "315360000s",
+        "startToCloseTimeout": "30s",
+        "heartbeatTimeout": "0s",
+        "workflowTaskCompletedEventId": "38",
+        "retryPolicy": {
+          "initialInterval": "1s",
+          "backoffCoefficient": 2.0,
+          "maximumInterval": "100s"
+        }
+      }
+    },
+    {
+      "eventId": "41",
+      "eventTime": "2026-01-01T00:00:00.043Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_STARTED",
+      "activityTaskStartedEventAttributes": {
+        "scheduledEventId": "40",
+        "identity": "orders-test",
+        "attempt": 1
+      }
+    },
+    {
+      "eventId": "42",
+      "eventTime": "2026-01-01T00:00:00.044Z",
+      "eventType": "EVENT_TYPE_ACTIVITY_TASK_COMPLETED",
+      "activityTaskCompletedEventAttributes": {
+        "result": {},
+        "scheduledEventId": "40",
+        "startedEventId": "41",
+        "identity": "orders-test"
+      }
+    },
+    {
+      "eventId": "43",
+      "eventTime": "2026-01-01T00:00:00.044Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_SCHEDULED",
+      "workflowTaskScheduledEventAttributes": {
+        "taskQueue": {
+          "name": "orders"
+        },
+        "startToCloseTimeout": "10s",
+        "attempt": 1
+      }
+    },
+    {
+      "eventId": "44",
+      "eventTime": "2026-01-01T00:00:00.044Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_STARTED",
+      "workflowTaskStartedEventAttributes": {
+        "scheduledEventId": "43",
+        "identity": "orders-test",
+        "historySizeBytes": "4373"
+      }
+    },
+    {
+      "eventId": "45",
+      "eventTime": "2026-01-01T00:00:00.046Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_TASK_COMPLETED",
+      "workflowTaskCompletedEventAttributes": {
+        "scheduledEventId": "43",
+        "identity": "orders-test",
+        "sdkMetadata": {
+          "sdkName": "temporal-java",
+          "sdkVersion": "1.41.1"
+        },
+        "meteringMetadata": {}
+      }
+    },
+    {
+      "eventId": "46",
+      "eventTime": "2026-01-01T00:00:00.046Z",
+      "eventType": "EVENT_TYPE_WORKFLOW_EXECUTION_FAILED",
+      "workflowExecutionFailedEventAttributes": {
+        "failure": {
+          "message": "Order 1002 was not paid",
+          "source": "JavaSDK",
+          "stackTrace": "io.temporal.failure.ApplicationFailure.newFailureWithCause(ApplicationFailure.java:87)\nio.temporal.failure.ApplicationFailure.newFailure(ApplicationFailure.java:67)\ncom.example.orders.OrderWorkflowImpl.processOrder(OrderWorkflowImpl.kt:85)\njava.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\njava.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)\njava.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\njava.base/java.lang.reflect.Method.invoke(Method.java:569)\nio.temporal.internal.sync.POJOWorkflowImplementationFactory$POJOWorkflowImplementation$RootWorkflowInboundCallsInterceptor.execute(POJOWorkflowImplementationFactory.java:417)\nio.temporal.internal.sync.POJOWorkflowImplementationFactory$POJOWorkflowImplementation.execute(POJOWorkflowImplementationFactory.java:361)\n",
+          "applicationFailureInfo": {
+            "type": "OrderCancelled"
+          }
+        },
+        "workflowTaskCompletedEventId": "44"
+      }
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Rethrown",
+  "interface": "failing.Rethrown",
+  "implementation": "failing.RethrownImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Rethrown",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n69367eaef4",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Rethrown.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Rethrown.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n71274bf946",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Rethrown.kt",
+        "line": 46
+      }
+    },
+    {
+      "id": "n9bad2c613d",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Rethrown.kt",
+        "line": 53
+      }
+    },
+    {
+      "id": "na0d0352868",
+      "kind": "fail",
+      "name": "RuntimeException",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Rethrown.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "na936b59f24",
+      "kind": "fail",
+      "name": "ActivityFailure",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Rethrown.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf8b00c822d",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Rethrown.kt",
+        "line": 51
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n69367eaef4",
+      "to": "n71274bf946"
+    },
+    {
+      "from": "n69367eaef4",
+      "to": "na0d0352868",
+      "kind": "exception",
+      "label": "Exception"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n69367eaef4"
+    },
+    {
+      "from": "n71274bf946",
+      "to": "nf8b00c822d"
+    },
+    {
+      "from": "n9bad2c613d",
+      "to": "na936b59f24"
+    },
+    {
+      "from": "nf8b00c822d",
+      "to": "n9bad2c613d",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "nf8b00c822d",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 8,
+    "unknown": 0
+  }
+}

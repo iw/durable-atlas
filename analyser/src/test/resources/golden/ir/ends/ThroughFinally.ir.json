@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "ThroughFinally",
+  "interface": "ends.ThroughFinally",
+  "implementation": "ends.ThroughFinallyImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "ThroughFinally",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n02b34a80a0",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/ThroughFinally.kt",
+        "line": 18
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/ThroughFinally.kt",
+        "line": 17
+      }
+    },
+    {
+      "id": "n6e5494e432",
+      "kind": "activity",
+      "name": "CleanUp",
+      "parent": "n791f1dd5a3",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/ThroughFinally.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "n791f1dd5a3",
+      "kind": "loop",
+      "label": "for each part",
+      "parent": "n02b34a80a0",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/ThroughFinally.kt",
+        "line": 19
+      }
+    },
+    {
+      "id": "n898cd72cdc",
+      "kind": "activity",
+      "name": "CleanUp",
+      "parent": "n791f1dd5a3",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/ThroughFinally.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "nbaa20c6cca",
+      "kind": "branch",
+      "label": "part.isEmpty()",
+      "parent": "n791f1dd5a3",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/ThroughFinally.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "ne19fe2fa55",
+      "kind": "loop",
+      "label": "for each part",
+      "parent": "nfca4c902db",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/ThroughFinally.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nee3cd98ad6",
+      "kind": "activity",
+      "name": "Work",
+      "parent": "n791f1dd5a3",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/ThroughFinally.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "nf95f6c378a",
+      "kind": "activity",
+      "name": "Report",
+      "parent": "ne19fe2fa55",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/ThroughFinally.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "nfca4c902db",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/ThroughFinally.kt",
+        "line": 28
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n02b34a80a0",
+      "to": "nfca4c902db"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n02b34a80a0"
+    },
+    {
+      "from": "n898cd72cdc",
+      "to": "n02b34a80a0"
+    },
+    {
+      "from": "nbaa20c6cca",
+      "to": "n898cd72cdc",
+      "label": "yes"
+    },
+    {
+      "from": "nbaa20c6cca",
+      "to": "nee3cd98ad6",
+      "label": "no"
+    },
+    {
+      "from": "nee3cd98ad6",
+      "to": "n6e5494e432"
+    },
+    {
+      "from": "nf95f6c378a",
+      "to": "ne19fe2fa55"
+    },
+    {
+      "from": "nf95f6c378a",
+      "to": "nfca4c902db",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "nfca4c902db",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 11,
+    "unknown": 0
+  }
+}

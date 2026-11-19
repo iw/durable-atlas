@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Plain",
+  "interface": "extensions.Plain",
+  "implementation": "extensions.PlainImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Plain",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1ffa48497a",
+      "kind": "activity",
+      "name": "Two",
+      "taskQueue": "base",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Plain.kt",
+        "line": 58
+      }
+    },
+    {
+      "id": "n4bc5c76e52",
+      "kind": "activity",
+      "name": "One",
+      "taskQueue": "base",
+      "timeout": "PT5S",
+      "parent": "n81b12bded9",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Plain.kt",
+        "line": 55
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Plain.kt",
+        "line": 52
+      }
+    },
+    {
+      "id": "n81b12bded9",
+      "kind": "compensation",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Plain.kt",
+        "line": 60
+      }
+    },
+    {
+      "id": "n9818e04823",
+      "kind": "activity",
+      "name": "Two",
+      "taskQueue": "base",
+      "timeout": "PT5S",
+      "parent": "n81b12bded9",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Plain.kt",
+        "line": 57
+      }
+    },
+    {
+      "id": "n9d1afeffbe",
+      "kind": "activity",
+      "name": "One",
+      "taskQueue": "base",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Plain.kt",
+        "line": 56
+      }
+    },
+    {
+      "id": "ncdd6b3ad0f",
+      "kind": "fail",
+      "name": "ActivityFailure",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Plain.kt",
+        "line": 61
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n1ffa48497a",
+      "to": "n81b12bded9",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "n1ffa48497a",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n9d1afeffbe"
+    },
+    {
+      "from": "n81b12bded9",
+      "to": "ncdd6b3ad0f"
+    },
+    {
+      "from": "n9818e04823",
+      "to": "n4bc5c76e52"
+    },
+    {
+      "from": "n9d1afeffbe",
+      "to": "n1ffa48497a"
+    },
+    {
+      "from": "n9d1afeffbe",
+      "to": "n81b12bded9",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    }
+  ],
+  "stats": {
+    "nodes": 8,
+    "unknown": 0
+  }
+}

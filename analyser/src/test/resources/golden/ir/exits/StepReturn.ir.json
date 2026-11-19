@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "StepReturn",
+  "interface": "exits.StepReturn",
+  "implementation": "exits.StepReturnImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "StepReturn",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/StepReturn.kt",
+        "line": 19
+      }
+    },
+    {
+      "id": "n8fccf2fe10",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/StepReturn.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "nd94cd36e51",
+      "kind": "activity",
+      "name": "Work",
+      "parent": "n8fccf2fe10",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/StepReturn.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "nda20f05532",
+      "kind": "activity",
+      "name": "Report",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/StepReturn.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "n8fccf2fe10"
+    },
+    {
+      "from": "n8fccf2fe10",
+      "to": "nda20f05532"
+    },
+    {
+      "from": "nd94cd36e51",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nda20f05532",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 5,
+    "unknown": 0
+  }
+}

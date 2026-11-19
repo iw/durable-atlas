@@ -1,0 +1,330 @@
+{
+  "schemaVersion": 1,
+  "commit": "3f786850e387550fdab836ed7e6dc881de23001b",
+  "modelMode": "gradle",
+  "workflowType": "Odd|Workflow<T> #1 *beta* `v2`",
+  "interface": "com.example.odd.`Odd Workflow`",
+  "implementation": "com.example.odd.`Odd Workflow`.Impl<T>",
+  "module": ":odd",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Odd|Workflow<T> #1 *beta* `v2`",
+      "start": "start"
+    },
+    {
+      "id": "sig-set flag",
+      "kind": "signal",
+      "name": "set\"flag\" | <now>",
+      "start": "h start",
+      "writes": [
+        "flag|x",
+        "a<b"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "start",
+      "kind": "start"
+    },
+    {
+      "id": "end",
+      "kind": "end"
+    },
+    {
+      "id": "subgraph",
+      "kind": "activity",
+      "name": "Do[Thing](x){y}",
+      "loc": {
+        "file": "odd/src/main/kotlin/com/example/odd/`Odd Workflow`.kt",
+        "line": 10
+      }
+    },
+    {
+      "id": "a b",
+      "kind": "branch",
+      "label": "items.any { it.qty > 0 && it.sku != \"N/A\" } || flags[\"x|y\"] == true",
+      "loc": {
+        "file": "odd/src/main/kotlin/com/example/odd/`Odd Workflow`.kt",
+        "line": 11
+      }
+    },
+    {
+      "id": "a_b",
+      "kind": "branch",
+      "label": "orders.filter { it.status == Status.OPEN && it.lines.isNotEmpty() }.sumOf { line -> line.quantity * line.unitPrice } > creditLimit",
+      "loc": {
+        "file": "odd/src/main/kotlin/com/example/odd/`Odd Workflow`.kt",
+        "line": 12
+      }
+    },
+    {
+      "id": "n1",
+      "kind": "parallel",
+      "label": "coroutineScope { /* \"fan\" out */ }",
+      "loc": {
+        "file": "odd/src/main/kotlin/com/example/odd/`Odd Workflow`.kt",
+        "line": 13
+      }
+    },
+    {
+      "id": "n1_join",
+      "kind": "activity",
+      "name": "join#1; drop table",
+      "parent": "n1",
+      "loc": {
+        "file": "odd/src/main/kotlin/com/example/odd/`Odd Workflow`.kt",
+        "line": 14
+      }
+    },
+    {
+      "id": "n1_region",
+      "kind": "localActivity",
+      "name": "it's `local`",
+      "parent": "n1",
+      "loc": {
+        "file": "odd/src/main/kotlin/com/example/odd/`Odd Workflow`.kt",
+        "line": 15
+      }
+    },
+    {
+      "id": "x\"y",
+      "kind": "childWorkflow",
+      "name": "Größe|Workflow",
+      "loc": {
+        "file": "odd/src/main/kotlin/com/example/odd/`Odd Workflow`.kt",
+        "line": 16
+      }
+    },
+    {
+      "id": "é",
+      "kind": "await",
+      "reads": [
+        "a<b",
+        "flag|x"
+      ],
+      "timeout": "soon",
+      "loc": {
+        "file": "odd/src/main/kotlin/com/example/odd/`Odd Workflow`.kt",
+        "line": 17
+      }
+    },
+    {
+      "id": "class",
+      "kind": "timer",
+      "duration": "${config.delay}",
+      "loc": {
+        "file": "odd/src/main/kotlin/com/example/odd/`Odd Workflow`.kt",
+        "line": 18
+      }
+    },
+    {
+      "id": "style",
+      "kind": "sideEffect",
+      "label": "lifestyle?:\"#fff\"; style fill:#f00;",
+      "loc": {
+        "file": "odd/src/main/kotlin/com/example/odd/`Odd Workflow`.kt",
+        "line": 19
+      }
+    },
+    {
+      "id": "n2",
+      "kind": "loop",
+      "label": "for ((k, v) in map) {\n\t// \"each\" entry\n}",
+      "loc": {
+        "file": "odd/src/main/kotlin/com/example/odd/`Odd Workflow`.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "n3",
+      "kind": "signalExternal",
+      "name": "<b>bold</b> &amp; &lt;i&gt;",
+      "parent": "n2",
+      "loc": {
+        "file": "odd/src/main/kotlin/com/example/odd/`Odd Workflow`.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "n4",
+      "kind": "nexusOperation",
+      "service": "svc/1",
+      "name": "op:run%20now",
+      "parent": "n2",
+      "loc": {
+        "file": "odd/src/main/kotlin/com/example/odd/`Odd Workflow`.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "n5",
+      "kind": "unknown",
+      "reason": "can't resolve \"handler\"",
+      "label": "handlers[`key`] (event)",
+      "candidates": [
+        "com.example.`odd name`.A",
+        "com.example.B|C"
+      ],
+      "loc": {
+        "file": "odd/src/main/kotlin/com/example/odd/`Odd Workflow`.kt",
+        "line": 23
+      }
+    },
+    {
+      "id": "n6",
+      "kind": "versionGate",
+      "changeId": "fix/#42: \"quotes\"",
+      "loc": {
+        "file": "odd/src/main/kotlin/com/example/odd/`Odd Workflow`.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "n7",
+      "kind": "compensation",
+      "name": "undo\\redo C:\\temp\\new",
+      "loc": {
+        "file": "odd/src/main/kotlin/com/example/odd/`Odd Workflow`.kt",
+        "line": 25
+      }
+    },
+    {
+      "id": "n8",
+      "kind": "fail",
+      "name": "java.lang.IllegalStateException: \"boom\"",
+      "loc": {
+        "file": "odd/src/main/kotlin/com/example/odd/`Odd Workflow`.kt",
+        "line": 26
+      }
+    },
+    {
+      "id": "n9",
+      "kind": "continueAsNew",
+      "loc": {
+        "file": "odd/src/main/kotlin/com/example/odd/`Odd Workflow`.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "h start",
+      "kind": "start"
+    },
+    {
+      "id": "h end",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "start",
+      "to": "subgraph"
+    },
+    {
+      "from": "subgraph",
+      "to": "a b"
+    },
+    {
+      "from": "a b",
+      "to": "a_b",
+      "label": "\"a\" < b; c > d"
+    },
+    {
+      "from": "a b",
+      "to": "n1",
+      "label": "when (x) { is Foo<*> -> 1 }"
+    },
+    {
+      "from": "a_b",
+      "to": "n1",
+      "label": "`backtick` # hash; semi: colon"
+    },
+    {
+      "from": "a_b",
+      "to": "x\"y",
+      "label": "%%{init: {\"theme\":\"dark\"}}%%"
+    },
+    {
+      "from": "n1",
+      "to": "x\"y",
+      "label": "$$x^2$$ costs $5 or ${price}"
+    },
+    {
+      "from": "x\"y",
+      "to": "é",
+      "label": "line one\nline two\ttabbed\r\n  indented"
+    },
+    {
+      "from": "é",
+      "to": "class",
+      "label": "naïve café → 日本語 ✓ 😀"
+    },
+    {
+      "from": "é",
+      "to": "n8",
+      "kind": "timeout",
+      "label": "after \"soon\""
+    },
+    {
+      "from": "class",
+      "to": "style",
+      "label": "--> |x| o--o x--x ==> -.->"
+    },
+    {
+      "from": "style",
+      "to": "n2",
+      "label": "a]]) b}} c)) d\"] e|"
+    },
+    {
+      "from": "n3",
+      "to": "n4",
+      "label": "  'single' \"double\"  "
+    },
+    {
+      "from": "n2",
+      "to": "n5",
+      "label": "end"
+    },
+    {
+      "from": "n5",
+      "to": "n6",
+      "label": "subgraph x [\"y\"]"
+    },
+    {
+      "from": "n5",
+      "to": "n8",
+      "kind": "exception",
+      "label": "kotlin.Result<List<Map<String, Int>>>"
+    },
+    {
+      "from": "n6",
+      "to": "n7",
+      "label": "click a href \"javascript:alert(1)\""
+    },
+    {
+      "from": "n6",
+      "to": "n9",
+      "label": " \n\t "
+    },
+    {
+      "from": "n7",
+      "to": "end",
+      "label": "bell\u0007 and <br/> break"
+    },
+    {
+      "from": "h start",
+      "to": "h end"
+    },
+    {
+      "from": "sig-set flag",
+      "to": "é",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 22,
+    "unknown": 1
+  }
+}

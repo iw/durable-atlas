@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "TryCatchWorkflow",
+  "interface": "com.example.fixture.workflows.controlflow.TryCatchWorkflow",
+  "implementation": "com.example.fixture.workflows.controlflow.TryCatchWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "TryCatchWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n096d24196f",
+      "kind": "fail",
+      "name": "CanceledFailure",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/TryCatchWorkflow.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "n4f9474c131",
+      "kind": "activity",
+      "name": "PaymentCharge",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/TryCatchWorkflow.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/TryCatchWorkflow.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "n7cefdb5503",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/TryCatchWorkflow.kt",
+        "line": 26
+      }
+    },
+    {
+      "id": "naaf91d28de",
+      "kind": "activity",
+      "name": "NotifyAudit",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/TryCatchWorkflow.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "neec4be92b3",
+      "kind": "activity",
+      "name": "NotifyAudit",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/TryCatchWorkflow.kt",
+        "line": 31
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n4f9474c131",
+      "to": "n7cefdb5503",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "n4f9474c131",
+      "to": "naaf91d28de"
+    },
+    {
+      "from": "n4f9474c131",
+      "to": "neec4be92b3",
+      "kind": "exception",
+      "label": "CanceledFailure"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n4f9474c131"
+    },
+    {
+      "from": "n7cefdb5503",
+      "to": "naaf91d28de"
+    },
+    {
+      "from": "naaf91d28de",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "neec4be92b3",
+      "to": "n096d24196f"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 0
+  }
+}

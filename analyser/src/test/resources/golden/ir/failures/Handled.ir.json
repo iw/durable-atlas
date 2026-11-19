@@ -1,0 +1,426 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Handled",
+  "interface": "failing.Handled",
+  "implementation": "failing.HandledImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Handled",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-adjust",
+      "kind": "signal",
+      "name": "adjust",
+      "start": "n1d40ac5872",
+      "reads": [
+        "total"
+      ],
+      "writes": [
+        "total"
+      ]
+    },
+    {
+      "id": "signal-cancel",
+      "kind": "signal",
+      "name": "cancel",
+      "start": "n5363e854ab",
+      "writes": [
+        "cancelled"
+      ]
+    },
+    {
+      "id": "query-total",
+      "kind": "query",
+      "name": "total",
+      "start": "n29191e44fc",
+      "reads": [
+        "cancelled",
+        "total"
+      ]
+    },
+    {
+      "id": "update-change",
+      "kind": "update",
+      "name": "change",
+      "start": "n93a4bd29e0",
+      "reads": [
+        "total"
+      ],
+      "writes": [
+        "total"
+      ]
+    },
+    {
+      "id": "update-rename",
+      "kind": "update",
+      "name": "rename",
+      "start": "n7350ce063f",
+      "reads": [
+        "name"
+      ],
+      "writes": [
+        "name"
+      ]
+    },
+    {
+      "id": "validator-change",
+      "kind": "updateValidator",
+      "name": "change",
+      "start": "n75424e76e8"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n02c3eb87d0",
+      "kind": "branch",
+      "label": "Checks.positive throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 63
+      }
+    },
+    {
+      "id": "n04445eb2da",
+      "kind": "branch",
+      "label": "reason.isBlank()",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "n06239a20ae",
+      "kind": "fail",
+      "name": "IllegalStateException",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 72
+      }
+    },
+    {
+      "id": "n0efd711315",
+      "kind": "branch",
+      "label": "amount > 1000",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 49
+      }
+    },
+    {
+      "id": "n1479614b80",
+      "kind": "end"
+    },
+    {
+      "id": "n1d40ac5872",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 47
+      }
+    },
+    {
+      "id": "n29191e44fc",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 71
+      }
+    },
+    {
+      "id": "n3fe90efe89",
+      "kind": "end"
+    },
+    {
+      "id": "n4bed574193",
+      "kind": "branch",
+      "label": "total + amount < 0",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "n5363e854ab",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "n5a6d1a2a29",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 57
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n7350ce063f",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 66
+      }
+    },
+    {
+      "id": "n75424e76e8",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 61
+      }
+    },
+    {
+      "id": "n79f627db9c",
+      "kind": "end"
+    },
+    {
+      "id": "n7c9ee11369",
+      "kind": "end"
+    },
+    {
+      "id": "n881cd5e984",
+      "kind": "fail",
+      "name": "DomainFault",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 63
+      }
+    },
+    {
+      "id": "n91939fc1b8",
+      "kind": "await",
+      "reads": [
+        "cancelled",
+        "total"
+      ],
+      "label": "cancelled or total > 10",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n93a4bd29e0",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 53
+      }
+    },
+    {
+      "id": "n97a3f0bbc7",
+      "kind": "fail",
+      "name": "IllegalArgumentException",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 62
+      }
+    },
+    {
+      "id": "nc43a4d8774",
+      "kind": "fail",
+      "name": "BelowZero",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "ncce7ffb249",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "nd5d86df0c2",
+      "kind": "branch",
+      "label": "amount > 1000",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 62
+      }
+    },
+    {
+      "id": "nd6b9e33329",
+      "kind": "end"
+    },
+    {
+      "id": "nd92bf88abd",
+      "kind": "fail",
+      "name": "RejectedOrder",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 49
+      }
+    },
+    {
+      "id": "ne31b435542",
+      "kind": "fail",
+      "name": "NoReason",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "nec013dd305",
+      "kind": "branch",
+      "label": "cancelled",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Handled.kt",
+        "line": 72
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nef4037d95b",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n02c3eb87d0",
+      "to": "n7c9ee11369",
+      "label": "no"
+    },
+    {
+      "from": "n02c3eb87d0",
+      "to": "n881cd5e984",
+      "label": "yes"
+    },
+    {
+      "from": "n04445eb2da",
+      "to": "n1479614b80",
+      "label": "no"
+    },
+    {
+      "from": "n04445eb2da",
+      "to": "ne31b435542",
+      "label": "yes"
+    },
+    {
+      "from": "n0efd711315",
+      "to": "n3fe90efe89",
+      "label": "no"
+    },
+    {
+      "from": "n0efd711315",
+      "to": "nd92bf88abd",
+      "label": "yes"
+    },
+    {
+      "from": "n1d40ac5872",
+      "to": "n0efd711315"
+    },
+    {
+      "from": "n29191e44fc",
+      "to": "nec013dd305"
+    },
+    {
+      "from": "n4bed574193",
+      "to": "n5a6d1a2a29",
+      "label": "no"
+    },
+    {
+      "from": "n4bed574193",
+      "to": "nc43a4d8774",
+      "label": "yes"
+    },
+    {
+      "from": "n5363e854ab",
+      "to": "n04445eb2da"
+    },
+    {
+      "from": "n5a6d1a2a29",
+      "to": "nd6b9e33329"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n91939fc1b8"
+    },
+    {
+      "from": "n7350ce063f",
+      "to": "n79f627db9c"
+    },
+    {
+      "from": "n75424e76e8",
+      "to": "nd5d86df0c2"
+    },
+    {
+      "from": "n91939fc1b8",
+      "to": "ncce7ffb249"
+    },
+    {
+      "from": "n93a4bd29e0",
+      "to": "n4bed574193"
+    },
+    {
+      "from": "ncce7ffb249",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nd5d86df0c2",
+      "to": "n02c3eb87d0",
+      "label": "no"
+    },
+    {
+      "from": "nd5d86df0c2",
+      "to": "n97a3f0bbc7",
+      "label": "yes"
+    },
+    {
+      "from": "nec013dd305",
+      "to": "n06239a20ae",
+      "label": "yes"
+    },
+    {
+      "from": "nec013dd305",
+      "to": "nef4037d95b",
+      "label": "no"
+    },
+    {
+      "from": "signal-adjust",
+      "to": "n91939fc1b8",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-cancel",
+      "to": "n91939fc1b8",
+      "kind": "wakes"
+    },
+    {
+      "from": "update-change",
+      "to": "n91939fc1b8",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 29,
+    "unknown": 0
+  }
+}

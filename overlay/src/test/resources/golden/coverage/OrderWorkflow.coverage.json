@@ -1,0 +1,655 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "OrderWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 3,
+  "events": {
+    "mapped": 56,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "OrderWorkflow",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "id": "signal-cancelOrder",
+      "kind": "signal",
+      "name": "cancelOrder",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "signal-payment-received",
+      "kind": "signal",
+      "name": "payment-received",
+      "hits": 2,
+      "executions": 2
+    },
+    {
+      "id": "query-order-status",
+      "kind": "query",
+      "name": "order-status",
+      "recorded": false,
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "update-change-address",
+      "kind": "update",
+      "name": "change-address",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "validator-change-address",
+      "kind": "updateValidator",
+      "name": "change-address",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0338baaa15",
+      "kind": "childWorkflow",
+      "name": "Shipment",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n072c926288",
+      "kind": "end",
+      "recorded": false,
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "n242f0180f4",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "id": "n29fafff145",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n2a112d4d73",
+      "kind": "compensation",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n42d82e9e8f",
+      "kind": "parallel",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n504742ee74",
+      "kind": "activity",
+      "name": "NotifyAudit",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n565cdac5f8",
+      "kind": "branch",
+      "hits": 5,
+      "executions": 3
+    },
+    {
+      "id": "n633ec518e3",
+      "kind": "end",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "n66efc755f3",
+      "kind": "activity",
+      "name": "CapturePayment",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "id": "n6bef237187",
+      "kind": "versionGate",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n7608a53b3c",
+      "kind": "localActivity",
+      "name": "CheckAvailability",
+      "hits": 5,
+      "executions": 3
+    },
+    {
+      "id": "n76b58e8a15",
+      "kind": "compensation",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n7c3c3141e7",
+      "kind": "activity",
+      "name": "NotifySms",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n7ef831f8ac",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "hits": 5,
+      "executions": 3
+    },
+    {
+      "id": "n80e599d2b1",
+      "kind": "loop",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "id": "n944373c168",
+      "kind": "activity",
+      "name": "ReleaseStock",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n9b70c6df23",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "na3b381d2b7",
+      "kind": "start",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "nb1a93ca840",
+      "kind": "fail",
+      "name": "TemporalFailure",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nb3c34feafc",
+      "kind": "activity",
+      "name": "PaymentRefund",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "nbc62940991",
+      "kind": "activity",
+      "name": "ReleaseStock",
+      "hits": 2,
+      "executions": 1
+    },
+    {
+      "id": "nc64f43f15b",
+      "kind": "start",
+      "recorded": false,
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "nc6fa067e62",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nc741a508ee",
+      "kind": "activity",
+      "name": "PaymentCharge",
+      "hits": 2,
+      "executions": 2
+    },
+    {
+      "id": "nd57b86d8f3",
+      "kind": "end",
+      "hits": 2,
+      "executions": 2
+    },
+    {
+      "id": "ndc9b26cbf5",
+      "kind": "await",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "id": "ne11df5b0a5",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "ne5afccada7",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "ne958ad93f7",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "ned5ce74c43",
+      "kind": "start",
+      "hits": 2,
+      "executions": 2
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 2,
+      "executions": 2
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0338baaa15",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n0338baaa15",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n242f0180f4",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n242f0180f4",
+      "to": "ndc9b26cbf5",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "from": "n29fafff145",
+      "to": "ne958ad93f7",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n2a112d4d73",
+      "to": "nb1a93ca840",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n42d82e9e8f",
+      "to": "n0338baaa15",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n504742ee74",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n504742ee74",
+      "to": "n42d82e9e8f",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n565cdac5f8",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n565cdac5f8",
+      "to": "n7ef831f8ac",
+      "label": "no",
+      "hits": 5,
+      "executions": 3
+    },
+    {
+      "from": "n66efc755f3",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n66efc755f3",
+      "to": "n6bef237187",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n80e599d2b1",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "from": "n6bef237187",
+      "to": "n42d82e9e8f",
+      "label": "default",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n6bef237187",
+      "to": "n504742ee74",
+      "label": "v1",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n7608a53b3c",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n7608a53b3c",
+      "to": "n565cdac5f8",
+      "hits": 5,
+      "executions": 3
+    },
+    {
+      "from": "n76b58e8a15",
+      "to": "ne11df5b0a5",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n7c3c3141e7",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n7ef831f8ac",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n80e599d2b1",
+      "to": "n242f0180f4",
+      "hits": 3,
+      "executions": 3
+    },
+    {
+      "from": "n9b70c6df23",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "na3b381d2b7",
+      "to": "n633ec518e3",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "nb3c34feafc",
+      "to": "n944373c168",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "nc64f43f15b",
+      "to": "n072c926288",
+      "recorded": false,
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "nc741a508ee",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "nc741a508ee",
+      "to": "n66efc755f3",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "ndc9b26cbf5",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "ndc9b26cbf5",
+      "to": "n76b58e8a15",
+      "label": "cancelReason != null",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "ndc9b26cbf5",
+      "to": "n76b58e8a15",
+      "kind": "timeout",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "ndc9b26cbf5",
+      "to": "nc741a508ee",
+      "label": "paymentReference != null",
+      "hits": 2,
+      "executions": 2
+    },
+    {
+      "from": "ne11df5b0a5",
+      "to": "n2a112d4d73",
+      "kind": "exception",
+      "label": "TemporalFailure",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "ne11df5b0a5",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "ne5afccada7",
+      "to": "nc6fa067e62",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "ned5ce74c43",
+      "to": "nd57b86d8f3",
+      "hits": 2,
+      "executions": 2
+    },
+    {
+      "from": "signal-cancelOrder",
+      "to": "ndc9b26cbf5",
+      "kind": "wakes",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "signal-payment-received",
+      "to": "ndc9b26cbf5",
+      "kind": "wakes",
+      "hits": 2,
+      "executions": 2
+    },
+    {
+      "from": "n2a112d4d73",
+      "to": "nb3c34feafc",
+      "implied": true,
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n42d82e9e8f",
+      "to": "n7c3c3141e7",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n7c3c3141e7",
+      "to": "n42d82e9e8f",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n42d82e9e8f",
+      "to": "n9b70c6df23",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n9b70c6df23",
+      "to": "n42d82e9e8f",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n76b58e8a15",
+      "to": "nbc62940991",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n80e599d2b1",
+      "to": "n7608a53b3c",
+      "implied": true,
+      "hits": 5,
+      "executions": 3
+    },
+    {
+      "from": "n7ef831f8ac",
+      "to": "n80e599d2b1",
+      "implied": true,
+      "hits": 5,
+      "executions": 3
+    }
+  ],
+  "neverHit": [
+    "n633ec518e3",
+    "na3b381d2b7",
+    "nb3c34feafc"
+  ],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 2
+    },
+    {
+      "status": "failed",
+      "nodes": [
+        "nb1a93ca840"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "OrderWorkflow.json",
+      "runId": "04c220fb-5603-4a7d-a737-e1af4e5e234b",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 26,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    },
+    {
+      "file": "OrderWorkflow.payment-declined.json",
+      "runId": "de22a3d9-cf5d-4ae2-b245-1d3c93f6d71d",
+      "status": "failed",
+      "closedAt": [
+        "nb1a93ca840"
+      ],
+      "events": {
+        "mapped": 13,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    },
+    {
+      "file": "OrderWorkflow.payment-timeout.json",
+      "runId": "2afae34c-217f-459d-a7a4-a7ec45112542",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 17,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

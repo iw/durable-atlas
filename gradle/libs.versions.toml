@@ -1,0 +1,127 @@
+[versions]
+kotlin = "2.4.21"
+kotlinx-serialization = "1.13.0"
+# 5.2.0 calls java.util.List.removeLast(), which only exists from JDK 21, as soon as a subcommand
+# runs. Stay on 5.1.0 while the tool targets JDK 17.
+clikt = "5.1.0"
+temporal = "1.41.1"
+# The Temporal SDK reads event histories from JSON with this library but leaves it to its users
+# to supply. This is the version the SDK itself is built and tested with.
+json-path = "2.9.0"
+# The Temporal SDK logs through SLF4J. The tool gives it nowhere to log to, on purpose.
+slf4j = "2.0.20"
+junit = "5.14.4"
+# The standalone Kotlin Analysis API. It is not a stable API: its artifacts must have exactly the
+# version of the Kotlin compiler they wrap, and the IntelliJ platform modules must have exactly the
+# version that Kotlin release was built against (`versions.intellijSdk` in the Kotlin repository's
+# gradle/versions.properties at the release tag).
+intellij-platform = "251.27812.49"
+# Used by the Analysis API but missing from its published metadata.
+caffeine = "2.9.3"
+kotlinx-collections-immutable = "0.5.1"
+json-schema-validator = "3.0.9"
+# Layout engine of the SVG diagrams (EPL-2.0). It asks for Guava as an open version range, so
+# Guava is left out of its dependencies and named here instead.
+elk = "0.12.1"
+guava = "33.8.0-jre"
+# Run-time library of the layout engine's generated code, which its published metadata leaves out.
+# 2.43.0 and later are compiled for JDK 21. Stay on 2.42.0 while the tool targets JDK 17.
+xbase-lib = "2.42.0"
+# The Inter typeface (SIL Open Font License 1.1) as static OpenType files; the version is Inter's.
+inter-font = "4.1"
+# Test only: turns SVG diagrams into PNG files for review.
+batik = "1.20"
+
+[libraries]
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-serialization-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
+temporal-sdk = { module = "io.temporal:temporal-sdk", version.ref = "temporal" }
+# The SDK's Kotlin extensions: the options DSLs and the reified forms of calls through stubs. The tool does not
+# use them itself; they are part of the classpath that stands in for a repository's own in degraded mode.
+temporal-kotlin = { module = "io.temporal:temporal-kotlin", version.ref = "temporal" }
+# The SDK's reader of the TEMPORAL_* environment variables and of the profiles in temporal.toml.
+temporal-envconfig = { module = "io.temporal:temporal-envconfig", version.ref = "temporal" }
+json-path = { module = "com.jayway.jsonpath:json-path", version.ref = "json-path" }
+slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4j" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+json-schema-validator = { module = "com.networknt:json-schema-validator", version.ref = "json-schema-validator" }
+
+analysis-api = { module = "org.jetbrains.kotlin:analysis-api-for-ide", version.ref = "kotlin" }
+analysis-api-standalone = { module = "org.jetbrains.kotlin:analysis-api-standalone-for-ide", version.ref = "kotlin" }
+analysis-api-k2 = { module = "org.jetbrains.kotlin:analysis-api-k2-for-ide", version.ref = "kotlin" }
+analysis-api-impl-base = { module = "org.jetbrains.kotlin:analysis-api-impl-base-for-ide", version.ref = "kotlin" }
+analysis-api-platform-interface = { module = "org.jetbrains.kotlin:analysis-api-platform-interface-for-ide", version.ref = "kotlin" }
+analysis-low-level-api-fir = { module = "org.jetbrains.kotlin:low-level-api-fir-for-ide", version.ref = "kotlin" }
+analysis-symbol-light-classes = { module = "org.jetbrains.kotlin:symbol-light-classes-for-ide", version.ref = "kotlin" }
+analysis-compiler-common = { module = "org.jetbrains.kotlin:kotlin-compiler-common-for-ide", version.ref = "kotlin" }
+analysis-compiler-fir = { module = "org.jetbrains.kotlin:kotlin-compiler-fir-for-ide", version.ref = "kotlin" }
+analysis-compiler-fe10 = { module = "org.jetbrains.kotlin:kotlin-compiler-fe10-for-ide", version.ref = "kotlin" }
+analysis-compiler-ir = { module = "org.jetbrains.kotlin:kotlin-compiler-ir-for-ide", version.ref = "kotlin" }
+analysis-compiler-cli = { module = "org.jetbrains.kotlin:kotlin-compiler-cli-for-ide", version.ref = "kotlin" }
+
+intellij-util-rt = { module = "com.jetbrains.intellij.platform:util-rt", version.ref = "intellij-platform" }
+intellij-util-classloader = { module = "com.jetbrains.intellij.platform:util-class-loader", version.ref = "intellij-platform" }
+intellij-util-text-matching = { module = "com.jetbrains.intellij.platform:util-text-matching", version.ref = "intellij-platform" }
+intellij-util = { module = "com.jetbrains.intellij.platform:util", version.ref = "intellij-platform" }
+intellij-util-base = { module = "com.jetbrains.intellij.platform:util-base", version.ref = "intellij-platform" }
+intellij-util-coroutines = { module = "com.jetbrains.intellij.platform:util-coroutines", version.ref = "intellij-platform" }
+intellij-util-xml-dom = { module = "com.jetbrains.intellij.platform:util-xml-dom", version.ref = "intellij-platform" }
+intellij-core = { module = "com.jetbrains.intellij.platform:core", version.ref = "intellij-platform" }
+intellij-core-impl = { module = "com.jetbrains.intellij.platform:core-impl", version.ref = "intellij-platform" }
+intellij-extensions = { module = "com.jetbrains.intellij.platform:extensions", version.ref = "intellij-platform" }
+intellij-diagnostic = { module = "com.jetbrains.intellij.platform:diagnostic", version.ref = "intellij-platform" }
+intellij-diagnostic-telemetry = { module = "com.jetbrains.intellij.platform:diagnostic-telemetry", version.ref = "intellij-platform" }
+intellij-java-frontback-psi = { module = "com.jetbrains.intellij.java:java-frontback-psi", version.ref = "intellij-platform" }
+intellij-java-frontback-psi-impl = { module = "com.jetbrains.intellij.java:java-frontback-psi-impl", version.ref = "intellij-platform" }
+intellij-java-psi = { module = "com.jetbrains.intellij.java:java-psi", version.ref = "intellij-platform" }
+intellij-java-psi-impl = { module = "com.jetbrains.intellij.java:java-psi-impl", version.ref = "intellij-platform" }
+
+elk-layered = { module = "org.eclipse.elk:org.eclipse.elk.alg.layered", version.ref = "elk" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
+xbase-lib = { module = "org.eclipse.xtext:org.eclipse.xtext.xbase.lib", version.ref = "xbase-lib" }
+inter-font = { module = "com.formdev:flatlaf-fonts-inter", version.ref = "inter-font" }
+batik-transcoder = { module = "org.apache.xmlgraphics:batik-transcoder", version.ref = "batik" }
+
+caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine" }
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm", version.ref = "kotlinx-collections-immutable" }
+
+[bundles]
+# Fat jars whose published metadata names modules that exist in no repository, so they are always
+# resolved without their transitive dependencies.
+kotlin-analysis-api = [
+    "analysis-api",
+    "analysis-api-standalone",
+    "analysis-api-k2",
+    "analysis-api-impl-base",
+    "analysis-api-platform-interface",
+    "analysis-low-level-api-fir",
+    "analysis-symbol-light-classes",
+    "analysis-compiler-common",
+    "analysis-compiler-fir",
+    "analysis-compiler-fe10",
+    "analysis-compiler-ir",
+    "analysis-compiler-cli",
+]
+intellij-platform = [
+    "intellij-util-rt",
+    "intellij-util-classloader",
+    "intellij-util-text-matching",
+    "intellij-util",
+    "intellij-util-base",
+    "intellij-util-coroutines",
+    "intellij-util-xml-dom",
+    "intellij-core",
+    "intellij-core-impl",
+    "intellij-extensions",
+    "intellij-diagnostic",
+    "intellij-diagnostic-telemetry",
+    "intellij-java-frontback-psi",
+    "intellij-java-frontback-psi-impl",
+    "intellij-java-psi",
+    "intellij-java-psi-impl",
+]

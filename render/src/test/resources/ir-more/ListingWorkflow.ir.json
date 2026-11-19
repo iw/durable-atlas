@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "commit": "3f786850e387550fdab836ed7e6dc881de23001b",
+  "modelMode": "gradle",
+  "workflowType": "ListingWorkflow",
+  "interface": "com.example.listing.ListingWorkflow",
+  "implementation": "com.example.listing.ListingWorkflowImpl",
+  "module": ":listing",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "ListingWorkflow",
+      "start": "l00"
+    },
+    {
+      "id": "signal-withdraw",
+      "kind": "signal",
+      "name": "withdraw",
+      "start": "l20",
+      "writes": [
+        "shelf"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "l00",
+      "kind": "start",
+      "loc": {
+        "file": "listing/src/main/kotlin/com/example/listing/ListingWorkflowImpl.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "l01",
+      "kind": "upsertSearchAttributes",
+      "keys": [
+        "Stage",
+        "Seller"
+      ],
+      "loc": {
+        "file": "listing/src/main/kotlin/com/example/listing/ListingWorkflowImpl.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "l02",
+      "kind": "upsertMemo",
+      "keys": [
+        "note"
+      ],
+      "loc": {
+        "file": "listing/src/main/kotlin/com/example/listing/ListingWorkflowImpl.kt",
+        "line": 23
+      }
+    },
+    {
+      "id": "l03",
+      "kind": "await",
+      "timeout": "PT1M",
+      "reads": [
+        "shelf"
+      ],
+      "label": "shelf.tryLock()",
+      "loc": {
+        "file": "listing/src/main/kotlin/com/example/listing/ListingWorkflowImpl.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "l04",
+      "kind": "loop",
+      "label": "retry on failure, up to 3 attempts",
+      "retry": true,
+      "loc": {
+        "file": "listing/src/main/kotlin/com/example/listing/ListingWorkflowImpl.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "l05",
+      "kind": "activity",
+      "name": "PublishListing",
+      "timeout": "PT30S",
+      "parent": "l04",
+      "loc": {
+        "file": "listing/src/main/kotlin/com/example/listing/ListingWorkflowImpl.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "l06",
+      "kind": "upsertSearchAttributes",
+      "loc": {
+        "file": "listing/src/main/kotlin/com/example/listing/ListingWorkflowImpl.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "l07",
+      "kind": "upsertMemo",
+      "loc": {
+        "file": "listing/src/main/kotlin/com/example/listing/ListingWorkflowImpl.kt",
+        "line": 25
+      }
+    },
+    {
+      "id": "l08",
+      "kind": "end"
+    },
+    {
+      "id": "l20",
+      "kind": "start",
+      "loc": {
+        "file": "listing/src/main/kotlin/com/example/listing/ListingWorkflowImpl.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "l21",
+      "kind": "upsertSearchAttributes",
+      "keys": [
+        "Stage"
+      ],
+      "loc": {
+        "file": "listing/src/main/kotlin/com/example/listing/ListingWorkflowImpl.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "l22",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "l00",
+      "to": "l01"
+    },
+    {
+      "from": "l01",
+      "to": "l02"
+    },
+    {
+      "from": "l02",
+      "to": "l03"
+    },
+    {
+      "from": "l03",
+      "to": "l04"
+    },
+    {
+      "from": "l03",
+      "to": "l07",
+      "kind": "timeout"
+    },
+    {
+      "from": "l04",
+      "to": "l06"
+    },
+    {
+      "from": "l06",
+      "to": "l08"
+    },
+    {
+      "from": "l07",
+      "to": "l08"
+    },
+    {
+      "from": "l20",
+      "to": "l21"
+    },
+    {
+      "from": "l21",
+      "to": "l22"
+    },
+    {
+      "from": "signal-withdraw",
+      "to": "l03",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 12,
+    "unknown": 0
+  }
+}

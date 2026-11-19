@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Soonest",
+  "interface": "open.Soonest",
+  "implementation": "open.SoonestImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Soonest",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n4340532a7c",
+      "kind": "activity",
+      "name": "Store",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Soonest.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n4f383654a5",
+      "kind": "activity",
+      "name": "Fetch",
+      "parent": "n9c5e1be995",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Soonest.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Soonest.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n9c5e1be995",
+      "kind": "parallel",
+      "join": "first",
+      "parent": "nf81e459e8d",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Soonest.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf81e459e8d",
+      "kind": "loop",
+      "label": "for each of ids",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Soonest.kt",
+        "line": 28
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n4340532a7c",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nf81e459e8d"
+    },
+    {
+      "from": "nf81e459e8d",
+      "to": "n4340532a7c"
+    }
+  ],
+  "stats": {
+    "nodes": 6,
+    "unknown": 0
+  }
+}

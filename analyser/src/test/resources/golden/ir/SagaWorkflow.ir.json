@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "SagaWorkflow",
+  "interface": "com.example.fixture.workflows.primitives.SagaWorkflow",
+  "implementation": "com.example.fixture.workflows.primitives.SagaWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "SagaWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1350bf6b89",
+      "kind": "activity",
+      "name": "ReleaseStock",
+      "timeout": "PT30S",
+      "parent": "nc45a78abf2",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/SagaWorkflow.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n40aa217fdd",
+      "kind": "activity",
+      "name": "PaymentRefund",
+      "timeout": "PT30S",
+      "parent": "nc45a78abf2",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/SagaWorkflow.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/SagaWorkflow.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n6b73e19e3e",
+      "kind": "activity",
+      "name": "PaymentCharge",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/SagaWorkflow.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n868457c834",
+      "kind": "activity",
+      "name": "ShipItem",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/SagaWorkflow.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "nc45a78abf2",
+      "kind": "compensation",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/SagaWorkflow.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "nd3f8fd4d4e",
+      "kind": "fail",
+      "name": "ActivityFailure",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/SagaWorkflow.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "ne40a8fd502",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/SagaWorkflow.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n40aa217fdd",
+      "to": "n1350bf6b89"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "ne40a8fd502"
+    },
+    {
+      "from": "n6b73e19e3e",
+      "to": "n868457c834"
+    },
+    {
+      "from": "n6b73e19e3e",
+      "to": "nc45a78abf2",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "n868457c834",
+      "to": "nc45a78abf2",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "n868457c834",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nc45a78abf2",
+      "to": "nd3f8fd4d4e"
+    },
+    {
+      "from": "ne40a8fd502",
+      "to": "n6b73e19e3e"
+    },
+    {
+      "from": "ne40a8fd502",
+      "to": "nc45a78abf2",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    }
+  ],
+  "stats": {
+    "nodes": 9,
+    "unknown": 0
+  }
+}

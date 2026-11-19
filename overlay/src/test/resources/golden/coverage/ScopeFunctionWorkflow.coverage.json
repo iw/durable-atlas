@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "ScopeFunctionWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 14,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "ScopeFunctionWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0cf25a2735",
+      "kind": "activity",
+      "name": "NotifySms",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n5762f6d2f8",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n78cfa59bd8",
+      "kind": "activity",
+      "name": "CapturePayment",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n7ddc84ed11",
+      "kind": "activity",
+      "name": "PaymentCharge",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n86487dcffe",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n95f5a939fb",
+      "kind": "activity",
+      "name": "ShipItem",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0cf25a2735",
+      "to": "n95f5a939fb",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n5762f6d2f8",
+      "to": "n7ddc84ed11",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n5762f6d2f8",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n78cfa59bd8",
+      "to": "n86487dcffe",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n7ddc84ed11",
+      "to": "n78cfa59bd8",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n86487dcffe",
+      "to": "n0cf25a2735",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n95f5a939fb",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "neverHit": [],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "ScopeFunctionWorkflow.json",
+      "runId": "86450a80-5abc-4dc4-9f42-71e3755b234d",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 14,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

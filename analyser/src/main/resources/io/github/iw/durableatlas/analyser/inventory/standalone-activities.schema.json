@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:durable-atlas:schema:standalone-activities:1",
+  "title": "Standalone activities",
+  "description": "The activity types one commit of a repository declares that none of its workflows calls. Such activities have no place in a workflow diagram; a Temporal server can run them on their own.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "commit",
+    "modelMode",
+    "activities",
+    "unresolvedWorkflows"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "description": "Version of this format.",
+      "const": 1
+    },
+    "commit": {
+      "description": "Commit of the analysed repository the list was produced from.",
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "modelMode": {
+      "description": "How the source model was obtained.",
+      "enum": ["gradle", "degraded"]
+    },
+    "activities": {
+      "description": "Activity types no workflow has a step for, ordered by activity type and then by interface.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/activity" }
+    },
+    "unresolvedWorkflows": {
+      "description": "Workflow types with a call the analysis could not follow, or without a graph, ordered by name. A listed activity may be called from one of them.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" },
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "activity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "interface", "method"],
+      "properties": {
+        "name": {
+          "description": "Activity type name as registered with Temporal.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "interface": {
+          "description": "Fully qualified name of the activity interface that declares the activity.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "method": {
+          "description": "Name of the interface method.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "module": {
+          "description": "Module that declares the interface. Absent if the interface comes from a library.",
+          "type": "string",
+          "pattern": "^:"
+        },
+        "loc": {
+          "description": "Where the method is declared. Absent if the interface comes from a library.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["file", "line"],
+          "properties": {
+            "file": {
+              "description": "Path relative to the root of the analysed repository, with / separators.",
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            "line": {
+              "description": "1-based line number.",
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

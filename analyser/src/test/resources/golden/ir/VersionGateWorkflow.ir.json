@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "VersionGateWorkflow",
+  "interface": "com.example.fixture.workflows.primitives.VersionGateWorkflow",
+  "implementation": "com.example.fixture.workflows.primitives.VersionGateWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "VersionGateWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n22e57ea5fa",
+      "kind": "versionGate",
+      "changeId": "express-shipping",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/VersionGateWorkflow.kt",
+        "line": 23
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/VersionGateWorkflow.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "nd3d92edabd",
+      "kind": "activity",
+      "name": "ShipExpress",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/VersionGateWorkflow.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "ne6d87b7a44",
+      "kind": "activity",
+      "name": "ShipItem",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/VersionGateWorkflow.kt",
+        "line": 25
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n22e57ea5fa",
+      "to": "nd3d92edabd",
+      "label": "v1"
+    },
+    {
+      "from": "n22e57ea5fa",
+      "to": "ne6d87b7a44",
+      "label": "default"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n22e57ea5fa"
+    },
+    {
+      "from": "nd3d92edabd",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "ne6d87b7a44",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 5,
+    "unknown": 0
+  }
+}

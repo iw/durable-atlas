@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Guarded",
+  "interface": "failing.Guarded",
+  "implementation": "failing.GuardedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Guarded",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Guarded.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "n7bb9aa614c",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Guarded.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "n7f50bef34b",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Guarded.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "n7f50bef34b"
+    },
+    {
+      "from": "n7bb9aa614c",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n7f50bef34b",
+      "to": "n7bb9aa614c"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 0
+  }
+}

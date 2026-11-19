@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "OuterContinue",
+  "interface": "ends.OuterContinue",
+  "implementation": "ends.OuterContinueImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "OuterContinue",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n3c52c312b5",
+      "kind": "activity",
+      "name": "Prepare",
+      "parent": "nb5cf89a481",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/OuterContinue.kt",
+        "line": 19
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/OuterContinue.kt",
+        "line": 17
+      }
+    },
+    {
+      "id": "n6bc577f749",
+      "kind": "activity",
+      "name": "Work",
+      "parent": "nc7cbb91b49",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/OuterContinue.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "nb5cf89a481",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/OuterContinue.kt",
+        "line": 18
+      }
+    },
+    {
+      "id": "nc7cbb91b49",
+      "kind": "loop",
+      "label": "for each part",
+      "parent": "nb5cf89a481",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/OuterContinue.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf0a6304f36",
+      "kind": "branch",
+      "label": "part.isEmpty()",
+      "parent": "nc7cbb91b49",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/OuterContinue.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "nf1b5b16a9a",
+      "kind": "activity",
+      "name": "Report",
+      "parent": "nb5cf89a481",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/OuterContinue.kt",
+        "line": 24
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n3c52c312b5",
+      "to": "nc7cbb91b49"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nb5cf89a481"
+    },
+    {
+      "from": "nb5cf89a481",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nc7cbb91b49",
+      "to": "nf1b5b16a9a"
+    },
+    {
+      "from": "nf0a6304f36",
+      "to": "n6bc577f749",
+      "label": "no"
+    },
+    {
+      "from": "nf0a6304f36",
+      "to": "nb5cf89a481",
+      "label": "yes"
+    }
+  ],
+  "stats": {
+    "nodes": 8,
+    "unknown": 0
+  }
+}

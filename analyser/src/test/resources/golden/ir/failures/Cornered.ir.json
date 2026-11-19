@@ -1,0 +1,304 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Cornered",
+  "interface": "failing.Cornered",
+  "implementation": "failing.CorneredImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Cornered",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0634922200",
+      "kind": "fail",
+      "name": "DomainFault",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cornered.kt",
+        "line": 52
+      }
+    },
+    {
+      "id": "n0777c29d3a",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cornered.kt",
+        "line": 58
+      }
+    },
+    {
+      "id": "n0a5c3d69da",
+      "kind": "branch",
+      "label": "input.isBlank()",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cornered.kt",
+        "line": 51
+      }
+    },
+    {
+      "id": "n21a2601487",
+      "kind": "branch",
+      "label": "Checks.positive throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cornered.kt",
+        "line": 52
+      }
+    },
+    {
+      "id": "n23d355dbb7",
+      "kind": "branch",
+      "label": "count == 4",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cornered.kt",
+        "line": 49
+      }
+    },
+    {
+      "id": "n48b671f7f1",
+      "kind": "fail",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cornered.kt",
+        "line": 59
+      }
+    },
+    {
+      "id": "n514255c6e0",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cornered.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n5574dff7a1",
+      "kind": "branch",
+      "label": "input.isBlank()",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cornered.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n695a7bd09a",
+      "kind": "branch",
+      "label": "count == 2",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cornered.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cornered.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n6c7dbaa3ec",
+      "kind": "branch",
+      "label": "count == 3",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cornered.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "n718d06fa9f",
+      "kind": "fail",
+      "name": "DomainFault",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cornered.kt",
+        "line": 53
+      }
+    },
+    {
+      "id": "n7b56ffc6e9",
+      "kind": "fail",
+      "name": "IllegalStateException",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cornered.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n9f091156e1",
+      "kind": "branch",
+      "label": "count == 1",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cornered.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "na1e34f81e0",
+      "kind": "fail",
+      "name": "IllegalStateException",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cornered.kt",
+        "line": 55
+      }
+    },
+    {
+      "id": "nb33e82b18d",
+      "kind": "fail",
+      "name": "DomainFault",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cornered.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "nc6c8e63ab0",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cornered.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "neaf88237d2",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cornered.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "neb39f6ffae",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cornered.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "nfd67d231e4",
+      "kind": "fail",
+      "name": "IllegalStateException",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cornered.kt",
+        "line": 38
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0777c29d3a",
+      "to": "n48b671f7f1"
+    },
+    {
+      "from": "n0a5c3d69da",
+      "to": "n21a2601487",
+      "label": "yes"
+    },
+    {
+      "from": "n0a5c3d69da",
+      "to": "na1e34f81e0",
+      "label": "no"
+    },
+    {
+      "from": "n21a2601487",
+      "to": "n0634922200",
+      "label": "yes"
+    },
+    {
+      "from": "n21a2601487",
+      "to": "n718d06fa9f",
+      "label": "no"
+    },
+    {
+      "from": "n23d355dbb7",
+      "to": "n0777c29d3a",
+      "label": "no"
+    },
+    {
+      "from": "n23d355dbb7",
+      "to": "neaf88237d2",
+      "label": "yes"
+    },
+    {
+      "from": "n514255c6e0",
+      "to": "nfd67d231e4",
+      "kind": "exception",
+      "label": "DomainFault"
+    },
+    {
+      "from": "n5574dff7a1",
+      "to": "n7b56ffc6e9",
+      "label": "no"
+    },
+    {
+      "from": "n5574dff7a1",
+      "to": "nb33e82b18d",
+      "label": "yes"
+    },
+    {
+      "from": "n695a7bd09a",
+      "to": "n514255c6e0",
+      "label": "yes"
+    },
+    {
+      "from": "n695a7bd09a",
+      "to": "n6c7dbaa3ec",
+      "label": "no"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n9f091156e1"
+    },
+    {
+      "from": "n6c7dbaa3ec",
+      "to": "n23d355dbb7",
+      "label": "no"
+    },
+    {
+      "from": "n6c7dbaa3ec",
+      "to": "neb39f6ffae",
+      "label": "yes"
+    },
+    {
+      "from": "n9f091156e1",
+      "to": "n695a7bd09a",
+      "label": "no"
+    },
+    {
+      "from": "n9f091156e1",
+      "to": "nc6c8e63ab0",
+      "label": "yes"
+    },
+    {
+      "from": "nc6c8e63ab0",
+      "to": "n5574dff7a1"
+    },
+    {
+      "from": "neaf88237d2",
+      "to": "n0a5c3d69da"
+    },
+    {
+      "from": "neb39f6ffae",
+      "to": "n23d355dbb7"
+    }
+  ],
+  "stats": {
+    "nodes": 20,
+    "unknown": 0
+  }
+}

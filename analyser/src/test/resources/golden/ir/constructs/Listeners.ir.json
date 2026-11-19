@@ -1,0 +1,231 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Listeners",
+  "interface": "constructs.Listeners",
+  "implementation": "constructs.ListenersImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Listeners",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-pause",
+      "kind": "signal",
+      "name": "pause",
+      "start": "n19b365508a",
+      "writes": [
+        "panel"
+      ]
+    },
+    {
+      "id": "query-isPaused",
+      "kind": "query",
+      "name": "isPaused",
+      "start": "neafe9ebc19",
+      "reads": [
+        "panel"
+      ]
+    },
+    {
+      "id": "dynamic-update",
+      "kind": "update",
+      "name": "(any name)",
+      "start": "n9aef9e7288",
+      "reads": [
+        "extra"
+      ],
+      "writes": [
+        "extra"
+      ]
+    },
+    {
+      "id": "update-resume",
+      "kind": "update",
+      "name": "resume",
+      "start": "n0033d968c6",
+      "writes": [
+        "panel"
+      ]
+    },
+    {
+      "id": "validator-resume",
+      "kind": "updateValidator",
+      "name": "resume",
+      "start": "n6bc0490e73"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0033d968c6",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Listeners.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "n01c98d85f7",
+      "kind": "end"
+    },
+    {
+      "id": "n14b042a3ea",
+      "kind": "end"
+    },
+    {
+      "id": "n157950fcdf",
+      "kind": "end"
+    },
+    {
+      "id": "n19b365508a",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Listeners.kt",
+        "line": 48
+      }
+    },
+    {
+      "id": "n1b2ed731e9",
+      "kind": "activity",
+      "name": "Prepare",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Listeners.kt",
+        "line": 56
+      }
+    },
+    {
+      "id": "n341e044930",
+      "kind": "activity",
+      "name": "Report",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Listeners.kt",
+        "line": 73
+      }
+    },
+    {
+      "id": "n4179ee53b9",
+      "kind": "activity",
+      "name": "Work",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Listeners.kt",
+        "line": 80
+      }
+    },
+    {
+      "id": "n4b682e673b",
+      "kind": "end"
+    },
+    {
+      "id": "n64027d181a",
+      "kind": "await",
+      "reads": [
+        "panel"
+      ],
+      "label": "not panel.paused",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Listeners.kt",
+        "line": 79
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Listeners.kt",
+        "line": 68
+      }
+    },
+    {
+      "id": "n6bc0490e73",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Listeners.kt",
+        "line": 59
+      }
+    },
+    {
+      "id": "n9aef9e7288",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Listeners.kt",
+        "line": 71
+      }
+    },
+    {
+      "id": "nda48169662",
+      "kind": "end"
+    },
+    {
+      "id": "neafe9ebc19",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Listeners.kt",
+        "line": 52
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0033d968c6",
+      "to": "n1b2ed731e9"
+    },
+    {
+      "from": "n19b365508a",
+      "to": "n157950fcdf"
+    },
+    {
+      "from": "n1b2ed731e9",
+      "to": "nda48169662"
+    },
+    {
+      "from": "n341e044930",
+      "to": "n14b042a3ea"
+    },
+    {
+      "from": "n4179ee53b9",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n64027d181a",
+      "to": "n4179ee53b9"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n64027d181a"
+    },
+    {
+      "from": "n6bc0490e73",
+      "to": "n01c98d85f7"
+    },
+    {
+      "from": "n9aef9e7288",
+      "to": "n341e044930"
+    },
+    {
+      "from": "neafe9ebc19",
+      "to": "n4b682e673b"
+    },
+    {
+      "from": "signal-pause",
+      "to": "n64027d181a",
+      "kind": "wakes"
+    },
+    {
+      "from": "update-resume",
+      "to": "n64027d181a",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 16,
+    "unknown": 0
+  }
+}

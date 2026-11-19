@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Wired",
+  "interface": "extensions.Wired",
+  "implementation": "extensions.WiredImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Wired",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n4b80b79fda",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT12S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Wired.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Wired.kt",
+        "line": 53
+      }
+    },
+    {
+      "id": "n8c25001aab",
+      "kind": "localActivity",
+      "name": "One",
+      "timeout": "PT1S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Wired.kt",
+        "line": 56
+      }
+    },
+    {
+      "id": "na58d37afc9",
+      "kind": "localActivity",
+      "name": "Two",
+      "timeout": "PT3S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Wired.kt",
+        "line": 57
+      }
+    },
+    {
+      "id": "nc0fbb8b7cd",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT13S",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Wired.kt",
+        "line": 55
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n4b80b79fda",
+      "to": "nc0fbb8b7cd"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n4b80b79fda"
+    },
+    {
+      "from": "n8c25001aab",
+      "to": "na58d37afc9"
+    },
+    {
+      "from": "na58d37afc9",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nc0fbb8b7cd",
+      "to": "n8c25001aab"
+    }
+  ],
+  "stats": {
+    "nodes": 6,
+    "unknown": 0
+  }
+}

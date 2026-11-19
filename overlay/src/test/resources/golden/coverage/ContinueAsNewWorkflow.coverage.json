@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "ContinueAsNewWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 2,
+    "ambiguous": 1,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "ContinueAsNewWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n3df21a2ad6",
+      "kind": "timer",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n56b65e68bb",
+      "kind": "branch",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n5a69236a33",
+      "kind": "branch",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n5c4e83cc5a",
+      "kind": "continueAsNew",
+      "name": "ContinueAsNewWorkflow",
+      "hits": 1,
+      "uncertain": 1,
+      "executions": 1
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n875428586d",
+      "kind": "continueAsNew",
+      "name": "ContinueAsNewWorkflow",
+      "hits": 1,
+      "uncertain": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 0,
+      "executions": 0
+    }
+  ],
+  "edges": [
+    {
+      "from": "n3df21a2ad6",
+      "to": "n56b65e68bb",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n56b65e68bb",
+      "to": "n5a69236a33",
+      "label": "no",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n56b65e68bb",
+      "to": "nedd528afe0",
+      "label": "yes",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n5a69236a33",
+      "to": "n5c4e83cc5a",
+      "label": "yes",
+      "hits": 1,
+      "uncertain": 1,
+      "executions": 1
+    },
+    {
+      "from": "n5a69236a33",
+      "to": "n875428586d",
+      "label": "no",
+      "hits": 1,
+      "uncertain": 1,
+      "executions": 1
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n3df21a2ad6",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "neverHit": [
+    "nedd528afe0"
+  ],
+  "closes": [
+    {
+      "status": "continuedAsNew",
+      "nodes": [
+        "n5c4e83cc5a",
+        "n875428586d"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [
+    {
+      "history": "ContinueAsNewWorkflow.json",
+      "eventId": 10,
+      "eventType": "WorkflowExecutionContinuedAsNew",
+      "doubt": "candidates",
+      "nodes": [
+        "n5c4e83cc5a",
+        "n875428586d"
+      ],
+      "edges": [
+        {
+          "from": "n5a69236a33",
+          "to": "n5c4e83cc5a",
+          "label": "yes"
+        },
+        {
+          "from": "n5a69236a33",
+          "to": "n875428586d",
+          "label": "no"
+        }
+      ]
+    }
+  ],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "ContinueAsNewWorkflow.json",
+      "runId": "e6cbe3a0-56c7-4fcf-8ca4-25fce705f12b",
+      "status": "continuedAsNew",
+      "closedAt": [
+        "n5c4e83cc5a",
+        "n875428586d"
+      ],
+      "events": {
+        "mapped": 2,
+        "ambiguous": 1,
+        "unmapped": 0
+      }
+    }
+  ]
+}

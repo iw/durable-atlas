@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "EarlyReturnWorkflow",
+  "interface": "com.example.fixture.workflows.controlflow.EarlyReturnWorkflow",
+  "implementation": "com.example.fixture.workflows.controlflow.EarlyReturnWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "EarlyReturnWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n21f701b112",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/EarlyReturnWorkflow.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n3024f79c86",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/EarlyReturnWorkflow.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n5fc3635bbb",
+      "kind": "branch",
+      "label": "!available",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/EarlyReturnWorkflow.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/EarlyReturnWorkflow.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "n9416f90c67",
+      "kind": "activity",
+      "name": "CheckAvailability",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/EarlyReturnWorkflow.kt",
+        "line": 26
+      }
+    },
+    {
+      "id": "n9dd6f4c019",
+      "kind": "branch",
+      "label": "sku.isBlank()",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/EarlyReturnWorkflow.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n21f701b112",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n3024f79c86",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n5fc3635bbb",
+      "to": "n21f701b112",
+      "label": "yes"
+    },
+    {
+      "from": "n5fc3635bbb",
+      "to": "n3024f79c86",
+      "label": "no"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n9dd6f4c019"
+    },
+    {
+      "from": "n9416f90c67",
+      "to": "n5fc3635bbb"
+    },
+    {
+      "from": "n9dd6f4c019",
+      "to": "n9416f90c67",
+      "label": "no"
+    },
+    {
+      "from": "n9dd6f4c019",
+      "to": "nedd528afe0",
+      "label": "yes"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 0
+  }
+}

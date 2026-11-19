@@ -1,0 +1,86 @@
+block workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/LoopWorkflow.kt:21
+  for `sku in skus` :23
+    header
+      local skus: kotlin.collections.List<kotlin.String> :23
+    body
+      block :23
+        call com.example.fixture.activities.InventoryActivities.reserveStock(kotlin.String,kotlin.Int) [source]: kotlin.String :24
+          on com.example.fixture.activities.InventoryActivities @io.temporal.activity.ActivityInterface
+          receiver
+            read com.example.fixture.workflows.controlflow.LoopWorkflowImpl.inventory on this: com.example.fixture.activities.InventoryActivities :24
+          argument sku `sku`
+            local sku: kotlin.String :24
+          argument quantity `1` = 1
+            literal 1 :24
+  var pauses: kotlin.Int :28
+    literal 0 :28
+  while `pauses < 2` :29
+    header
+      other < `pauses < 2` :29
+        local pauses: kotlin.Int :29
+        literal 2 :29
+    body
+      block :29
+        call io.temporal.workflow.Workflow.sleep(java.time.Duration) [library]: kotlin.Unit :30
+          argument duration `Duration.ofSeconds(10)`
+            call java.time.Duration.ofSeconds(kotlin.Long) [library]: java.time.Duration :30
+              argument seconds `10` = 10
+                literal 10 :30
+        assign pauses ++ :31
+  var available: kotlin.Boolean :35
+  do-while `!available` :36
+    header
+      other ! `!available` :38
+        local available: kotlin.Boolean :38
+    body
+      block :36
+        assign available = :37
+          call com.example.fixture.activities.InventoryActivities.checkAvailability(kotlin.String) [source]: kotlin.Boolean :37
+            on com.example.fixture.activities.InventoryActivities @io.temporal.activity.ActivityInterface
+            receiver
+              read com.example.fixture.workflows.controlflow.LoopWorkflowImpl.inventory on this: com.example.fixture.activities.InventoryActivities :37
+            argument sku `skus.first()`
+              call kotlin.collections.first() on kotlin.collections.List [library] <kotlin.String>: kotlin.String :37
+                on kotlin.collections.List<kotlin.String>
+                receiver
+                  local skus: kotlin.collections.List<kotlin.String> :37
+  call kotlin.collections.forEach(kotlin.Function1) on kotlin.collections.Iterable [library] <kotlin.String>: kotlin.Unit :41
+    on kotlin.collections.List<kotlin.String>
+    receiver
+      local skus: kotlin.collections.List<kotlin.String> :41
+    argument action `{ sku -> shipping.shipItem(orderId, sku) }`
+      lambda (sku) :41
+        block :42
+          call com.example.fixture.activities.ShippingActivities.shipItem(kotlin.String,kotlin.String) [source]: kotlin.String :42
+            on com.example.fixture.activities.ShippingActivities @io.temporal.activity.ActivityInterface
+            receiver
+              read com.example.fixture.workflows.controlflow.LoopWorkflowImpl.shipping on this: com.example.fixture.activities.ShippingActivities :42
+            argument orderId `orderId`
+              local orderId: kotlin.String :42
+            argument sku `sku`
+              local sku: kotlin.String :42
+  val quotes: kotlin.collections.List<kotlin.Long> :46
+    call kotlin.collections.map(kotlin.Function1) on kotlin.collections.Iterable [library] <kotlin.String, kotlin.Long>: kotlin.collections.List<kotlin.Long> :46
+      on kotlin.collections.List<kotlin.String>
+      receiver
+        local skus: kotlin.collections.List<kotlin.String> :46
+      argument transform `{ sku -> shipping.quoteShipping(sku) }`
+        lambda (sku) :46
+          block :46
+            call com.example.fixture.activities.ShippingActivities.quoteShipping(kotlin.String) [source]: kotlin.Long :46
+              on com.example.fixture.activities.ShippingActivities @io.temporal.activity.ActivityInterface
+              receiver
+                read com.example.fixture.workflows.controlflow.LoopWorkflowImpl.shipping on this: com.example.fixture.activities.ShippingActivities :46
+              argument sku `sku`
+                local sku: kotlin.String :46
+  var total: kotlin.Long :49
+    literal 0 :49
+  for `quote in quotes` :50
+    header
+      local quotes: kotlin.collections.List<kotlin.Long> :50
+    body
+      block :50
+        assign total += :51
+          local quote: kotlin.Long :51
+  return :53
+    local total: kotlin.Long :53

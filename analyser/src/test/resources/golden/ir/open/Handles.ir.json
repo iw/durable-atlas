@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Handles",
+  "interface": "open.Handles",
+  "implementation": "open.HandlesImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Handles",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n4d6ffc9990",
+      "kind": "activity",
+      "name": "Notify",
+      "timeout": "PT5S",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Handles.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n5725774538",
+      "kind": "childWorkflow",
+      "name": "Errand",
+      "waitsFor": "start",
+      "parentClosePolicy": "abandon",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Handles.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Handles.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "n822143b907",
+      "kind": "parallel",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Handles.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n8609a9211a",
+      "kind": "activity",
+      "name": "Fetch",
+      "timeout": "PT5S",
+      "parent": "nad92fbe618",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Handles.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n9db9677995",
+      "kind": "childWorkflow",
+      "name": "Errand",
+      "parent": "n822143b907",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Handles.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "na953068c62",
+      "kind": "activity",
+      "name": "Fetch",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Handles.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "nad92fbe618",
+      "kind": "parallel",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Handles.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "nd3f5331b48",
+      "kind": "activity",
+      "name": "Store",
+      "timeout": "PT5S",
+      "parent": "nad92fbe618",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Handles.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "nd5e5032d5b",
+      "kind": "activity",
+      "name": "Notify",
+      "timeout": "PT5S",
+      "parent": "n822143b907",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Handles.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n4d6ffc9990",
+      "to": "n5725774538"
+    },
+    {
+      "from": "n5725774538",
+      "to": "n822143b907"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nad92fbe618"
+    },
+    {
+      "from": "n822143b907",
+      "to": "na953068c62"
+    },
+    {
+      "from": "na953068c62",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nad92fbe618",
+      "to": "n4d6ffc9990"
+    }
+  ],
+  "stats": {
+    "nodes": 11,
+    "unknown": 0
+  }
+}

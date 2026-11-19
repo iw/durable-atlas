@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Supplied",
+  "interface": "calls.Supplied",
+  "implementation": "calls.SuppliedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Supplied",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Supplied.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "na94fc3720b",
+      "kind": "unknown",
+      "label": "Chores.one",
+      "reason": "unresolved",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Supplied.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "na94fc3720b"
+    },
+    {
+      "from": "na94fc3720b",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 3,
+    "unknown": 1
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Supplied.kt",
+        "line": 26
+      },
+      "text": "Stubs.activity(Chores::class.java)"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Supplied.kt",
+        "line": 30
+      },
+      "text": "Stubs.activity(Chores::class.java)"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Supplied.kt",
+        "line": 30
+      },
+      "text": "Stubs.activity(Chores::class.java).describe()"
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "ContinueAsNewWorkflow",
+  "interface": "com.example.fixture.workflows.primitives.ContinueAsNewWorkflow",
+  "implementation": "com.example.fixture.workflows.primitives.ContinueAsNewWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "ContinueAsNewWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n3df21a2ad6",
+      "kind": "timer",
+      "duration": "PT1S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ContinueAsNewWorkflow.kt",
+        "line": 16
+      }
+    },
+    {
+      "id": "n56b65e68bb",
+      "kind": "branch",
+      "label": "iteration >= limit",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ContinueAsNewWorkflow.kt",
+        "line": 17
+      }
+    },
+    {
+      "id": "n5a69236a33",
+      "kind": "branch",
+      "label": "iteration % 2 == 0",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ContinueAsNewWorkflow.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "n5c4e83cc5a",
+      "kind": "continueAsNew",
+      "name": "ContinueAsNewWorkflow",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ContinueAsNewWorkflow.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ContinueAsNewWorkflow.kt",
+        "line": 15
+      }
+    },
+    {
+      "id": "n875428586d",
+      "kind": "continueAsNew",
+      "name": "ContinueAsNewWorkflow",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/ContinueAsNewWorkflow.kt",
+        "line": 26
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n3df21a2ad6",
+      "to": "n56b65e68bb"
+    },
+    {
+      "from": "n56b65e68bb",
+      "to": "n5a69236a33",
+      "label": "no"
+    },
+    {
+      "from": "n56b65e68bb",
+      "to": "nedd528afe0",
+      "label": "yes"
+    },
+    {
+      "from": "n5a69236a33",
+      "to": "n5c4e83cc5a",
+      "label": "yes"
+    },
+    {
+      "from": "n5a69236a33",
+      "to": "n875428586d",
+      "label": "no"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n3df21a2ad6"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 0
+  }
+}

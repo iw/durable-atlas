@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "ComputedActivityNameWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 2,
+    "ambiguous": 0,
+    "unmapped": 1
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "ComputedActivityNameWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n9ed987fb7a",
+      "kind": "unknown",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "n9ed987fb7a",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n9ed987fb7a",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "neverHit": [],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [
+    {
+      "history": "ComputedActivityNameWorkflow.json",
+      "eventId": 5,
+      "eventType": "ActivityTaskScheduled",
+      "name": "ShipExpress",
+      "likelySources": [
+        "n9ed987fb7a"
+      ]
+    }
+  ],
+  "histories": [
+    {
+      "file": "ComputedActivityNameWorkflow.json",
+      "runId": "123eaf31-7063-4f2f-b042-62a79e26d87c",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 2,
+        "ambiguous": 0,
+        "unmapped": 1
+      }
+    }
+  ]
+}

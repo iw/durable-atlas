@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "FirstWins",
+  "interface": "constructs.FirstWins",
+  "implementation": "constructs.FirstWinsImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "FirstWins",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-approve",
+      "kind": "signal",
+      "name": "approve",
+      "start": "n62b63817dd",
+      "writes": [
+        "approved"
+      ]
+    },
+    {
+      "id": "signal-stop",
+      "kind": "signal",
+      "name": "stop",
+      "start": "nec6da4d85f",
+      "writes": [
+        "stopped"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n09b20e1877",
+      "kind": "activity",
+      "name": "Work",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/FirstWins.kt",
+        "line": 46
+      }
+    },
+    {
+      "id": "n62b63817dd",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/FirstWins.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/FirstWins.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "n8dfccfd16c",
+      "kind": "await",
+      "timeout": "PT1H",
+      "reads": [
+        "approved",
+        "stopped"
+      ],
+      "label": "approved or stopped",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/FirstWins.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "nb2fe49d2f1",
+      "kind": "end"
+    },
+    {
+      "id": "nc84adf83bc",
+      "kind": "activity",
+      "name": "CleanUp",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/FirstWins.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "nec6da4d85f",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/FirstWins.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf45401b72d",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n09b20e1877",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n62b63817dd",
+      "to": "nf45401b72d"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n8dfccfd16c"
+    },
+    {
+      "from": "n8dfccfd16c",
+      "to": "n09b20e1877",
+      "label": "approved"
+    },
+    {
+      "from": "n8dfccfd16c",
+      "to": "nc84adf83bc",
+      "label": "stopped"
+    },
+    {
+      "from": "n8dfccfd16c",
+      "to": "nedd528afe0",
+      "kind": "timeout"
+    },
+    {
+      "from": "nc84adf83bc",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nec6da4d85f",
+      "to": "nb2fe49d2f1"
+    },
+    {
+      "from": "signal-approve",
+      "to": "n8dfccfd16c",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-stop",
+      "to": "n8dfccfd16c",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 9,
+    "unknown": 0
+  }
+}

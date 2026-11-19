@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "EarlyReturnWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 6,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "EarlyReturnWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n21f701b112",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n3024f79c86",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "n5fc3635bbb",
+      "kind": "branch",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n9416f90c67",
+      "kind": "activity",
+      "name": "CheckAvailability",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n9dd6f4c019",
+      "kind": "branch",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n21f701b112",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n3024f79c86",
+      "to": "nedd528afe0",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n5fc3635bbb",
+      "to": "n21f701b112",
+      "label": "yes",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n5fc3635bbb",
+      "to": "n3024f79c86",
+      "label": "no",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n9dd6f4c019",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n9416f90c67",
+      "to": "n5fc3635bbb",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n9dd6f4c019",
+      "to": "n9416f90c67",
+      "label": "no",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n9dd6f4c019",
+      "to": "nedd528afe0",
+      "label": "yes",
+      "hits": 0,
+      "executions": 0
+    }
+  ],
+  "neverHit": [
+    "n3024f79c86"
+  ],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "EarlyReturnWorkflow.json",
+      "runId": "4f6b3915-59c5-4c39-8084-f9416a18a343",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 6,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

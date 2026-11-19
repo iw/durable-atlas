@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "InitSteps",
+  "interface": "constructs.InitSteps",
+  "implementation": "constructs.InitStepsImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "InitSteps",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n096172bf1d",
+      "kind": "activity",
+      "name": "Check",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/InitSteps.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "n323455f5c7",
+      "kind": "activity",
+      "name": "Report",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/InitSteps.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "n577a17b3cf",
+      "kind": "activity",
+      "name": "Prepare",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/InitSteps.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/InitSteps.kt",
+        "line": 45
+      }
+    },
+    {
+      "id": "ncca17a287e",
+      "kind": "branch",
+      "label": "!checked",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/InitSteps.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf02251e809",
+      "kind": "activity",
+      "name": "Work",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/InitSteps.kt",
+        "line": 46
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n096172bf1d",
+      "to": "ncca17a287e"
+    },
+    {
+      "from": "n323455f5c7",
+      "to": "nf02251e809"
+    },
+    {
+      "from": "n577a17b3cf",
+      "to": "n096172bf1d"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n577a17b3cf"
+    },
+    {
+      "from": "ncca17a287e",
+      "to": "n323455f5c7",
+      "label": "no"
+    },
+    {
+      "from": "ncca17a287e",
+      "to": "nf02251e809",
+      "label": "yes"
+    },
+    {
+      "from": "nf02251e809",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 0
+  }
+}

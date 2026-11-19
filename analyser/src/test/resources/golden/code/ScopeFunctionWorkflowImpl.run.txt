@@ -1,0 +1,77 @@
+block workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/ScopeFunctionWorkflow.kt:25
+  val reservationId: kotlin.String :27
+    call kotlin.run(kotlin.Function1) on T [library] <com.example.fixture.activities.InventoryActivities @io.temporal.activity.ActivityInterface, kotlin.String>: kotlin.String :27
+      on com.example.fixture.activities.InventoryActivities @io.temporal.activity.ActivityInterface
+      receiver
+        read com.example.fixture.workflows.controlflow.ScopeFunctionWorkflowImpl.inventory on this: com.example.fixture.activities.InventoryActivities :27
+      argument block `{ reserveStock(sku, 1) }`
+        lambda () :27
+          block :27
+            call com.example.fixture.activities.InventoryActivities.reserveStock(kotlin.String,kotlin.Int) [source]: kotlin.String :27
+              on com.example.fixture.activities.InventoryActivities @io.temporal.activity.ActivityInterface
+              argument sku `sku`
+                local sku: kotlin.String :27
+              argument quantity `1` = 1
+                literal 1 :27
+  call kotlin.also(kotlin.Function1) on T [library] <kotlin.String>: kotlin.String :32
+    on kotlin.String
+    receiver
+      call kotlin.let(kotlin.Function1) on T [library] <kotlin.String, kotlin.String>: kotlin.String :31
+        on kotlin.String
+        receiver
+          local orderId: kotlin.String :30
+        argument block `{ id -> payments.charge(id, 500) }`
+          lambda (id) :31
+            block :31
+              call com.example.fixture.activities.PaymentActivities.charge(kotlin.String,kotlin.Long) [source]: kotlin.String :31
+                on com.example.fixture.activities.PaymentActivities @io.temporal.activity.ActivityInterface(namePrefix = "Payment")
+                receiver
+                  read com.example.fixture.workflows.controlflow.ScopeFunctionWorkflowImpl.payments on this: com.example.fixture.activities.PaymentActivities :31
+                argument orderId `id`
+                  local id: kotlin.String :31
+                argument amountCents `500` = 500
+                  literal 500 :31
+    argument block `{ paymentId -> payments.capture(paymentId) }`
+      lambda (paymentId) :32
+        block :32
+          call com.example.fixture.activities.PaymentActivities.capture(kotlin.String) [source]: kotlin.Unit :32
+            on com.example.fixture.activities.PaymentActivities @io.temporal.activity.ActivityInterface(namePrefix = "Payment")
+            receiver
+              read com.example.fixture.workflows.controlflow.ScopeFunctionWorkflowImpl.payments on this: com.example.fixture.activities.PaymentActivities :32
+            argument paymentId `paymentId`
+              local paymentId: kotlin.String :32
+  call kotlin.with(T,kotlin.Function1) [library] <com.example.fixture.activities.NotificationActivities @io.temporal.activity.ActivityInterface(namePrefix = "Notify"), kotlin.Unit>: kotlin.Unit :35
+    argument receiver `notifications`
+      read com.example.fixture.workflows.controlflow.ScopeFunctionWorkflowImpl.notifications on this: com.example.fixture.activities.NotificationActivities :35
+    argument block `{ email(OPS_EMAIL, "order $orderId reserved") sms(WAREHOUSE_PHONE, "pick $sku")…`
+      lambda () :35
+        block :36
+          call com.example.fixture.activities.NotificationActivities.email(kotlin.String,kotlin.String) [source]: kotlin.Unit :36
+            on com.example.fixture.activities.NotificationActivities @io.temporal.activity.ActivityInterface(namePrefix = "Notify")
+            argument recipient `OPS_EMAIL` = "ops@example.com"
+              read com.example.fixture.helpers.OPS_EMAIL: kotlin.String = "ops@example.com" :36
+            argument message `"order $orderId reserved"`
+              other template `"order $orderId reserved"` :36
+                local orderId: kotlin.String :36
+          call com.example.fixture.activities.NotificationActivities.sms(kotlin.String,kotlin.String) [source]: kotlin.Unit :37
+            on com.example.fixture.activities.NotificationActivities @io.temporal.activity.ActivityInterface(namePrefix = "Notify")
+            argument recipient `WAREHOUSE_PHONE` = "+15550100"
+              read com.example.fixture.helpers.WAREHOUSE_PHONE: kotlin.String = "+15550100" :37
+            argument message `"pick $sku"`
+              other template `"pick $sku"` :37
+                local sku: kotlin.String :37
+  call kotlin.apply(kotlin.Function1) on T [library] <com.example.fixture.activities.ShippingActivities @io.temporal.activity.ActivityInterface>: com.example.fixture.activities.ShippingActivities :41
+    on com.example.fixture.activities.ShippingActivities @io.temporal.activity.ActivityInterface
+    receiver
+      read com.example.fixture.workflows.controlflow.ScopeFunctionWorkflowImpl.shipping on this: com.example.fixture.activities.ShippingActivities :41
+    argument block `{ shipItem(orderId, sku) }`
+      lambda () :41
+        block :41
+          call com.example.fixture.activities.ShippingActivities.shipItem(kotlin.String,kotlin.String) [source]: kotlin.String :41
+            on com.example.fixture.activities.ShippingActivities @io.temporal.activity.ActivityInterface
+            argument orderId `orderId`
+              local orderId: kotlin.String :41
+            argument sku `sku`
+              local sku: kotlin.String :41
+  return :43
+    local reservationId: kotlin.String :43

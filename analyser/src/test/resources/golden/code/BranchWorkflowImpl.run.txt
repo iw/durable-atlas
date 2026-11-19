@@ -1,0 +1,63 @@
+block workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/BranchWorkflow.kt:21
+  if `urgent` :23
+    condition
+      local urgent: kotlin.Boolean :23
+    then
+      block :23
+        call com.example.fixture.activities.NotificationActivities.sms(kotlin.String,kotlin.String) [source]: kotlin.Unit :24
+          on com.example.fixture.activities.NotificationActivities @io.temporal.activity.ActivityInterface(namePrefix = "Notify")
+          receiver
+            read com.example.fixture.workflows.controlflow.BranchWorkflowImpl.notifications on this: com.example.fixture.activities.NotificationActivities :24
+          argument recipient `WAREHOUSE_PHONE` = "+15550100"
+            read com.example.fixture.helpers.WAREHOUSE_PHONE: kotlin.String = "+15550100" :24
+          argument message `"urgent request"` = "urgent request"
+            literal "urgent request" :24
+    else
+      block :25
+        call io.temporal.workflow.Workflow.sleep(java.time.Duration) [library]: kotlin.Unit :26
+          argument duration `Duration.ofMinutes(1)`
+            call java.time.Duration.ofMinutes(kotlin.Long) [library]: java.time.Duration :26
+              argument minutes `1` = 1
+                literal 1 :26
+  when `channel` :30
+    subject
+      local channel: kotlin.String :30
+    branch `"email"` :31
+      condition
+        literal "email" :31
+      body
+        call com.example.fixture.activities.NotificationActivities.email(kotlin.String,kotlin.String) [source]: kotlin.Unit :31
+          on com.example.fixture.activities.NotificationActivities @io.temporal.activity.ActivityInterface(namePrefix = "Notify")
+          receiver
+            read com.example.fixture.workflows.controlflow.BranchWorkflowImpl.notifications on this: com.example.fixture.activities.NotificationActivities :31
+          argument recipient `OPS_EMAIL` = "ops@example.com"
+            read com.example.fixture.helpers.OPS_EMAIL: kotlin.String = "ops@example.com" :31
+          argument message `"request received"` = "request received"
+            literal "request received" :31
+    branch `"sms"` :32
+      condition
+        literal "sms" :32
+      body
+        call com.example.fixture.activities.NotificationActivities.sms(kotlin.String,kotlin.String) [source]: kotlin.Unit :32
+          on com.example.fixture.activities.NotificationActivities @io.temporal.activity.ActivityInterface(namePrefix = "Notify")
+          receiver
+            read com.example.fixture.workflows.controlflow.BranchWorkflowImpl.notifications on this: com.example.fixture.activities.NotificationActivities :32
+          argument recipient `WAREHOUSE_PHONE` = "+15550100"
+            read com.example.fixture.helpers.WAREHOUSE_PHONE: kotlin.String = "+15550100" :32
+          argument message `"request received"` = "request received"
+            literal "request received" :32
+    branch `else` :33
+      body
+        class kotlin.Unit :33
+  val label: kotlin.String :37
+    if `urgent` :37
+      condition
+        local urgent: kotlin.Boolean :37
+      then
+        literal "urgent" :37
+      else
+        literal "normal" :37
+  return :38
+    other template `"$channel/$label"` :38
+      local channel: kotlin.String :38
+      local label: kotlin.String :38

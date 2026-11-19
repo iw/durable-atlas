@@ -1,0 +1,325 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="atlas" width="1454" height="344" viewBox="0 0 1454 344" role="img" aria-label="Workflow diagram: TriedWorkflow, implemented by com.example.TriedWorkflowImpl">
+<title>TriedWorkflow · com.example.TriedWorkflowImpl</title>
+<metadata>
+<atlas:diagram xmlns:atlas="urn:durable-atlas:svg-diagram:1" workflowType="TriedWorkflow" interface="com.example.TriedWorkflow" implementation="com.example.TriedWorkflowImpl" module=":made" commit="0000000000000000000000000000000000000000" modelMode="gradle" nodes="15" unknownNodes="0" collapsedRegions="0" simplified="near" timeLimit="PT30S">
+<atlas:layout>{"width":1422.0,"height":237.0,"regions":[],"nodes":[{"id":"start","kind":"start","shape":"pill","box":{"x":0.0,"y":2.0,"width":120.0,"height":56.0},"kindLabel":"START","name":["Start"],"entryPoints":["main"]},{"id":"a0001","kind":"activity","shape":"card","box":{"x":156.0,"y":0.0,"width":150.0,"height":60.0},"kindLabel":"ACTIVITY","name":["RunStep1"]},{"id":"a0002","kind":"activity","shape":"card","box":{"x":342.0,"y":0.0,"width":150.0,"height":60.0},"kindLabel":"ACTIVITY","name":["RunStep2"]},{"id":"a0003","kind":"activity","shape":"card","box":{"x":528.0,"y":0.0,"width":150.0,"height":60.0},"kindLabel":"ACTIVITY","name":["RunStep3"]},{"id":"a0004","kind":"activity","shape":"card","box":{"x":714.0,"y":0.0,"width":150.0,"height":60.0},"kindLabel":"ACTIVITY","name":["RunStep4"]},{"id":"a0005","kind":"activity","shape":"card","box":{"x":900.0,"y":0.0,"width":150.0,"height":60.0},"kindLabel":"ACTIVITY","name":["RunStep5"]},{"id":"a0006","kind":"activity","shape":"card","box":{"x":1086.0,"y":0.0,"width":150.0,"height":60.0},"kindLabel":"ACTIVITY","name":["RunStep6"]},{"id":"a0007","kind":"activity","shape":"card","box":{"x":1272.0,"y":0.0,"width":150.0,"height":60.0},"kindLabel":"ACTIVITY","name":["RunStep7"]},{"id":"a0008","kind":"activity","shape":"card","box":{"x":0.0,"y":163.0,"width":150.0,"height":60.0},"kindLabel":"ACTIVITY","name":["RunStep8"]},{"id":"a0009","kind":"activity","shape":"card","box":{"x":186.0,"y":163.0,"width":150.0,"height":60.0},"kindLabel":"ACTIVITY","name":["RunStep9"]},{"id":"a0010","kind":"activity","shape":"card","box":{"x":372.0,"y":163.0,"width":150.0,"height":60.0},"kindLabel":"ACTIVITY","name":["RunStep10"]},{"id":"a0011","kind":"activity","shape":"card","box":{"x":558.0,"y":163.0,"width":150.0,"height":60.0},"kindLabel":"ACTIVITY","name":["RunStep11"]},{"id":"a0012","kind":"activity","shape":"card","box":{"x":744.0,"y":163.0,"width":150.0,"height":60.0},"kindLabel":"ACTIVITY","name":["RunStep12"]},{"id":"end","kind":"end","shape":"pill","box":{"x":1193.2,"y":165.0,"width":136.0,"height":56.0},"kindLabel":"TERMINAL","name":["Complete"]},{"id":"c01","kind":"activity","shape":"card","box":{"x":981.2,"y":119.0,"width":176.0,"height":60.0},"kindLabel":"ACTIVITY","name":["HandleFailure1"]}],"edges":[{"from":"start","to":"a0001","kind":"flow","path":"M120 30H154","sources":[25]},{"from":"a0001","to":"a0002","kind":"flow","path":"M306 30H340","sources":[0]},{"from":"a0002","to":"a0003","kind":"flow","path":"M492 30H526","sources":[2]},{"from":"a0003","to":"a0004","kind":"flow","path":"M678 30H712","sources":[4]},{"from":"a0004","to":"a0005","kind":"flow","path":"M864 30H898","sources":[6]},{"from":"a0005","to":"a0006","kind":"flow","path":"M1050 30H1084","sources":[8]},{"from":"a0006","to":"a0007","kind":"flow","path":"M1236 30H1270","sources":[10]},{"from":"a0008","to":"a0009","kind":"flow","path":"M150 193H184","sources":[14]},{"from":"a0008","to":"c01","kind":"exception","path":"M150 193H168V237H920V178H963.2V149H979.2","sources":[15]},{"from":"a0009","to":"a0010","kind":"flow","path":"M336 193H370","sources":[16]},{"from":"a0009","to":"c01","kind":"exception","path":"M336 193H354V237H920V178H963.2V149H979.2","sources":[17]},{"from":"a0010","to":"a0011","kind":"flow","path":"M522 193H556","sources":[18]},{"from":"a0010","to":"c01","kind":"exception","path":"M522 193H540V237H920V178H963.2V149H979.2","sources":[19]},{"from":"a0011","to":"a0012","kind":"flow","path":"M708 193H742","sources":[20]},{"from":"a0011","to":"c01","kind":"exception","path":"M708 193H726V237H920V178H963.2V149H979.2","sources":[21]},{"from":"a0012","to":"end","kind":"flow","path":"M894 193H1191.2","sources":[23]},{"from":"a0012","to":"c01","kind":"exception","path":"M894 193H912V237H920V178H963.2V149H979.2","label":{"text":"Failure1","box":{"x":904.0,"y":155.0,"width":55.2,"height":16.0}},"sources":[22]},{"from":"c01","to":"end","kind":"flow","path":"M1157.2 149H1175.2V193H1191.2","sources":[24]},{"from":"a0007","to":"a0008","kind":"flow","path":"M1347 60V82H75V161","sources":[12]},{"from":"a0001","to":"c01","kind":"exception","path":"M231 60V91H1069.2V117","label":{"text":"Failure1","box":{"x":1013.2,"y":97.0,"width":55.2,"height":16.0}},"sources":[1]},{"from":"a0002","to":"c01","kind":"exception","path":"M417 60V91H1069.2V117","sources":[3]},{"from":"a0003","to":"c01","kind":"exception","path":"M603 60V91H1069.2V117","sources":[5]},{"from":"a0004","to":"c01","kind":"exception","path":"M789 60V91H1069.2V117","sources":[7]},{"from":"a0005","to":"c01","kind":"exception","path":"M975 60V91H1069.2V117","sources":[9]},{"from":"a0006","to":"c01","kind":"exception","path":"M1161 60V91H1069.2V117","sources":[11]},{"from":"a0007","to":"c01","kind":"exception","path":"M1365 60V91H1069.2V117","sources":[13]}],"rows":[{"x":0.0,"y":0.0,"width":1422.0,"height":60.0},{"x":0.0,"y":119.0,"width":1329.2,"height":118.0}]}</atlas:layout>
+</atlas:diagram>
+</metadata>
+<defs>
+<style>
+.atlas text{font-family:Inter,system-ui,Arial,sans-serif}
+.atlas .k{font-size:10.5px;font-weight:700;letter-spacing:0.07em}
+.atlas .n{font-size:14.5px;font-weight:600;fill:#101820}
+.atlas .pill .n{fill:#fff}
+.atlas .pill .k{fill:#fff;fill-opacity:0.72}
+.atlas .el{font-size:12px;font-weight:600;text-anchor:middle}
+.atlas .e{fill:none;stroke-width:1.7}
+.atlas .timeout .e{stroke-dasharray:6 4}
+.atlas .wakes .e{stroke-dasharray:1.5 4;stroke-linecap:round}
+.atlas .highlighted .e{stroke-width:2.8}
+.atlas .lg{font-size:12.5px;font-weight:500;fill:#1F2933}
+.atlas .lt{font-size:10.5px;font-weight:700;letter-spacing:0.1em;fill:#5B6472}
+.atlas .ht{font-size:14.5px;font-weight:600;fill:#101820}
+.atlas .hi{font-size:12.5px;font-weight:500;fill:#5B6472}
+.atlas .note{font-size:12.5px;font-weight:600}
+.atlas .badge{font-size:10.5px;font-weight:700;text-anchor:middle;fill:#fff}
+</style>
+<filter id="atlas-shadow" x="-10%" y="-20%" width="120%" height="150%"><feGaussianBlur in="SourceAlpha" stdDeviation="1.5"/><feOffset dy="1" result="blur"/><feFlood flood-color="#101820" flood-opacity="0.1"/><feComposite in2="blur" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<marker id="atlas-arrow-flow" viewBox="0 0 10 10" refX="8.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="11.9" markerHeight="11.9" orient="auto"><path d="M1 1.5L9 5 1 8.5z" fill="#344054"/></marker>
+<marker id="atlas-arrow-exception" viewBox="0 0 10 10" refX="8.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="11.9" markerHeight="11.9" orient="auto"><path d="M1 1.5L9 5 1 8.5z" fill="#B42318"/></marker>
+<marker id="atlas-arrow-timeout" viewBox="0 0 10 10" refX="8.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="11.9" markerHeight="11.9" orient="auto"><path d="M1 1.5L9 5 1 8.5z" fill="#B45309"/></marker>
+<marker id="atlas-arrow-wakes" viewBox="0 0 10 10" refX="8.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="11.9" markerHeight="11.9" orient="auto"><path d="M1 1.5L9 5 1 8.5z" fill="#15803D"/></marker>
+<marker id="atlas-arrow-muted" viewBox="0 0 10 10" refX="8.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="11.9" markerHeight="11.9" orient="auto"><path d="M1 1.5L9 5 1 8.5z" fill="#98A2B3"/></marker>
+<symbol id="atlas-icon-start" viewBox="0 0 20 20"><path d='M7 4.5l9 5.5-9 5.5z' fill='#fff'/></symbol>
+<symbol id="atlas-icon-activity" viewBox="0 0 20 20"><path d='M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z' fill='#fff'/></symbol>
+<symbol id="atlas-icon-end" viewBox="0 0 20 20"><path d='M4.5 10.5l3.8 3.8 7.4-8' stroke='#fff' stroke-width='2.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></symbol>
+</defs>
+<rect class="paper" width="1454" height="344" fill="#F6F4EE"/>
+<g class="diagram" transform="translate(16 16)">
+<g class="regions">
+</g>
+<g class="edges">
+<g class="edge flow" data-from="start" data-to="a0001" data-kind="flow">
+<title>Start → RunStep1</title>
+<path class="e" d="M120 30H154" stroke="#344054" marker-end="url(#atlas-arrow-flow)"/>
+</g>
+<g class="edge flow" data-from="a0001" data-to="a0002" data-kind="flow">
+<title>RunStep1 → RunStep2</title>
+<path class="e" d="M306 30H340" stroke="#344054" marker-end="url(#atlas-arrow-flow)"/>
+</g>
+<g class="edge flow" data-from="a0002" data-to="a0003" data-kind="flow">
+<title>RunStep2 → RunStep3</title>
+<path class="e" d="M492 30H526" stroke="#344054" marker-end="url(#atlas-arrow-flow)"/>
+</g>
+<g class="edge flow" data-from="a0003" data-to="a0004" data-kind="flow">
+<title>RunStep3 → RunStep4</title>
+<path class="e" d="M678 30H712" stroke="#344054" marker-end="url(#atlas-arrow-flow)"/>
+</g>
+<g class="edge flow" data-from="a0004" data-to="a0005" data-kind="flow">
+<title>RunStep4 → RunStep5</title>
+<path class="e" d="M864 30H898" stroke="#344054" marker-end="url(#atlas-arrow-flow)"/>
+</g>
+<g class="edge flow" data-from="a0005" data-to="a0006" data-kind="flow">
+<title>RunStep5 → RunStep6</title>
+<path class="e" d="M1050 30H1084" stroke="#344054" marker-end="url(#atlas-arrow-flow)"/>
+</g>
+<g class="edge flow" data-from="a0006" data-to="a0007" data-kind="flow">
+<title>RunStep6 → RunStep7</title>
+<path class="e" d="M1236 30H1270" stroke="#344054" marker-end="url(#atlas-arrow-flow)"/>
+</g>
+<g class="edge flow" data-from="a0008" data-to="a0009" data-kind="flow">
+<title>RunStep8 → RunStep9</title>
+<path class="e" d="M150 193H184" stroke="#344054" marker-end="url(#atlas-arrow-flow)"/>
+</g>
+<g class="edge exception" data-from="a0008" data-to="c01" data-kind="exception">
+<title>RunStep8 → HandleFailure1: exception, Failure1</title>
+<path class="e" d="M150 193H168V237H920V178H963.2V149H979.2" stroke="#B42318" marker-end="url(#atlas-arrow-exception)"/>
+</g>
+<g class="edge flow" data-from="a0009" data-to="a0010" data-kind="flow">
+<title>RunStep9 → RunStep10</title>
+<path class="e" d="M336 193H370" stroke="#344054" marker-end="url(#atlas-arrow-flow)"/>
+</g>
+<g class="edge exception" data-from="a0009" data-to="c01" data-kind="exception">
+<title>RunStep9 → HandleFailure1: exception, Failure1</title>
+<path class="e" d="M336 193H354V237H920V178H963.2V149H979.2" stroke="#B42318" marker-end="url(#atlas-arrow-exception)"/>
+</g>
+<g class="edge flow" data-from="a0010" data-to="a0011" data-kind="flow">
+<title>RunStep10 → RunStep11</title>
+<path class="e" d="M522 193H556" stroke="#344054" marker-end="url(#atlas-arrow-flow)"/>
+</g>
+<g class="edge exception" data-from="a0010" data-to="c01" data-kind="exception">
+<title>RunStep10 → HandleFailure1: exception, Failure1</title>
+<path class="e" d="M522 193H540V237H920V178H963.2V149H979.2" stroke="#B42318" marker-end="url(#atlas-arrow-exception)"/>
+</g>
+<g class="edge flow" data-from="a0011" data-to="a0012" data-kind="flow">
+<title>RunStep11 → RunStep12</title>
+<path class="e" d="M708 193H742" stroke="#344054" marker-end="url(#atlas-arrow-flow)"/>
+</g>
+<g class="edge exception" data-from="a0011" data-to="c01" data-kind="exception">
+<title>RunStep11 → HandleFailure1: exception, Failure1</title>
+<path class="e" d="M708 193H726V237H920V178H963.2V149H979.2" stroke="#B42318" marker-end="url(#atlas-arrow-exception)"/>
+</g>
+<g class="edge flow" data-from="a0012" data-to="end" data-kind="flow">
+<title>RunStep12 → Complete</title>
+<path class="e" d="M894 193H1191.2" stroke="#344054" marker-end="url(#atlas-arrow-flow)"/>
+</g>
+<g class="edge exception" data-from="a0012" data-to="c01" data-kind="exception">
+<title>RunStep12 → HandleFailure1: exception, Failure1</title>
+<path class="e" d="M894 193H912V237H920V178H963.2V149H979.2" stroke="#B42318" marker-end="url(#atlas-arrow-exception)"/>
+</g>
+<g class="edge flow" data-from="c01" data-to="end" data-kind="flow">
+<title>HandleFailure1 → Complete</title>
+<path class="e" d="M1157.2 149H1175.2V193H1191.2" stroke="#344054" marker-end="url(#atlas-arrow-flow)"/>
+</g>
+<g class="edge flow" data-from="a0007" data-to="a0008" data-kind="flow">
+<title>RunStep7 → RunStep8</title>
+<path class="e" d="M1347 60V82H75V161" stroke="#344054" marker-end="url(#atlas-arrow-flow)"/>
+</g>
+<g class="edge exception" data-from="a0001" data-to="c01" data-kind="exception">
+<title>RunStep1 → HandleFailure1: exception, Failure1</title>
+<path class="e" d="M231 60V91H1069.2V117" stroke="#B42318" marker-end="url(#atlas-arrow-exception)"/>
+</g>
+<g class="edge exception" data-from="a0002" data-to="c01" data-kind="exception">
+<title>RunStep2 → HandleFailure1: exception, Failure1</title>
+<path class="e" d="M417 60V91H1069.2V117" stroke="#B42318" marker-end="url(#atlas-arrow-exception)"/>
+</g>
+<g class="edge exception" data-from="a0003" data-to="c01" data-kind="exception">
+<title>RunStep3 → HandleFailure1: exception, Failure1</title>
+<path class="e" d="M603 60V91H1069.2V117" stroke="#B42318" marker-end="url(#atlas-arrow-exception)"/>
+</g>
+<g class="edge exception" data-from="a0004" data-to="c01" data-kind="exception">
+<title>RunStep4 → HandleFailure1: exception, Failure1</title>
+<path class="e" d="M789 60V91H1069.2V117" stroke="#B42318" marker-end="url(#atlas-arrow-exception)"/>
+</g>
+<g class="edge exception" data-from="a0005" data-to="c01" data-kind="exception">
+<title>RunStep5 → HandleFailure1: exception, Failure1</title>
+<path class="e" d="M975 60V91H1069.2V117" stroke="#B42318" marker-end="url(#atlas-arrow-exception)"/>
+</g>
+<g class="edge exception" data-from="a0006" data-to="c01" data-kind="exception">
+<title>RunStep6 → HandleFailure1: exception, Failure1</title>
+<path class="e" d="M1161 60V91H1069.2V117" stroke="#B42318" marker-end="url(#atlas-arrow-exception)"/>
+</g>
+<g class="edge exception" data-from="a0007" data-to="c01" data-kind="exception">
+<title>RunStep7 → HandleFailure1: exception, Failure1</title>
+<path class="e" d="M1365 60V91H1069.2V117" stroke="#B42318" marker-end="url(#atlas-arrow-exception)"/>
+</g>
+</g>
+<g class="nodes">
+<g id="start" data-kind="start" class="node pill" data-entry-points="[&quot;main&quot;]">
+<title>START: Start</title>
+<rect x="0" y="2" width="120" height="56" rx="28" fill="#101820" filter="url(#atlas-shadow)"/>
+<use xlink:href="#atlas-icon-start" x="14" y="19" width="22" height="22"/>
+<text class="k" x="46" y="24.5">START</text>
+<text class="n" x="46" y="42.6">Start</text>
+</g>
+<g id="a0001" data-kind="activity" class="node">
+<title>ACTIVITY: RunStep1</title>
+<rect x="156" y="0" width="150" height="60" rx="10" fill="#fff" filter="url(#atlas-shadow)"/>
+<path d="M166 0H200V60H166A10 10 0 0 1 156 50V10A10 10 0 0 1 166 0Z" fill="#2563EB"/>
+<rect x="156.8" y="0.8" width="148.5" height="58.5" rx="9.3" fill="none" stroke="#2563EB" stroke-width="1.5"/>
+<use xlink:href="#atlas-icon-activity" x="167" y="19" width="22" height="22"/>
+<text class="k" x="211" y="24.5" fill="#2563EB">ACTIVITY</text>
+<text class="n" x="211" y="42.6">RunStep1</text>
+</g>
+<g id="a0002" data-kind="activity" class="node">
+<title>ACTIVITY: RunStep2</title>
+<rect x="342" y="0" width="150" height="60" rx="10" fill="#fff" filter="url(#atlas-shadow)"/>
+<path d="M352 0H386V60H352A10 10 0 0 1 342 50V10A10 10 0 0 1 352 0Z" fill="#2563EB"/>
+<rect x="342.8" y="0.8" width="148.5" height="58.5" rx="9.3" fill="none" stroke="#2563EB" stroke-width="1.5"/>
+<use xlink:href="#atlas-icon-activity" x="353" y="19" width="22" height="22"/>
+<text class="k" x="397" y="24.5" fill="#2563EB">ACTIVITY</text>
+<text class="n" x="397" y="42.6">RunStep2</text>
+</g>
+<g id="a0003" data-kind="activity" class="node">
+<title>ACTIVITY: RunStep3</title>
+<rect x="528" y="0" width="150" height="60" rx="10" fill="#fff" filter="url(#atlas-shadow)"/>
+<path d="M538 0H572V60H538A10 10 0 0 1 528 50V10A10 10 0 0 1 538 0Z" fill="#2563EB"/>
+<rect x="528.8" y="0.8" width="148.5" height="58.5" rx="9.3" fill="none" stroke="#2563EB" stroke-width="1.5"/>
+<use xlink:href="#atlas-icon-activity" x="539" y="19" width="22" height="22"/>
+<text class="k" x="583" y="24.5" fill="#2563EB">ACTIVITY</text>
+<text class="n" x="583" y="42.6">RunStep3</text>
+</g>
+<g id="a0004" data-kind="activity" class="node">
+<title>ACTIVITY: RunStep4</title>
+<rect x="714" y="0" width="150" height="60" rx="10" fill="#fff" filter="url(#atlas-shadow)"/>
+<path d="M724 0H758V60H724A10 10 0 0 1 714 50V10A10 10 0 0 1 724 0Z" fill="#2563EB"/>
+<rect x="714.8" y="0.8" width="148.5" height="58.5" rx="9.3" fill="none" stroke="#2563EB" stroke-width="1.5"/>
+<use xlink:href="#atlas-icon-activity" x="725" y="19" width="22" height="22"/>
+<text class="k" x="769" y="24.5" fill="#2563EB">ACTIVITY</text>
+<text class="n" x="769" y="42.6">RunStep4</text>
+</g>
+<g id="a0005" data-kind="activity" class="node">
+<title>ACTIVITY: RunStep5</title>
+<rect x="900" y="0" width="150" height="60" rx="10" fill="#fff" filter="url(#atlas-shadow)"/>
+<path d="M910 0H944V60H910A10 10 0 0 1 900 50V10A10 10 0 0 1 910 0Z" fill="#2563EB"/>
+<rect x="900.8" y="0.8" width="148.5" height="58.5" rx="9.3" fill="none" stroke="#2563EB" stroke-width="1.5"/>
+<use xlink:href="#atlas-icon-activity" x="911" y="19" width="22" height="22"/>
+<text class="k" x="955" y="24.5" fill="#2563EB">ACTIVITY</text>
+<text class="n" x="955" y="42.6">RunStep5</text>
+</g>
+<g id="a0006" data-kind="activity" class="node">
+<title>ACTIVITY: RunStep6</title>
+<rect x="1086" y="0" width="150" height="60" rx="10" fill="#fff" filter="url(#atlas-shadow)"/>
+<path d="M1096 0H1130V60H1096A10 10 0 0 1 1086 50V10A10 10 0 0 1 1096 0Z" fill="#2563EB"/>
+<rect x="1086.8" y="0.8" width="148.5" height="58.5" rx="9.3" fill="none" stroke="#2563EB" stroke-width="1.5"/>
+<use xlink:href="#atlas-icon-activity" x="1097" y="19" width="22" height="22"/>
+<text class="k" x="1141" y="24.5" fill="#2563EB">ACTIVITY</text>
+<text class="n" x="1141" y="42.6">RunStep6</text>
+</g>
+<g id="a0007" data-kind="activity" class="node">
+<title>ACTIVITY: RunStep7</title>
+<rect x="1272" y="0" width="150" height="60" rx="10" fill="#fff" filter="url(#atlas-shadow)"/>
+<path d="M1282 0H1316V60H1282A10 10 0 0 1 1272 50V10A10 10 0 0 1 1282 0Z" fill="#2563EB"/>
+<rect x="1272.8" y="0.8" width="148.5" height="58.5" rx="9.3" fill="none" stroke="#2563EB" stroke-width="1.5"/>
+<use xlink:href="#atlas-icon-activity" x="1283" y="19" width="22" height="22"/>
+<text class="k" x="1327" y="24.5" fill="#2563EB">ACTIVITY</text>
+<text class="n" x="1327" y="42.6">RunStep7</text>
+</g>
+<g id="a0008" data-kind="activity" class="node">
+<title>ACTIVITY: RunStep8</title>
+<rect x="0" y="163" width="150" height="60" rx="10" fill="#fff" filter="url(#atlas-shadow)"/>
+<path d="M10 163H44V223H10A10 10 0 0 1 0 213V173A10 10 0 0 1 10 163Z" fill="#2563EB"/>
+<rect x="0.8" y="163.8" width="148.5" height="58.5" rx="9.3" fill="none" stroke="#2563EB" stroke-width="1.5"/>
+<use xlink:href="#atlas-icon-activity" x="11" y="182" width="22" height="22"/>
+<text class="k" x="55" y="187.5" fill="#2563EB">ACTIVITY</text>
+<text class="n" x="55" y="205.6">RunStep8</text>
+</g>
+<g id="a0009" data-kind="activity" class="node">
+<title>ACTIVITY: RunStep9</title>
+<rect x="186" y="163" width="150" height="60" rx="10" fill="#fff" filter="url(#atlas-shadow)"/>
+<path d="M196 163H230V223H196A10 10 0 0 1 186 213V173A10 10 0 0 1 196 163Z" fill="#2563EB"/>
+<rect x="186.8" y="163.8" width="148.5" height="58.5" rx="9.3" fill="none" stroke="#2563EB" stroke-width="1.5"/>
+<use xlink:href="#atlas-icon-activity" x="197" y="182" width="22" height="22"/>
+<text class="k" x="241" y="187.5" fill="#2563EB">ACTIVITY</text>
+<text class="n" x="241" y="205.6">RunStep9</text>
+</g>
+<g id="a0010" data-kind="activity" class="node">
+<title>ACTIVITY: RunStep10</title>
+<rect x="372" y="163" width="150" height="60" rx="10" fill="#fff" filter="url(#atlas-shadow)"/>
+<path d="M382 163H416V223H382A10 10 0 0 1 372 213V173A10 10 0 0 1 382 163Z" fill="#2563EB"/>
+<rect x="372.8" y="163.8" width="148.5" height="58.5" rx="9.3" fill="none" stroke="#2563EB" stroke-width="1.5"/>
+<use xlink:href="#atlas-icon-activity" x="383" y="182" width="22" height="22"/>
+<text class="k" x="427" y="187.5" fill="#2563EB">ACTIVITY</text>
+<text class="n" x="427" y="205.6">RunStep10</text>
+</g>
+<g id="a0011" data-kind="activity" class="node">
+<title>ACTIVITY: RunStep11</title>
+<rect x="558" y="163" width="150" height="60" rx="10" fill="#fff" filter="url(#atlas-shadow)"/>
+<path d="M568 163H602V223H568A10 10 0 0 1 558 213V173A10 10 0 0 1 568 163Z" fill="#2563EB"/>
+<rect x="558.8" y="163.8" width="148.5" height="58.5" rx="9.3" fill="none" stroke="#2563EB" stroke-width="1.5"/>
+<use xlink:href="#atlas-icon-activity" x="569" y="182" width="22" height="22"/>
+<text class="k" x="613" y="187.5" fill="#2563EB">ACTIVITY</text>
+<text class="n" x="613" y="205.6">RunStep11</text>
+</g>
+<g id="a0012" data-kind="activity" class="node">
+<title>ACTIVITY: RunStep12</title>
+<rect x="744" y="163" width="150" height="60" rx="10" fill="#fff" filter="url(#atlas-shadow)"/>
+<path d="M754 163H788V223H754A10 10 0 0 1 744 213V173A10 10 0 0 1 754 163Z" fill="#2563EB"/>
+<rect x="744.8" y="163.8" width="148.5" height="58.5" rx="9.3" fill="none" stroke="#2563EB" stroke-width="1.5"/>
+<use xlink:href="#atlas-icon-activity" x="755" y="182" width="22" height="22"/>
+<text class="k" x="799" y="187.5" fill="#2563EB">ACTIVITY</text>
+<text class="n" x="799" y="205.6">RunStep12</text>
+</g>
+<g id="end" data-kind="end" class="node pill">
+<title>TERMINAL: Complete</title>
+<rect x="1193.2" y="165" width="136" height="56" rx="28" fill="#166534" filter="url(#atlas-shadow)"/>
+<use xlink:href="#atlas-icon-end" x="1207.2" y="182" width="22" height="22"/>
+<text class="k" x="1239.2" y="187.5">TERMINAL</text>
+<text class="n" x="1239.2" y="205.6">Complete</text>
+</g>
+<g id="c01" data-kind="activity" class="node">
+<title>ACTIVITY: HandleFailure1</title>
+<rect x="981.2" y="119" width="176" height="60" rx="10" fill="#fff" filter="url(#atlas-shadow)"/>
+<path d="M991.2 119H1025.2V179H991.2A10 10 0 0 1 981.2 169V129A10 10 0 0 1 991.2 119Z" fill="#2563EB"/>
+<rect x="982" y="119.8" width="174.5" height="58.5" rx="9.3" fill="none" stroke="#2563EB" stroke-width="1.5"/>
+<use xlink:href="#atlas-icon-activity" x="992.2" y="138" width="22" height="22"/>
+<text class="k" x="1036.2" y="143.5" fill="#2563EB">ACTIVITY</text>
+<text class="n" x="1036.2" y="161.6">HandleFailure1</text>
+</g>
+</g>
+<g class="edge-labels">
+<g class="edge-label exception" data-from="a0012" data-to="c01" data-kind="exception">
+<title>Failure1</title>
+<rect x="904" y="155" width="55.2" height="16" rx="3" fill="#F6F4EE"/>
+<text class="el" x="931.6" y="167.4" fill="#B42318">Failure1</text>
+</g>
+<g class="edge-label exception" data-from="a0001" data-to="c01" data-kind="exception">
+<title>Failure1</title>
+<rect x="1013.2" y="97" width="55.2" height="16" rx="3" fill="#F6F4EE"/>
+<text class="el" x="1040.8" y="109.4" fill="#B42318">Failure1</text>
+</g>
+</g>
+</g>
+<g class="notes">
+<text class="note" x="16" y="275.5" fill="#475569">Looking for the best breaks between the rows of this diagram took longer than the limit of 30 s, so each was chosen with the steps near it in view, not all that follow it.</text>
+</g>
+<g class="legend" transform="translate(0 299)">
+<path d="M0 0.8H1454" fill="none" stroke="#D9D4C7" stroke-width="1.5"/>
+<text class="lt" x="20" y="23.2">LEGEND</text>
+<g class="legend-entry" data-kind="start">
+<rect x="104" y="9" width="20" height="20" rx="5" fill="#101820"/>
+<use xlink:href="#atlas-icon-start" x="107" y="12" width="14" height="14"/>
+<text class="lg" x="131" y="23.5">Workflow start</text>
+</g>
+<g class="legend-entry" data-kind="activity">
+<rect x="314" y="9" width="20" height="20" rx="5" fill="#2563EB"/>
+<use xlink:href="#atlas-icon-activity" x="317" y="12" width="14" height="14"/>
+<text class="lg" x="341" y="23.5">Activity</text>
+</g>
+<g class="legend-entry" data-kind="end">
+<rect x="524" y="9" width="20" height="20" rx="5" fill="#166534"/>
+<use xlink:href="#atlas-icon-end" x="527" y="12" width="14" height="14"/>
+<text class="lg" x="551" y="23.5">Complete</text>
+</g>
+<g class="legend-entry" data-kind="flow">
+<g class="flow"><path class="e" d="M735 19H756" stroke="#344054"/></g>
+<path d="M755 15l7 4-7 4z" fill="#344054"/>
+<text class="lg" x="771" y="23.5">Flow</text>
+</g>
+<g class="legend-entry" data-kind="exception">
+<g class="exception"><path class="e" d="M945 19H966" stroke="#B42318"/></g>
+<path d="M965 15l7 4-7 4z" fill="#B42318"/>
+<text class="lg" x="981" y="23.5">Exception</text>
+</g>
+</g>
+</svg>

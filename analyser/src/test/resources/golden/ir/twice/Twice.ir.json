@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Twice",
+  "interface": "shared.Twice",
+  "implementation": "shared.TwiceImpl",
+  "module": ":",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Twice",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "root/src/main/kotlin/a/Shared.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "ncecf752fa5",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "root/src/main/kotlin/a/Shared.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "nd5839fbae8",
+      "kind": "unknown",
+      "label": "Jobs.pack",
+      "reason": "unresolved",
+      "loc": {
+        "file": "root/src/main/kotlin/a/Shared.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "ncecf752fa5"
+    },
+    {
+      "from": "ncecf752fa5",
+      "to": "nd5839fbae8"
+    },
+    {
+      "from": "nd5839fbae8",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 1
+  }
+}

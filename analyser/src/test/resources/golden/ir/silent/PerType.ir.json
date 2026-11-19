@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "PerType",
+  "interface": "silent.PerType",
+  "implementation": "silent.PerTypeImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "PerType",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/PerType.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "n828b7e9672",
+      "kind": "localActivity",
+      "name": "Notify",
+      "timeout": "PT8S",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/PerType.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "nbdad53b00a",
+      "kind": "activity",
+      "name": "Fetch",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/PerType.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "nbedecb6d5d",
+      "kind": "localActivity",
+      "name": "Fetch",
+      "timeout": "PT2S",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/PerType.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "ne18eca0fa1",
+      "kind": "activity",
+      "name": "Store",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/PerType.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "ne963159191",
+      "kind": "activity",
+      "name": "Store",
+      "timeout": "PT9S",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/PerType.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nff65cf6f5d",
+      "kind": "activity",
+      "name": "Fetch",
+      "taskQueue": "slow",
+      "timeout": "PT2M",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/PerType.kt",
+        "line": 32
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "nbdad53b00a"
+    },
+    {
+      "from": "n828b7e9672",
+      "to": "nbedecb6d5d"
+    },
+    {
+      "from": "nbdad53b00a",
+      "to": "nff65cf6f5d"
+    },
+    {
+      "from": "nbedecb6d5d",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "ne18eca0fa1",
+      "to": "ne963159191"
+    },
+    {
+      "from": "ne963159191",
+      "to": "n828b7e9672"
+    },
+    {
+      "from": "nff65cf6f5d",
+      "to": "ne18eca0fa1"
+    }
+  ],
+  "stats": {
+    "nodes": 8,
+    "unknown": 0
+  }
+}

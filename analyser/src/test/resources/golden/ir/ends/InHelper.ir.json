@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "InHelper",
+  "interface": "ends.InHelper",
+  "implementation": "ends.InHelperImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "InHelper",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n4e5d7d4f35",
+      "kind": "branch",
+      "label": "part == \"x\"",
+      "parent": "n67b2e937f1",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/InHelper.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n67b2e937f1",
+      "kind": "loop",
+      "label": "for each part",
+      "parent": "nacfcd63a24",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/InHelper.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/InHelper.kt",
+        "line": 17
+      }
+    },
+    {
+      "id": "n92e98fe736",
+      "kind": "activity",
+      "name": "Report",
+      "parent": "ne465d63212",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/InHelper.kt",
+        "line": 25
+      }
+    },
+    {
+      "id": "nacfcd63a24",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/InHelper.kt",
+        "line": 18
+      }
+    },
+    {
+      "id": "nb2a1413cce",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/InHelper.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "nc3f985944e",
+      "kind": "activity",
+      "name": "Prepare",
+      "parent": "nacfcd63a24",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/InHelper.kt",
+        "line": 19
+      }
+    },
+    {
+      "id": "nd45a6ea8a0",
+      "kind": "branch",
+      "label": "part.isEmpty()",
+      "parent": "ne465d63212",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/InHelper.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "ne465d63212",
+      "kind": "loop",
+      "label": "for each part",
+      "parent": "nb2a1413cce",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/InHelper.kt",
+        "line": 23
+      }
+    },
+    {
+      "id": "ne8798bc0ab",
+      "kind": "activity",
+      "name": "Work",
+      "parent": "n67b2e937f1",
+      "loc": {
+        "file": "app/src/main/kotlin/ends/InHelper.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n4e5d7d4f35",
+      "to": "nacfcd63a24",
+      "label": "yes"
+    },
+    {
+      "from": "n4e5d7d4f35",
+      "to": "ne8798bc0ab",
+      "label": "no"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nacfcd63a24"
+    },
+    {
+      "from": "nacfcd63a24",
+      "to": "nb2a1413cce"
+    },
+    {
+      "from": "nb2a1413cce",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nc3f985944e",
+      "to": "n67b2e937f1"
+    },
+    {
+      "from": "nd45a6ea8a0",
+      "to": "n92e98fe736",
+      "label": "no"
+    },
+    {
+      "from": "nd45a6ea8a0",
+      "to": "nb2a1413cce",
+      "label": "yes"
+    }
+  ],
+  "stats": {
+    "nodes": 11,
+    "unknown": 0
+  }
+}

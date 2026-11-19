@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Greeted",
+  "interface": "extensions.Greeted",
+  "implementation": "extensions.GreetedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Greeted",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n06dcfd6082",
+      "kind": "nexusOperation",
+      "name": "hello",
+      "service": "Greeter",
+      "timeout": "PT1M",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Greeted.kt",
+        "line": 64
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Greeted.kt",
+        "line": 64
+      }
+    },
+    {
+      "id": "n940a1d929e",
+      "kind": "nexusOperation",
+      "name": "hello",
+      "service": "Greeter",
+      "timeout": "PT5M",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Greeted.kt",
+        "line": 64
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n06dcfd6082",
+      "to": "n940a1d929e"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n06dcfd6082"
+    },
+    {
+      "from": "n940a1d929e",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 0
+  }
+}

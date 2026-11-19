@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Compensated",
+  "interface": "failing.Compensated",
+  "implementation": "failing.CompensatedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Compensated",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0bb9905a9f",
+      "kind": "compensation",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Compensated.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n2a58cf2531",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Compensated.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Compensated.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n6f5899f2b4",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Compensated.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "nc8d3b9617a",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "parent": "n0bb9905a9f",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Compensated.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nfcc0394e66",
+      "kind": "fail",
+      "name": "Exception",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Compensated.kt",
+        "line": 36
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0bb9905a9f",
+      "to": "nfcc0394e66"
+    },
+    {
+      "from": "n2a58cf2531",
+      "to": "n0bb9905a9f",
+      "kind": "exception",
+      "label": "Exception"
+    },
+    {
+      "from": "n2a58cf2531",
+      "to": "n6f5899f2b4"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n2a58cf2531"
+    },
+    {
+      "from": "n6f5899f2b4",
+      "to": "n0bb9905a9f",
+      "kind": "exception",
+      "label": "Exception"
+    },
+    {
+      "from": "n6f5899f2b4",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 0
+  }
+}

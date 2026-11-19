@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "CancelLater",
+  "interface": "patterns.CancelLater",
+  "implementation": "patterns.CancelLaterImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "CancelLater",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n03495dbbab",
+      "kind": "activity",
+      "name": "Report",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/CancelLater.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n3abe5d8709",
+      "kind": "timer",
+      "duration": "PT1M",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/CancelLater.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/CancelLater.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n6a7682ae80",
+      "kind": "cancelScope",
+      "label": "scope",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/CancelLater.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "ned32e12c28",
+      "kind": "activity",
+      "name": "Prepare",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/CancelLater.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n03495dbbab",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n3abe5d8709",
+      "to": "n6a7682ae80"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "ned32e12c28"
+    },
+    {
+      "from": "n6a7682ae80",
+      "to": "n03495dbbab"
+    },
+    {
+      "from": "n6a7682ae80",
+      "to": "ned32e12c28",
+      "kind": "cancels"
+    },
+    {
+      "from": "ned32e12c28",
+      "to": "n3abe5d8709"
+    }
+  ],
+  "stats": {
+    "nodes": 6,
+    "unknown": 0
+  }
+}

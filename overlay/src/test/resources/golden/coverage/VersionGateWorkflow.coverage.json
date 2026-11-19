@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "VersionGateWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 5,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "VersionGateWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n22e57ea5fa",
+      "kind": "versionGate",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nd3d92edabd",
+      "kind": "activity",
+      "name": "ShipExpress",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "ne6d87b7a44",
+      "kind": "activity",
+      "name": "ShipItem",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n22e57ea5fa",
+      "to": "nd3d92edabd",
+      "label": "v1",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n22e57ea5fa",
+      "to": "ne6d87b7a44",
+      "label": "default",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n22e57ea5fa",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "nd3d92edabd",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "ne6d87b7a44",
+      "to": "nedd528afe0",
+      "hits": 0,
+      "executions": 0
+    }
+  ],
+  "neverHit": [
+    "ne6d87b7a44"
+  ],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "VersionGateWorkflow.json",
+      "runId": "6ff97297-9327-4b4c-9b8d-869788568b9c",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 5,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

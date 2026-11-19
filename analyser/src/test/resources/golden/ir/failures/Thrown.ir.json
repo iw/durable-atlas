@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Thrown",
+  "interface": "failing.Thrown",
+  "implementation": "failing.ThrownImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Thrown",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n19ab894d1a",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Thrown.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n1d317d4ff9",
+      "kind": "loop",
+      "label": "for each index",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Thrown.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "n55b4029088",
+      "kind": "fail",
+      "name": "IllegalStateException",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Thrown.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Thrown.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n7ebdec6b33",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "parent": "n1d317d4ff9",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Thrown.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "n85fe6ab1b7",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Thrown.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "naee227b406",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Thrown.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "nb15bcb7f26",
+      "kind": "branch",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Thrown.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "nbf8e8a0e3e",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Thrown.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n19ab894d1a",
+      "to": "nb15bcb7f26"
+    },
+    {
+      "from": "n1d317d4ff9",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n19ab894d1a"
+    },
+    {
+      "from": "n85fe6ab1b7",
+      "to": "n55b4029088"
+    },
+    {
+      "from": "naee227b406",
+      "to": "n1d317d4ff9"
+    },
+    {
+      "from": "nb15bcb7f26",
+      "to": "n85fe6ab1b7",
+      "label": "count > 100"
+    },
+    {
+      "from": "nb15bcb7f26",
+      "to": "naee227b406",
+      "label": "else"
+    },
+    {
+      "from": "nb15bcb7f26",
+      "to": "nbf8e8a0e3e",
+      "label": "count == 0"
+    },
+    {
+      "from": "nbf8e8a0e3e",
+      "to": "naee227b406"
+    }
+  ],
+  "stats": {
+    "nodes": 10,
+    "unknown": 0
+  }
+}

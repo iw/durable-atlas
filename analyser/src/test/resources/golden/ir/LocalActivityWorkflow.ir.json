@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "LocalActivityWorkflow",
+  "interface": "com.example.fixture.workflows.primitives.LocalActivityWorkflow",
+  "implementation": "com.example.fixture.workflows.primitives.LocalActivityWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "LocalActivityWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n17cb2909d5",
+      "kind": "localActivity",
+      "name": "CheckAvailability",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/LocalActivityWorkflow.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/LocalActivityWorkflow.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "nb1641f9a4b",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/LocalActivityWorkflow.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n17cb2909d5",
+      "to": "nb1641f9a4b"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n17cb2909d5"
+    },
+    {
+      "from": "nb1641f9a4b",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 0
+  }
+}

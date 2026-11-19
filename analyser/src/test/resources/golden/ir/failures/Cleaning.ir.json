@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Cleaning",
+  "interface": "failing.Cleaning",
+  "implementation": "failing.CleaningImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Cleaning",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n64e6efffa3",
+      "kind": "fail",
+      "name": "NothingGiven",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cleaning.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cleaning.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n886d9ad62e",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cleaning.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n8ebd5a2acf",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cleaning.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "nbb92d93411",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cleaning.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "ncf9b74c7d0",
+      "kind": "branch",
+      "label": "input.isBlank()",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cleaning.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "nd09af9c100",
+      "kind": "branch",
+      "label": "input == \"stop\"",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cleaning.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf862aaf5eb",
+      "kind": "fail",
+      "name": "DomainFault",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cleaning.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "nfcc91b7056",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Cleaning.kt",
+        "line": 32
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "ncf9b74c7d0"
+    },
+    {
+      "from": "n886d9ad62e",
+      "to": "nd09af9c100"
+    },
+    {
+      "from": "n8ebd5a2acf",
+      "to": "n64e6efffa3"
+    },
+    {
+      "from": "nbb92d93411",
+      "to": "nf862aaf5eb"
+    },
+    {
+      "from": "ncf9b74c7d0",
+      "to": "n8ebd5a2acf",
+      "label": "yes"
+    },
+    {
+      "from": "ncf9b74c7d0",
+      "to": "nfcc91b7056",
+      "label": "no"
+    },
+    {
+      "from": "nd09af9c100",
+      "to": "nbb92d93411",
+      "label": "yes"
+    },
+    {
+      "from": "nd09af9c100",
+      "to": "nedd528afe0",
+      "label": "no"
+    },
+    {
+      "from": "nfcc91b7056",
+      "to": "n886d9ad62e"
+    }
+  ],
+  "stats": {
+    "nodes": 10,
+    "unknown": 0
+  }
+}

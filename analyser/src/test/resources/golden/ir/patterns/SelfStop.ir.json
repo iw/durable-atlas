@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "SelfStop",
+  "interface": "patterns.SelfStop",
+  "implementation": "patterns.SelfStopImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "SelfStop",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n11c14e306a",
+      "kind": "activity",
+      "name": "Work",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/SelfStop.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n1aad737e50",
+      "kind": "activity",
+      "name": "Report",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/SelfStop.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "n4671a54bb6",
+      "kind": "activity",
+      "name": "Check",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/SelfStop.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n46c0941b60",
+      "kind": "branch",
+      "label": "!tasks.check(id)",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/SelfStop.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n4d921bc687",
+      "kind": "cancelScope",
+      "label": "current scope",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/SelfStop.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "n4f0d3425dd",
+      "kind": "cancelScope",
+      "label": "scopes.first()",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/SelfStop.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/SelfStop.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n812a3a23e3",
+      "kind": "timer",
+      "duration": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/SelfStop.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "nb12af929c3",
+      "kind": "cancelScope",
+      "label": "current scope",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/SelfStop.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "nc7cd4be658",
+      "kind": "cancelScope",
+      "label": "own",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/SelfStop.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nfdc07a2705",
+      "kind": "activity",
+      "name": "Prepare",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/SelfStop.kt",
+        "line": 36
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n11c14e306a",
+      "to": "n4671a54bb6"
+    },
+    {
+      "from": "n1aad737e50",
+      "to": "n4f0d3425dd"
+    },
+    {
+      "from": "n4671a54bb6",
+      "to": "n46c0941b60"
+    },
+    {
+      "from": "n46c0941b60",
+      "to": "nb12af929c3",
+      "label": "yes"
+    },
+    {
+      "from": "n46c0941b60",
+      "to": "nfdc07a2705",
+      "label": "no"
+    },
+    {
+      "from": "n4d921bc687",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n4f0d3425dd",
+      "to": "n4d921bc687"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n11c14e306a"
+    },
+    {
+      "from": "n812a3a23e3",
+      "to": "nc7cd4be658"
+    },
+    {
+      "from": "nb12af929c3",
+      "to": "n11c14e306a",
+      "kind": "cancels"
+    },
+    {
+      "from": "nb12af929c3",
+      "to": "nfdc07a2705"
+    },
+    {
+      "from": "nc7cd4be658",
+      "to": "n1aad737e50"
+    },
+    {
+      "from": "nc7cd4be658",
+      "to": "nfdc07a2705",
+      "kind": "cancels"
+    },
+    {
+      "from": "nfdc07a2705",
+      "to": "n812a3a23e3"
+    }
+  ],
+  "stats": {
+    "nodes": 12,
+    "unknown": 0
+  }
+}

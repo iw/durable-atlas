@@ -1,0 +1,244 @@
+{
+  "schemaVersion": 1,
+  "commit": "3f786850e387550fdab836ed7e6dc881de23001b",
+  "modelMode": "gradle",
+  "workflowType": "TenderWorkflow",
+  "interface": "com.example.tender.TenderWorkflow",
+  "implementation": "com.example.tender.TenderWorkflowImpl",
+  "module": ":tender",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "TenderWorkflow",
+      "start": "t00"
+    },
+    {
+      "id": "signal-approve",
+      "kind": "signal",
+      "name": "approve",
+      "start": "t20",
+      "writes": [
+        "approval"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "t00",
+      "kind": "start",
+      "loc": {
+        "file": "tender/src/main/kotlin/com/example/tender/TenderWorkflowImpl.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "t01",
+      "kind": "upsertSearchAttributes",
+      "keys": [
+        "Stage"
+      ],
+      "otherKeys": true,
+      "loc": {
+        "file": "tender/src/main/kotlin/com/example/tender/TenderWorkflowImpl.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "t02",
+      "kind": "parallel",
+      "join": "first",
+      "loc": {
+        "file": "tender/src/main/kotlin/com/example/tender/TenderWorkflowImpl.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "t03",
+      "kind": "activity",
+      "name": "RequestQuote",
+      "timeout": "PT30S",
+      "parent": "t02",
+      "loc": {
+        "file": "tender/src/main/kotlin/com/example/tender/TenderWorkflowImpl.kt",
+        "line": 25
+      }
+    },
+    {
+      "id": "t04",
+      "kind": "activity",
+      "name": "RequestQuote",
+      "taskQueue": "partners",
+      "timeout": "PT30S",
+      "parent": "t02",
+      "loc": {
+        "file": "tender/src/main/kotlin/com/example/tender/TenderWorkflowImpl.kt",
+        "line": 26
+      }
+    },
+    {
+      "id": "t05",
+      "kind": "timer",
+      "duration": "PT1H",
+      "parent": "t02",
+      "loc": {
+        "file": "tender/src/main/kotlin/com/example/tender/TenderWorkflowImpl.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "t06",
+      "kind": "cancelScope",
+      "label": "quotes",
+      "loc": {
+        "file": "tender/src/main/kotlin/com/example/tender/TenderWorkflowImpl.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "t07",
+      "kind": "await",
+      "timeout": "PT10M",
+      "reads": [
+        "approval"
+      ],
+      "label": "approval.get()",
+      "loc": {
+        "file": "tender/src/main/kotlin/com/example/tender/TenderWorkflowImpl.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "t08",
+      "kind": "activity",
+      "name": "Escalate",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "tender/src/main/kotlin/com/example/tender/TenderWorkflowImpl.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "t09",
+      "kind": "parallel",
+      "waitsFor": "start",
+      "loc": {
+        "file": "tender/src/main/kotlin/com/example/tender/TenderWorkflowImpl.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "t10",
+      "kind": "activity",
+      "name": "ArchiveQuotes",
+      "timeout": "PT30S",
+      "parent": "t09",
+      "loc": {
+        "file": "tender/src/main/kotlin/com/example/tender/TenderWorkflowImpl.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "t11",
+      "kind": "childWorkflow",
+      "name": "ContractWorkflow",
+      "waitsFor": "start",
+      "parentClosePolicy": "abandon",
+      "parent": "t09",
+      "loc": {
+        "file": "tender/src/main/kotlin/com/example/tender/TenderWorkflowImpl.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "t12",
+      "kind": "upsertMemo",
+      "keys": [
+        "winner",
+        "note"
+      ],
+      "otherKeys": true,
+      "loc": {
+        "file": "tender/src/main/kotlin/com/example/tender/TenderWorkflowImpl.kt",
+        "line": 45
+      }
+    },
+    {
+      "id": "t13",
+      "kind": "end"
+    },
+    {
+      "id": "t20",
+      "kind": "start",
+      "loc": {
+        "file": "tender/src/main/kotlin/com/example/tender/TenderWorkflowImpl.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "t21",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "signal-approve",
+      "to": "t07",
+      "kind": "wakes"
+    },
+    {
+      "from": "t00",
+      "to": "t01"
+    },
+    {
+      "from": "t01",
+      "to": "t02"
+    },
+    {
+      "from": "t02",
+      "to": "t06"
+    },
+    {
+      "from": "t06",
+      "to": "t02",
+      "kind": "cancels"
+    },
+    {
+      "from": "t06",
+      "to": "t07"
+    },
+    {
+      "from": "t07",
+      "to": "t08",
+      "kind": "timeout"
+    },
+    {
+      "from": "t07",
+      "to": "t09"
+    },
+    {
+      "from": "t08",
+      "to": "t09"
+    },
+    {
+      "from": "t09",
+      "to": "t12"
+    },
+    {
+      "from": "t10",
+      "to": "t11"
+    },
+    {
+      "from": "t12",
+      "to": "t13"
+    },
+    {
+      "from": "t20",
+      "to": "t21"
+    }
+  ],
+  "stats": {
+    "nodes": 16,
+    "unknown": 0
+  }
+}

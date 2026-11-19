@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "CaughtInHandler",
+  "interface": "caught.CaughtInHandler",
+  "implementation": "caught.CaughtInHandlerImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "CaughtInHandler",
+      "start": "start"
+    },
+    {
+      "id": "signal-go",
+      "kind": "signal",
+      "name": "go",
+      "start": "signal-go.start"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "end",
+      "kind": "end"
+    },
+    {
+      "id": "n01",
+      "kind": "activity",
+      "name": "Main"
+    },
+    {
+      "id": "signal-go.end",
+      "kind": "end"
+    },
+    {
+      "id": "signal-go.n02",
+      "kind": "branch",
+      "label": "Checks.known throws?"
+    },
+    {
+      "id": "signal-go.n03",
+      "kind": "activity",
+      "name": "Two"
+    },
+    {
+      "id": "signal-go.n04",
+      "kind": "branch",
+      "label": "f throws?"
+    },
+    {
+      "id": "signal-go.n05",
+      "kind": "activity",
+      "name": "Two"
+    },
+    {
+      "id": "signal-go.n06",
+      "kind": "activity",
+      "name": "Three"
+    },
+    {
+      "id": "signal-go.n07",
+      "kind": "activity",
+      "name": "Done"
+    },
+    {
+      "id": "signal-go.start",
+      "kind": "start"
+    },
+    {
+      "id": "start",
+      "kind": "start"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n01",
+      "to": "end"
+    },
+    {
+      "from": "signal-go.n02",
+      "to": "signal-go.n03",
+      "kind": "exception",
+      "label": "IllegalArgumentException"
+    },
+    {
+      "from": "signal-go.n02",
+      "to": "signal-go.n04",
+      "label": "no"
+    },
+    {
+      "from": "signal-go.n03",
+      "to": "signal-go.n04"
+    },
+    {
+      "from": "signal-go.n04",
+      "to": "signal-go.n05",
+      "kind": "exception",
+      "label": "java.util.concurrent.CancellationException"
+    },
+    {
+      "from": "signal-go.n04",
+      "to": "signal-go.n06",
+      "kind": "exception",
+      "label": "IllegalStateException"
+    },
+    {
+      "from": "signal-go.n04",
+      "to": "signal-go.n07",
+      "label": "no"
+    },
+    {
+      "from": "signal-go.n05",
+      "to": "signal-go.n07"
+    },
+    {
+      "from": "signal-go.n06",
+      "to": "signal-go.n07"
+    },
+    {
+      "from": "signal-go.n07",
+      "to": "signal-go.end"
+    },
+    {
+      "from": "signal-go.start",
+      "to": "signal-go.n02"
+    },
+    {
+      "from": "start",
+      "to": "n01"
+    }
+  ],
+  "stats": {
+    "nodes": 11,
+    "unknown": 0
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "RelayWorkflow",
+  "interface": "linear.RelayWorkflow",
+  "implementation": "linear.RelayWorkflowImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "RelayWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/linear/Linear.kt",
+        "line": 83
+      }
+    },
+    {
+      "id": "nd787fb74f7",
+      "kind": "continueAsNew",
+      "name": "RelayWorkflow",
+      "loc": {
+        "file": "app/src/main/kotlin/linear/Linear.kt",
+        "line": 85
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "nd787fb74f7"
+    }
+  ],
+  "stats": {
+    "nodes": 2,
+    "unknown": 0
+  }
+}

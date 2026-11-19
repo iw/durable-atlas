@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "CaughtInLane",
+  "interface": "caught.CaughtInLane",
+  "implementation": "caught.CaughtInLaneImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "CaughtInLane",
+      "start": "start"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "end",
+      "kind": "end"
+    },
+    {
+      "id": "n01",
+      "kind": "parallel"
+    },
+    {
+      "id": "n02",
+      "kind": "activity",
+      "name": "Aside",
+      "parent": "n01"
+    },
+    {
+      "id": "n03",
+      "kind": "activity",
+      "name": "First",
+      "parent": "n01"
+    },
+    {
+      "id": "n04",
+      "kind": "loop",
+      "label": "for each item",
+      "parent": "n01"
+    },
+    {
+      "id": "n05",
+      "kind": "activity",
+      "name": "Pack",
+      "parent": "n04"
+    },
+    {
+      "id": "n06",
+      "kind": "branch",
+      "label": "Checks.known throws?",
+      "parent": "n01"
+    },
+    {
+      "id": "n07",
+      "kind": "activity",
+      "name": "Two",
+      "parent": "n01"
+    },
+    {
+      "id": "n08",
+      "kind": "branch",
+      "label": "Checks.known throws?",
+      "parent": "n01"
+    },
+    {
+      "id": "n09",
+      "kind": "activity",
+      "name": "Two",
+      "parent": "n01"
+    },
+    {
+      "id": "n10",
+      "kind": "activity",
+      "name": "Done",
+      "parent": "n01"
+    },
+    {
+      "id": "start",
+      "kind": "start"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n01",
+      "to": "end"
+    },
+    {
+      "from": "n03",
+      "to": "n04"
+    },
+    {
+      "from": "n04",
+      "to": "n06"
+    },
+    {
+      "from": "n06",
+      "to": "n07",
+      "kind": "exception",
+      "label": "IllegalArgumentException"
+    },
+    {
+      "from": "n06",
+      "to": "n08",
+      "label": "no"
+    },
+    {
+      "from": "n07",
+      "to": "n08"
+    },
+    {
+      "from": "n08",
+      "to": "n09",
+      "kind": "exception",
+      "label": "IllegalArgumentException"
+    },
+    {
+      "from": "n08",
+      "to": "n10",
+      "label": "no"
+    },
+    {
+      "from": "n09",
+      "to": "n10"
+    },
+    {
+      "from": "start",
+      "to": "n01"
+    }
+  ],
+  "stats": {
+    "nodes": 12,
+    "unknown": 0
+  }
+}

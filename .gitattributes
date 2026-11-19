@@ -1,0 +1,9 @@
+# LF everywhere: golden files and the tool's own output are compared byte for byte, on every
+# platform.
+* text=auto eol=lf
+
+# The Windows wrapper scripts are checked in with the CRLF line endings Gradle writes them
+# with, and are left as they are.
+*.bat -text
+
+*.jar binary

@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "CaughtSeveral",
+  "interface": "caught.CaughtSeveral",
+  "implementation": "caught.CaughtSeveralImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "CaughtSeveral",
+      "start": "start"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "end",
+      "kind": "end"
+    },
+    {
+      "id": "n01",
+      "kind": "branch",
+      "label": "Checks.known throws?"
+    },
+    {
+      "id": "n02",
+      "kind": "activity",
+      "name": "Two"
+    },
+    {
+      "id": "n03",
+      "kind": "branch",
+      "label": "f throws?"
+    },
+    {
+      "id": "n04",
+      "kind": "activity",
+      "name": "Two"
+    },
+    {
+      "id": "n05",
+      "kind": "activity",
+      "name": "Three"
+    },
+    {
+      "id": "n06",
+      "kind": "activity",
+      "name": "Four"
+    },
+    {
+      "id": "n07",
+      "kind": "activity",
+      "name": "Done"
+    },
+    {
+      "id": "start",
+      "kind": "start"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n01",
+      "to": "n02",
+      "kind": "exception",
+      "label": "java.util.concurrent.CancellationException"
+    },
+    {
+      "from": "n01",
+      "to": "n03",
+      "label": "no"
+    },
+    {
+      "from": "n02",
+      "to": "n03"
+    },
+    {
+      "from": "n03",
+      "to": "n04",
+      "kind": "exception",
+      "label": "ConcurrentModificationException"
+    },
+    {
+      "from": "n03",
+      "to": "n05",
+      "kind": "exception",
+      "label": "IllegalStateException"
+    },
+    {
+      "from": "n03",
+      "to": "n06",
+      "kind": "exception",
+      "label": "ConcurrentModificationException2"
+    },
+    {
+      "from": "n03",
+      "to": "n07",
+      "label": "no"
+    },
+    {
+      "from": "n04",
+      "to": "n07"
+    },
+    {
+      "from": "n05",
+      "to": "n07"
+    },
+    {
+      "from": "n06",
+      "to": "n07"
+    },
+    {
+      "from": "n07",
+      "to": "end"
+    },
+    {
+      "from": "start",
+      "to": "n01"
+    }
+  ],
+  "stats": {
+    "nodes": 9,
+    "unknown": 0
+  }
+}

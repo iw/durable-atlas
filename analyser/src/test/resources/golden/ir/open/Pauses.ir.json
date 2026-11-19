@@ -1,0 +1,212 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Pauses",
+  "interface": "open.Pauses",
+  "implementation": "open.PausesImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Pauses",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-release",
+      "kind": "signal",
+      "name": "release",
+      "start": "n3de7c4cadd",
+      "writes": [
+        "released"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n00287fc531",
+      "kind": "await",
+      "reads": [
+        "released"
+      ],
+      "label": "released",
+      "parent": "nb9726adb9f",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Pauses.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n18ec0887cc",
+      "kind": "timer",
+      "duration": "PT1M",
+      "parent": "nc2ee655046",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Pauses.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n3bf327b11b",
+      "kind": "activity",
+      "name": "Store",
+      "parent": "nc2ee655046",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Pauses.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n3de7c4cadd",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Pauses.kt",
+        "line": 45
+      }
+    },
+    {
+      "id": "n46f531ff13",
+      "kind": "timer",
+      "duration": "PT30S",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Pauses.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "n64b079e801",
+      "kind": "activity",
+      "name": "Notify",
+      "parent": "nc2ee655046",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Pauses.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Pauses.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n77bd82c586",
+      "kind": "end"
+    },
+    {
+      "id": "n7e68f5c027",
+      "kind": "activity",
+      "name": "Fetch",
+      "parent": "nb9726adb9f",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Pauses.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n93ff4e3b4e",
+      "kind": "timer",
+      "duration": "PT5M",
+      "parent": "nb9726adb9f",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Pauses.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "nb706645066",
+      "kind": "timer",
+      "duration": "PT24H",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Pauses.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "nb9726adb9f",
+      "kind": "parallel",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Pauses.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "nc2ee655046",
+      "kind": "parallel",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Pauses.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "nd14ab31446",
+      "kind": "await",
+      "timeout": "PT1H",
+      "reads": [
+        "released"
+      ],
+      "label": "released",
+      "parent": "nc2ee655046",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Pauses.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n18ec0887cc",
+      "to": "n3bf327b11b"
+    },
+    {
+      "from": "n3de7c4cadd",
+      "to": "n77bd82c586"
+    },
+    {
+      "from": "n46f531ff13",
+      "to": "nb706645066"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nb9726adb9f"
+    },
+    {
+      "from": "nb706645066",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nb9726adb9f",
+      "to": "nc2ee655046"
+    },
+    {
+      "from": "nc2ee655046",
+      "to": "n46f531ff13"
+    },
+    {
+      "from": "nd14ab31446",
+      "to": "n64b079e801"
+    },
+    {
+      "from": "signal-release",
+      "to": "n00287fc531",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-release",
+      "to": "nd14ab31446",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 15,
+    "unknown": 0
+  }
+}

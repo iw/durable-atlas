@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "WhenReasons",
+  "interface": "constructs.WhenReasons",
+  "implementation": "constructs.WhenReasonsImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "WhenReasons",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-approve",
+      "kind": "signal",
+      "name": "approve",
+      "start": "n62b63817dd",
+      "writes": [
+        "approved"
+      ]
+    },
+    {
+      "id": "signal-stop",
+      "kind": "signal",
+      "name": "stop",
+      "start": "nec6da4d85f",
+      "writes": [
+        "stopped"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1a9f3b68c6",
+      "kind": "await",
+      "reads": [
+        "approved",
+        "stopped"
+      ],
+      "label": "approved or stopped",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/WhenReasons.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "n5e8580164e",
+      "kind": "activity",
+      "name": "Work",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/WhenReasons.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "n62b63817dd",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/WhenReasons.kt",
+        "line": 48
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/WhenReasons.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "nb2fe49d2f1",
+      "kind": "end"
+    },
+    {
+      "id": "nb58d089776",
+      "kind": "activity",
+      "name": "CleanUp",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/WhenReasons.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "nec6da4d85f",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/WhenReasons.kt",
+        "line": 52
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf45401b72d",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n1a9f3b68c6",
+      "to": "n5e8580164e",
+      "label": "approved"
+    },
+    {
+      "from": "n1a9f3b68c6",
+      "to": "nb58d089776",
+      "label": "stopped and not approved"
+    },
+    {
+      "from": "n5e8580164e",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n62b63817dd",
+      "to": "nf45401b72d"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n1a9f3b68c6"
+    },
+    {
+      "from": "nb58d089776",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nec6da4d85f",
+      "to": "nb2fe49d2f1"
+    },
+    {
+      "from": "signal-approve",
+      "to": "n1a9f3b68c6",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-stop",
+      "to": "n1a9f3b68c6",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 9,
+    "unknown": 0
+  }
+}

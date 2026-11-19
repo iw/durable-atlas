@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "ApplicationFailureWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 2,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "ApplicationFailureWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n14a789c9d8",
+      "kind": "activity",
+      "name": "PaymentCharge",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nc152ca3976",
+      "kind": "branch",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "id": "nf647bc3ca4",
+      "kind": "fail",
+      "name": "InvalidAmount",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n14a789c9d8",
+      "to": "nedd528afe0",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nc152ca3976",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "nc152ca3976",
+      "to": "n14a789c9d8",
+      "label": "no",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "nc152ca3976",
+      "to": "nf647bc3ca4",
+      "label": "yes",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "neverHit": [
+    "n14a789c9d8",
+    "nedd528afe0"
+  ],
+  "closes": [
+    {
+      "status": "failed",
+      "nodes": [
+        "nf647bc3ca4"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "ApplicationFailureWorkflow.json",
+      "runId": "6b39e26e-ae96-482c-afaf-c52574c89bd5",
+      "status": "failed",
+      "closedAt": [
+        "nf647bc3ca4"
+      ],
+      "events": {
+        "mapped": 2,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

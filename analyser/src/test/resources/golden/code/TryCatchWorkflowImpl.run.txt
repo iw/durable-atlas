@@ -1,0 +1,38 @@
+block workflows/src/main/kotlin/com/example/fixture/workflows/controlflow/TryCatchWorkflow.kt:22
+  try :23
+    block :23
+      return :24
+        call com.example.fixture.activities.PaymentActivities.charge(kotlin.String,kotlin.Long) [source]: kotlin.String :24
+          on com.example.fixture.activities.PaymentActivities @io.temporal.activity.ActivityInterface(namePrefix = "Payment")
+          receiver
+            read com.example.fixture.workflows.controlflow.TryCatchWorkflowImpl.payments on this: com.example.fixture.activities.PaymentActivities :24
+          argument orderId `orderId`
+            local orderId: kotlin.String :24
+          argument amountCents `amountCents`
+            local amountCents: kotlin.Long :24
+    catch e: io.temporal.failure.ActivityFailure :25
+      block :25
+        call com.example.fixture.activities.NotificationActivities.email(kotlin.String,kotlin.String) [source]: kotlin.Unit :26
+          on com.example.fixture.activities.NotificationActivities @io.temporal.activity.ActivityInterface(namePrefix = "Notify")
+          receiver
+            read com.example.fixture.workflows.controlflow.TryCatchWorkflowImpl.notifications on this: com.example.fixture.activities.NotificationActivities :26
+          argument recipient `OPS_EMAIL` = "ops@example.com"
+            read com.example.fixture.helpers.OPS_EMAIL: kotlin.String = "ops@example.com" :26
+          argument message `"charge failed for $orderId"`
+            other template `"charge failed for $orderId"` :26
+              local orderId: kotlin.String :26
+        return :27
+          literal "charge-failed" :27
+    catch e: io.temporal.failure.CanceledFailure :28
+      block :28
+        throw: io.temporal.failure.CanceledFailure :29
+          local e: io.temporal.failure.CanceledFailure :29
+    finally
+      block :30
+        call com.example.fixture.activities.NotificationActivities.audit(kotlin.String) [source]: kotlin.Unit :31
+          on com.example.fixture.activities.NotificationActivities @io.temporal.activity.ActivityInterface(namePrefix = "Notify")
+          receiver
+            read com.example.fixture.workflows.controlflow.TryCatchWorkflowImpl.notifications on this: com.example.fixture.activities.NotificationActivities :31
+          argument entry `"charge attempted for $orderId"`
+            other template `"charge attempted for $orderId"` :31
+              local orderId: kotlin.String :31

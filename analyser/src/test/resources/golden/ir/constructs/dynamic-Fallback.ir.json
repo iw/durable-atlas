@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "dynamic-Fallback",
+  "interface": "io.temporal.workflow.DynamicWorkflow",
+  "implementation": "constructs.Fallback",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "dynamic-Fallback",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "dynamic-signal",
+      "kind": "signal",
+      "name": "(any name)",
+      "start": "n9b2c686b30",
+      "writes": [
+        "note"
+      ]
+    },
+    {
+      "id": "dynamic-query",
+      "kind": "query",
+      "name": "(any name)",
+      "start": "neba4a10e89",
+      "reads": [
+        "note"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n682a67c570",
+      "kind": "await",
+      "reads": [
+        "note"
+      ],
+      "label": "note != null",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Fallback.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Fallback.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n6bb94196b8",
+      "kind": "end"
+    },
+    {
+      "id": "n7258bd69f7",
+      "kind": "activity",
+      "name": "Handle",
+      "timeout": "PT10S",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Fallback.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n9b2c686b30",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Fallback.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "nd29bb856fa",
+      "kind": "end"
+    },
+    {
+      "id": "neba4a10e89",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/Fallback.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "dynamic-signal",
+      "to": "n682a67c570",
+      "kind": "wakes"
+    },
+    {
+      "from": "n682a67c570",
+      "to": "n7258bd69f7"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n682a67c570"
+    },
+    {
+      "from": "n7258bd69f7",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n9b2c686b30",
+      "to": "nd29bb856fa"
+    },
+    {
+      "from": "neba4a10e89",
+      "to": "n6bb94196b8"
+    }
+  ],
+  "stats": {
+    "nodes": 8,
+    "unknown": 0
+  }
+}

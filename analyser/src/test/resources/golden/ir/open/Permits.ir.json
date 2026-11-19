@@ -1,0 +1,260 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Permits",
+  "interface": "open.Permits",
+  "implementation": "open.PermitsImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Permits",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "update-change",
+      "kind": "update",
+      "name": "change",
+      "start": "n93a4bd29e0",
+      "reads": [
+        "lock",
+        "ready"
+      ],
+      "writes": [
+        "lock"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n4f99047b31",
+      "kind": "await",
+      "reads": [
+        "permits"
+      ],
+      "label": "permits.acquire()",
+      "parent": "na42bd5f050",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Permits.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n50e912aabe",
+      "kind": "activity",
+      "name": "Notify",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Permits.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "n59c0904888",
+      "kind": "activity",
+      "name": "Fetch",
+      "parent": "na42bd5f050",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Permits.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n5d3895e778",
+      "kind": "activity",
+      "name": "Store",
+      "parent": "na42bd5f050",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Permits.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Permits.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n76c2223659",
+      "kind": "await",
+      "reads": [
+        "ready"
+      ],
+      "label": "ready",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Permits.kt",
+        "line": 55
+      }
+    },
+    {
+      "id": "n93a4bd29e0",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Permits.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "na42bd5f050",
+      "kind": "parallel",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Permits.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "nca9000e116",
+      "kind": "await",
+      "reads": [
+        "permits"
+      ],
+      "label": "permits.acquire()",
+      "parent": "na42bd5f050",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Permits.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "nd6b9e33329",
+      "kind": "end"
+    },
+    {
+      "id": "nde5895c01b",
+      "kind": "await",
+      "reads": [
+        "permits"
+      ],
+      "label": "permits.acquire()",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Permits.kt",
+        "line": 49
+      }
+    },
+    {
+      "id": "ne360d99bd9",
+      "kind": "activity",
+      "name": "Audit",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Permits.kt",
+        "line": 58
+      }
+    },
+    {
+      "id": "ne5b71960aa",
+      "kind": "await",
+      "reads": [
+        "lock"
+      ],
+      "label": "lock.lock()",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Permits.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "ne682d72eed",
+      "kind": "await",
+      "reads": [
+        "lock"
+      ],
+      "label": "lock.lock()",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Permits.kt",
+        "line": 56
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "main",
+      "to": "n4f99047b31",
+      "kind": "wakes",
+      "label": "permits"
+    },
+    {
+      "from": "main",
+      "to": "n76c2223659",
+      "kind": "wakes",
+      "label": "ready"
+    },
+    {
+      "from": "main",
+      "to": "nca9000e116",
+      "kind": "wakes",
+      "label": "permits"
+    },
+    {
+      "from": "main",
+      "to": "ne682d72eed",
+      "kind": "wakes",
+      "label": "lock"
+    },
+    {
+      "from": "n4f99047b31",
+      "to": "n59c0904888"
+    },
+    {
+      "from": "n50e912aabe",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "ne5b71960aa"
+    },
+    {
+      "from": "n76c2223659",
+      "to": "ne682d72eed"
+    },
+    {
+      "from": "n93a4bd29e0",
+      "to": "n76c2223659"
+    },
+    {
+      "from": "na42bd5f050",
+      "to": "nde5895c01b"
+    },
+    {
+      "from": "nca9000e116",
+      "to": "n5d3895e778"
+    },
+    {
+      "from": "nde5895c01b",
+      "to": "n50e912aabe"
+    },
+    {
+      "from": "ne360d99bd9",
+      "to": "nd6b9e33329"
+    },
+    {
+      "from": "ne5b71960aa",
+      "to": "na42bd5f050"
+    },
+    {
+      "from": "ne682d72eed",
+      "to": "ne360d99bd9"
+    },
+    {
+      "from": "update-change",
+      "to": "ne5b71960aa",
+      "kind": "wakes"
+    },
+    {
+      "from": "update-change",
+      "to": "ne682d72eed",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 15,
+    "unknown": 0
+  }
+}

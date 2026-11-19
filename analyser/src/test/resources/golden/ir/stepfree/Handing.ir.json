@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Handing",
+  "interface": "plain.Handing",
+  "implementation": "plain.HandingImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Handing",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n062387b8d7",
+      "kind": "fail",
+      "name": "MappingException",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Handing.kt",
+        "line": 26
+      }
+    },
+    {
+      "id": "n0f298c3bf5",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Handing.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n3e00c145df",
+      "kind": "fail",
+      "name": "IllegalArgumentException",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Handing.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n428300ffa4",
+      "kind": "branch",
+      "label": "Mapper.each throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Handing.kt",
+        "line": 26
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Handing.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "n72fe64803f",
+      "kind": "branch",
+      "label": "what.isEmpty()",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Handing.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n78b7ba6a12",
+      "kind": "loop",
+      "label": "for each value",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Mapper.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "n90db8c5860",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "parent": "n78b7ba6a12",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Handing.kt",
+        "line": 25
+      }
+    },
+    {
+      "id": "nd31554b4ec",
+      "kind": "fail",
+      "name": "MappingException",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Mapper.kt",
+        "line": 46
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0f298c3bf5",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n428300ffa4",
+      "to": "n062387b8d7",
+      "label": "yes"
+    },
+    {
+      "from": "n428300ffa4",
+      "to": "n72fe64803f",
+      "label": "no"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n78b7ba6a12"
+    },
+    {
+      "from": "n72fe64803f",
+      "to": "n0f298c3bf5",
+      "label": "no"
+    },
+    {
+      "from": "n72fe64803f",
+      "to": "n3e00c145df",
+      "label": "yes"
+    },
+    {
+      "from": "n78b7ba6a12",
+      "to": "n428300ffa4"
+    },
+    {
+      "from": "n78b7ba6a12",
+      "to": "nd31554b4ec",
+      "kind": "exception",
+      "label": "JsonProcessingException"
+    }
+  ],
+  "stats": {
+    "nodes": 10,
+    "unknown": 0
+  }
+}

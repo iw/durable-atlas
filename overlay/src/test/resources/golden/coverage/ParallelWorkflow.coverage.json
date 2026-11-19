@@ -1,0 +1,210 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "ParallelWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 12,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "ParallelWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0460788354",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n157d76d649",
+      "kind": "parallel",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n39bcb89b2c",
+      "kind": "parallel",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n4fc881d34b",
+      "kind": "activity",
+      "name": "NotifySms",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n9b5de163ff",
+      "kind": "activity",
+      "name": "QuoteShipping",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nba3222923c",
+      "kind": "parallel",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "ne6beb65037",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nec13c605a6",
+      "kind": "activity",
+      "name": "NotifyAudit",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n157d76d649",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n39bcb89b2c",
+      "to": "nba3222923c",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n39bcb89b2c",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "nba3222923c",
+      "to": "n157d76d649",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n157d76d649",
+      "to": "nec13c605a6",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "nec13c605a6",
+      "to": "n157d76d649",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n39bcb89b2c",
+      "to": "n0460788354",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n0460788354",
+      "to": "n39bcb89b2c",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n39bcb89b2c",
+      "to": "n9b5de163ff",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n9b5de163ff",
+      "to": "n39bcb89b2c",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "nba3222923c",
+      "to": "n4fc881d34b",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n4fc881d34b",
+      "to": "nba3222923c",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "nba3222923c",
+      "to": "ne6beb65037",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "ne6beb65037",
+      "to": "nba3222923c",
+      "implied": true,
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "neverHit": [],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "ParallelWorkflow.json",
+      "runId": "351ea6c4-ffd5-426d-b7ca-674fb37a01f0",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 12,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

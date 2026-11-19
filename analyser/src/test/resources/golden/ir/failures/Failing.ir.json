@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Failing",
+  "interface": "failing.Failing",
+  "implementation": "failing.FailingImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Failing",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1ec4f02d80",
+      "kind": "fail",
+      "name": "NothingGiven",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Failing.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "n384a307a1b",
+      "kind": "branch",
+      "label": "count < 0",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Failing.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n460ad7c07c",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Failing.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Failing.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n6bc1e0ff0f",
+      "kind": "fail",
+      "name": "NegativeCount",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Failing.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n75a46656be",
+      "kind": "branch",
+      "label": "first.isEmpty()",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Failing.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n8b581656c0",
+      "kind": "fail",
+      "name": "NoAnswer",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Failing.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n91dc0d44ee",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Failing.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "ne4d3184f0f",
+      "kind": "branch",
+      "label": "input.isBlank()",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Failing.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n384a307a1b",
+      "to": "n6bc1e0ff0f",
+      "label": "yes"
+    },
+    {
+      "from": "n384a307a1b",
+      "to": "n91dc0d44ee",
+      "label": "no"
+    },
+    {
+      "from": "n460ad7c07c",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "ne4d3184f0f"
+    },
+    {
+      "from": "n75a46656be",
+      "to": "n460ad7c07c",
+      "label": "no"
+    },
+    {
+      "from": "n75a46656be",
+      "to": "n8b581656c0",
+      "label": "yes"
+    },
+    {
+      "from": "n91dc0d44ee",
+      "to": "n75a46656be"
+    },
+    {
+      "from": "ne4d3184f0f",
+      "to": "n1ec4f02d80",
+      "label": "yes"
+    },
+    {
+      "from": "ne4d3184f0f",
+      "to": "n384a307a1b",
+      "label": "no"
+    }
+  ],
+  "stats": {
+    "nodes": 10,
+    "unknown": 0
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Looped",
+  "interface": "plain.Looped",
+  "implementation": "plain.LoopedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Looped",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n05409b0407",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "parent": "nf786c14486",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Looped.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n079bbf3ef8",
+      "kind": "fail",
+      "label": "IllegalArgumentException, IllegalStateException, UnknownEvent",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Looped.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n3dc2e120a2",
+      "kind": "branch",
+      "label": "Events.create throws?",
+      "parent": "n89573096d1",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Looped.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Looped.kt",
+        "line": 25
+      }
+    },
+    {
+      "id": "n6a522221b8",
+      "kind": "branch",
+      "label": "Events.create throws?",
+      "parent": "nf786c14486",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Looped.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n89573096d1",
+      "kind": "loop",
+      "label": "for each of input",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Looped.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n90e9b257d7",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Looped.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n94118f5c12",
+      "kind": "branch",
+      "label": "Mapper.write throws?",
+      "parent": "nf786c14486",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Looped.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "na5e9acaa71",
+      "kind": "fail",
+      "name": "MappingException",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Looped.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "needcaa4d98",
+      "kind": "fail",
+      "label": "IllegalArgumentException, IllegalStateException, UnknownEvent",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Looped.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "nf786c14486",
+      "kind": "loop",
+      "label": "for each item",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Looped.kt",
+        "line": 26
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n05409b0407",
+      "to": "n94118f5c12"
+    },
+    {
+      "from": "n3dc2e120a2",
+      "to": "n079bbf3ef8",
+      "label": "yes"
+    },
+    {
+      "from": "n3dc2e120a2",
+      "to": "n89573096d1",
+      "label": "no"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nf786c14486"
+    },
+    {
+      "from": "n6a522221b8",
+      "to": "n05409b0407",
+      "label": "no"
+    },
+    {
+      "from": "n6a522221b8",
+      "to": "needcaa4d98",
+      "label": "yes"
+    },
+    {
+      "from": "n89573096d1",
+      "to": "n90e9b257d7"
+    },
+    {
+      "from": "n90e9b257d7",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n94118f5c12",
+      "to": "na5e9acaa71",
+      "label": "yes"
+    },
+    {
+      "from": "n94118f5c12",
+      "to": "nf786c14486",
+      "label": "no"
+    },
+    {
+      "from": "nf786c14486",
+      "to": "n89573096d1"
+    }
+  ],
+  "stats": {
+    "nodes": 12,
+    "unknown": 0
+  }
+}

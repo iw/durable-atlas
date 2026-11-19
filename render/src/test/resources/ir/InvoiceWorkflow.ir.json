@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "commit": "3f786850e387550fdab836ed7e6dc881de23001b",
+  "modelMode": "degraded",
+  "workflowType": "InvoiceWorkflow",
+  "interface": "com.example.billing.InvoiceWorkflow",
+  "implementation": "com.example.billing.InvoiceWorkflowImpl",
+  "module": ":",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "InvoiceWorkflow",
+      "start": "n0"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0",
+      "kind": "start"
+    },
+    {
+      "id": "n1",
+      "kind": "activity",
+      "name": "CreateInvoice",
+      "loc": {
+        "file": "billing/src/main/kotlin/com/example/billing/InvoiceWorkflowImpl.kt",
+        "line": 18
+      }
+    },
+    {
+      "id": "n2",
+      "kind": "unknown",
+      "reason": "unresolved-call",
+      "label": "taxRules.apply(invoice)",
+      "loc": {
+        "file": "billing/src/main/kotlin/com/example/billing/InvoiceWorkflowImpl.kt",
+        "line": 19
+      }
+    },
+    {
+      "id": "n3",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0",
+      "to": "n1"
+    },
+    {
+      "from": "n1",
+      "to": "n2"
+    },
+    {
+      "from": "n2",
+      "to": "n3"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 1
+  }
+}

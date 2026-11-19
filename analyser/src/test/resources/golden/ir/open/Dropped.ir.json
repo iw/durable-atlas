@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Dropped",
+  "interface": "open.Dropped",
+  "implementation": "open.DroppedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Dropped",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n10c6f0c97d",
+      "kind": "activity",
+      "name": "Fetch",
+      "parent": "ndc4145bbc0",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Dropped.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n16db34741e",
+      "kind": "activity",
+      "name": "Store",
+      "parent": "n786ed93913",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Dropped.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n21304f47f0",
+      "kind": "activity",
+      "name": "Notify",
+      "parent": "ndc4145bbc0",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Dropped.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Dropped.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n6a58b3a8be",
+      "kind": "activity",
+      "name": "Store",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Dropped.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n786ed93913",
+      "kind": "parallel",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Dropped.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n84764f6e82",
+      "kind": "activity",
+      "name": "Fetch",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Dropped.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "na8f3390493",
+      "kind": "activity",
+      "name": "Fetch",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Dropped.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "nc7d3276f1c",
+      "kind": "activity",
+      "name": "Notify",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Dropped.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "ndc4145bbc0",
+      "kind": "parallel",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Dropped.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n10c6f0c97d",
+      "to": "n21304f47f0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nc7d3276f1c"
+    },
+    {
+      "from": "n6a58b3a8be",
+      "to": "n84764f6e82"
+    },
+    {
+      "from": "n786ed93913",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n84764f6e82",
+      "to": "ndc4145bbc0"
+    },
+    {
+      "from": "na8f3390493",
+      "to": "n6a58b3a8be"
+    },
+    {
+      "from": "nc7d3276f1c",
+      "to": "na8f3390493"
+    },
+    {
+      "from": "ndc4145bbc0",
+      "to": "n786ed93913"
+    }
+  ],
+  "stats": {
+    "nodes": 11,
+    "unknown": 0
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Starred",
+  "interface": "calls.Starred",
+  "implementation": "calls.StarredImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Starred",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n2355f9330c",
+      "kind": "unknown",
+      "label": "somethingNew",
+      "reason": "unresolved",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Starred.kt",
+        "line": 13
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Starred.kt",
+        "line": 12
+      }
+    },
+    {
+      "id": "n9238480672",
+      "kind": "timer",
+      "duration": "PT1S",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Starred.kt",
+        "line": 14
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n2355f9330c",
+      "to": "n9238480672"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n2355f9330c"
+    },
+    {
+      "from": "n9238480672",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 1
+  }
+}

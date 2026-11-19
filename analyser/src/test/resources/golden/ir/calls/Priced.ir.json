@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Priced",
+  "interface": "calls.Priced",
+  "implementation": "calls.PricedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Priced",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n483ce0a79d",
+      "kind": "unknown",
+      "label": "pick",
+      "reason": "unresolved",
+      "candidates": [
+        "calls.Pricing.pick(kotlin.Int,calls.Chores)",
+        "calls.Pricing.pick(kotlin.String,calls.Chores)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Priced.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Priced.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "nd245228902",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Priced.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n483ce0a79d",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nd245228902"
+    },
+    {
+      "from": "nd245228902",
+      "to": "n483ce0a79d"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 1
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Priced.kt",
+        "line": 20
+      },
+      "text": "amount.text()"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Priced.kt",
+        "line": 41
+      },
+      "text": "Money.of(1)"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Priced.kt",
+        "line": 43
+      },
+      "text": "money.text()"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Priced.kt",
+        "line": 44
+      },
+      "text": "money.text()"
+    }
+  ]
+}

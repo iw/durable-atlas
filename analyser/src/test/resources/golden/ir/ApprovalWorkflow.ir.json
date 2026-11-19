@@ -1,0 +1,325 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "ApprovalWorkflow",
+  "interface": "com.example.fixture.workflows.handlers.ApprovalWorkflow",
+  "implementation": "com.example.fixture.workflows.handlers.ApprovalWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "ApprovalWorkflow",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-approve",
+      "kind": "signal",
+      "name": "approve",
+      "start": "n62b63817dd",
+      "reads": [
+        "approvals"
+      ],
+      "writes": [
+        "approvals"
+      ]
+    },
+    {
+      "id": "signal-reject",
+      "kind": "signal",
+      "name": "reject",
+      "start": "n40f04dc3b2",
+      "writes": [
+        "rejectionReason"
+      ]
+    },
+    {
+      "id": "query-approvalCount",
+      "kind": "query",
+      "name": "approvalCount",
+      "start": "n92d4492d30",
+      "reads": [
+        "approvals"
+      ]
+    },
+    {
+      "id": "query-status",
+      "kind": "query",
+      "name": "status",
+      "start": "n1f4643f22a",
+      "reads": [
+        "approvals",
+        "rejectionReason",
+        "requiredApprovals"
+      ]
+    },
+    {
+      "id": "update-addNote",
+      "kind": "update",
+      "name": "addNote",
+      "start": "n19ae31aae7",
+      "reads": [
+        "lastNote"
+      ],
+      "writes": [
+        "lastNote"
+      ]
+    },
+    {
+      "id": "update-set-required-approvals",
+      "kind": "update",
+      "name": "set-required-approvals",
+      "start": "nfdc744e6df",
+      "reads": [
+        "requiredApprovals"
+      ],
+      "writes": [
+        "requiredApprovals"
+      ]
+    },
+    {
+      "id": "validator-set-required-approvals",
+      "kind": "updateValidator",
+      "name": "set-required-approvals",
+      "start": "n1e244d9125"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n04adeb7c0c",
+      "kind": "activity",
+      "name": "NotifyAudit",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/handlers/ApprovalWorkflowImpl.kt",
+        "line": 62
+      }
+    },
+    {
+      "id": "n194162b7f7",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/handlers/ApprovalWorkflowImpl.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "n19ae31aae7",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/handlers/ApprovalWorkflowImpl.kt",
+        "line": 60
+      }
+    },
+    {
+      "id": "n1e244d9125",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/handlers/ApprovalWorkflowImpl.kt",
+        "line": 56
+      }
+    },
+    {
+      "id": "n1f4643f22a",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/handlers/ApprovalWorkflowImpl.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "n2dccf41ee6",
+      "kind": "end"
+    },
+    {
+      "id": "n40f04dc3b2",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/handlers/ApprovalWorkflowImpl.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n60ee52405a",
+      "kind": "end"
+    },
+    {
+      "id": "n62b63817dd",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/handlers/ApprovalWorkflowImpl.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n6691e80c57",
+      "kind": "end"
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/handlers/ApprovalWorkflowImpl.kt",
+        "line": 17
+      }
+    },
+    {
+      "id": "n82276031f7",
+      "kind": "activity",
+      "name": "NotifyEmail",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/handlers/ApprovalWorkflowImpl.kt",
+        "line": 18
+      }
+    },
+    {
+      "id": "n89dbd07b98",
+      "kind": "await",
+      "timeout": "PT24H",
+      "reads": [
+        "approvals",
+        "rejectionReason",
+        "requiredApprovals"
+      ],
+      "label": "approvals >= requiredApprovals or rejectionReason != null",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/handlers/ApprovalWorkflowImpl.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "n92d4492d30",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/handlers/ApprovalWorkflowImpl.kt",
+        "line": 48
+      }
+    },
+    {
+      "id": "nb777360ca0",
+      "kind": "end"
+    },
+    {
+      "id": "nd193561861",
+      "kind": "activity",
+      "name": "NotifyAudit",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/handlers/ApprovalWorkflowImpl.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "nda6cf50e8d",
+      "kind": "end"
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf45401b72d",
+      "kind": "end"
+    },
+    {
+      "id": "nf467893f31",
+      "kind": "end"
+    },
+    {
+      "id": "nfdc744e6df",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/handlers/ApprovalWorkflowImpl.kt",
+        "line": 50
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n04adeb7c0c",
+      "to": "nda6cf50e8d"
+    },
+    {
+      "from": "n194162b7f7",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n19ae31aae7",
+      "to": "n04adeb7c0c"
+    },
+    {
+      "from": "n1e244d9125",
+      "to": "nf467893f31"
+    },
+    {
+      "from": "n1f4643f22a",
+      "to": "nb777360ca0"
+    },
+    {
+      "from": "n40f04dc3b2",
+      "to": "n2dccf41ee6"
+    },
+    {
+      "from": "n62b63817dd",
+      "to": "nf45401b72d"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n82276031f7"
+    },
+    {
+      "from": "n82276031f7",
+      "to": "n89dbd07b98"
+    },
+    {
+      "from": "n89dbd07b98",
+      "to": "n194162b7f7",
+      "kind": "timeout"
+    },
+    {
+      "from": "n89dbd07b98",
+      "to": "nd193561861",
+      "label": "approvals >= requiredApprovals"
+    },
+    {
+      "from": "n89dbd07b98",
+      "to": "nedd528afe0",
+      "label": "rejectionReason != null"
+    },
+    {
+      "from": "n92d4492d30",
+      "to": "n60ee52405a"
+    },
+    {
+      "from": "nd193561861",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nfdc744e6df",
+      "to": "n6691e80c57"
+    },
+    {
+      "from": "signal-approve",
+      "to": "n89dbd07b98",
+      "kind": "wakes"
+    },
+    {
+      "from": "signal-reject",
+      "to": "n89dbd07b98",
+      "kind": "wakes"
+    },
+    {
+      "from": "update-set-required-approvals",
+      "to": "n89dbd07b98",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 21,
+    "unknown": 0
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "commit": "3f786850e387550fdab836ed7e6dc881de23001b",
+  "modelMode": "gradle",
+  "workflowType": "OrderWorkflow",
+  "interface": "com.example.orders.OrderWorkflow",
+  "implementation": "com.example.orders.OrderWorkflowImpl",
+  "module": ":orders:workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "OrderWorkflow",
+      "start": "n00"
+    },
+    {
+      "id": "sig-cancel",
+      "kind": "signal",
+      "name": "cancelOrder",
+      "start": "n20",
+      "writes": [
+        "cancelled"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n00",
+      "kind": "start"
+    },
+    {
+      "id": "n01",
+      "kind": "activity",
+      "name": "ReserveStock",
+      "taskQueue": "orders",
+      "loc": {
+        "file": "orders/workflows/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "n02",
+      "kind": "await",
+      "timeout": "PT30M",
+      "reads": [
+        "cancelled",
+        "paid"
+      ],
+      "loc": {
+        "file": "orders/workflows/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 47
+      }
+    },
+    {
+      "id": "n03",
+      "kind": "branch",
+      "loc": {
+        "file": "orders/workflows/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 51
+      }
+    },
+    {
+      "id": "n04",
+      "kind": "loop",
+      "label": "for each line item",
+      "loc": {
+        "file": "orders/workflows/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 55
+      }
+    },
+    {
+      "id": "n05",
+      "kind": "activity",
+      "name": "ShipItem",
+      "parent": "n04",
+      "loc": {
+        "file": "orders/workflows/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 56
+      }
+    },
+    {
+      "id": "n06",
+      "kind": "unknown",
+      "reason": "dynamic-dispatch",
+      "candidates": [
+        "com.example.orders.EmailNotifier",
+        "com.example.orders.SmsNotifier"
+      ],
+      "loc": {
+        "file": "orders/workflows/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt",
+        "line": 61
+      }
+    },
+    {
+      "id": "n09",
+      "kind": "end"
+    },
+    {
+      "id": "n20",
+      "kind": "start"
+    },
+    {
+      "id": "n21",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n00",
+      "to": "n01"
+    },
+    {
+      "from": "n01",
+      "to": "n02"
+    },
+    {
+      "from": "n02",
+      "to": "n03"
+    },
+    {
+      "from": "n02",
+      "to": "n09",
+      "kind": "timeout"
+    },
+    {
+      "from": "n03",
+      "to": "n04",
+      "label": "paid"
+    },
+    {
+      "from": "n03",
+      "to": "n09",
+      "label": "cancelled"
+    },
+    {
+      "from": "n04",
+      "to": "n06"
+    },
+    {
+      "from": "n06",
+      "to": "n09"
+    },
+    {
+      "from": "n20",
+      "to": "n21"
+    },
+    {
+      "from": "sig-cancel",
+      "to": "n02",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 10,
+    "unknown": 1
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Laned",
+  "interface": "failing.Laned",
+  "implementation": "failing.LanedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Laned",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n24d646f8b5",
+      "kind": "branch",
+      "label": "input.length > 10",
+      "parent": "nc9c7917b6d",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Laned.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n41e439b6da",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "parent": "n9fbd32c94e",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Laned.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Laned.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n6d228e0b11",
+      "kind": "fail",
+      "name": "TooLong",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Laned.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n7583769f9d",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "parent": "n9fbd32c94e",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Laned.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n7ca26375e7",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "parent": "nc9c7917b6d",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Laned.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n9a77eaf6fe",
+      "kind": "branch",
+      "label": "input == \"quiet\"",
+      "parent": "n9fbd32c94e",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Laned.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n9fbd32c94e",
+      "kind": "parallel",
+      "waitsFor": "nothing",
+      "parent": "nc9c7917b6d",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Laned.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "nb658b5a53b",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "parent": "nc9c7917b6d",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Laned.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nc9c7917b6d",
+      "kind": "parallel",
+      "loc": {
+        "file": "app/src/main/kotlin/failing/Laned.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n24d646f8b5",
+      "to": "n6d228e0b11",
+      "label": "yes"
+    },
+    {
+      "from": "n24d646f8b5",
+      "to": "nb658b5a53b",
+      "label": "no"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nc9c7917b6d"
+    },
+    {
+      "from": "n7583769f9d",
+      "to": "n41e439b6da"
+    },
+    {
+      "from": "n9a77eaf6fe",
+      "to": "n7583769f9d",
+      "label": "no"
+    },
+    {
+      "from": "n9a77eaf6fe",
+      "to": "n9fbd32c94e",
+      "label": "yes"
+    },
+    {
+      "from": "nc9c7917b6d",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 11,
+    "unknown": 0
+  }
+}

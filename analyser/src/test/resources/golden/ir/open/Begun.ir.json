@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Begun",
+  "interface": "open.Begun",
+  "implementation": "open.BegunImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Begun",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n071c219f4c",
+      "kind": "parallel",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Begun.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n0ccf1a7403",
+      "kind": "childWorkflow",
+      "name": "Errand",
+      "waitsFor": "start",
+      "parentClosePolicy": "abandon",
+      "parent": "n92108564f3",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Begun.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n20ea2ec1fb",
+      "kind": "activity",
+      "name": "Store",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Begun.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n4850525eb3",
+      "kind": "childWorkflow",
+      "name": "Errand",
+      "parent": "n071c219f4c",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Begun.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n60028ddb4e",
+      "kind": "activity",
+      "name": "Fetch",
+      "parent": "n92108564f3",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Begun.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Begun.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n6f0480c89e",
+      "kind": "activity",
+      "name": "Fetch",
+      "parent": "n071c219f4c",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Begun.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n910fddee53",
+      "kind": "activity",
+      "name": "Notify",
+      "parent": "n92108564f3",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Begun.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n92108564f3",
+      "kind": "parallel",
+      "waitsFor": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Begun.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n071c219f4c",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n0ccf1a7403",
+      "to": "n910fddee53"
+    },
+    {
+      "from": "n20ea2ec1fb",
+      "to": "n071c219f4c"
+    },
+    {
+      "from": "n60028ddb4e",
+      "to": "n0ccf1a7403"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n92108564f3"
+    },
+    {
+      "from": "n6f0480c89e",
+      "to": "n4850525eb3"
+    },
+    {
+      "from": "n92108564f3",
+      "to": "n20ea2ec1fb"
+    }
+  ],
+  "stats": {
+    "nodes": 10,
+    "unknown": 0
+  }
+}

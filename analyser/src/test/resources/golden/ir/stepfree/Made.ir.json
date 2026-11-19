@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Made",
+  "interface": "plain.Made",
+  "implementation": "plain.MadeImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Made",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0feb530c79",
+      "kind": "fail",
+      "name": "IllegalArgumentException",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Made.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "n1bb7e5e0c8",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Made.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n565cef3025",
+      "kind": "branch",
+      "label": "limitOf throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Made.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Made.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n8ead67d6e7",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Made.kt",
+        "line": 25
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n1bb7e5e0c8",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n565cef3025",
+      "to": "n0feb530c79",
+      "label": "yes"
+    },
+    {
+      "from": "n565cef3025",
+      "to": "n8ead67d6e7",
+      "label": "no"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n565cef3025"
+    },
+    {
+      "from": "n8ead67d6e7",
+      "to": "n1bb7e5e0c8"
+    }
+  ],
+  "stats": {
+    "nodes": 6,
+    "unknown": 0
+  }
+}

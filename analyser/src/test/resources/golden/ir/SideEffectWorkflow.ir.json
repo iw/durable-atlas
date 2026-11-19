@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "SideEffectWorkflow",
+  "interface": "com.example.fixture.workflows.primitives.SideEffectWorkflow",
+  "implementation": "com.example.fixture.workflows.primitives.SideEffectWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "SideEffectWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/SideEffectWorkflow.kt",
+        "line": 14
+      }
+    },
+    {
+      "id": "n849a51754f",
+      "kind": "sideEffect",
+      "label": "region",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/SideEffectWorkflow.kt",
+        "line": 15
+      }
+    },
+    {
+      "id": "na8cc404c35",
+      "kind": "sideEffect",
+      "name": "batch-size",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/primitives/SideEffectWorkflow.kt",
+        "line": 18
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "n849a51754f"
+    },
+    {
+      "from": "n849a51754f",
+      "to": "na8cc404c35"
+    },
+    {
+      "from": "na8cc404c35",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 0
+  }
+}

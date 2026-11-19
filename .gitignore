@@ -1,0 +1,13 @@
+.gradle/
+build/
+.kotlin/
+out/
+# Output of `durable-atlas run --out .durable-atlas`.
+.durable-atlas/
+.idea/
+*.iml
+local.properties
+.DS_Store
+# Claude Code's worktrees and local settings.
+/.claude/worktrees/
+/.claude/settings.local.json

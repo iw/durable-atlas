@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Looped",
+  "interface": "calls.Looped",
+  "implementation": "calls.LoopedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Looped",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0b52e7edf1",
+      "kind": "loop",
+      "label": "for each of money.parts()",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Looped.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n3ca5a63f0e",
+      "kind": "loop",
+      "label": "for each part",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Looped.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Looped.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "na422d9d556",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "parent": "n0b52e7edf1",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Looped.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "ne05b4da595",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "parent": "n3ca5a63f0e",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Looped.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0b52e7edf1",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n3ca5a63f0e",
+      "to": "n0b52e7edf1"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n3ca5a63f0e"
+    }
+  ],
+  "stats": {
+    "nodes": 6,
+    "unknown": 0
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Looped.kt",
+        "line": 29
+      },
+      "text": "Money.of(4)"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Looped.kt",
+        "line": 30
+      },
+      "text": "money.parts()"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Looped.kt",
+        "line": 30
+      },
+      "text": "money.parts().forEach { part -> chores.one(part) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Looped.kt",
+        "line": 31
+      },
+      "text": "money.parts()"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Looped.kt",
+        "line": 31
+      },
+      "text": "money.parts().map { it.length }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Looped.kt",
+        "line": 32
+      },
+      "text": "money.parts()"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Looped.kt",
+        "line": 32
+      },
+      "text": "money.parts().onEach { chores.two(it) }"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+flowchart TD
+    n00(["start"])
+    n01["ReserveStock"]
+    n02{{"await cancelled, paid<br/>timeout 30m"}}
+    n03{"branch"}
+    subgraph n04_region ["for each line item"]
+        n04(("loop"))
+        n05["ShipItem"]
+        n06["RecordShipment (local)"]
+    end
+    n07[["InvoiceWorkflow"]]
+    n08["unknown#58; dynamic-dispatch<br/>2 candidates"]
+    n09(["end"])
+    n10["ReleaseStock"]
+    n12(["fail<br/>PaymentTimeoutException"])
+    subgraph handlers ["handlers"]
+        subgraph h_sig_cancel ["signal cancelOrder · writes#58; cancelled"]
+            n20(["start"])
+            n21(["end"])
+        end
+        subgraph h_sig_paid ["signal paymentReceived · writes#58; paid · received"]
+            n30(["start"])
+            n31(["end"])
+        end
+        subgraph h_qry_status ["query getStatus · reads#58; status"]
+            n40(["start"])
+            n41(["end"])
+        end
+        subgraph h_upd_address ["update + validator changeAddress · reads#58; status · writes#58; address"]
+            n60(["start<br/>validator"])
+            n61(["end"])
+            n50(["start<br/>update"])
+            n51["ValidateAddress"]
+            n52(["end"])
+        end
+    end
+    n00 --> n01
+    n01 --> n02
+    n02 --> n03
+    n02 -->|"timeout"| n12
+    n03 -->|"paid"| n04
+    n03 -->|"cancelled"| n10
+    n04 --> n05
+    n04 --> n07
+    n05 --> n06
+    n06 -->|"repeat"| n04
+    n07 --> n08
+    n08 --> n09
+    n10 --> n09
+    n20 -.->|"cancelled"| n02
+    n20 --> n21
+    n30 -.->|"paid"| n02
+    n30 --> n31
+    n40 --> n41
+    n50 --> n51
+    n51 --> n52
+    n60 --> n61
+    classDef unknown fill:#fff7e6,stroke:#b45309,color:#7c2d12,stroke-width:2px,stroke-dasharray:6 4
+    classDef highlighted fill:#dbeafe,stroke:#1d4ed8,color:#1e3a8a,stroke-width:3px
+    class n08 unknown
+    class n00,n01,n02,n03,n04,n05,n06,n07,n08,n09,n30,n31 highlighted
+    style h_sig_paid fill:#dbeafe,stroke:#1d4ed8,color:#1e3a8a,stroke-width:3px
+    linkStyle 0,1,2,4,6,7,8,9,10,11,15,16 stroke:#1d4ed8,stroke-width:3px

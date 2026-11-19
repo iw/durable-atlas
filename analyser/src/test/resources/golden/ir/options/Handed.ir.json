@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Handed",
+  "interface": "options.Handed",
+  "implementation": "options.HandedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Handed",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n39af995c91",
+      "kind": "activity",
+      "name": "Fetch",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Wired.kt",
+        "line": 110
+      }
+    },
+    {
+      "id": "n6311646d3c",
+      "kind": "localActivity",
+      "name": "Fetch",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Wired.kt",
+        "line": 112
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Wired.kt",
+        "line": 109
+      }
+    },
+    {
+      "id": "nd5d44e1450",
+      "kind": "activity",
+      "name": "Store",
+      "loc": {
+        "file": "app/src/main/kotlin/options/Wired.kt",
+        "line": 111
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n39af995c91",
+      "to": "nd5d44e1450"
+    },
+    {
+      "from": "n6311646d3c",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n39af995c91"
+    },
+    {
+      "from": "nd5d44e1450",
+      "to": "n6311646d3c"
+    }
+  ],
+  "stats": {
+    "nodes": 5,
+    "unknown": 0
+  }
+}

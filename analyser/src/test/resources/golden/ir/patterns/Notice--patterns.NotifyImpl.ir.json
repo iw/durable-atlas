@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Notice",
+  "interface": "patterns.Notify",
+  "implementation": "patterns.NotifyImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Notice",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Notices.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "nae12074a95",
+      "kind": "activity",
+      "name": "Report",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Notices.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "nae12074a95"
+    },
+    {
+      "from": "nae12074a95",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 3,
+    "unknown": 0
+  }
+}

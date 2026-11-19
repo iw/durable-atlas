@@ -1,0 +1,210 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Chains",
+  "interface": "patterns.Chains",
+  "implementation": "patterns.ChainsImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Chains",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n03ae26924d",
+      "kind": "activity",
+      "name": "CleanUp",
+      "parent": "neda7c7e004",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Chains.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n21b498f883",
+      "kind": "parallel",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Chains.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n64a15d99d4",
+      "kind": "activity",
+      "name": "Prepare",
+      "parent": "n21b498f883",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Chains.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Chains.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n71b7f5dce0",
+      "kind": "branch",
+      "label": "failure != null",
+      "parent": "n21b498f883",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Chains.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n73892965f0",
+      "kind": "activity",
+      "name": "Undo",
+      "parent": "n21b498f883",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Chains.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n9ec4479508",
+      "kind": "activity",
+      "name": "Check",
+      "parent": "n21b498f883",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Chains.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nceefea5665",
+      "kind": "activity",
+      "name": "Prepare",
+      "parent": "n21b498f883",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Chains.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "nd3cd123301",
+      "kind": "activity",
+      "name": "Report",
+      "parent": "n21b498f883",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Chains.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "neda7c7e004",
+      "kind": "parallel",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Chains.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf1b3ab8d49",
+      "kind": "activity",
+      "name": "Report",
+      "parent": "neda7c7e004",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Chains.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "nf4852c4f72",
+      "kind": "activity",
+      "name": "Work",
+      "parent": "n21b498f883",
+      "loc": {
+        "file": "app/src/main/kotlin/patterns/Chains.kt",
+        "line": 33
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n21b498f883",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n64a15d99d4",
+      "to": "n71b7f5dce0"
+    },
+    {
+      "from": "n64a15d99d4",
+      "to": "n71b7f5dce0",
+      "kind": "exception",
+      "label": "RuntimeException"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "neda7c7e004"
+    },
+    {
+      "from": "n71b7f5dce0",
+      "to": "n21b498f883",
+      "label": "no"
+    },
+    {
+      "from": "n71b7f5dce0",
+      "to": "nd3cd123301",
+      "label": "yes"
+    },
+    {
+      "from": "n9ec4479508",
+      "to": "n64a15d99d4"
+    },
+    {
+      "from": "n9ec4479508",
+      "to": "n71b7f5dce0",
+      "kind": "exception",
+      "label": "RuntimeException"
+    },
+    {
+      "from": "nceefea5665",
+      "to": "n73892965f0",
+      "kind": "exception",
+      "label": "Throwable"
+    },
+    {
+      "from": "nceefea5665",
+      "to": "nf4852c4f72"
+    },
+    {
+      "from": "neda7c7e004",
+      "to": "n21b498f883"
+    },
+    {
+      "from": "nf1b3ab8d49",
+      "to": "n03ae26924d"
+    },
+    {
+      "from": "nf4852c4f72",
+      "to": "n21b498f883"
+    },
+    {
+      "from": "nf4852c4f72",
+      "to": "n73892965f0",
+      "kind": "exception",
+      "label": "Throwable"
+    }
+  ],
+  "stats": {
+    "nodes": 13,
+    "unknown": 0
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "WhenArms",
+  "interface": "exits.WhenArms",
+  "implementation": "exits.WhenArmsImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "WhenArms",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n3e133a9e9d",
+      "kind": "loop",
+      "label": "for each id",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/WhenArms.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "n579b7d8b41",
+      "kind": "activity",
+      "name": "Report",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/WhenArms.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n58954a463e",
+      "kind": "activity",
+      "name": "Work",
+      "parent": "n3e133a9e9d",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/WhenArms.kt",
+        "line": 26
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/WhenArms.kt",
+        "line": 19
+      }
+    },
+    {
+      "id": "n9e45737986",
+      "kind": "branch",
+      "label": "id",
+      "parent": "n3e133a9e9d",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/WhenArms.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "nbf6da13052",
+      "kind": "activity",
+      "name": "Prepare",
+      "parent": "n3e133a9e9d",
+      "loc": {
+        "file": "app/src/main/kotlin/exits/WhenArms.kt",
+        "line": 21
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n3e133a9e9d",
+      "to": "n579b7d8b41"
+    },
+    {
+      "from": "n579b7d8b41",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n3e133a9e9d"
+    },
+    {
+      "from": "n9e45737986",
+      "to": "n3e133a9e9d",
+      "label": "\"skip\""
+    },
+    {
+      "from": "n9e45737986",
+      "to": "n3e133a9e9d",
+      "label": "else"
+    },
+    {
+      "from": "n9e45737986",
+      "to": "n579b7d8b41",
+      "label": "\"last\""
+    },
+    {
+      "from": "n9e45737986",
+      "to": "n58954a463e",
+      "label": "\"work\""
+    },
+    {
+      "from": "n9e45737986",
+      "to": "nedd528afe0",
+      "label": "\"quit\""
+    },
+    {
+      "from": "nbf6da13052",
+      "to": "n9e45737986"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 0
+  }
+}

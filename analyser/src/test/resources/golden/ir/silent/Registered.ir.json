@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Registered",
+  "interface": "silent.Registered",
+  "implementation": "silent.RegisteredImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Registered",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n516159f686",
+      "kind": "activity",
+      "name": "Fetch",
+      "timeout": "PT1S",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Registered.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Registered.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n877787abe7",
+      "kind": "localActivity",
+      "name": "Fetch",
+      "timeout": "PT2S",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Registered.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "nc312dcd229",
+      "kind": "activity",
+      "name": "Store",
+      "taskQueue": "slow",
+      "timeout": "PT2M",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Registered.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nd1910620a3",
+      "kind": "activity",
+      "name": "Store",
+      "taskQueue": "slow",
+      "timeout": "PT2M",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Registered.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "necd8ed1d2c",
+      "kind": "activity",
+      "name": "Fetch",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/silent/Registered.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n516159f686",
+      "to": "nc312dcd229"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "necd8ed1d2c"
+    },
+    {
+      "from": "n877787abe7",
+      "to": "n516159f686"
+    },
+    {
+      "from": "nc312dcd229",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nd1910620a3",
+      "to": "n877787abe7"
+    },
+    {
+      "from": "necd8ed1d2c",
+      "to": "nd1910620a3"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 0
+  }
+}

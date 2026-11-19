@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Published",
+  "interface": "plain.Published",
+  "implementation": "plain.PublishedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Published",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0571f10bfe",
+      "kind": "branch",
+      "label": "Events.create throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Published.kt",
+        "line": 26
+      }
+    },
+    {
+      "id": "n250041a3be",
+      "kind": "fail",
+      "name": "MappingException",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Published.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n3ac82b6ca8",
+      "kind": "branch",
+      "label": "events.describe(event).isEmpty()",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Published.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n4e77965a95",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Published.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n58b88a4ceb",
+      "kind": "branch",
+      "label": "Events.toJson throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Published.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n60d0cf655f",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Published.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Published.kt",
+        "line": 25
+      }
+    },
+    {
+      "id": "n81c63d9b21",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Published.kt",
+        "line": 29
+      }
+    },
+    {
+      "id": "n9f66513cf4",
+      "kind": "fail",
+      "label": "IllegalArgumentException, IllegalStateException, UnknownEvent",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Published.kt",
+        "line": 26
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0571f10bfe",
+      "to": "n58b88a4ceb",
+      "label": "no"
+    },
+    {
+      "from": "n0571f10bfe",
+      "to": "n9f66513cf4",
+      "label": "yes"
+    },
+    {
+      "from": "n3ac82b6ca8",
+      "to": "n60d0cf655f",
+      "label": "no"
+    },
+    {
+      "from": "n3ac82b6ca8",
+      "to": "n81c63d9b21",
+      "label": "yes"
+    },
+    {
+      "from": "n4e77965a95",
+      "to": "n3ac82b6ca8"
+    },
+    {
+      "from": "n58b88a4ceb",
+      "to": "n250041a3be",
+      "label": "yes"
+    },
+    {
+      "from": "n58b88a4ceb",
+      "to": "n4e77965a95",
+      "label": "no"
+    },
+    {
+      "from": "n60d0cf655f",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n0571f10bfe"
+    },
+    {
+      "from": "n81c63d9b21",
+      "to": "n60d0cf655f"
+    }
+  ],
+  "stats": {
+    "nodes": 10,
+    "unknown": 0
+  }
+}

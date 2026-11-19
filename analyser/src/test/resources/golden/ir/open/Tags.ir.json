@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Tags",
+  "interface": "open.Tags",
+  "implementation": "open.TagsImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Tags",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n3c9dec3152",
+      "kind": "upsertSearchAttributes",
+      "keys": [
+        "Stage",
+        "Rank"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/open/Tags.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n5c04139d3c",
+      "kind": "activity",
+      "name": "Notify",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Tags.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n67bb8b61d4",
+      "kind": "upsertMemo",
+      "keys": [
+        "note",
+        "by"
+      ],
+      "otherKeys": true,
+      "loc": {
+        "file": "app/src/main/kotlin/open/Tags.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Tags.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n6ae5a60b32",
+      "kind": "upsertMemo",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Tags.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "ncc0b343b4d",
+      "kind": "upsertSearchAttributes",
+      "keys": [
+        "Stage",
+        "Owner"
+      ],
+      "otherKeys": true,
+      "loc": {
+        "file": "app/src/main/kotlin/open/Tags.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "ne0ec47a023",
+      "kind": "upsertSearchAttributes",
+      "keys": [
+        "Stage"
+      ],
+      "otherKeys": true,
+      "loc": {
+        "file": "app/src/main/kotlin/open/Tags.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n3c9dec3152",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n5c04139d3c",
+      "to": "n6ae5a60b32"
+    },
+    {
+      "from": "n67bb8b61d4",
+      "to": "n5c04139d3c"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "ne0ec47a023"
+    },
+    {
+      "from": "n6ae5a60b32",
+      "to": "n3c9dec3152"
+    },
+    {
+      "from": "ncc0b343b4d",
+      "to": "n67bb8b61d4"
+    },
+    {
+      "from": "ne0ec47a023",
+      "to": "ncc0b343b4d"
+    }
+  ],
+  "stats": {
+    "nodes": 8,
+    "unknown": 0
+  }
+}

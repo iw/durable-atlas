@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Deep",
+  "interface": "plain.Deep",
+  "implementation": "plain.DeepImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Deep",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n4794f1ff96",
+      "kind": "fail",
+      "name": "IllegalArgumentException",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Deep.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Deep.kt",
+        "line": 23
+      }
+    },
+    {
+      "id": "n941071ee54",
+      "kind": "branch",
+      "label": "checked1 throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Deep.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "ndc4d4c8be7",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Chains.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf3d755b2e5",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Deep.kt",
+        "line": 26
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "n941071ee54"
+    },
+    {
+      "from": "n941071ee54",
+      "to": "n4794f1ff96",
+      "label": "yes"
+    },
+    {
+      "from": "n941071ee54",
+      "to": "nf3d755b2e5",
+      "label": "no"
+    },
+    {
+      "from": "ndc4d4c8be7",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nf3d755b2e5",
+      "to": "ndc4d4c8be7"
+    }
+  ],
+  "stats": {
+    "nodes": 6,
+    "unknown": 0
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Deadline",
+  "interface": "open.Deadline",
+  "implementation": "open.DeadlineImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Deadline",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n15bf9f7d4a",
+      "kind": "activity",
+      "name": "Fetch",
+      "parent": "n418d3e9ae5",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Deadline.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n418d3e9ae5",
+      "kind": "parallel",
+      "join": "first",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Deadline.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Deadline.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n737fb8032e",
+      "kind": "branch",
+      "label": "!work.isCompleted",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Deadline.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "na829686337",
+      "kind": "activity",
+      "name": "Notify",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Deadline.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf73c7e260b",
+      "kind": "timer",
+      "duration": "PT1M",
+      "parent": "n418d3e9ae5",
+      "loc": {
+        "file": "app/src/main/kotlin/open/Deadline.kt",
+        "line": 29
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n418d3e9ae5",
+      "to": "n737fb8032e"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n418d3e9ae5"
+    },
+    {
+      "from": "n737fb8032e",
+      "to": "na829686337",
+      "label": "yes"
+    },
+    {
+      "from": "n737fb8032e",
+      "to": "nedd528afe0",
+      "label": "no"
+    },
+    {
+      "from": "na829686337",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 0
+  }
+}

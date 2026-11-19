@@ -1,0 +1,475 @@
+{
+  "schemaVersion": 1,
+  "commit": "3f786850e387550fdab836ed7e6dc881de23001b",
+  "modelMode": "gradle",
+  "workflowType": "FulfilmentWorkflow",
+  "interface": "com.example.fulfilment.FulfilmentWorkflow",
+  "implementation": "com.example.fulfilment.FulfilmentWorkflowImpl",
+  "module": ":fulfilment",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "FulfilmentWorkflow",
+      "start": "n100"
+    },
+    {
+      "id": "sig-approve",
+      "kind": "signal",
+      "name": "approve",
+      "start": "n200",
+      "writes": [
+        "approved"
+      ]
+    },
+    {
+      "id": "sig-status",
+      "kind": "signal",
+      "name": "statusChanged",
+      "start": "n210",
+      "writes": [
+        "carrierStatus"
+      ]
+    },
+    {
+      "id": "upd-priority",
+      "kind": "update",
+      "name": "setPriority",
+      "start": "n220",
+      "writes": [
+        "priority"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n100",
+      "kind": "start"
+    },
+    {
+      "id": "n101",
+      "kind": "versionGate",
+      "changeId": "add-fraud-check",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "n102",
+      "kind": "activity",
+      "name": "FraudCheck",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "n103",
+      "kind": "sideEffect",
+      "label": "generate idempotency key",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 25
+      }
+    },
+    {
+      "id": "n104",
+      "kind": "parallel",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n105",
+      "kind": "activity",
+      "name": "ChargeCard",
+      "parent": "n104",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 31
+      }
+    },
+    {
+      "id": "n106",
+      "kind": "compensation",
+      "parent": "n104",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n126",
+      "kind": "activity",
+      "name": "RefundCard",
+      "parent": "n106",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n127",
+      "kind": "localActivity",
+      "name": "RecordRefund",
+      "parent": "n106",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "n107",
+      "kind": "nexusOperation",
+      "service": "inventory",
+      "name": "reserve",
+      "parent": "n104",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n108",
+      "kind": "loop",
+      "label": "while (attempts < 3)",
+      "parent": "n104",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "n109",
+      "kind": "localActivity",
+      "name": "PollCarrier",
+      "parent": "n108",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n110",
+      "kind": "timer",
+      "duration": "PT10S",
+      "parent": "n108",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n111",
+      "kind": "await",
+      "reads": [
+        "approved"
+      ],
+      "timeout": "PT24H",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 45
+      }
+    },
+    {
+      "id": "n112",
+      "kind": "branch",
+      "label": "order.total > 1000",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "n113",
+      "kind": "signalExternal",
+      "name": "notifyWarehouse",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 52
+      }
+    },
+    {
+      "id": "n114",
+      "kind": "childWorkflow",
+      "name": "ShippingWorkflow",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 55
+      }
+    },
+    {
+      "id": "n115",
+      "kind": "timer",
+      "duration": "P1DT2H",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 58
+      }
+    },
+    {
+      "id": "n116",
+      "kind": "loop",
+      "label": "do … while (!delivered)",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 60
+      }
+    },
+    {
+      "id": "n117",
+      "kind": "activity",
+      "name": "CheckStatus",
+      "parent": "n116",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 61
+      }
+    },
+    {
+      "id": "n118",
+      "kind": "branch",
+      "label": "status",
+      "parent": "n116",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 62
+      }
+    },
+    {
+      "id": "n119",
+      "kind": "await",
+      "reads": [
+        "carrierStatus"
+      ],
+      "timeout": "PT1M",
+      "parent": "n116",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 63
+      }
+    },
+    {
+      "id": "n120",
+      "kind": "continueAsNew",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 70
+      }
+    },
+    {
+      "id": "n121",
+      "kind": "end"
+    },
+    {
+      "id": "n122",
+      "kind": "fail",
+      "name": "PaymentDeclinedException",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "n123",
+      "kind": "unknown",
+      "reason": "depth-limit",
+      "label": "auditTrail.record(order)",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 66
+      }
+    },
+    {
+      "id": "n124",
+      "kind": "unknown",
+      "reason": "recursion",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 67
+      }
+    },
+    {
+      "id": "n125",
+      "kind": "compensation",
+      "name": "ReleaseInventory",
+      "loc": {
+        "file": "fulfilment/src/main/kotlin/com/example/fulfilment/FulfilmentWorkflowImpl.kt",
+        "line": 72
+      }
+    },
+    {
+      "id": "n200",
+      "kind": "start"
+    },
+    {
+      "id": "n201",
+      "kind": "end"
+    },
+    {
+      "id": "n210",
+      "kind": "start"
+    },
+    {
+      "id": "n211",
+      "kind": "end"
+    },
+    {
+      "id": "n220",
+      "kind": "start"
+    },
+    {
+      "id": "n221",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n100",
+      "to": "n101"
+    },
+    {
+      "from": "n101",
+      "to": "n102",
+      "label": "v1"
+    },
+    {
+      "from": "n101",
+      "to": "n103",
+      "label": "default"
+    },
+    {
+      "from": "n102",
+      "to": "n103"
+    },
+    {
+      "from": "n103",
+      "to": "n104"
+    },
+    {
+      "from": "n105",
+      "to": "n106"
+    },
+    {
+      "from": "n126",
+      "to": "n127"
+    },
+    {
+      "from": "n105",
+      "to": "n122",
+      "kind": "exception",
+      "label": "CardDeclinedException"
+    },
+    {
+      "from": "n109",
+      "to": "n110"
+    },
+    {
+      "from": "n104",
+      "to": "n111"
+    },
+    {
+      "from": "n111",
+      "to": "n112"
+    },
+    {
+      "from": "n111",
+      "to": "n125",
+      "kind": "timeout"
+    },
+    {
+      "from": "n125",
+      "to": "n122"
+    },
+    {
+      "from": "n112",
+      "to": "n113",
+      "label": "true"
+    },
+    {
+      "from": "n112",
+      "to": "n114",
+      "label": "false"
+    },
+    {
+      "from": "n113",
+      "to": "n114"
+    },
+    {
+      "from": "n114",
+      "to": "n115"
+    },
+    {
+      "from": "n115",
+      "to": "n116"
+    },
+    {
+      "from": "n116",
+      "to": "n117"
+    },
+    {
+      "from": "n117",
+      "to": "n118"
+    },
+    {
+      "from": "n118",
+      "to": "n119",
+      "label": "IN_TRANSIT"
+    },
+    {
+      "from": "n119",
+      "to": "n116"
+    },
+    {
+      "from": "n118",
+      "to": "n123",
+      "label": "DELIVERED"
+    },
+    {
+      "from": "n119",
+      "to": "n123",
+      "kind": "timeout"
+    },
+    {
+      "from": "n123",
+      "to": "n124"
+    },
+    {
+      "from": "n123",
+      "to": "n121",
+      "kind": "exception"
+    },
+    {
+      "from": "n124",
+      "to": "n120"
+    },
+    {
+      "from": "n200",
+      "to": "n201"
+    },
+    {
+      "from": "n210",
+      "to": "n211"
+    },
+    {
+      "from": "n220",
+      "to": "n221"
+    },
+    {
+      "from": "sig-approve",
+      "to": "n111",
+      "kind": "wakes"
+    },
+    {
+      "from": "sig-status",
+      "to": "n119",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 34,
+    "unknown": 2
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Poller",
+  "interface": "linear.PollingWorkflow",
+  "implementation": "linear.PollingWorkflowImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Poller",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n01058299e9",
+      "kind": "continueAsNew",
+      "name": "Poller",
+      "loc": {
+        "file": "app/src/main/kotlin/linear/Linear.kt",
+        "line": 72
+      }
+    },
+    {
+      "id": "n3aa6d8e316",
+      "kind": "timer",
+      "duration": "PT15M",
+      "loc": {
+        "file": "app/src/main/kotlin/linear/Linear.kt",
+        "line": 71
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/linear/Linear.kt",
+        "line": 70
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n3aa6d8e316",
+      "to": "n01058299e9"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n3aa6d8e316"
+    }
+  ],
+  "stats": {
+    "nodes": 3,
+    "unknown": 0
+  }
+}

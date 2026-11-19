@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Forked",
+  "interface": "plain.Forked",
+  "implementation": "plain.ForkedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Forked",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Forked.kt",
+        "line": 23
+      }
+    },
+    {
+      "id": "nb4a73fe7a8",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Forked.kt",
+        "line": 33
+      }
+    },
+    {
+      "id": "ne6073def97",
+      "kind": "branch",
+      "label": "input.length < 3",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Forked.kt",
+        "line": 32
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "ne6073def97"
+    },
+    {
+      "from": "nb4a73fe7a8",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "ne6073def97",
+      "to": "nb4a73fe7a8",
+      "label": "no"
+    },
+    {
+      "from": "ne6073def97",
+      "to": "nedd528afe0",
+      "label": "yes"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 0
+  }
+}

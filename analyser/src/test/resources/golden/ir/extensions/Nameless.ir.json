@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Nameless",
+  "interface": "extensions.Nameless",
+  "implementation": "extensions.NamelessImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Nameless",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n4cd74cc67e",
+      "kind": "unknown",
+      "label": "activityName(Bare::run)",
+      "reason": "computed-name",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Nameless.kt",
+        "line": 53
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Nameless.kt",
+        "line": 52
+      }
+    },
+    {
+      "id": "n88203c740a",
+      "kind": "unknown",
+      "label": "workflowSignalName(Sub::state)",
+      "reason": "computed-name",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Nameless.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "na301154805",
+      "kind": "unknown",
+      "label": "workflowName<Bare>()",
+      "reason": "computed-name",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Nameless.kt",
+        "line": 55
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n4cd74cc67e",
+      "to": "n88203c740a"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n4cd74cc67e"
+    },
+    {
+      "from": "n88203c740a",
+      "to": "na301154805"
+    },
+    {
+      "from": "na301154805",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 5,
+    "unknown": 3
+  }
+}

@@ -1,0 +1,146 @@
+block app/src/main/kotlin/rare/Holder.kt:16
+  val value: kotlin.Int :17
+    other ?: `input ?: return -1` :17
+      local input: kotlin.Int? :17
+      return :17
+        other - `-1` :17
+          literal 1 :17
+  val (a, b) :18
+    call rare.Point.plus(rare.Point) [source]: rare.Point :18
+      on rare.Point
+      receiver
+        call constructor rare.Point.<init>(kotlin.Int,kotlin.Int) [source]: rare.Point :18
+          argument x `value`
+            local value: kotlin.Int :18
+          argument y `value`
+            local value: kotlin.Int :18
+      argument other `Point(1, 2)`
+        call constructor rare.Point.<init>(kotlin.Int,kotlin.Int) [source]: rare.Point :18
+          argument x `1` = 1
+            literal 1 :18
+          argument y `2` = 2
+            literal 2 :18
+  val scaled: kotlin.Int :19
+    call rare.scaledBy(kotlin.Int) on kotlin.Int [source]: kotlin.Int :19
+      on kotlin.Int
+      receiver
+        local a: kotlin.Int :19
+      argument other `b`
+        local b: kotlin.Int :19
+  when `val size = values.size` :20
+    subject
+      val size: kotlin.Int :20
+        read kotlin.collections.List.size: kotlin.Int :20
+          receiver
+            read rare.Holder.values on this: kotlin.collections.MutableList<kotlin.Int> :20
+    branch `0` :21
+      condition
+        literal 0 :21
+      body
+        return :21
+          literal 0 :21
+    branch `in 1..3` :22
+      condition
+        other .. `1..3` :22
+          literal 1 :22
+          literal 3 :22
+      body
+        write rare.Holder.count on this += :22
+          value
+            local size: kotlin.Int :22
+    branch `else` :23
+      body
+        if `size > 100` :23
+          condition
+            other > `size > 100` :23
+              local size: kotlin.Int :23
+              literal 100 :23
+          then
+            throw: java.lang.IllegalStateException :23
+              call constructor kotlin.IllegalStateException.<init>(kotlin.String) [library]: java.lang.IllegalStateException :23
+                argument s `"too many: $size"`
+                  other template `"too many: $size"` :23
+                    local size: kotlin.Int :23
+  call kotlin.collections.forEach(kotlin.Function1) on kotlin.collections.Iterable [library] <kotlin.Int>: kotlin.Unit :25
+    on kotlin.collections.MutableList<kotlin.Int>
+    receiver
+      read rare.Holder.values on this: kotlin.collections.MutableList<kotlin.Int> :25
+    argument action `{ item -> if (item < 0) return@forEach values[0] = item count++ }`
+      lambda (item) :25
+        block :26
+          if `item < 0` :26
+            condition
+              other < `item < 0` :26
+                local item: kotlin.Int :26
+                literal 0 :26
+            then
+              return@forEach :26
+          other []= `values[0] = item` :27
+            read rare.Holder.values on this: kotlin.collections.MutableList<kotlin.Int> :27
+            literal 0 :27
+            local item: kotlin.Int :27
+          write rare.Holder.count on this ++ :28
+  loop@ for `i in 0 until scaled` :30
+    header
+      call kotlin.ranges.until(kotlin.Int) on kotlin.Int [library]: kotlin.ranges.IntRange :30
+        on kotlin.Int
+        receiver
+          literal 0 :30
+        argument to `scaled`
+          local scaled: kotlin.Int :30
+    body
+      block :30
+        if `i == 3` :31
+          condition
+            other == `i == 3` :31
+              local i: kotlin.Int :31
+              literal 3 :31
+          then
+            continue@loop :31
+        if `i > 5` :32
+          condition
+            other > `i > 5` :32
+              local i: kotlin.Int :32
+              literal 5 :32
+          then
+            break :32
+  other declaration `fun local(n: Int) = n + 1` :34
+  val listener: rare.<anonymous> :35
+    other object `object : Runnable { override fun run() { Workflow.sleep(Duration.ofSeconds(1)) …` :35
+  call <local>.run() [source]: kotlin.Unit :40
+    on rare.<anonymous>
+    receiver
+      local listener: rare.<anonymous> :40
+  val text: kotlin.String :41
+    call kotlin.Int.toString() [library]: kotlin.String :41
+      on kotlin.Int
+      receiver
+        call kotlin.Function1.invoke(P1) [library]: kotlin.Int :41
+          on kotlin.Function1<kotlin.String, kotlin.Int>
+          receiver
+            read rare.Holder.callback on this: kotlin.Function1<kotlin.String, kotlin.Int> :41
+          argument p1 `"x"` = "x"
+            literal "x" :41
+  val length: kotlin.Int :42
+    other ?: `(text as? CharSequence)?.length ?: 0` :42
+      read kotlin.CharSequence.length: kotlin.Int? :42
+        receiver
+          other as? `text as? CharSequence` :42
+            local text: kotlin.String :42
+      literal 0 :42
+  return :43
+    other + `local(length) + lazyValue + missingFunction(length) + this.missing.size` :43
+      other + `local(length) + lazyValue + missingFunction(length)` :43
+        other + `local(length) + lazyValue` :43
+          call <local>.local(kotlin.Int) [source]: kotlin.Int :43
+            argument n `length`
+              local length: kotlin.Int :43
+          read rare.Holder.lazyValue on this: kotlin.Int :43
+        call ?missingFunction :43
+          argument ? `length`
+            local length: kotlin.Int :43
+      read ?size :43
+        receiver
+          read ?missing :43
+            receiver
+              this: rare.Holder :43

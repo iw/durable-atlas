@@ -1,0 +1,10 @@
+flowchart TD
+    n0(["start"])
+    n1["CreateInvoice"]
+    n2["unknown#58; unresolved-call<br/>taxRules.apply(invoice)"]
+    n3(["end"])
+    n0 --> n1
+    n1 --> n2
+    n2 --> n3
+    classDef unknown fill:#fff7e6,stroke:#b45309,color:#7c2d12,stroke-width:2px,stroke-dasharray:6 4
+    class n2 unknown

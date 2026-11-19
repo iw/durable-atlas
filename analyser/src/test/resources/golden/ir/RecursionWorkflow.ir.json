@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "workflowType": "RecursionWorkflow",
+  "interface": "com.example.fixture.workflows.hardcases.RecursionWorkflow",
+  "implementation": "com.example.fixture.workflows.hardcases.RecursionWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "RecursionWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n022d9b0ffe",
+      "kind": "branch",
+      "label": "inventory.checkAvailability(sku)",
+      "loc": {
+        "file": "helpers/src/main/kotlin/com/example/fixture/helpers/StockPolling.kt",
+        "line": 9
+      }
+    },
+    {
+      "id": "n02e7a8e19d",
+      "kind": "activity",
+      "name": "CheckAvailability",
+      "timeout": "PT30S",
+      "loc": {
+        "file": "helpers/src/main/kotlin/com/example/fixture/helpers/StockPolling.kt",
+        "line": 9
+      }
+    },
+    {
+      "id": "n13ae1705c9",
+      "kind": "branch",
+      "label": "attemptsLeft <= 0",
+      "loc": {
+        "file": "helpers/src/main/kotlin/com/example/fixture/helpers/StockPolling.kt",
+        "line": 12
+      }
+    },
+    {
+      "id": "n2ebbb58af7",
+      "kind": "unknown",
+      "label": "waitForStock",
+      "reason": "recursion",
+      "loc": {
+        "file": "helpers/src/main/kotlin/com/example/fixture/helpers/StockPolling.kt",
+        "line": 16
+      }
+    },
+    {
+      "id": "n34843bdfac",
+      "kind": "timer",
+      "duration": "PT30S",
+      "loc": {
+        "file": "helpers/src/main/kotlin/com/example/fixture/helpers/StockPolling.kt",
+        "line": 15
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/hardcases/RecursionWorkflow.kt",
+        "line": 18
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n022d9b0ffe",
+      "to": "n13ae1705c9",
+      "label": "no"
+    },
+    {
+      "from": "n022d9b0ffe",
+      "to": "nedd528afe0",
+      "label": "yes"
+    },
+    {
+      "from": "n02e7a8e19d",
+      "to": "n022d9b0ffe"
+    },
+    {
+      "from": "n13ae1705c9",
+      "to": "n34843bdfac",
+      "label": "no"
+    },
+    {
+      "from": "n13ae1705c9",
+      "to": "nedd528afe0",
+      "label": "yes"
+    },
+    {
+      "from": "n2ebbb58af7",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n34843bdfac",
+      "to": "n2ebbb58af7"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n02e7a8e19d"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 1
+  }
+}

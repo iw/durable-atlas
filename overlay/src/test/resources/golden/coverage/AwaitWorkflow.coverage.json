@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "AwaitWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 5,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "AwaitWorkflow",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "signal-release",
+      "kind": "signal",
+      "name": "release",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n3de7c4cadd",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n680334ad51",
+      "kind": "timer",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n77bd82c586",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n94d1036341",
+      "kind": "await",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nd364debe44",
+      "kind": "await",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n3de7c4cadd",
+      "to": "n77bd82c586",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n680334ad51",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n94d1036341",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n94d1036341",
+      "to": "nd364debe44",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "nd364debe44",
+      "to": "n680334ad51",
+      "kind": "timeout",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "nd364debe44",
+      "to": "nedd528afe0",
+      "label": "released",
+      "hits": 0,
+      "executions": 0
+    },
+    {
+      "from": "signal-release",
+      "to": "n94d1036341",
+      "kind": "wakes",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "signal-release",
+      "to": "nd364debe44",
+      "kind": "wakes",
+      "hits": 0,
+      "executions": 0
+    }
+  ],
+  "neverHit": [],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "AwaitWorkflow.json",
+      "runId": "583582ab-1605-4157-aeac-5cae4772c402",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 5,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

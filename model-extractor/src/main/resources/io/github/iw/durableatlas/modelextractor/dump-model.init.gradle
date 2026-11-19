@@ -1,0 +1,78 @@
+import groovy.json.JsonOutput
+import org.gradle.api.artifacts.component.ProjectComponentIdentifier
+import org.gradle.api.artifacts.result.UnresolvedDependencyResult
+
+// Adds a task to every Kotlin or Java module that writes the module's source directories and
+// compile classpath as JSON. The task has no inputs and depends on nothing: it resolves the
+// classpath when it runs, so nothing is compiled. It reads the project model while it executes,
+// which the configuration cache does not allow, so run it with --no-configuration-cache.
+//
+//   ./gradlew --init-script dump-model.init.gradle --no-configuration-cache \
+//             -PmodelOut=<directory> dumpAnalysisModel
+//
+// Output: <directory>/modules/<module>.json, and <directory>/tasks.txt listing every task of the run.
+
+// The script is also evaluated for buildSrc and included builds. Only the build that was invoked
+// is described.
+if (gradle.parent == null) {
+    def modelOut = gradle.startParameter.projectProperties['modelOut']
+    if (modelOut == null) {
+        throw new GradleException('Pass the output directory as -PmodelOut=<directory>')
+    }
+    def outDir = new File(modelOut as String)
+    def modulesDir = new File(outDir, 'modules')
+
+    gradle.taskGraph.whenReady { graph ->
+        outDir.mkdirs()
+        new File(outDir, 'tasks.txt').setText(graph.allTasks.collect { it.path + '\n' }.join(''), 'UTF-8')
+    }
+
+    gradle.allprojects { p ->
+        def register = {
+            if (p.tasks.names.contains('dumpAnalysisModel')) return
+            p.tasks.register('dumpAnalysisModel') { task ->
+                task.group = 'help'
+                task.description = 'Writes the source directories and compile classpath of this module as JSON.'
+                task.outputs.upToDateWhen { false }
+                task.doLast {
+                    // Kotlin's own source set covers src/main/kotlin and src/main/java but, unlike
+                    // the Java source set's allSource, not the resource directories.
+                    def kotlin = p.extensions.findByName('kotlin')
+                    def sourceDirs = kotlin != null
+                        ? kotlin.sourceSets.getByName('main').kotlin.srcDirs
+                        : p.extensions.getByName('sourceSets').getByName('main').java.srcDirs
+
+                    def classpath = p.configurations.getByName('compileClasspath')
+                    def resolution = classpath.incoming.resolutionResult
+                    def self = resolution.root.id
+
+                    // Sibling modules are taken from the dependency graph, never from their
+                    // artifacts: those are class directories and jars that do not exist yet.
+                    def projectDeps = resolution.allComponents
+                        .collect { it.id }
+                        .findAll { it instanceof ProjectComponentIdentifier && it != self }
+                        .collect { it.buildTreePath }
+                    def unresolved = resolution.allDependencies
+                        .findAll { it instanceof UnresolvedDependencyResult }
+                        .collect { it.attempted.displayName }
+                    def jars = classpath.incoming.artifactView { view ->
+                        view.lenient = true
+                        view.componentFilter { !(it instanceof ProjectComponentIdentifier) }
+                    }.artifacts.collect { it.file.path }
+
+                    modulesDir.mkdirs()
+                    def name = URLEncoder.encode(p.buildTreePath, 'UTF-8') + '.json'
+                    new File(modulesDir, name).setText(JsonOutput.toJson([
+                        path       : p.buildTreePath,
+                        sources    : sourceDirs.findAll { it.isDirectory() }.collect { it.path },
+                        projectDeps: projectDeps,
+                        jars       : jars,
+                        unresolved : unresolved,
+                    ]), 'UTF-8')
+                }
+            }
+        }
+        p.plugins.withId('org.jetbrains.kotlin.jvm', register)
+        p.plugins.withId('java', register)
+    }
+}

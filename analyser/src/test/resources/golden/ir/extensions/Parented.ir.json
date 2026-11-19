@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Parented",
+  "interface": "extensions.Parented",
+  "implementation": "extensions.ParentedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Parented",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n4ae3490773",
+      "kind": "childWorkflow",
+      "name": "SubFlow",
+      "taskQueue": "children",
+      "timeout": "PT10M",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Parented.kt",
+        "line": 66
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Parented.kt",
+        "line": 51
+      }
+    },
+    {
+      "id": "ndf9033fc03",
+      "kind": "childWorkflow",
+      "name": "SubFlow",
+      "waitsFor": "start",
+      "parentClosePolicy": "abandon",
+      "loc": {
+        "file": "app/src/main/kotlin/extensions/Parented.kt",
+        "line": 64
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n4ae3490773",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "ndf9033fc03"
+    },
+    {
+      "from": "ndf9033fc03",
+      "to": "n4ae3490773"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 0
+  }
+}

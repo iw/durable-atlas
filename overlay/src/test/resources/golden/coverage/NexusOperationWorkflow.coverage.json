@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "workflowType": "NexusOperationWorkflow",
+  "commit": "0000000000000000000000000000000000000000",
+  "executions": 1,
+  "events": {
+    "mapped": 4,
+    "ambiguous": 0,
+    "unmapped": 0
+  },
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "NexusOperationWorkflow",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "n6f54b25be9",
+      "kind": "nexusOperation",
+      "name": "greet",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nc47f317ae4",
+      "kind": "nexusOperation",
+      "name": "say-goodbye",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "n6f54b25be9",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "n6f54b25be9",
+      "to": "nc47f317ae4",
+      "hits": 1,
+      "executions": 1
+    },
+    {
+      "from": "nc47f317ae4",
+      "to": "nedd528afe0",
+      "hits": 1,
+      "executions": 1
+    }
+  ],
+  "neverHit": [],
+  "closes": [
+    {
+      "status": "completed",
+      "nodes": [
+        "nedd528afe0"
+      ],
+      "executions": 1
+    }
+  ],
+  "ambiguous": [],
+  "unmapped": [],
+  "histories": [
+    {
+      "file": "NexusOperationWorkflow.json",
+      "runId": "1041e08a-709f-4878-8fa2-dcae6434f89d",
+      "status": "completed",
+      "closedAt": [
+        "nedd528afe0"
+      ],
+      "events": {
+        "mapped": 4,
+        "ambiguous": 0,
+        "unmapped": 0
+      }
+    }
+  ]
+}

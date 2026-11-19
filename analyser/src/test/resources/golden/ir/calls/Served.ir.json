@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Served",
+  "interface": "calls.Served",
+  "implementation": "calls.ServedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Served",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Served.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nd847421f9b",
+      "kind": "unknown",
+      "label": "JavaJobs.charge",
+      "reason": "unresolved",
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Served.kt",
+        "line": 22
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "nd847421f9b"
+    },
+    {
+      "from": "nd847421f9b",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 3,
+    "unknown": 1
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Served.kt",
+        "line": 21
+      },
+      "text": "log.info(input)"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/calls/Served.kt",
+        "line": 33
+      },
+      "text": "KotlinLogging.logger(\"desk\")"
+    }
+  ]
+}
