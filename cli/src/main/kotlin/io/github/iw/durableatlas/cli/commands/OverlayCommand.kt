@@ -77,7 +77,12 @@ class OverlayCommand : StageCommand(
     private val diagrams by DiagramOptions()
 
     override fun run() {
-        val options = OverlayOptions(formats = diagrams.configuredFormats, maxNodes = diagrams.maxNodes, progress = ProgressLines(::log))
+        val options = OverlayOptions(
+            formats = diagrams.configuredFormats,
+            maxNodes = diagrams.maxNodes,
+            progress = ProgressLines(::log),
+            requests = !diagrams.noRequests,
+        )
         val summary = attempt { Stages(::log).overlay(ir, history, Summaries.shown(out), options, versionMap) }
 
         val limit = maxUnmappedPct

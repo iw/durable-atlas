@@ -45,6 +45,13 @@ data class Call(
     override val location: SourceLocation,
     /** What the sources still say of a call that could not be resolved; `null` for one that was. */
     val unresolved: Unresolved? = null,
+    /**
+     * The type arguments as written, for a call that the compiler could not resolve but took for
+     * the one function it found by the name, as it does where the type of the object the call is
+     * made on is not known; there [typeArguments] are those of that function. `null` for a call
+     * that resolved.
+     */
+    val writtenTypeArguments: List<TypeRef>? = null,
 ) : Code
 
 /**

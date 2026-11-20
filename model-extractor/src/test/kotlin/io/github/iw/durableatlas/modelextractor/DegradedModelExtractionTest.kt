@@ -183,6 +183,60 @@ class DegradedModelExtractionTest {
     }
 
     @Test
+    fun `the configuration files beside each source directory come with a degraded model, and nothing else of the resources`() {
+        val repository = SampleRepository.create(dir.resolve("repo-configured"))
+        val configured = repository.commit("Configure the services") { project ->
+            write(project, "activities/src/main/resources/application.yaml", "inventory:\n  url: http://inventory.example.com\n")
+            write(project, "activities/src/main/resources/application.properties", "billing.url=http://billing.example.com\n")
+            write(project, "activities/src/main/resources/logback.xml", "<configuration/>\n")
+            write(project, "activities/src/test/resources/application.yaml", "inventory:\n  url: http://localhost\n")
+            write(project, "workflows/src/main/resources/application.yml", "a: b\n")
+            write(project, "config/application.yaml", "a: b\n")
+        }
+
+        val model = ExtractedModel.read(extractor.extract(request(repository, configured)).directory)
+
+        val expected = listOf(
+            "activities/src/main/resources/application.properties",
+            "activities/src/main/resources/application.yaml",
+            "workflows/src/main/resources/application.yml",
+        )
+        val manifest = model.manifests.single()
+        assertEquals(expected, manifest.resources)
+        assertEquals(expected.map { model.sourceRoot.resolve(it) }, model.resourceFiles(manifest))
+        for (file in expected) {
+            assertEquals(Files.readString(repository.project.resolve(file)), Files.readString(model.sourceRoot.resolve(file)), file)
+        }
+        assertFalse(model.sourceRoot.resolve("activities/src/main/resources/logback.xml").exists())
+        assertFalse(model.sourceRoot.resolve("activities/src/test").exists())
+        assertFalse(model.sourceRoot.resolve("config").exists())
+        JsonSchemaChecker.forResource(ModelSchemas.MANIFEST_RESOURCE).assertValid(Files.readString(model.directory.resolve("modules/_.json")))
+    }
+
+    @Test
+    fun `a degraded model keeps the configuration files of the resource directory next to a source directory`() {
+        val files = listOf(
+            "src/main/resources/application.yaml",
+            "a/src/main/resources/application.properties",
+            "a/src/main/resources/nested/application.yaml",
+            "b/src/main/resources/application.yml",
+            "c/src/main/resources/application.yaml",
+            "a/src/test/resources/application.yaml",
+        )
+        assertEquals(
+            listOf("a/src/main/resources/application.properties", "b/src/main/resources/application.yml", "src/main/resources/application.yaml"),
+            ModelBuilder.degradedResources(listOf("src/main/kotlin", "a/src/main/kotlin", "b/src/main/java"), files),
+        )
+        assertEquals(emptyList(), ModelBuilder.degradedResources(listOf("a/src/main/kotlin"), emptyList()))
+    }
+
+    private fun write(project: Path, path: String, text: String) {
+        val file = project.resolve(path)
+        Files.createDirectories(file.parent)
+        Files.writeString(file, text)
+    }
+
+    @Test
     fun `every written file matches its schema`() {
         val result = extractor.extract(request())
 

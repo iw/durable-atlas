@@ -56,7 +56,11 @@ internal object NodeText {
         val detail = name ?: label
         val own = of(node, detail, name, label, caption, ::text)
         // What a region is not waited for is said by its title and where its lanes end.
-        return if (node.kind.isContainer) own else own + listOfNotNull(waiting(node), parentClose(node)?.let { "parent close: $it" })
+        return if (node.kind.isContainer) {
+            own
+        } else {
+            own + listOfNotNull(RequestTexts.line(node, max), waiting(node), parentClose(node)?.let { "parent close: $it" })
+        }
     }
 
     private fun of(node: IrNode, detail: String?, name: String?, label: String?, caption: String?, text: (String?) -> String?): List<String> =

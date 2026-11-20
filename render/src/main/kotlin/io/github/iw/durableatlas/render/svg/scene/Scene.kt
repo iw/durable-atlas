@@ -33,6 +33,7 @@ internal sealed interface SceneItem {
  * @param kind the construct, as named in the style data
  * @param nodes further nodes of the document this card stands for and that are not drawn
  * @param entryPoints the entry points of the document this card stands for
+ * @param requests what the activity of the card asks of other services, a line for each
  */
 internal class SceneCard(
     override val id: String,
@@ -44,6 +45,7 @@ internal class SceneCard(
     val name: List<String>,
     val nodes: List<String> = emptyList(),
     val entryPoints: List<String> = emptyList(),
+    val requests: List<String> = emptyList(),
 ) : SceneItem
 
 /**

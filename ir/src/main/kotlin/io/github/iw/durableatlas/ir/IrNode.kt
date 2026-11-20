@@ -93,6 +93,13 @@ data class IrNode(
      */
     val candidates: List<String> = emptyList(),
     /**
+     * What the implementation of the activity type of an [NodeKind.ACTIVITY] or
+     * [NodeKind.LOCAL_ACTIVITY] node asks of other services, in the order of its code: see
+     * [Request]. Empty where it asks nothing that the analysis can see, and where no class of the
+     * analysed sources implements the activity type.
+     */
+    val requests: List<Request> = emptyList(),
+    /**
      * Id of the enclosing container node, when this node sits inside a region. An edge from this
      * node to its parent, or to a region further out, leads to the end of that region.
      */

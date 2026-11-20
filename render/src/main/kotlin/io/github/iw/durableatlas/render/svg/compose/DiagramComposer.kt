@@ -295,6 +295,7 @@ private class Draft(
                     handler = handler,
                     nodes = item.nodes,
                     entryPoints = item.entryPoints,
+                    requests = item.requests,
                 )
             }
         }

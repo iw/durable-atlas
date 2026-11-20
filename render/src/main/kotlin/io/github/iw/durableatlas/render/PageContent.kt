@@ -8,6 +8,7 @@ import io.github.iw.durableatlas.ir.NodeKind
 import io.github.iw.durableatlas.ir.SkippedCall
 import io.github.iw.durableatlas.ir.SourceLocation
 import io.github.iw.durableatlas.ir.UnknownReasons
+import io.github.iw.durableatlas.render.layout.RequestTexts
 
 /**
  * Everything a diagram file says about its workflow besides the drawing, as plain data: every
@@ -32,6 +33,8 @@ internal class PageContent(
     val simplifiedNotice: String? = null,
     /** The calls that the document has no node for because it is an overview, in its order. */
     val leftOutCalls: List<LeftOutCall> = emptyList(),
+    /** What the activities of the workflow ask of other services: each activity type once, by name, its requests in order. */
+    val requests: List<RequestRow> = emptyList(),
 ) {
     /** What a drawing without room for the list says of the calls that were left out; `null` if none was. */
     val skippedNotice: String?
@@ -53,6 +56,14 @@ internal class PageContent(
     class ChildWorkflow(val workflowType: String, val files: List<String>, val interfaceName: String? = null)
 
     class UnknownNode(val reason: String, val label: String?, val location: SourceLocation?, val candidates: List<String>)
+
+    /**
+     * A request an activity makes.
+     *
+     * @param request what it is, short
+     * @param source where it is made, and by which class where several implement the activity type
+     */
+    class RequestRow(val activity: String, val request: String, val host: String?, val response: String?, val source: String)
 
     companion object {
         const val DEGRADED_WARNING: String =
@@ -139,6 +150,22 @@ internal class PageContent(
                 skippedCalls = document.skippedCalls,
                 simplifiedNotice = options.render.simplification?.notice(limit),
                 leftOutCalls = document.leftOutCalls,
+                requests = document.nodes
+                    .filter { RequestTexts.of(it).isNotEmpty() && it.name != null }
+                    .distinctBy { it.name }
+                    .sortedBy { it.name }
+                    .flatMap { node ->
+                        node.requests.map { request ->
+                            val place = "${request.loc.file}:${request.loc.line}"
+                            RequestRow(
+                                activity = node.name!!,
+                                request = RequestTexts.short(request),
+                                host = request.host,
+                                response = request.response,
+                                source = request.className?.let { "$place (${it.substringAfterLast('.')})" } ?: place,
+                            )
+                        }
+                    },
             )
 
         fun modeName(mode: ModelMode): String = when (mode) {

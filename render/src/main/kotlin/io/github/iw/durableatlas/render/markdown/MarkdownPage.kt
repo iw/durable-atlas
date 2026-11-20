@@ -6,9 +6,9 @@ import io.github.iw.durableatlas.render.PageContent
 
 /**
  * A Markdown page for one workflow: a header, the diagram in whatever form the format embeds it,
- * links to the diagrams of its child workflows, the calls that could not be resolved, the calls
- * that were left out of the diagram as unresolved calls into libraries, and those an overview
- * has no node for.
+ * links to the diagrams of its child workflows, what its activities ask of other services, the
+ * calls that could not be resolved, the calls that were left out of the diagram as unresolved
+ * calls into libraries, and those an overview has no node for.
  */
 internal object MarkdownPage {
     /** @param diagram Markdown that shows the diagram, for example a fenced block */
@@ -27,6 +27,7 @@ internal object MarkdownPage {
         block(properties(content.facts))
         block(diagram.trimEnd('\n'))
         childWorkflows(content.childWorkflows)?.let(::block)
+        requests(content.requests)?.let(::block)
         unknownNodes(content.unknownNodes)?.let(::block)
         skippedCalls(content.skippedCalls)?.let(::block)
         leftOutCalls(content.leftOutCalls)?.let(::block)
@@ -69,6 +70,21 @@ internal object MarkdownPage {
             "- ${Markdown.code(child.workflowType)}$stub: $links"
         }
         return (listOf("## Child workflows", "") + lines).joinToString("\n")
+    }
+
+    private fun requests(requests: List<PageContent.RequestRow>): String? {
+        if (requests.isEmpty()) return null
+        val rows = requests.map { row ->
+            Markdown.row(
+                Markdown.code(row.activity),
+                Markdown.code(row.request),
+                row.host?.let(Markdown::code).orEmpty(),
+                row.response?.let(Markdown::code).orEmpty(),
+                Markdown.code(row.source),
+            )
+        }
+        val table = listOf(Markdown.row("Activity", "Request", "Host", "Response", "Source"), "|---|---|---|---|---|") + rows
+        return (listOf("## Requests", "") + table).joinToString("\n")
     }
 
     private fun unknownNodes(unknown: List<PageContent.UnknownNode>): String? {

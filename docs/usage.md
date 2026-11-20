@@ -36,6 +36,7 @@ tree: changes that are not committed are not seen. The repository is never modif
 | `--jdk-home <dir>` | The JDK whose classes the sources are resolved against. By default, the JDK that runs the tool. |
 | `--max-depth <n>` | How many calls deep to follow the functions a workflow calls, 8 by default. A step that lies deeper shows as an `unknown` node at the call. |
 | `--detail overview\|full` | How much of what the analysis could not read to show; see [Overview and full detail](#overview-and-full-detail). `overview` is the default. |
+| `--client <spec>` | A client of the repository's own whose calls are requests of the activities that make them, written `[Type.]method[:parameter]`; see [Requests of activities](#requests-of-activities). Repeat it for several clients. |
 | `--max-unresolved-pct <n>` | Exit with status 2 if more than this percentage of a workflow's nodes are `unknown`. The calls an overview left out are no nodes and do not count. |
 | `--json` | Print a machine-readable summary on stdout. |
 
@@ -48,8 +49,8 @@ Each kind of output has a directory named after the full SHA of the commit, howe
 
 ```text
 <out>/model/<sha>/index.json          the model: which modules, in which mode
-<out>/model/<sha>/modules/*.json      one manifest per module: source directories, classpath
-<out>/model/<sha>/source/             the modules' sources, as of the commit
+<out>/model/<sha>/modules/*.json      one manifest per module: source directories, configuration files, classpath
+<out>/model/<sha>/source/             the modules' sources and configuration files, as of the commit
 <out>/ir/<sha>/inventory.json         every workflow type and activity interface the commit declares
 <out>/ir/<sha>/<workflow>.ir.json     the IR of one workflow type
 <out>/ir/<sha>/standalone-activities.json   activity types no workflow calls
@@ -68,8 +69,8 @@ one does not write again are removed.
 `-` replaced by `_`. Where several classes implement one workflow type, or two types differ
 only in case, each file is named `<workflow type>--<implementing class>` instead.
 
-The model directory holds a copy of the commit's main sources and names jars by their
-absolute paths. Read [SECURITY.md](../SECURITY.md) before you publish an output directory.
+The model directory holds a copy of the commit's main sources and of the configuration files
+beside them, and names jars by their absolute paths. Read [SECURITY.md](../SECURITY.md) before you publish an output directory.
 
 ### Gradle mode and degraded mode
 
@@ -158,6 +159,145 @@ durable-atlas run --repo path/to/repo --commit HEAD --out .durable-atlas --detai
 An IR file says `"detail": "overview"` if it is an overview. The diagrams are drawn from the
 IR files, so `render` and `overlay` show whichever detail the files they are given have.
 
+### Requests of activities
+
+For each activity type, the analysis reads which requests to other services its
+implementation makes: the activity's function in each class of the sources that implements
+the activity interface, and the functions it calls, as deep as `--max-depth` allows, each
+argument bound to its parameter. Each request is listed once, in code order, on every node
+that runs the activity type (`requests`, see [the IR format](ir.md#requests)) and in
+`inventory.json`, and drawn in the diagrams. stderr says how many there are.
+
+Two kinds of request are read:
+
+- **HTTP requests sent with `java.net.http`**, through `HttpClient.send` and `sendAsync`,
+  are read without being asked for. The request is read from the chain that builds it, from
+  `HttpRequest.newBuilder(…)` to `build()`: the method from `GET()`, `POST(…)`, `PUT(…)`,
+  `DELETE()`, `HEAD()` or `method("PATCH", …)`, `GET` where none is called; the URI from
+  `newBuilder(uri)` or `uri(…)`, made with `URI.create`, `URI(…)`, a string template, `+`,
+  `resolve` or `String.format`. The response type is the `T` of `HttpResponse<T>`; a body
+  that is thrown away (`Void`) gives none.
+- **Calls of a client of the repository's own** are read only for a client that `--client`
+  names. Many repositories wrap their requests in a client class of their own, and nothing in
+  such a call says that it is one.
+
+A request is written with its constant parts as the code has them, a part that comes from a
+configuration property as `{key}`, and any other part the code computes as `{name}`, by the
+name the code gives it: `PUT {billing.url}/v1/charges/{orderId}`.
+
+#### Naming a client
+
+```bash
+durable-atlas run --repo path/to/repo --commit HEAD --out .durable-atlas \
+  --client ServiceClient.invoke:functionName
+```
+
+`--client` takes `[Type.]method[:parameter]`:
+
+- `ServiceClient` is the class of the client, by its simple or its fully qualified name; a
+  call on an object of a subclass counts too. Without it, a call of the function on any
+  object counts.
+- `invoke` is the function called. `client<Long>(…)` counts as a call of `invoke`.
+- `functionName` names the parameter whose argument says what is asked for: the argument
+  given for it by name, or in its place where the call resolves, or, where the call is handed
+  an object, the argument of that name to its constructor or the value given to a builder
+  function of that name (`functionName(…)`, `setFunctionName(…)`, `withFunctionName(…)`). A
+  number names the argument by its place, from 1: `ServiceClient.invoke:2`. Without `:`, the
+  request says which function was called but not what it asks for.
+
+The response type is the call's type argument (`invoke<Long>(…)`), or else the type the code
+expects the result to have.
+
+The form names what a reader sees at the call: the class, the function and its parameter. It
+is one word for the shell, needs no quotes, and keeps any particular framework out of the
+tool. A place serves where the name of the parameter is not known: in a degraded model whose
+jars do not hold the client, an argument given without its name cannot be matched with its
+parameter, so `ServiceClient.invoke:2` reads it where `:functionName` does not.
+
+#### Hosts
+
+A key is read in each of the three forms MicroProfile Config has:
+
+- `@ConfigProperty(name = "billing.url")` on a constructor parameter or a property;
+- `ConfigProvider.getConfig().getValue("billing.url", …)` and `getOptionalValue`, and the
+  same on an injected `Config`;
+- an accessor of an interface annotated `@ConfigMapping(prefix = "billing")`: `url()` reads
+  `billing.url`, `baseUrl()` reads `billing.base-url`, and `@WithName` gives a name of its own.
+
+In a degraded model, which lacks the library that declares these annotations, they are read by
+the names they are written with, and are not among the annotations stderr warns did not
+resolve.
+
+The value of a key comes from the `application.yaml`, `application.yml` and
+`application.properties` of the main resources of the module that holds the implementing
+class; in a degraded model, from those beside its source directory (`src/main/resources` for
+a class under `src/main/kotlin`). The value without a profile counts, else that of `%prod`;
+other profiles do not. `application.yaml` counts before `application.yml`, and both before
+`application.properties`. A `${…}` expression is kept as written. Where no file gives a value,
+the default the code gives counts: `defaultValue`, `@WithDefault`, `orElse(…)`.
+
+The host is the value of the key a URI starts with. The diagrams and the IR show it beside the
+key, not in its place: `{billing.url}/v1/charges` with host `http://billing.example.com`.
+
+The model holds the configuration files. One made by an earlier version of the tool holds
+none: its requests keep their keys without hosts, and `analyse` says once that `--force`
+makes the model again.
+
+#### What is not read
+
+What cannot be read is said, not guessed:
+
+- A request built where the code that is read does not show, such as one the activity is
+  handed, is listed by what is sent, `HTTP {request}`, without a method. A request that is
+  built and never sent is no request.
+- A builder kept in a variable may be told more in statements of their own, which are not
+  read. Its request has the method and URI its chain gives, and no method is taken for
+  granted: `HTTP {builder.build()}` where the chain gives neither.
+- A computed part shows as `{name}`, and so does a computed method.
+- Requests made inside libraries, in calls that may run one of several functions, and with
+  other HTTP clients are not seen, unless `--client` names the client.
+
+#### An example
+
+`billing/src/main/kotlin/com/example/billing/BillingActivitiesImpl.kt`:
+
+```kotlin
+package com.example.billing
+
+import com.example.clients.ServiceClient
+import org.eclipse.microprofile.config.inject.ConfigProperty
+import java.net.URI
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
+
+class BillingActivitiesImpl(
+    @ConfigProperty(name = "billing.url") private val billingUrl: String,
+    private val client: ServiceClient,
+) : BillingActivities {
+    private val http = HttpClient.newHttpClient()
+
+    override fun charge(orderId: String): String {
+        val request = HttpRequest.newBuilder(URI.create("$billingUrl/v1/charges/$orderId"))
+            .PUT(HttpRequest.BodyPublishers.noBody())
+            .build()
+        val receipt = http.send(request, HttpResponse.BodyHandlers.ofString()).body()
+        client.invoke<Long>(functionName = "pricing-quote", payload = receipt)
+        return receipt
+    }
+}
+```
+
+With `billing.url: http://billing.example.com` in `billing/src/main/resources/application.yaml`
+and `--client ServiceClient.invoke:functionName`, the card of `Charge` reads
+`PUT {billing.url}/… +1 more` below its name, its tooltip has both requests whole, and the
+workflow's page has this table:
+
+| Activity | Request | Host | Response | Source |
+|---|---|---|---|---|
+| `Charge` | `PUT {billing.url}/v1/charges/{orderId}` | `http://billing.example.com` | `String` | `billing/src/main/kotlin/com/example/billing/BillingActivitiesImpl.kt:20` |
+| `Charge` | `ServiceClient · pricing-quote` |  | `Long` | `billing/src/main/kotlin/com/example/billing/BillingActivitiesImpl.kt:21` |
+
 ### Exit status
 
 | Status | Meaning |
@@ -182,6 +322,7 @@ IR files, so `render` and `overlay` show whichever detail the files they are giv
 | `--background paper\|transparent` | Background of the SVG diagrams. |
 | `--embed-font` | Put the typeface into each SVG file, so that it looks the same everywhere. Adds over a megabyte per file. |
 | `--svg-timeout <seconds>` | The time allowed for arranging one SVG diagram, 30 by default; `0` sets no limit. |
+| `--no-requests` | Draw activities without what they ask of other services: no line for it on a card, nothing in its tooltip, no table on the page. The IR files keep the requests. |
 
 ### What the diagrams show
 
@@ -190,12 +331,17 @@ parallel sections, compensations) as boxes around their steps, the signal, query
 handlers in a band above the main flow, and a legend. Dotted green edges lead from a handler
 to the awaits it can end. Below the drawing it says what is worth knowing about it: calls
 that were skipped or left out of an overview, regions drawn as single nodes, a drawing made
-more simply.
+more simply. The card of an activity that makes requests of other services names the first
+below the activity, and how many more there are; its tooltip lists them all, each with its
+host, its response type and, where several classes implement the activity, the class that
+makes it.
 
 The Mermaid diagram of the same workflow is a `flowchart TD` in a fenced block, which Git
 hosts draw in place. Its page also lists the workflow's properties, links the diagrams of its
-child workflows, says where each `unknown` node is, and lists the calls that were skipped or
-left out of an overview.
+child workflows, says where each `unknown` node is, lists the calls that were skipped or
+left out of an overview, and has a table of the requests of its activities: activity,
+request, host, response type and source. A Mermaid node of an activity names its first
+request.
 
 The same commit and options always give the same bytes.
 
@@ -234,7 +380,7 @@ durable-atlas render --ir out/ir --out out/diagrams
   `--keep-scratch`, which keeps the scratch checkout for you to look at. The model goes to
   `<out>/<sha>`.
 - `analyse` takes `--model` (the directory that holds the model's `index.json`), `--out`,
-  `--max-depth`, `--detail`, `--max-unresolved-pct` and `--jdk-home` as `run` does, and
+  `--max-depth`, `--detail`, `--max-unresolved-pct`, `--jdk-home` and `--client` as `run` does, and
   `--workflow <type>`, which writes the IR of that workflow type only. The inventory always
   covers everything.
 - `render` takes `--ir`, `--out` and the diagram options.

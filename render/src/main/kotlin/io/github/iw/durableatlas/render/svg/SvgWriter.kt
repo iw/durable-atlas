@@ -58,7 +58,7 @@ internal class SvgWriter(
     /** What an edge calls the things it joins. */
     private val names: Map<String, String> =
         graph.regions.associate { it.id to it.title } +
-            graph.nodes.associate { it.id to it.name.joinToString(" ").ifEmpty { it.kindLabel } }
+            graph.nodes.associate { it.id to it.ownName.joinToString(" ").ifEmpty { it.kindLabel } }
 
     // Everything above the diagram body depends on the document and on what is written with it,
     // not on the overlay, so the body starts at the same height in every drawing of it.
@@ -314,7 +314,8 @@ internal class SvgWriter(
             kind = node.kind,
             classes = if (node.shape == Shape.PILL) "node pill" else if (node.handler) "node handler" else "node",
             decoration = decoration,
-            title = (listOf(node.kindLabel) + node.name.joinToString(" ").ifEmpty { null }).filterNotNull().joinToString(": ") + others,
+            title = (listOf(node.kindLabel) + node.ownName.joinToString(" ").ifEmpty { null }).filterNotNull().joinToString(": ") + others +
+                node.requests.joinToString("") { "\n$it" },
             extra = attribute("data-parent", node.parent) +
                 attribute("data-nodes", list(node.nodes)) +
                 attribute("data-entry-points", list(node.entryPoints)),

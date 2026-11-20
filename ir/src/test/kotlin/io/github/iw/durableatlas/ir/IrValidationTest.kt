@@ -105,6 +105,16 @@ class IrValidationTest {
     }
 
     @Test
+    fun `only a node that runs an activity makes requests`() {
+        val request = Request(kind = RequestKind.HTTP, method = "GET", target = "https://example.com", loc = SourceLocation("Orders.kt", 3))
+        val onActivity = document.copy(nodes = document.nodes.map { if (it.id == "n05") it.copy(requests = listOf(request)) else it })
+        val onBranch = document.copy(nodes = document.nodes.map { if (it.id == "n03") it.copy(requests = listOf(request)) else it })
+
+        assertEquals(emptyList(), onActivity.validate())
+        assertEquals(listOf("node 'n03' has requests, which only an activity makes"), onBranch.validate())
+    }
+
+    @Test
     fun `only a parallel region says which lanes are waited for, and only an upsert with names that it writes more`() {
         val nodes = document.nodes
         val joined = document.copy(nodes = nodes.map { if (it.id == "n01") it.copy(join = Join.FIRST) else it })

@@ -7,6 +7,7 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.path
 import io.github.iw.durableatlas.analyser.AnalysisRequest
+import io.github.iw.durableatlas.analyser.requests.ClientSpec
 import io.github.iw.durableatlas.cli.Completion
 import io.github.iw.durableatlas.cli.ProgressLines
 import io.github.iw.durableatlas.cli.StageCommand
@@ -71,6 +72,7 @@ class RunCommand : StageCommand(
     private val maxDepth: Int by maxDepthOption()
     private val detail: Detail by detailOption()
     private val maxUnresolvedPct: Double? by maxUnresolvedPctOption()
+    private val clients: List<ClientSpec> by clientOption()
     private val diagrams by DiagramOptions()
 
     override fun run() {
@@ -83,7 +85,11 @@ class RunCommand : StageCommand(
         }
         // The model knows the commit by its full SHA, however --commit named it.
         val irDirectory = root.resolve(IR_DIRECTORY).resolve(model.commit)
-        attempt { stages.analyse(AnalysisRequest(model = model.directory, out = irDirectory, jdkHome = jdkHome, maxDepth = maxDepth, detail = detail)) }
+        attempt {
+            stages.analyse(
+                AnalysisRequest(model = model.directory, out = irDirectory, jdkHome = jdkHome, maxDepth = maxDepth, detail = detail, clients = clients),
+            )
+        }
         val diagramsDirectory = root.resolve(DIAGRAMS_DIRECTORY).resolve(model.commit)
         val rendered = attempt { stages.renderAlone(irDirectory, diagramsDirectory, diagrams.directoryOptions(ProgressLines(::log))) }
 

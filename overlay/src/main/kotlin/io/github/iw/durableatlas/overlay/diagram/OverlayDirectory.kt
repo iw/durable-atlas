@@ -3,6 +3,7 @@ package io.github.iw.durableatlas.overlay.diagram
 import io.github.iw.durableatlas.ir.IrDocument
 import io.github.iw.durableatlas.ir.IrFormatException
 import io.github.iw.durableatlas.ir.IrJson
+import io.github.iw.durableatlas.ir.withoutRequests
 import io.github.iw.durableatlas.overlay.coverage.CoverageBuilder
 import io.github.iw.durableatlas.overlay.coverage.CoverageJson
 import io.github.iw.durableatlas.overlay.coverage.EventCounts
@@ -52,12 +53,15 @@ import kotlin.io.path.name
  * @param maxNodes see [RenderOptions.maxNodes]
  * @param fileNames how the files of a workflow are named; by default after its document
  * @param progress told of each workflow as its overlays are drawn
+ * @param requests whether to draw what activities ask of other services, as the plain diagram
+ *   does (see [io.github.iw.durableatlas.render.DirectoryOptions.requests])
  */
 data class OverlayOptions(
     val formats: List<DiagramFormat> = DiagramFormats.all,
     val maxNodes: Int = RenderOptions.DEFAULT_MAX_NODES,
     val fileNames: DiagramFileNames = DiagramFileNames.SAME_AS_DOCUMENT,
     val progress: DrawingProgress = DrawingProgress.NONE,
+    val requests: Boolean = true,
 ) {
     init {
         require(formats.isNotEmpty()) { "At least one format is needed" }
@@ -293,7 +297,7 @@ object OverlayDirectory {
 
     /** Reads the documents of [irDir] and finds the one each of [histories] is laid over. Nothing is written. */
     private fun match(irDir: Path, histories: List<ExecutionHistory>, options: OverlayOptions): Matched {
-        val documents = documents(irDir)
+        val documents = documents(irDir).map { if (options.requests) it else Source(it.file, it.document.withoutRequests()) }
         val sources = documents.groupBy { it.document.workflowType }
         // What runs for every workflow type that has no document of its own.
         val dynamic = documents.filter { it.document.isDynamic }

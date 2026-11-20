@@ -85,6 +85,8 @@ internal data class PositionedRegion(
  * @param handler whether it is the card of a handler
  * @param nodes further nodes of the document this card stands for, which are not drawn themselves
  * @param entryPoints the entry points of the document this card stands for
+ * @param requests what the activity of the card asks of other services, a line for each, as its
+ *   tooltip lists them; the last line of [name] then names the first of them
  */
 @Serializable
 internal data class PositionedNode(
@@ -98,7 +100,12 @@ internal data class PositionedNode(
     val handler: Boolean = false,
     val nodes: List<String> = emptyList(),
     val entryPoints: List<String> = emptyList(),
-)
+    val requests: List<String> = emptyList(),
+) {
+    /** The lines of the name that name the node itself, without the request below them. */
+    val ownName: List<String>
+        get() = if (requests.isEmpty()) name else name.dropLast(1)
+}
 
 /**
  * @param from id of the node or handler card the edge starts at

@@ -29,17 +29,52 @@ sealed interface Constant {
 
 /** An annotation on a declaration, with the arguments given where it is used. */
 data class AnnotationUse(
-    /** Fully qualified name of the annotation class, as resolved. */
+    /** Fully qualified name of the annotation class, as resolved; for a [written] one, the name as written. */
     val type: String,
     /** Explicit arguments by parameter name. Parameters left at their default are absent. */
     val arguments: Map<String, Constant> = emptyMap(),
+    /**
+     * True for an annotation of the sources whose class does not resolve, as in a model that
+     * lacks the library that declares it. Its [type] is then the name it is written with, and
+     * its arguments are those written out that are constants, an argument without a name being
+     * `value`. Only the declarations of the sources carry such annotations, and not the types.
+     */
+    val written: Boolean = false,
 ) {
     /** The text argument [name], or `null` if it is absent or not text. */
     fun text(name: String): String? = (arguments[name] as? Constant.Text)?.value
 }
 
-/** Finds the annotation of the given fully qualified type. */
-fun List<AnnotationUse>.find(type: String): AnnotationUse? = firstOrNull { it.type == type }
+/** Finds the annotation of the given fully qualified type, among those whose class resolves. */
+fun List<AnnotationUse>.find(type: String): AnnotationUse? = firstOrNull { !it.written && it.type == type }
+
+/**
+ * Finds the annotation of the given fully qualified type, or else one whose class does not
+ * resolve and that is written with the simple name of that type or with the type itself.
+ */
+fun List<AnnotationUse>.findWritten(type: String): AnnotationUse? =
+    find(type) ?: firstOrNull { it.written && writtenAs(it.type, type) }
+
+/** Whether an annotation written as [name] names [type] where its class does not resolve: by the type itself, or by its simple name. */
+private fun writtenAs(name: String, type: String): Boolean = name == type || name == type.substringAfterLast('.')
+
+/**
+ * The annotations the analysis reads where their class does not resolve, by the name they are
+ * written with ([findWritten]): those that MicroProfile Config and SmallRye Config give the keys
+ * of configuration properties with. An annotation of the sources that does not resolve is worth
+ * a warning, since what depends on it is not recognised, unless it is one of these.
+ */
+object WrittenAnnotations {
+    const val CONFIG_PROPERTY = "org.eclipse.microprofile.config.inject.ConfigProperty"
+    const val CONFIG_MAPPING = "io.smallrye.config.ConfigMapping"
+    const val WITH_NAME = "io.smallrye.config.WithName"
+    const val WITH_DEFAULT = "io.smallrye.config.WithDefault"
+
+    private val types = listOf(CONFIG_PROPERTY, CONFIG_MAPPING, WITH_NAME, WITH_DEFAULT)
+
+    /** Whether an annotation whose class does not resolve, written as [name], is read all the same. */
+    fun isRead(name: String): Boolean = types.any { writtenAs(name, it) }
+}
 
 /** A resolved type. */
 data class TypeRef(

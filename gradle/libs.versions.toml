@@ -31,6 +31,9 @@ xbase-lib = "2.42.0"
 inter-font = "4.1"
 # Test only: turns SVG diagrams into PNG files for review.
 batik = "1.20"
+# Reads the application.yaml files whose values the requests of activities are made with. YAML 1.2,
+# with no dependencies of its own.
+snakeyaml-engine = "3.2"
 
 [libraries]
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -86,6 +89,7 @@ guava = { module = "com.google.guava:guava", version.ref = "guava" }
 xbase-lib = { module = "org.eclipse.xtext:org.eclipse.xtext.xbase.lib", version.ref = "xbase-lib" }
 inter-font = { module = "com.formdev:flatlaf-fonts-inter", version.ref = "inter-font" }
 batik-transcoder = { module = "org.apache.xmlgraphics:batik-transcoder", version.ref = "batik" }
+snakeyaml-engine = { module = "org.snakeyaml:snakeyaml-engine", version.ref = "snakeyaml-engine" }
 
 caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm", version.ref = "kotlinx-collections-immutable" }

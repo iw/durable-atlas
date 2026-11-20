@@ -61,6 +61,11 @@ data class FunctionId(
 data class ParameterDecl(
     val name: String,
     val type: TypeRef,
+    /**
+     * The annotations written on the parameter of a function of the sources, those whose class
+     * does not resolve among them (see [AnnotationUse.written]); empty for one of a library.
+     */
+    val annotations: List<AnnotationUse> = emptyList(),
 )
 
 /** A function, without its body; see [SourceBackend.body]. */
@@ -79,6 +84,8 @@ data class FunctionDecl(
     val overrides: List<FunctionId>,
     /** True if the declaration has no body. */
     val isAbstract: Boolean,
+    /** The names of the function's type parameters, in order. */
+    val typeParameters: List<String> = emptyList(),
 )
 
 /**
@@ -103,6 +110,11 @@ data class PropertyDecl(
     val id: PropertyId,
     val name: String,
     val location: SourceLocation?,
+    /**
+     * The annotations of the property, and for one of the sources those written for its backing
+     * field, its getter or the constructor parameter it is declared with; those whose class does
+     * not resolve among them (see [AnnotationUse.written]).
+     */
     val annotations: List<AnnotationUse>,
     val type: TypeRef,
     /** True for `var`. */

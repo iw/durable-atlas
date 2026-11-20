@@ -2,8 +2,8 @@ import groovy.json.JsonOutput
 import org.gradle.api.artifacts.component.ProjectComponentIdentifier
 import org.gradle.api.artifacts.result.UnresolvedDependencyResult
 
-// Adds a task to every Kotlin or Java module that writes the module's source directories and
-// compile classpath as JSON. The task has no inputs and depends on nothing: it resolves the
+// Adds a task to every Kotlin or Java module that writes the module's source and resource
+// directories and compile classpath as JSON. The task has no inputs and depends on nothing: it resolves the
 // classpath when it runs, so nothing is compiled. It reads the project model while it executes,
 // which the configuration cache does not allow, so run it with --no-configuration-cache.
 //
@@ -42,6 +42,10 @@ if (gradle.parent == null) {
                         ? kotlin.sourceSets.getByName('main').kotlin.srcDirs
                         : p.extensions.getByName('sourceSets').getByName('main').java.srcDirs
 
+                    // The main resource directories, whose configuration files the model keeps.
+                    def javaSourceSets = p.extensions.findByName('sourceSets')
+                    def resourceDirs = javaSourceSets != null ? javaSourceSets.getByName('main').resources.srcDirs : []
+
                     def classpath = p.configurations.getByName('compileClasspath')
                     def resolution = classpath.incoming.resolutionResult
                     def self = resolution.root.id
@@ -68,6 +72,7 @@ if (gradle.parent == null) {
                         projectDeps: projectDeps,
                         jars       : jars,
                         unresolved : unresolved,
+                        resources  : resourceDirs.collect { it.path },
                     ]), 'UTF-8')
                 }
             }

@@ -176,8 +176,12 @@ class SourceBackendsTest {
         SourceBackends.open(ExtractedModel.read(dir), log = log::add).use { backend ->
             val discovery = TemporalDiscovery.discover(backend)
             assertEquals(emptyList(), discovery.workflows)
-            // The interface is there; its annotation has no type to be recognised by.
-            assertEquals(emptyList(), backend.findClass("app.Flow")?.annotations)
+            // The interface is there; its annotation has no type to be recognised by, only the name
+            // it is written with, which nothing takes for the SDK's.
+            val annotations = backend.findClass("app.Flow")?.annotations.orEmpty()
+            assertEquals(listOf("WorkflowInterface"), annotations.map { it.type })
+            assertTrue(annotations.single().written)
+            assertNull(annotations.find("io.temporal.workflow.WorkflowInterface"))
         }
         assertEquals(1, warnings().size, log.toString())
         assertContains(warnings().single(), "1 annotation(s) in the sources did not resolve")

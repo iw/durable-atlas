@@ -3,6 +3,7 @@ package io.github.iw.durableatlas.render
 import io.github.iw.durableatlas.ir.IrDocument
 import io.github.iw.durableatlas.ir.IrFormatException
 import io.github.iw.durableatlas.ir.IrJson
+import io.github.iw.durableatlas.ir.withoutRequests
 import io.github.iw.durableatlas.ir.ModelMode
 import io.github.iw.durableatlas.render.layout.LayoutBuilder
 import kotlinx.serialization.SerializationException
@@ -37,12 +38,15 @@ fun interface DiagramFileNames {
  * @param maxNodes see [RenderOptions.maxNodes]
  * @param fileNames how diagram files are named; by default after the documents they come from
  * @param progress told of each workflow as it is drawn
+ * @param requests whether to draw what activities ask of other services, where the documents
+ *   say it; without, every diagram is drawn as that of a document that says nothing of it
  */
 data class DirectoryOptions(
     val formats: List<DiagramFormat> = DiagramFormats.all,
     val maxNodes: Int = RenderOptions.DEFAULT_MAX_NODES,
     val fileNames: DiagramFileNames = DiagramFileNames.SAME_AS_DOCUMENT,
     val progress: DrawingProgress = DrawingProgress.NONE,
+    val requests: Boolean = true,
 ) {
     init {
         require(formats.isNotEmpty()) { "At least one format is needed" }
@@ -118,7 +122,8 @@ object DiagramDirectory {
         render(irDir, outDir, options, DrawingWatch(options.progress))
 
     internal fun render(irDir: Path, outDir: Path, options: DirectoryOptions, watch: DrawingWatch): RenderSummary {
-        val (sources, skipped) = read(irDir)
+        val (read, skipped) = read(irDir)
+        val sources = if (options.requests) read else read.map { Source(it.file, it.document.withoutRequests()) }
         val named = sources
             .map { it to options.fileNames.nameFor(it.file, it.document) }
             .sortedWith(compareBy({ it.first.document.workflowType }, { it.second }))

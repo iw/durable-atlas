@@ -7,7 +7,7 @@ it and the next. The command line strings them together.
 repository at a commit
    │  model-extractor   git, and the repository's Gradle build or none
    ▼
-model: modules, source directories, classpaths, a copy of the sources
+model: modules, source directories, classpaths, a copy of the sources and their configuration
    │  analyser          Kotlin Analysis API → discovery → flow → graph
    ▼
 IR: one document per workflow type (docs/ir.md), an inventory
@@ -25,7 +25,7 @@ event histories (fetched from a Temporal server, or exported)
 | --- | --- | --- |
 | `ir` | The IR: its types, JSON form, schema, canonical order, validation, node ids. | kotlinx.serialization |
 | `model-extractor` | The model of a commit: reading a repository through git, running its Gradle build with the init script, the degraded model, the model's files. | `ir` |
-| `analyser` | From a model to IR: the backend that reads Kotlin, discovery of workflow types and activities, the flow of each entry point, its graph, the inventory. | `ir`, `model-extractor` |
+| `analyser` | From a model to IR: the backend that reads Kotlin, discovery of workflow types and activities, the flow of each entry point, its graph, the requests of each activity, the inventory. | `ir`, `model-extractor`, SnakeYAML Engine |
 | `render` | From IR to diagrams: the Mermaid renderer, the SVG renderer and its layout, HTML pages, the index, the time limit. | `ir`, ELK, Inter |
 | `overlay` | From IR and histories to coverage: reading histories, mapping events to nodes, coverage files, overlay diagrams, the version map, fetching from a server. | `ir`, `render`, the Temporal SDK |
 | `cli` | The commands, their options, summaries, progress lines and exit statuses. | all of the above, Clikt |
@@ -52,7 +52,10 @@ projects for the tool to analyse, and the inputs of its tests.
 A model is built in a staging directory and moved into place in one step; its `index.json`
 is written last, so a model directory with an index is complete. The sources in it are
 exported from the commit by git, so a model does not depend on the working tree or on the
-scratch directory.
+scratch directory. So are the configuration files of each module's main resources
+(`application.yaml`, `application.yml`, `application.properties`), which the manifest lists
+under `resources`: in Gradle mode those of the resource directories the init script reports,
+in degraded mode those of `src/main/resources` beside each source directory.
 
 ## Stage 2: the analysis
 
@@ -88,6 +91,16 @@ classes. The result is the inventory.
 4. `WorkflowGraphs` joins the graphs of a workflow's entry points into one document and adds
    the edges between them: `wakes`, from what writes a property to the awaits that read it
    (`State`), and `cancels`.
+
+**Requests.** `ActivityRequests` (`analyser/requests`) finds, for each activity type, the
+function of each class of the sources that implements it, and `RequestReader` reads it the way
+`FlowReader` reads a workflow: following calls into functions of the sources up to
+`--max-depth`, each argument bound to its parameter. It knows the `java.net.http` calls, and
+the clients `--client` names (`ClientSpec`). `RequestValues` follows the URI or the operation
+of a request back to what made it, through `ValueTracer`, and knows the three forms of
+MicroProfile Config; `Configuration` reads a service's configuration files, with SnakeYAML
+Engine for YAML, for the host of a key. The requests are put on the nodes that run the
+activity type, and in the inventory.
 
 Documents are written in canonical order (`IrOrdering.kt`), under the names `IrFiles` gives
 them.
@@ -149,10 +162,11 @@ downloads histories through the SDK's service client.
 | Whether a function is drawn from the inside | `analyser/graph/StepProbe` |
 | Whether an exception fails the execution | `analyser/graph/FailureTypes`, `FailTypes` |
 | What an unresolved call is taken for in a degraded model | `analyser/graph/UnresolvedCalls` |
+| What a request is, and how its target, operation and host are read | `analyser/requests/RequestReader`, `RequestValues`, `Configuration` |
 | What an overview leaves out, and what it has to keep | `analyser/graph/Overview`, `GraphLayout`; `OverviewContract` in the test fixtures of `ir` |
 | How regions and their edges are written | `analyser/graph/GraphLayout`; read by `render/layout/LayoutBuilder` and `overlay/mapping/FlowGraph` |
 | The order of nodes, edges and keys in a document | `ir/IrOrdering`, `ir/IrJson` |
-| The words on nodes | `render/layout/NodeText`, `render/svg/scene/CardTexts` |
+| The words on nodes | `render/layout/NodeText`, `render/svg/scene/CardTexts`; for requests, `render/layout/RequestTexts` |
 | Colours, icons and legend names of the SVG notation | `render/src/main/resources/…/svg/construct-styles.json` |
 | Every measurement of the SVG notation | `render/svg/Geometry` |
 | Where rows break | `render/svg/compose/RowWrapper` |

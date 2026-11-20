@@ -23,6 +23,10 @@ import kotlin.test.fail
  */
 class SyntheticSources(private val directory: Path) {
     private val modules = LinkedHashMap<String, List<String>>()
+    private val resources = LinkedHashMap<String, MutableList<String>>()
+
+    /** Whether the manifests list the resource files, as a model made before they were exported does not. */
+    var listResources: Boolean = true
 
     /** Declares a module and the modules it depends on. Files go under `<name>/src/main/kotlin`. */
     fun module(path: String, vararg dependencies: String): SyntheticSources {
@@ -48,6 +52,16 @@ class SyntheticSources(private val directory: Path) {
         return this
     }
 
+    /** Writes a file of the main resources of [module], under `<name>/src/main/resources`, such as its `application.yaml`. */
+    fun resource(module: String, name: String, text: String): SyntheticSources {
+        if (module !in modules) module(module)
+        val file = sourceDirectory(module, "resources").resolve(name)
+        Files.createDirectories(file.parent)
+        Files.writeString(file, text.trimIndent() + "\n")
+        resources.getOrPut(module) { ArrayList() } += directory.resolve(ModelLayout.SOURCE_DIRECTORY).relativize(file).joinToString("/")
+        return this
+    }
+
     fun model(): ExtractedModel {
         val names = ModelLayout.manifestNames(modules.keys)
         for ((path, dependencies) in modules) {
@@ -59,6 +73,7 @@ class SyntheticSources(private val directory: Path) {
                 projectDeps = dependencies.sorted(),
                 jars = classpath().map { it.toString() },
                 mode = ModelMode.DEGRADED,
+                resources = if (listResources) resources[path].orEmpty().sorted() else emptyList(),
             )
             val file = directory.resolve(names.getValue(path))
             Files.createDirectories(file.parent)

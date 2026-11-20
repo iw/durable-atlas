@@ -274,6 +274,50 @@ class GradleModelExtractionTest {
     }
 
     @Test
+    fun `the configuration files of a module's main resource directories are exported and listed in its manifest`() {
+        // The sample has none.
+        assertTrue(model.manifests.all { it.resources.isEmpty() })
+        val other = SampleRepository.create(dir.resolve("repo-configured"))
+        val configured = other.commit("Configure the services") { project ->
+            write(project, "activities/src/main/resources/application.yaml", "inventory:\n  url: http://inventory.example.com\n")
+            write(project, "activities/src/main/resources/application.properties", "billing.url=http://billing.example.com\n")
+            write(project, "activities/src/main/resources/logback.xml", "<configuration/>\n")
+            write(project, "activities/src/test/resources/application.yaml", "inventory:\n  url: http://localhost\n")
+            write(project, "workflows/src/main/resources/application.yml", "a: b\n")
+            // A module that is left out keeps its files to itself.
+            write(project, "unrelated/src/main/resources/application.yaml", "a: b\n")
+        }
+
+        val extracted = ExtractedModel.read(
+            ModelExtractor().extract(request(other, configured, dir.resolve("out-configured"), ModelMode.GRADLE, scratch = "scratch-configured")).directory,
+        )
+
+        val resources = extracted.manifests.associate { it.path to it.resources }
+        assertEquals(
+            mapOf(
+                ":activities" to listOf("activities/src/main/resources/application.properties", "activities/src/main/resources/application.yaml"),
+                ":helpers" to emptyList(),
+                ":nexus-api" to emptyList(),
+                ":workflows" to listOf("workflows/src/main/resources/application.yml"),
+            ),
+            resources,
+        )
+        for (file in resources.values.flatten()) {
+            assertEquals(Files.readString(other.project.resolve(file)), Files.readString(extracted.sourceRoot.resolve(file)), file)
+        }
+        assertFalse(extracted.sourceRoot.resolve("activities/src/main/resources/logback.xml").exists())
+        assertFalse(extracted.sourceRoot.resolve("activities/src/test").exists())
+        assertFalse(extracted.sourceRoot.resolve("unrelated").exists())
+        assertMatchesSchema(ModelSchemas.MANIFEST_RESOURCE, extracted.directory.resolve("modules/_activities.json"))
+    }
+
+    private fun write(project: Path, path: String, text: String) {
+        val file = project.resolve(path)
+        Files.createDirectories(file.parent)
+        Files.writeString(file, text)
+    }
+
+    @Test
     fun `a project in a subdirectory of the git repository is built and described from there`() {
         val nested = SampleRepository.create(dir.resolve("repo-nested"), subdirectory = "services/sample")
         val before = TreeSnapshot.metadata(nested.root)

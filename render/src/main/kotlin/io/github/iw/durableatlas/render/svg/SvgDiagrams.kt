@@ -2,6 +2,7 @@ package io.github.iw.durableatlas.render.svg
 
 import io.github.iw.durableatlas.ir.IrDocument
 import io.github.iw.durableatlas.render.Simplification
+import io.github.iw.durableatlas.render.layout.RequestTexts
 import java.time.Duration
 
 /** Reads what an SVG diagram says about itself. */
@@ -44,7 +45,11 @@ internal object SvgDiagrams {
         return PositionedGraph.decode(unescape(match.groupValues[1]))
     }
 
-    /** Makes sure [graph] is a layout of [document]: everything it places must be in the document. */
+    /**
+     * Makes sure [graph] is a layout of [document]: everything it places must be in the
+     * document, and each card must name the requests its node makes, so that a drawing with
+     * requests and one without are not taken for each other.
+     */
     fun check(graph: PositionedGraph, document: IrDocument) {
         val nodes = document.nodes.map { it.id }.toSet()
         val entryPoints = document.entryPoints.map { it.id }.toSet()
@@ -56,6 +61,11 @@ internal object SvgDiagrams {
         }
         require(graph.edges.all { edge -> edge.sources.all { it in document.edges.indices } }) {
             "The SVG file was drawn for another document: it has edges this one lacks"
+        }
+        val byId = document.nodes.associateBy { it.id }
+        val requests = graph.nodes.filter { !it.handler && it.requests != byId[it.id]?.let(RequestTexts::tooltip).orEmpty() }
+        require(requests.isEmpty()) {
+            "The SVG file was drawn with other requests than the document has: at ${requests.joinToString(", ") { "'${it.id}'" }}"
         }
     }
 

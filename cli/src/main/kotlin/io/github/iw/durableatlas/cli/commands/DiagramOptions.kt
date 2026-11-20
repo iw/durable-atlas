@@ -81,6 +81,13 @@ class DiagramOptions : OptionGroup(name = "Diagram options") {
         .enum<Background> { it.name.lowercase() }
         .default(Background.PAPER)
 
+    val noRequests: Boolean by option(
+        "--no-requests",
+        help = "Draw activities without what they ask of other services: no line under the name of an activity's card, " +
+            "no request in its tooltip, its Mermaid node or the Markdown page.",
+    )
+        .flag()
+
     val embedFont: Boolean by option(
         "--embed-font",
         help = "Put the typeface into each SVG file, so that it looks the same everywhere. Adds over a megabyte per file.",
@@ -117,7 +124,7 @@ class DiagramOptions : OptionGroup(name = "Diagram options") {
 
     /** @param progress told of each workflow as it is drawn */
     fun directoryOptions(progress: DrawingProgress = DrawingProgress.NONE): DirectoryOptions =
-        DirectoryOptions(formats = configuredFormats, maxNodes = maxNodes, progress = progress)
+        DirectoryOptions(formats = configuredFormats, maxNodes = maxNodes, progress = progress, requests = !noRequests)
 
     companion object {
         /** Stands for every format the tool can write. */

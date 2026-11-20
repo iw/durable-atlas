@@ -18,6 +18,8 @@ internal data class RawManifest(
     val projectDeps: List<String>,
     val jars: List<String>,
     val unresolved: List<String> = emptyList(),
+    /** The main resource directories; absent from what an older init script wrote. */
+    val resources: List<String> = emptyList(),
 )
 
 internal class GradleRun(

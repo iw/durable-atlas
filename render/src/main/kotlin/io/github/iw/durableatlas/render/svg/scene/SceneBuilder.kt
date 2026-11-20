@@ -11,6 +11,7 @@ import io.github.iw.durableatlas.render.layout.HandlerGroup
 import io.github.iw.durableatlas.render.layout.Item
 import io.github.iw.durableatlas.render.layout.LoopRegion
 import io.github.iw.durableatlas.render.layout.ParallelRegion
+import io.github.iw.durableatlas.render.layout.RequestTexts
 import io.github.iw.durableatlas.render.layout.ScopeRegion
 import io.github.iw.durableatlas.render.layout.Step
 import io.github.iw.durableatlas.render.svg.ConstructStyles
@@ -174,6 +175,7 @@ internal class SceneBuilder(private val layout: DiagramLayout, measurer: TextMea
                 text = if (handler != null && node.kind == NodeKind.END) texts.handlerEnd() else texts.of(node),
                 height = if (ConstructStyles.of(kind).shape == "pill") Geometry.PILL_HEIGHT else Geometry.CARD_HEIGHT,
                 entryPoints = listOfNotNull(mainEntry?.takeIf { it.start == node.id }?.id),
+                requests = RequestTexts.tooltip(node),
             )
         }
     }
@@ -199,6 +201,7 @@ internal class SceneBuilder(private val layout: DiagramLayout, measurer: TextMea
         shape: Shape? = null,
         nodes: List<String> = emptyList(),
         entryPoints: List<String> = emptyList(),
+        requests: List<String> = emptyList(),
     ): SceneCard {
         val drawn = shape ?: when (ConstructStyles.of(kind).shape) {
             "pill" -> Shape.PILL
@@ -212,13 +215,20 @@ internal class SceneBuilder(private val layout: DiagramLayout, measurer: TextMea
         val kindLabel = fitter.truncate(text.kindLabel, TextStyles.KIND, room)
         val name = when {
             text.name == null -> emptyList()
-            text.detail != null -> listOf(text.name, text.detail).map { fitter.truncate(it, TextStyles.NAME, room) }
+            text.detail != null -> listOf(fitter.truncate(text.name, TextStyles.NAME, room), detail(text.detail, text.more, room))
             else -> fitter.twoLines(text.name, TextStyles.NAME, room)
         }
         val widest = max(fitter.width(kindLabel, TextStyles.KIND), name.maxOfOrNull { fitter.width(it, TextStyles.NAME) } ?: 0.0)
         val least = if (drawn == Shape.PILL) Geometry.PILL_MIN_WIDTH else Geometry.CARD_MIN_WIDTH
         val width = (inset + widest).roundedUpTo(Geometry.CARD_WIDTH_STEP).coerceIn(least, Geometry.CARD_MAX_WIDTH)
-        return SceneCard(id, kind, drawn, width, height, kindLabel, name, nodes, entryPoints)
+        return SceneCard(id, kind, drawn, width, height, kindLabel, name, nodes, entryPoints, requests)
+    }
+
+    /** The second line of a name, cut to [room] as names are, with [more] after it whatever is cut. */
+    private fun detail(detail: String, more: String?, room: Double): String {
+        if (more == null) return fitter.truncate(detail, TextStyles.NAME, room)
+        val tail = " $more"
+        return fitter.truncate(detail, TextStyles.NAME, room - fitter.width(tail, TextStyles.NAME)) + tail
     }
 
     /** Whether node [id] lies inside region [container], at any depth. */

@@ -4,6 +4,7 @@ import io.github.iw.durableatlas.analyser.discovery.Discovery
 import io.github.iw.durableatlas.analyser.discovery.ImplementedEntryPoint
 import io.github.iw.durableatlas.ir.EntryPointKind
 import io.github.iw.durableatlas.ir.ModelMode
+import io.github.iw.durableatlas.ir.Request
 import io.github.iw.durableatlas.ir.SourceLocation
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -33,7 +34,8 @@ data class Inventory(
         /** Version of the JSON format written by this module. */
         const val SCHEMA_VERSION: Int = 1
 
-        fun of(discovery: Discovery, commit: String, modelMode: ModelMode): Inventory =
+        /** @param requests what the implementation of each activity type asks of other services, by activity type */
+        fun of(discovery: Discovery, commit: String, modelMode: ModelMode, requests: Map<String, List<Request>> = emptyMap()): Inventory =
             Inventory(
                 commit = commit,
                 modelMode = modelMode,
@@ -62,7 +64,7 @@ data class Inventory(
                         module = activityInterface.declaration.module,
                         loc = activityInterface.declaration.location,
                         namePrefix = activityInterface.namePrefix.ifEmpty { null },
-                        activities = activityInterface.activities.map { InventoryActivity(it.name, it.method.name) },
+                        activities = activityInterface.activities.map { InventoryActivity(it.name, it.method.name, requests[it.name].orEmpty()) },
                         implementations = activityInterface.implementations.map {
                             InventoryImplementation(it.name, it.module, it.location)
                         },
@@ -138,4 +140,10 @@ data class InventoryActivity(
     val name: String,
     /** Name of the interface method. */
     val method: String,
+    /**
+     * What the implementation of the activity type asks of other services, in the order of its
+     * code, as the IR gives it for each node that runs the activity type; see [Request]. Empty
+     * where it asks nothing the analysis can see, and where no class of the sources implements it.
+     */
+    val requests: List<Request> = emptyList(),
 )

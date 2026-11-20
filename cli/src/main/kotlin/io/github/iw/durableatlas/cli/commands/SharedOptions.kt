@@ -3,13 +3,16 @@ package io.github.iw.durableatlas.cli.commands
 import com.github.ajalt.clikt.core.ParameterHolder
 import com.github.ajalt.clikt.parameters.options.NullableOption
 import com.github.ajalt.clikt.parameters.options.OptionWithValues
+import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.double
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.clikt.parameters.types.restrictTo
 import io.github.iw.durableatlas.analyser.graph.WorkflowGraphs
+import io.github.iw.durableatlas.analyser.requests.ClientSpec
 import io.github.iw.durableatlas.ir.Detail
 
 /** Threshold option shared by the commands that analyse workflows. */
@@ -45,3 +48,23 @@ internal fun ParameterHolder.maxDepthOption(): OptionWithValues<Int, Int, Int> =
         .int()
         .restrictTo(min = 0)
         .default(WorkflowGraphs.DEFAULT_MAX_DEPTH)
+
+/** Client option shared by the commands that analyse workflows. */
+internal fun ParameterHolder.clientOption(): OptionWithValues<List<ClientSpec>, ClientSpec, ClientSpec> =
+    option(
+        "--client",
+        metavar = "spec",
+        help = "A client of the repository's own whose calls are requests of the activities that make them, written " +
+            "${ClientSpec.FORM}, for example 'ServiceClient.invoke:functionName': a call of 'invoke' on a ServiceClient, " +
+            "which asks for what its argument 'functionName' says. Without a type, a call of the function on any object; " +
+            "a number after ':' names an argument by its place. Repeat the option for several clients. HTTP requests sent " +
+            "with java.net.http are read without it.",
+    )
+        .convert { text ->
+            try {
+                ClientSpec.parse(text)
+            } catch (e: IllegalArgumentException) {
+                fail(e.message ?: "'$text' does not name a client")
+            }
+        }
+        .multiple()

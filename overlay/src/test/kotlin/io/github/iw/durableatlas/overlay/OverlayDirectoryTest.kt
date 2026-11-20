@@ -1,6 +1,10 @@
 package io.github.iw.durableatlas.overlay
 
 import io.github.iw.durableatlas.ir.IrFormatException
+import io.github.iw.durableatlas.ir.IrJson
+import io.github.iw.durableatlas.ir.Request
+import io.github.iw.durableatlas.ir.RequestKind
+import io.github.iw.durableatlas.ir.SourceLocation
 import io.github.iw.durableatlas.ir.testing.GoldenFiles
 import io.github.iw.durableatlas.ir.testing.JsonSchemaChecker
 import io.github.iw.durableatlas.overlay.coverage.CoverageJson
@@ -232,6 +236,36 @@ class OverlayDirectoryTest {
         demo()
         assertEquals(read("OrderWorkflow.svg", fresh), read("OrderWorkflow.svg"))
         assertEquals(read("OrderWorkflow.coverage.svg", fresh), read("OrderWorkflow.coverage.svg"))
+    }
+
+    @Test
+    fun `the requests of an activity are drawn on its overlays as on the plain diagram, and left out where asked`() {
+        val request = Request(
+            kind = RequestKind.HTTP,
+            method = "POST",
+            target = "{services.stock.url}/reservations",
+            keys = listOf("services.stock.url"),
+            loc = SourceLocation("demo/src/main/kotlin/Stock.kt", 12),
+        )
+        val requesting = Fixtures.demo.copy(nodes = Fixtures.demo.nodes.map { if (it.name == "ReserveStock") it.copy(requests = listOf(request)) else it })
+        val ir = Files.createDirectories(dir.resolve("ir"))
+        Files.writeString(ir.resolve("OrderWorkflow.ir.json"), IrJson.encode(requesting))
+
+        val drawn = dir.resolve("drawn")
+        OverlayDirectory.write(ir, Fixtures.demoHistories, drawn, OverlayOptions())
+        val plain = SvgFile(read("OrderWorkflow.svg", drawn))
+        assertEquals(SvgFormat().prepare(requesting, PageOptions(indexFile = "index.md")).render(), plain.text)
+        assertContains(plain.text, "POST {services.st")
+        for ((file, text) in contents(drawn).filterKeys { it.endsWith(".svg") && it != "OrderWorkflow.svg" }) {
+            assertEquals(plain.layout, SvgFile(text).layout, file)
+            assertContains(text, "POST {services.st", message = file)
+        }
+
+        // Without them, every file is what the document without requests gives.
+        val left = dir.resolve("left")
+        OverlayDirectory.write(ir, Fixtures.demoHistories, left, OverlayOptions(requests = false))
+        demo()
+        assertEquals(contents(out), contents(left))
     }
 
     @Test

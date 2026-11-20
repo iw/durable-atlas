@@ -38,6 +38,16 @@ internal class SourceRepository private constructor(
             .toSet()
 
     /**
+     * The files of the analysed tree at [commit] that are called one of [names], relative to it,
+     * sorted.
+     */
+    fun files(commit: String, names: Collection<String>): List<String> =
+        checked(git(toplevel, "ls-tree", "-r", "-z", "--name-only", treeish(commit)), "list files")
+            .split('\u0000')
+            .filter { it.isNotEmpty() && it.substringAfterLast('/') in names }
+            .sorted()
+
+    /**
      * Copies [paths] (files or directories, relative to the analysed tree) as they are at [commit]
      * into [target], keeping their relative locations. [workDirectory] receives a temporary file.
      */

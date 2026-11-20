@@ -350,9 +350,7 @@ internal class Lowering(
                 name = name,
                 receiver = qualified?.receiverExpression?.let(::lower),
                 receiverType = null,
-                typeArguments = call.typeArguments.mapNotNull { written ->
-                    written.typeReference?.let { reference -> safely { with(ka) { reference.type } } }?.let(::typeRef)
-                },
+                typeArguments = writtenTypeArguments(call),
                 arguments = arguments,
                 type = typeOf(whole),
                 location = location,
@@ -386,8 +384,15 @@ internal class Lowering(
             arguments = arguments,
             type = typeOf(whole),
             location = location,
+            // The compiler took the call for the one function it found by the name, which need not be the one meant.
+            writtenTypeArguments = if (info.successfulFunctionCallOrNull() == null) writtenTypeArguments(call) else null,
         )
     }
+
+    private fun writtenTypeArguments(call: KtCallExpression): List<TypeRef> =
+        call.typeArguments.mapNotNull { written ->
+            written.typeReference?.let { reference -> safely { with(ka) { reference.type } } }?.let(::typeRef)
+        }
 
     // ---- calls that do not resolve
 

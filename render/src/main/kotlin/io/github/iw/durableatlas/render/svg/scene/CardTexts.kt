@@ -7,12 +7,18 @@ import io.github.iw.durableatlas.render.layout.CollapsedRegion
 import io.github.iw.durableatlas.render.layout.Durations
 import io.github.iw.durableatlas.render.layout.HandlerGroup
 import io.github.iw.durableatlas.render.layout.NodeText
+import io.github.iw.durableatlas.render.layout.RequestTexts
 import io.github.iw.durableatlas.render.layout.singleLine
 import io.github.iw.durableatlas.render.svg.ConstructStyles
 import io.github.iw.durableatlas.render.svg.StyleKinds
 
-/** The words on a card: its kind label and, below it, up to two parts of a name. */
-internal class CardText(val kindLabel: String, val name: String?, val detail: String? = null)
+/**
+ * The words on a card: its kind label and, below it, up to two parts of a name.
+ *
+ * @param more what follows [detail] however short it is cut, such as how many more requests an
+ *   activity makes than the one the detail names
+ */
+internal class CardText(val kindLabel: String, val name: String?, val detail: String? = null, val more: String? = null)
 
 /** The words of the SVG notation. */
 internal class CardTexts(private val maxLength: Int) {
@@ -26,7 +32,8 @@ internal class CardTexts(private val maxLength: Int) {
     /**
      * The words of a node's card. A step that the flow does not wait for says so below its name,
      * and a child workflow says after its kind what becomes of it when its parent closes, where
-     * that is not the usual.
+     * that is not the usual. An activity that asks something of other services names the first
+     * request below its name, and how many more it makes.
      */
     fun of(node: IrNode): CardText {
         val text = plain(node)
@@ -35,10 +42,10 @@ internal class CardTexts(private val maxLength: Int) {
         val waiting = NodeText.waiting(node)
         val kind = joined(text.kindLabel, NodeText.parentClose(node))
         return when {
-            waiting == null -> CardText(kind, text.name, text.detail)
+            waiting == null -> CardText(kind, text.name, text.detail, text.more)
             text.name == null -> CardText(kind, waiting)
             text.detail == null -> CardText(kind, text.name, waiting)
-            else -> CardText(joined(kind, waiting), text.name, text.detail)
+            else -> CardText(joined(kind, waiting), text.name, text.detail, text.more)
         }
     }
 
@@ -63,6 +70,10 @@ internal class CardTexts(private val maxLength: Int) {
             NodeKind.CANCEL_SCOPE -> CardText(kind, display(node) ?: "scope")
             NodeKind.CANCEL_EXTERNAL -> CardText(kind, display(node) ?: "another workflow")
             NodeKind.UPSERT_SEARCH_ATTRIBUTES, NodeKind.UPSERT_MEMO -> CardText(kind, text(node.label) ?: NodeText.written(node, ::text))
+            NodeKind.ACTIVITY, NodeKind.LOCAL_ACTIVITY -> {
+                val first = RequestTexts.of(node).firstOrNull()?.let { text(RequestTexts.short(it)) }
+                if (first == null) CardText(kind, display(node)) else CardText(kind, display(node) ?: "activity", first, RequestTexts.more(node))
+            }
             else -> CardText(kind, display(node))
         }
     }

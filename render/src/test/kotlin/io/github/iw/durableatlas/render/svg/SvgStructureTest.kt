@@ -134,11 +134,15 @@ class SvgStructureTest {
                     WaitsFor.START -> "waits for start only"
                     null -> null
                 }
+                // An activity that makes requests names the first below its name, and then says in its kind label that it is not waited for.
+                val requested = node.requests.isNotEmpty() && !node.kind.isContainer
                 if (waiting != null && node.kind.isContainer) assertEquals("$expected · ${waiting.uppercase()}", kind, id)
-                if (waiting != null && !node.kind.isContainer) assertEquals(waiting, texts.last(), id)
+                if (waiting != null && !node.kind.isContainer && !requested) assertEquals(waiting, texts.last(), id)
+                if (waiting != null && requested) assertTrue(kind.startsWith("$expected · "), "'$id' is labelled '$kind'")
                 if (node.parentClosePolicy != null) assertEquals("$expected · ABANDON", kind, id)
                 val name = if (node.kind == NodeKind.END && id in inBand) "Return" else name(node)
-                name?.let { assertNamed(id, if (waiting == null || node.kind.isContainer) texts.drop(1) else texts.drop(1).dropLast(1), it) }
+                val below = !node.kind.isContainer && (waiting != null || requested)
+                name?.let { assertNamed(id, if (below) texts.drop(1).dropLast(1) else texts.drop(1), it) }
             } else {
                 val entryPoint = entryPoints.getValue(id)
                 assertContains(listOf("SIGNAL", "QUERY", "UPDATE", "UPDATE + VALIDATOR", "UPDATE VALIDATOR"), texts.first())

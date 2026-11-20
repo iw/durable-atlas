@@ -14,6 +14,7 @@ import io.github.iw.durableatlas.analyser.code.ParameterDecl
 import io.github.iw.durableatlas.analyser.code.PropertyDecl
 import io.github.iw.durableatlas.analyser.code.PropertyId
 import io.github.iw.durableatlas.analyser.code.TypeRef
+import io.github.iw.durableatlas.analyser.code.WrittenAnnotations
 import io.github.iw.durableatlas.ir.SourceLocation
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.annotations.KaAnnotated
@@ -43,6 +44,7 @@ import org.jetbrains.kotlin.analysis.api.types.KaFlexibleType
 import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
 import org.jetbrains.kotlin.name.ClassId
+import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtConstructor
@@ -52,6 +54,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtNullableType
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtUserType
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
@@ -202,7 +205,9 @@ internal class SymbolReader(
         if (classId == null) {
             val written = annotation.psi
             val file = (written?.containingFile as? KtFile)?.let(session::sourceFile)
-            if (written != null && file != null) {
+            // One that is read by the name it is written with is recognised all the same.
+            val read = (written as? KtAnnotationEntry)?.typeReference?.text?.let(WrittenAnnotations::isRead) == true
+            if (written != null && file != null && !read) {
                 unresolved += "${written.text} at ${file.path}:${file.line(written.startOffset)}"
             }
             return null
@@ -213,6 +218,36 @@ internal class SymbolReader(
             arguments = annotation.arguments.associate { it.name.asString() to constantOf(it.expression) },
         )
     }
+
+    /**
+     * The annotations written on [declaration] whose class does not resolve, each by the name it
+     * is written with (see [AnnotationUse.written]). With [all], those whose class resolves as
+     * well, whatever they apply to: the annotations of a property include those written for its
+     * backing field, its getter or the constructor parameter it is declared with.
+     */
+    private fun KaSession.writtenAnnotations(declaration: KtDeclaration?, all: Boolean): List<AnnotationUse> =
+        declaration?.annotationEntries.orEmpty().mapNotNull { entry ->
+            val classId = entry.typeReference
+                ?.let { reference -> runCatching { reference.type }.getOrNull() as? KaClassType }
+                ?.classId
+                ?.takeUnless { it.shortClassName.isSpecial }
+            when {
+                classId == null -> entry.typeReference?.text?.let { AnnotationUse(it, writtenArguments(entry), written = true) }
+                all -> AnnotationUse(classId.asFqNameString(), writtenArguments(entry))
+                else -> null
+            }
+        }
+
+    /** The arguments of an annotation as written; one without a name is the annotation's `value`. */
+    private fun KaSession.writtenArguments(entry: KtAnnotationEntry): Map<String, Constant> =
+        entry.valueArguments.withIndex().associate { (index, argument) ->
+            val name = argument.getArgumentName()?.asName?.asString() ?: if (index == 0) VALUE else "$VALUE$index"
+            val expression = argument.getArgumentExpression()
+            val constant = expression?.let { runCatching { it.evaluate() }.getOrNull() }?.let(::constantOf)
+                ?: (expression as? KtStringTemplateExpression)?.takeUnless { it.hasInterpolation() }?.let { template -> Constant.Text(template.entries.joinToString("") { it.text }) }
+                ?: Constant.Unsupported(expression?.text.orEmpty())
+            name to constant
+        }
 
     private fun KaSession.constantOf(value: KaAnnotationValue): Constant =
         when (value) {
@@ -352,7 +387,7 @@ internal class SymbolReader(
             isAbstract = symbol.modality == KaSymbolModality.ABSTRACT || symbol.modality == KaSymbolModality.SEALED,
             module = module,
             location = location,
-            annotations = annotationsOf(symbol),
+            annotations = annotationsOf(symbol) + writtenAnnotations(sourceDeclaration(symbol), all = false),
             superTypes = direct,
             allSuperTypes = all.toList(),
         )
@@ -423,10 +458,17 @@ internal class SymbolReader(
             name = symbol.name.asString(),
             module = sourceFile?.module,
             location = source?.let { location(it as KtDeclaration) } ?: javaLocation(symbol),
-            annotations = annotationsOf(symbol),
+            annotations = annotationsOf(symbol) + writtenAnnotations(source, all = false),
             receiver = symbol.receiverParameter?.let { typeRef(it.returnType) }
                 ?.let { type -> type.copy(unresolved = source?.receiverTypeReference?.let { missingClass(it) }) },
-            parameters = symbol.valueParameters.map { ParameterDecl(it.name.asString(), typeRef(it.returnType)) },
+            parameters = symbol.valueParameters.mapIndexed { index, parameter ->
+                ParameterDecl(
+                    parameter.name.asString(),
+                    typeRef(parameter.returnType),
+                    writtenAnnotations(source?.valueParameters?.getOrNull(index), all = true),
+                )
+            },
+            typeParameters = symbol.typeParameters.map { it.name.asString() },
             returnType = typeRef(symbol.returnType),
             overrides = symbol.allOverriddenSymbols
                 .filterIsInstance<KaFunctionSymbol>()
@@ -449,7 +491,10 @@ internal class SymbolReader(
             id = id,
             location = location((written ?: owner) as KtDeclaration),
             annotations = annotationsOf(symbol),
-            parameters = symbol.valueParameters.map { ParameterDecl(it.name.asString(), typeRef(it.returnType)) },
+            parameters = symbol.valueParameters.mapIndexed { index, parameter ->
+                val declared = (written?.valueParameters ?: owner.primaryConstructorParameters.takeIf { symbol.isPrimary }).orEmpty()
+                ParameterDecl(parameter.name.asString(), typeRef(parameter.returnType), writtenAnnotations(declared.getOrNull(index), all = true))
+            },
             takesNoArguments = symbol.valueParameters.all { it.hasDefaultValue },
         )
     }
@@ -488,7 +533,7 @@ internal class SymbolReader(
             id = id,
             name = symbol.name.asString(),
             location = source?.let { location(it) },
-            annotations = annotationsOf(symbol),
+            annotations = (annotationsOf(symbol) + writtenAnnotations(source, all = true)).distinctBy { it.type },
             type = typeRef(symbol.returnType),
             isMutable = !symbol.isVal,
             isConstructorParameter = source is KtParameter,
@@ -509,6 +554,9 @@ internal class SymbolReader(
         const val ANY = "kotlin.Any"
         const val ANONYMOUS = "<anonymous>"
         const val LOCAL = "<local>"
+
+        /** The parameter of an annotation that an argument without a name is given to. */
+        const val VALUE = "value"
 
         /** Where a symbol comes from that is written in the Kotlin or Java sources. */
         val SOURCE_ORIGINS = setOf(KaSymbolOrigin.SOURCE, KaSymbolOrigin.SOURCE_MEMBER_GENERATED, KaSymbolOrigin.JAVA_SOURCE)

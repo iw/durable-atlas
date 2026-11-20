@@ -90,7 +90,7 @@ ones.
 | Kind | What it is | Fields it carries |
 | --- | --- | --- |
 | `start`, `end` | Where an entry point's graph begins, and where it completes. | |
-| `activity`, `localActivity` | An activity call through a stub. | `name` (the activity type), `timeout`, `taskQueue` |
+| `activity`, `localActivity` | An activity call through a stub. | `name` (the activity type), `timeout`, `taskQueue`, `requests` |
 | `childWorkflow` | A child workflow. | `name` (the workflow type), `interface` where the type alone is ambiguous, `waitsFor`, `parentClosePolicy` |
 | `signalExternal` | A signal to another workflow. | `name` (the signal) |
 | `cancelExternal` | A request to another workflow to cancel. | `name` (its workflow type, where the stub says it) |
@@ -129,6 +129,37 @@ A field is written only where it says something; its absence is the common case.
 | `keys`, `otherKeys` | the two upsert kinds | The names written, in code order. `otherKeys: true` says they are not all: the step writes further names the analysis could not tell. No `keys` means no name is known. |
 | `retry` | `loop` | `true`: the loop is a retry. What it holds runs once, and again while it fails and the retry options allow. |
 | `reason`, `candidates` | `unknown` | Why the call could not be read, and what it may run. |
+| `requests` | `activity`, `localActivity` | What the implementation of the activity type asks of other services ([Requests](#requests)). |
+
+### Requests
+
+`requests` lists the requests to other services that the code of the activity type's
+implementation makes, in code order, each once: those it makes itself and those of the
+functions it calls, as far as calls are followed (`--max-depth`). Every node that runs the
+activity type carries the same list, and `inventory.json` has it once for each activity type.
+
+```json
+"requests": [
+  { "kind": "http", "method": "PUT", "target": "{billing.url}/v1/charges/{orderId}",
+    "response": "String", "keys": ["billing.url"], "host": "http://billing.example.com",
+    "loc": { "file": "billing/src/main/kotlin/com/example/billing/BillingActivitiesImpl.kt", "line": 20 } },
+  { "kind": "client", "client": "ServiceClient", "call": "invoke", "operation": "pricing-quote",
+    "response": "Long", "loc": { "file": "billing/src/main/kotlin/com/example/billing/BillingActivitiesImpl.kt", "line": 21 } }
+]
+```
+
+| Field | Says |
+| --- | --- |
+| `kind` | `http`: an HTTP request sent with `java.net.http.HttpClient`. `client`: a call of a client named with `--client`. |
+| `method` | The HTTP method, or `{name}` where the code computes it. Absent where the code that builds the request is not seen or does not say it. |
+| `target` | The URI: its constant parts as written, a part from a configuration property as `{key}`, any other computed part as `{name}`, by the name the code gives it. |
+| `client`, `call` | The simple name of the client's class, where it is known, and the function called. |
+| `operation` | What the client call asks for: the argument `--client` names, written as `target` is. Absent where no argument says it. |
+| `response` | The type of what the request gives back, with simple names, where the code says it. |
+| `keys` | The configuration properties the request is made with, in the order the code uses them. |
+| `host` | The value configured for the key `target` starts with, as written, a `${…}` expression included. Absent where no configuration file of the model gives it. |
+| `class` | The class that makes the request, where several classes of the sources implement the activity type. |
+| `loc` | Where the request is made: the call that sends it, or the call of the client. |
 
 ### Unknown nodes
 

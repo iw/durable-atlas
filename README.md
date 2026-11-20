@@ -80,6 +80,12 @@ and the tool's dependencies. See [docs/install.md](docs/install.md).
   source. A guess is never drawn as a fact. By default a diagram is an overview: a call
   behind which a step is only possible is left out and listed, and `--detail full` draws
   every one. See [docs/decisions.md](docs/decisions.md).
+- **Says what activities ask of other services.** The code of each class that implements an
+  activity type is read for the HTTP requests it sends with `java.net.http`, and for the calls
+  of the repository's own clients that `--client` names. A request shows its method and
+  target, or its client and operation, with a configuration key and the host that
+  `application.yaml` or `application.properties` gives it, as MicroProfile Config reads them.
+  See [docs/usage.md](docs/usage.md#requests-of-activities).
 - **Writes SVG, Mermaid and HTML.** An SVG diagram is one self-contained file without
   script: a card per step with its own icon and colour, regions as boxes, handlers in a
   band above the flow, a legend, and links to the diagrams of child workflows and, if you
@@ -114,10 +120,10 @@ and the tool's dependencies. See [docs/install.md](docs/install.md).
 ```text
 durable-atlas run     --repo DIR --commit REV --out DIR [--mode gradle|degraded] [--force]
                       [--max-depth N] [--detail overview|full] [--max-unresolved-pct N]
-                      [--jdk-home DIR] [diagram options]
+                      [--client SPEC]… [--jdk-home DIR] [diagram options]
 durable-atlas model   --repo DIR --commit REV --out DIR [--mode gradle|degraded] [--force] [--keep-scratch]
 durable-atlas analyse --model DIR --out DIR [--workflow TYPE] [--max-depth N] [--detail overview|full]
-                      [--max-unresolved-pct N] [--jdk-home DIR]
+                      [--max-unresolved-pct N] [--client SPEC]… [--jdk-home DIR]
 durable-atlas render  --ir DIR --out DIR [diagram options]
 durable-atlas fetch   --workflow-type TYPE --limit N --out DIR [--since TIME] [--until TIME]
                       [--address HOST:PORT] [--namespace NAME] [--api-key KEY] [--tls | --no-tls] [--profile NAME] …
@@ -126,7 +132,7 @@ durable-atlas overlay --ir DIR --history FILE|DIR --out DIR [--version-map FILE]
 
 diagram options:      [--format svg|mermaid|all] [--html] [--max-nodes N] [--wrap-width N]
                       [--legend present|full|none] [--source-base-url URL] [--background paper|transparent]
-                      [--embed-font] [--svg-timeout SECONDS]
+                      [--embed-font] [--svg-timeout SECONDS] [--no-requests]
 ```
 
 `run` is `model`, `analyse` and `render` in turn. Every command takes `--json` for a
@@ -140,7 +146,7 @@ that was exceeded, 3 a run that fell back to degraded mode.
 | --- | --- |
 | `ir` | The workflow IR: types, JSON form, schema, canonical order, validation |
 | `model-extractor` | The model of a commit: reads the repository through git, asks its Gradle build for modules and classpaths, or builds a degraded model |
-| `analyser` | From model to IR: the Kotlin Analysis API backend in a class loader of its own, discovery of workflows and activities, the flow and the graph of each entry point |
+| `analyser` | From model to IR: the Kotlin Analysis API backend in a class loader of its own, discovery of workflows and activities, the flow and the graph of each entry point, the requests of each activity |
 | `render` | From IR to diagrams: Mermaid, SVG (laid out with the Eclipse Layout Kernel), HTML pages, the index, the time limit |
 | `overlay` | From IR and event histories to coverage: reading and fetching histories, mapping events to nodes, overlay diagrams, the version map |
 | `cli` | The `durable-atlas` command: options, summaries, progress and exit statuses |

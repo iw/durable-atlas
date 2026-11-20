@@ -149,6 +149,51 @@ class IrJsonTest {
     }
 
     @Test
+    fun `the requests of an activity are written in their order where there are some, and taken away as a whole`() {
+        val before = IrJson.encode(document)
+        assertFalse("requests" in before)
+        assertEquals(document, document.withoutRequests())
+
+        val http = Request(
+            kind = RequestKind.HTTP,
+            method = "POST",
+            target = "{services.inventory.url}/reservations/{id}",
+            keys = listOf("services.inventory.url"),
+            host = "http://inventory.example.com",
+            response = "String",
+            loc = SourceLocation("orders/src/main/kotlin/Inventory.kt", 30),
+        )
+        val client = Request(
+            kind = RequestKind.CLIENT,
+            client = "ServiceClient",
+            call = "invoke",
+            operation = "inventory-reserve",
+            response = "List<Reservation>",
+            className = "com.example.orders.InventoryImpl",
+            loc = SourceLocation("orders/src/main/kotlin/Inventory.kt", 24),
+        )
+        val requesting = document.copy(nodes = document.nodes.map { if (it.id == "n05") it.copy(requests = listOf(http, client)) else it })
+        val text = IrJson.encode(requesting)
+
+        // In the order of the code, not sorted; each with the keys it has, in a fixed order.
+        assertEquals(listOf(http, client), IrJson.decode(text).nodes.single { it.id == "n05" }.requests)
+        assertContains(
+            text,
+            "\"name\": \"ShipItem\",\n      \"requests\": [\n        {\n          \"kind\": \"http\",\n          \"method\": \"POST\",\n" +
+                "          \"target\": \"{services.inventory.url}/reservations/{id}\",\n          \"response\": \"String\",\n" +
+                "          \"keys\": [\n            \"services.inventory.url\"\n          ],\n          \"host\": \"http://inventory.example.com\",\n",
+        )
+        assertContains(
+            text,
+            "\"kind\": \"client\",\n          \"client\": \"ServiceClient\",\n          \"call\": \"invoke\",\n" +
+                "          \"operation\": \"inventory-reserve\",\n          \"response\": \"List<Reservation>\",\n" +
+                "          \"class\": \"com.example.orders.InventoryImpl\",\n",
+        )
+        // Taken away, nothing of them is left.
+        assertEquals(before, IrJson.encode(requesting.withoutRequests()))
+    }
+
+    @Test
     fun `what an upsert writes and that a loop is a retry are written where they are set, and nowhere else`() {
         val step = IrNode("n1", NodeKind.UPSERT_SEARCH_ATTRIBUTES)
         val loop = IrNode("n2", NodeKind.LOOP, label = "retry on failure")

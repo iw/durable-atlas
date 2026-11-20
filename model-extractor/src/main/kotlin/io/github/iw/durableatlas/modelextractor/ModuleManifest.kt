@@ -34,9 +34,22 @@ data class ModuleManifest(
      */
     val jars: List<String>,
     val mode: ModelMode,
+    /**
+     * The configuration files of the module's main resources ([CONFIGURATION_FILES]), relative to
+     * the root of the analysed repository, with `/` separators and sorted. A copy of each is kept
+     * under [ModelLayout.SOURCE_DIRECTORY] of the model, as for [sources]. A model made by an
+     * earlier version of the tool has none.
+     */
+    val resources: List<String> = emptyList(),
 ) {
     companion object {
         /** Version of the JSON format written by this module. */
         const val SCHEMA_VERSION: Int = 1
+
+        /**
+         * The names of the files of a resource directory that a model keeps: those a service
+         * reads its configuration from, in the order their values count, the first first.
+         */
+        val CONFIGURATION_FILES: List<String> = listOf("application.yaml", "application.yml", "application.properties")
     }
 }

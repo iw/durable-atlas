@@ -28,6 +28,8 @@ configurations.named("analysisClasspath") {
 dependencies {
     api(project(":ir"))
     api(project(":model-extractor"))
+    // Read by the main code, which finds the requests of activities; the backend does not need it.
+    implementation(libs.snakeyaml.engine)
 
     // These jars embed their dependencies; the dependencies their metadata declares do not exist.
     analysisApi(libs.bundles.kotlin.analysis.api) { isTransitive = false }

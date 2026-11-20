@@ -214,6 +214,37 @@ safe rather than right.
 
 Only Maven Central artifacts go into the degraded classpath.
 
+## Requests of activities
+
+An activity that calls another service says so: the requests that its implementation makes
+are read from the code and drawn with the activity. The tool stays generic.
+
+- **What the JDK and MicroProfile give is recognised by itself.** An HTTP request built with
+  `java.net.http.HttpRequest` and sent with `HttpClient.send` or `sendAsync` is a request. A
+  value read from configuration, in the three forms MicroProfile Config has
+  (`@ConfigProperty`, `@ConfigMapping`, `Config.getValue`), is known by its key.
+- **A client of a repository's own is recognised only when the user names it**, with
+  `--client [Type.]method[:parameter]`. Nothing specific to one organisation is built in:
+  how a team calls its services is theirs to say. The form is a dotted name as Kotlin
+  writes a member, with the parameter after a colon, so that it needs no quotes in a shell.
+- **What is read is the code of the sources.** The class of the sources that implements an
+  activity type is read from its function for that type, following calls into functions of
+  the sources as for workflows, with each argument bound to its parameter. Where several
+  classes implement it, each request names its class. An activity type that no class of the
+  sources implements has no requests, and nothing is said of it.
+- **A request is counted where it is sent.** A request that is built and never sent is none.
+  One that is sent but was built where the code does not show, such as one handed in, is
+  listed by what is sent, so that the call is not lost. A builder kept in a variable may be
+  told more in statements that are not read, so its request gets no method that its chain
+  does not give.
+- **What cannot be told is shown as written.** A part of a URL or an operation that is
+  computed is shown by the name it is written with, `{id}`; one from configuration by its
+  key, `{services.inventory.url}`, with the host the configuration files give beside it and
+  never instead of it. A value that cannot be read at all is left out, not guessed.
+- **Requests change nothing else.** A document without requests is drawn byte for byte as
+  before, and `--no-requests` draws one with requests as if it had none. `--detail` has no
+  bearing on them.
+
 ## Drawing
 
 - **Two notations.** SVG is the diagram to read: one self-contained file, no script, the
@@ -269,6 +300,9 @@ Only Maven Central artifacts go into the degraded classpath.
 - **Static analysis.** What is chosen at run time (an implementation, a computed activity
   name, reflection) is an `unknown` node, not a step.
 - **Fail types and options set outside the analysed sources** are not seen.
+- **Requests made inside libraries are not seen**: a REST client generated from an
+  interface, an HTTP library other than `java.net.http`, a client the user does not name.
+  Of a client that is named, only the call is seen, not what it sends.
 - **A workflow type whose implementing class is not in the sources** has no document; a
   warning names it.
 - **Module scoping is by mention.** In Gradle mode a module is analysed if its sources

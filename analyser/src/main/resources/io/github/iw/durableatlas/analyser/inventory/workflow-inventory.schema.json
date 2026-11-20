@@ -46,6 +46,61 @@
       "type": "string",
       "pattern": "^:"
     },
+    "request": {
+      "description": "A request to another service. A part of it that the code computes is written as {name}, by the name the code gives it; a part that comes from a configuration property is written as {key}.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "loc"],
+      "properties": {
+        "kind": {
+          "description": "http: an HTTP request sent with java.net.http.HttpClient. client: a call of a client that the analysis was told of with --client.",
+          "enum": ["http", "client"]
+        },
+        "method": {
+          "description": "For http: the HTTP method, or the expression that gives it as {name} where it is computed. Absent where the code that builds the request is not seen or does not say it.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "target": {
+          "description": "For http: the URI, with its constant parts as written, each part from a configuration property as {key} and each other computed part as {name}.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "client": {
+          "description": "For client: the simple name of the class of the client, where it is known.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "call": {
+          "description": "For client: the name of the function called.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "operation": {
+          "description": "For client: the value of the argument named with --client: as text where it is constant, as {key} where it comes from a configuration property, as {name} where it is computed.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "response": {
+          "description": "The type of what the request gives back, with simple names, where the code says it.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "keys": {
+          "description": "The configuration properties the request is made with, in the order the code uses them.",
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/nonEmptyString" },
+          "uniqueItems": true
+        },
+        "host": {
+          "description": "The value configured for the key that the target starts with, found in application.yaml, application.yml or application.properties of the module that holds the class: the host, or the start of the URI, the request goes to. A ${...} expression in it is kept as written.",
+          "type": "string"
+        },
+        "class": {
+          "description": "Fully qualified name of the class that makes the request, where several classes of the analysed sources implement the activity type.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "loc": {
+          "description": "Where the request is made: the call that sends it, or the call of the client.",
+          "$ref": "#/$defs/location"
+        }
+      }
+    },
     "location": {
       "type": "object",
       "additionalProperties": false,
@@ -174,6 +229,12 @@
               "method": {
                 "description": "Name of the interface method.",
                 "$ref": "#/$defs/nonEmptyString"
+              },
+              "requests": {
+                "description": "What the implementation of the activity type asks of other services, in the order of its code, each once, as the IR gives it on each node that runs the activity type. Absent where it asks nothing the analysis can see, and where no class of the analysed sources implements the activity type.",
+                "type": "array",
+                "minItems": 1,
+                "items": { "$ref": "#/$defs/request" }
               }
             }
           }

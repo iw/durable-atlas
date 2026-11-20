@@ -18,6 +18,10 @@ class ExtractedModel private constructor(
     fun sourceDirectories(manifest: ModuleManifest): List<Path> =
         manifest.sources.map { sourceRoot.resolve(it).normalize() }
 
+    /** Absolute locations of the configuration files of [manifest] (see [ModuleManifest.resources]). */
+    fun resourceFiles(manifest: ModuleManifest): List<Path> =
+        manifest.resources.map { sourceRoot.resolve(it).normalize() }
+
     /** Absolute locations of the jars of [manifest], in classpath order. */
     fun jars(manifest: ModuleManifest): List<Path> =
         manifest.jars.map { jar ->

@@ -48,6 +48,13 @@
     "mode": {
       "description": "How the model was obtained.",
       "enum": ["gradle", "degraded"]
+    },
+    "resources": {
+      "description": "The configuration files (application.yaml, application.yml, application.properties) of the module's main resource directories, relative to the root of the analysed repository, sorted. The model holds a copy of each under its source directory. Absent where there are none, and from a model made by an earlier version of the tool.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/relativePath" },
+      "minItems": 1,
+      "uniqueItems": true
     }
   },
   "$defs": {

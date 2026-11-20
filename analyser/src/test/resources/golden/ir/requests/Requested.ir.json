@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Requested",
+  "interface": "requests.Requested",
+  "implementation": "requests.RequestedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Requested",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n3b06307046",
+      "kind": "activity",
+      "name": "Announce",
+      "timeout": "PT5S",
+      "requests": [
+        {
+          "kind": "http",
+          "method": "POST",
+          "target": "https://mail.example.com/send",
+          "response": "String",
+          "class": "requests.MailNotices",
+          "loc": {
+            "file": "app/src/main/kotlin/requests/Requested.kt",
+            "line": 54
+          }
+        },
+        {
+          "kind": "client",
+          "client": "ServiceClient",
+          "call": "invoke",
+          "operation": "text-send",
+          "class": "requests.TextNotices",
+          "loc": {
+            "file": "app/src/main/kotlin/requests/Requested.kt",
+            "line": 60
+          }
+        }
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/requests/Requested.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n58c76803a3",
+      "kind": "activity",
+      "name": "Helper",
+      "timeout": "PT5S",
+      "requests": [
+        {
+          "kind": "http",
+          "method": "POST",
+          "target": "https://api.example.com/orders/{id}",
+          "response": "String",
+          "loc": {
+            "file": "app/src/main/kotlin/requests/HttpCalls.kt",
+            "line": 80
+          }
+        }
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/requests/Requested.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/requests/Requested.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n8c0dc58baa",
+      "kind": "activity",
+      "name": "Call",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/requests/Requested.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n8cc45cbb85",
+      "kind": "activity",
+      "name": "Named",
+      "timeout": "PT5S",
+      "requests": [
+        {
+          "kind": "client",
+          "client": "ServiceClient",
+          "call": "invoke",
+          "operation": "named-fn",
+          "response": "List<Item>",
+          "loc": {
+            "file": "app/src/main/kotlin/requests/ClientCalls.kt",
+            "line": 77
+          }
+        }
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/requests/Requested.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf84f2fb271",
+      "kind": "timer",
+      "duration": "PT1S",
+      "loc": {
+        "file": "app/src/main/kotlin/requests/Requested.kt",
+        "line": 40
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n3b06307046",
+      "to": "n8c0dc58baa"
+    },
+    {
+      "from": "n58c76803a3",
+      "to": "n8cc45cbb85"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n58c76803a3"
+    },
+    {
+      "from": "n8c0dc58baa",
+      "to": "nf84f2fb271"
+    },
+    {
+      "from": "n8cc45cbb85",
+      "to": "n3b06307046"
+    },
+    {
+      "from": "nf84f2fb271",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 0
+  }
+}

@@ -124,6 +124,37 @@ class IrSchemaTest {
     }
 
     @Test
+    fun `the requests of an activity match the schema, each of a known kind and with its place`() {
+        val request = Request(
+            kind = RequestKind.HTTP,
+            method = "GET",
+            target = "{orders.url}/orders/{id}",
+            keys = listOf("orders.url"),
+            host = "http://orders.example.com",
+            loc = SourceLocation("orders/src/main/kotlin/Orders.kt", 12),
+        )
+        val client = Request(kind = RequestKind.CLIENT, client = "ServiceClient", call = "invoke", className = "com.example.A", loc = SourceLocation("orders/src/main/kotlin/Orders.kt", 14))
+        val requesting = SampleDocuments.orderWorkflow.let { document ->
+            document.copy(nodes = document.nodes.map { if (it.id == "n05") it.copy(requests = listOf(request, client)) else it })
+        }
+        val text = IrJson.encode(requesting)
+        checker.assertValid(text)
+
+        val malformed = mapOf(
+            "an unknown kind" to text.replace("\"kind\": \"http\"", "\"kind\": \"grpc\""),
+            "a request without a place" to text.replace("\"host\": \"http://orders.example.com\",\n          \"loc\": {\n            \"file\": \"orders/src/main/kotlin/Orders.kt\",\n            \"line\": 12\n          }", "\"host\": \"http://orders.example.com\""),
+            "a request with something else" to text.replace("\"host\": \"http://orders.example.com\",", "\"host\": \"http://orders.example.com\",\n          \"port\": 80,"),
+            "a key twice" to text.replace("\"orders.url\"\n          ]", "\"orders.url\",\n            \"orders.url\"\n          ]"),
+            // A node that makes none leaves the list out.
+            "an empty list" to valid.replace("\"name\": \"ShipItem\",", "\"name\": \"ShipItem\",\n      \"requests\": [],"),
+        )
+        for ((description, changed) in malformed) {
+            assertTrue(changed != text && changed != valid, "$description: the sample was not changed")
+            assertTrue(checker.violations(changed).isNotEmpty(), "$description: expected a schema violation")
+        }
+    }
+
+    @Test
     fun `calls that were skipped match the schema where each has its place and its text`() {
         val skipping = SampleDocuments.orderWorkflow.copy(
             modelMode = ModelMode.DEGRADED,

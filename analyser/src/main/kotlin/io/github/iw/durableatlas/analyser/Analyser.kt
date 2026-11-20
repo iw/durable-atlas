@@ -1,5 +1,6 @@
 package io.github.iw.durableatlas.analyser
 
+import io.github.iw.durableatlas.analyser.code.ClassDecl
 import io.github.iw.durableatlas.analyser.code.SourceAnalysisException
 import io.github.iw.durableatlas.analyser.code.SourceBackend
 import io.github.iw.durableatlas.analyser.discovery.Discovery
@@ -10,11 +11,17 @@ import io.github.iw.durableatlas.analyser.inventory.Inventory
 import io.github.iw.durableatlas.analyser.inventory.InventoryJson
 import io.github.iw.durableatlas.analyser.inventory.StandaloneActivities
 import io.github.iw.durableatlas.analyser.inventory.StandaloneActivitiesJson
+import io.github.iw.durableatlas.analyser.requests.ActivityRequests
+import io.github.iw.durableatlas.analyser.requests.ClientSpec
+import io.github.iw.durableatlas.analyser.requests.Configuration
 import io.github.iw.durableatlas.ir.Detail
 import io.github.iw.durableatlas.ir.IrDocument
 import io.github.iw.durableatlas.ir.IrJson
+import io.github.iw.durableatlas.ir.ModelMode
+import io.github.iw.durableatlas.ir.Request
 import io.github.iw.durableatlas.modelextractor.ExtractedModel
 import io.github.iw.durableatlas.modelextractor.ModelFormatException
+import io.github.iw.durableatlas.modelextractor.ModuleManifest
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
@@ -47,6 +54,11 @@ data class AnalysisRequest(
      * which a step is certain have one; the others are listed in the document.
      */
     val detail: Detail = Detail.FULL,
+    /**
+     * The clients of the analysed repository's own whose calls are requests of the activities
+     * that make them. Without any, only the HTTP requests sent with `java.net.http` are.
+     */
+    val clients: List<ClientSpec> = emptyList(),
 )
 
 /** The IR of one workflow type as one class implements it, and the file it was written to. */
@@ -98,6 +110,7 @@ class Analyser(private val log: (String) -> Unit = {}) {
         val failures = ArrayList<String>()
         val withoutGraph = ArrayList<String>()
         val warnings = ArrayList<String>()
+        var requests: Map<String, List<Request>> = emptyMap()
         val (discovery, documents) = SourceBackends.open(model, request.jdkHome, log).use { backend ->
             log("the sources are ready for analysis after ${millisSince(started)} ms")
             val discovery = TemporalDiscovery.discover(backend)
@@ -106,11 +119,22 @@ class Analyser(private val log: (String) -> Unit = {}) {
                 "found ${discovery.workflows.size} workflow type(s) and " +
                     "${discovery.activityInterfaces.size} activity interface(s) after ${millisSince(started)} ms",
             )
-            discovery to documents(backend, model, discovery, request, failures, withoutGraph, warnings)
+            requests = ActivityRequests(backend, request.clients, request.maxDepth, configurations(model)).of(discovery)
+            if (requests.isNotEmpty()) {
+                log("found ${requests.values.sumOf { it.size }} request(s) of ${requests.size} activity type(s) after ${millisSince(started)} ms")
+            }
+            val documents = documents(backend, model, discovery, request, failures, withoutGraph, warnings)
+            discovery to documents.map { ActivityRequests.attach(it, requests) }
         }
         warnings.forEach { log("warning: $it") }
+        if (requests.values.any { list -> list.any { it.keys.isNotEmpty() } } && model.manifests.all { it.resources.isEmpty() }) {
+            log(
+                "warning: the model holds no ${ModuleManifest.CONFIGURATION_FILES.joinToString(", ")}, so no request has a host; " +
+                    "a model made by an earlier version of the tool holds none: --force makes it again",
+            )
+        }
 
-        val inventory = Inventory.of(discovery, model.index.commit, model.index.mode)
+        val inventory = Inventory.of(discovery, model.index.commit, model.index.mode, requests)
         val out = request.out.toAbsolutePath().normalize()
         Files.createDirectories(out)
         val inventoryFile = out.resolve(InventoryJson.FILE_NAME)
@@ -172,6 +196,34 @@ class Analyser(private val log: (String) -> Unit = {}) {
         return documents
     }
 
+    /**
+     * The configuration of the service each class of the sources is part of: the configuration
+     * files of its module's main resources. Where the model holds those of several directories,
+     * as a degraded model does for every module of the repository, a class has those of the
+     * resource directory next to the source directory it lies in.
+     */
+    private fun configurations(model: ExtractedModel): (ClassDecl) -> Configuration {
+        val manifests = model.manifests.associateBy { it.path }
+        val read = HashMap<List<String>, Configuration>()
+        return { declaration ->
+            val manifest = declaration.module?.let(manifests::get)
+            val file = declaration.location?.file
+            val resources = manifest?.resources.orEmpty()
+            val near = resources.filter { resource -> file != null && serviceRoot(resource)?.let(file::startsWith) == true }
+            val files = if (near.isNotEmpty() || manifest?.mode == ModelMode.DEGRADED) near else resources
+            read.getOrPut(files) {
+                if (files.isEmpty()) Configuration.NONE else Configuration.read(files.map { model.sourceRoot.resolve(it).normalize() }) { log("warning: $it") }
+            }
+        }
+    }
+
+    /** What the sources of the module a resource file belongs to lie under, by convention: `x/src/main/` for `x/src/main/resources/f`. */
+    private fun serviceRoot(resource: String): String? {
+        val directory = resource.substringBeforeLast('/', "")
+        if (directory != RESOURCES && !directory.endsWith("/$RESOURCES")) return null
+        return directory.removeSuffix(RESOURCES)
+    }
+
     private fun failure(workflowType: String, implementation: String, cause: Throwable): String =
         "the IR of workflow type $workflowType ($implementation) could not be made: $cause"
 
@@ -188,6 +240,10 @@ class Analyser(private val log: (String) -> Unit = {}) {
     }
 
     private fun millisSince(start: Long): Long = (System.nanoTime() - start) / 1_000_000
+
+    private companion object {
+        const val RESOURCES = "resources"
+    }
 
     /** A reader never sees a half-written file. */
     private fun writeAtomically(file: Path, text: String) {

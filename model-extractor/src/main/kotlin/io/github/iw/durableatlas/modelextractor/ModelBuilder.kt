@@ -22,6 +22,8 @@ internal class ModelBuilder(
         val jars: List<String>,
         /** The entries of [jars] that are files of the repository. */
         val repositoryJars: List<String>,
+        /** The configuration files in the module's main resource directories. */
+        val resources: List<String>,
     )
 
     /** Queries the commit's Gradle build in a scratch clone and writes the model to [target]. */
@@ -33,7 +35,8 @@ internal class ModelBuilder(
         val run = GradleModelRunner(log).run(root, scratch)
 
         val tracked = repository.directories(commit)
-        val described = run.manifests.map { describe(it, root, tracked) }
+        val configuration = repository.files(commit, ModuleManifest.CONFIGURATION_FILES)
+        val described = run.manifests.map { describe(it, root, tracked, configuration) }
         val usesTemporal = described
             .filter { module -> ModuleScoping.usesTemporal(module.sources.map(root::resolve)) }
             .map { it.path }
@@ -51,11 +54,12 @@ internal class ModelBuilder(
                 projectDeps = module.projectDeps.filter { it in keptPaths },
                 jars = module.jars,
                 mode = ModelMode.GRADLE,
+                resources = module.resources,
             )
         }
 
         val sourceRoot = target.resolve(ModelLayout.SOURCE_DIRECTORY)
-        repository.export(commit, kept.flatMap { it.sources }.distinct().sorted(), sourceRoot, scratch)
+        repository.export(commit, kept.flatMap { it.sources + it.resources }.distinct().sorted(), sourceRoot, scratch)
         for (jar in kept.flatMap { it.repositoryJars }.distinct()) {
             val copy = sourceRoot.resolve(jar)
             if (!Files.exists(copy)) {
@@ -70,7 +74,8 @@ internal class ModelBuilder(
      * Writes a model with a single module made of every main source directory of the commit to
      * [target]: the directories a Kotlin module of a Gradle build compiles by convention,
      * `src/main/kotlin` and `src/main/java`, wherever they lie. Only git is needed for this; the
-     * repository's build is not touched.
+     * repository's build is not touched. The configuration files of the resource directory next to
+     * each of them, `src/main/resources`, come with them.
      */
     fun degraded(target: Path): ModelIndex {
         val sources = degradedSources(repository.directories(commit))
@@ -81,6 +86,7 @@ internal class ModelBuilder(
         }
         val counted = DEGRADED_SOURCE_DIRECTORIES.joinToString(", ") { kind -> "${sources.count { it == kind || it.endsWith("/$kind") }} $kind" }
         log("taking the sources of ${sources.size} main source director${if (sources.size == 1) "y" else "ies"} of $commit: $counted")
+        val resources = degradedResources(sources, repository.files(commit, ModuleManifest.CONFIGURATION_FILES))
         val manifest = ModuleManifest(
             commit = commit,
             path = DEGRADED_MODULE_PATH,
@@ -88,12 +94,16 @@ internal class ModelBuilder(
             projectDeps = emptyList(),
             jars = DegradedClasspath.locate().map { it.toString() },
             mode = ModelMode.DEGRADED,
+            resources = resources,
         )
-        repository.export(commit, sources, target.resolve(ModelLayout.SOURCE_DIRECTORY), scratch)
+        repository.export(commit, (sources + resources).sorted(), target.resolve(ModelLayout.SOURCE_DIRECTORY), scratch)
         return write(target, ModelMode.DEGRADED, listOf(manifest), emptyList())
     }
 
-    private fun describe(raw: RawManifest, root: Path, tracked: Set<String>): Described {
+    /**
+     * @param configuration the configuration files of the commit, relative to [root]
+     */
+    private fun describe(raw: RawManifest, root: Path, tracked: Set<String>, configuration: List<String>): Described {
         if (raw.unresolved.isNotEmpty()) {
             log("warning: ${raw.path} has unresolved dependencies: ${raw.unresolved.sorted().joinToString(", ")}")
         }
@@ -122,12 +132,15 @@ internal class ModelBuilder(
                 else -> jars += jar
             }
         }
+        // A resource directory outside the repository, or one the commit does not hold, has no file of the commit.
+        val resourceDirectories = raw.resources.mapNotNull { relativeTo(root, it) }.toSet()
         return Described(
             path = raw.path,
             sources = sources.distinct().sorted(),
             projectDeps = raw.projectDeps.distinct().sorted(),
             jars = jars.distinct(),
             repositoryJars = repositoryJars,
+            resources = configuration.filter { file -> file.substringBeforeLast('/', ".") in resourceDirectories }.sorted(),
         )
     }
 
@@ -184,6 +197,22 @@ internal class ModelBuilder(
             return conventional
                 .filter { directory -> conventional.none { it != directory && directory.startsWith("$it/") } }
                 .sorted()
+        }
+
+        /** The resource directory of a module by convention, beside [DEGRADED_SOURCE_DIRECTORIES]. */
+        private const val RESOURCE_DIRECTORY: String = "src/main/resources"
+
+        /**
+         * The configuration files among [files] that a degraded model with the source directories
+         * [sources] keeps: those of the resource directory next to each, `src/main/resources`
+         * beside `src/main/kotlin`, sorted.
+         */
+        internal fun degradedResources(sources: List<String>, files: List<String>): List<String> {
+            val directories = sources.mapNotNull { source ->
+                DEGRADED_SOURCE_DIRECTORIES.firstOrNull { source == it || source.endsWith("/$it") }
+                    ?.let { kind -> source.removeSuffix(kind) + RESOURCE_DIRECTORY }
+            }.toSet()
+            return files.filter { file -> file.substringBeforeLast('/', "") in directories }.sorted()
         }
     }
 }

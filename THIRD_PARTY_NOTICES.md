@@ -108,3 +108,5 @@ The SDK brings, in one directory or both:
 - [Jayway JsonPath](https://github.com/json-path/JsonPath) 2.9.0 with `json-smart` and
   `accessors-smart` 2.5.0, Apache-2.0, and ASM 9.3, BSD-3-Clause. The Temporal SDK needs
   JsonPath to read histories from JSON.
+- [SnakeYAML Engine](https://codeberg.org/snakeyaml/snakeyaml-engine) 3.2, Apache-2.0, reads
+  the `application.yaml` files that say where a request goes.

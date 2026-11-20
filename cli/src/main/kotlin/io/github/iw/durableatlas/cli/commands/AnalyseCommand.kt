@@ -6,6 +6,7 @@ import com.github.ajalt.clikt.parameters.types.path
 import io.github.iw.durableatlas.analyser.AnalysedWorkflow
 import io.github.iw.durableatlas.analyser.AnalysisRequest
 import io.github.iw.durableatlas.analyser.AnalysisResult
+import io.github.iw.durableatlas.analyser.requests.ClientSpec
 import io.github.iw.durableatlas.cli.Completion
 import io.github.iw.durableatlas.cli.StageCommand
 import io.github.iw.durableatlas.cli.Stages
@@ -34,6 +35,7 @@ class AnalyseCommand : StageCommand(
     private val maxDepth: Int by maxDepthOption()
     private val detail: Detail by detailOption()
     private val maxUnresolvedPct: Double? by maxUnresolvedPctOption()
+    private val clients: List<ClientSpec> by clientOption()
     private val jdkHome: Path? by option(
         "--jdk-home",
         metavar = "dir",
@@ -42,7 +44,15 @@ class AnalyseCommand : StageCommand(
         .path(mustExist = true, canBeFile = false)
 
     override fun run() {
-        val request = AnalysisRequest(model = model, out = out, jdkHome = jdkHome, workflowType = workflow, maxDepth = maxDepth, detail = detail)
+        val request = AnalysisRequest(
+            model = model,
+            out = out,
+            jdkHome = jdkHome,
+            workflowType = workflow,
+            maxDepth = maxDepth,
+            detail = detail,
+            clients = clients,
+        )
         val result = attempt { Stages(::log).analyse(request) }
         val selected = workflow
         if (selected != null && result.inventory.workflows.none { it.workflowType == selected }) {

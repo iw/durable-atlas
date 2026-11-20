@@ -142,7 +142,7 @@ object CodePrinter {
             if (arguments.isEmpty()) "" else arguments.joinToString(", ", " <", ">") { annotated(it) }
 
         private fun annotated(type: TypeRef): String =
-            (listOf(type.text) + type.annotations.map(::annotation)).joinToString(" ")
+            (listOf(type.text) + type.annotations.filter { !it.written }.map(::annotation)).joinToString(" ")
 
         private fun annotation(use: AnnotationUse): String {
             val arguments = use.arguments.entries.joinToString(", ") { (name, value) -> "$name = ${constant(value)}" }

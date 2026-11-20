@@ -42,6 +42,9 @@ fun IrDocument.validate(): List<String> {
         if (node.otherKeys && node.keys.isEmpty()) {
             problems += "node '${node.id}' is said to write more than its keys, and has none"
         }
+        if (node.requests.isNotEmpty() && node.kind != NodeKind.ACTIVITY && node.kind != NodeKind.LOCAL_ACTIVITY) {
+            problems += "node '${node.id}' has requests, which only an activity makes"
+        }
         if (node.retry && node.kind != NodeKind.LOOP) problems += "node '${node.id}' is marked as a retry, which only a loop can be"
         if (node.join != null && node.kind != NodeKind.PARALLEL) {
             problems += "node '${node.id}' says which lanes are waited for, which only a parallel region can"
