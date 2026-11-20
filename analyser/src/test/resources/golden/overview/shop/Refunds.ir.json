@@ -1,0 +1,496 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "detail": "overview",
+  "workflowType": "Refunds",
+  "interface": "shop.Refunds",
+  "implementation": "shop.RefundsImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Refunds",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0a5e9cb81f",
+      "kind": "activity",
+      "name": "Audit",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 73
+      }
+    },
+    {
+      "id": "n0be780d8ff",
+      "kind": "unknown",
+      "label": "Deep.again",
+      "reason": "recursion",
+      "parent": "n4f8be2bcdb",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Deep.kt",
+        "line": 51
+      }
+    },
+    {
+      "id": "n17d948d5c8",
+      "kind": "branch",
+      "label": "!known",
+      "parent": "n4f8be2bcdb",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "n269d1ec2e1",
+      "kind": "activity",
+      "name": "Refund",
+      "timeout": "PT5S",
+      "parent": "n4f8be2bcdb",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "n2861c23926",
+      "kind": "branch",
+      "label": "left > 0",
+      "parent": "n4f8be2bcdb",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Deep.kt",
+        "line": 51
+      }
+    },
+    {
+      "id": "n2eb61d881e",
+      "kind": "branch",
+      "label": "helper.price(order) > 0",
+      "parent": "ndb2baa27ae",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 58
+      }
+    },
+    {
+      "id": "n4f8be2bcdb",
+      "kind": "loop",
+      "label": "for each order",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n8eb245a09b",
+      "kind": "activity",
+      "name": "Audit",
+      "timeout": "PT5S",
+      "parent": "n4f8be2bcdb",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "na3f0130412",
+      "kind": "activity",
+      "name": "Charge",
+      "timeout": "PT5S",
+      "parent": "n4f8be2bcdb",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Deep.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "nbc86b5a4aa",
+      "kind": "branch",
+      "parent": "n4f8be2bcdb",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 63
+      }
+    },
+    {
+      "id": "ndb2baa27ae",
+      "kind": "loop",
+      "label": "for each line",
+      "parent": "n4f8be2bcdb",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 57
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nff6bf94d5a",
+      "kind": "activity",
+      "name": "Notify",
+      "timeout": "PT5S",
+      "parent": "n4f8be2bcdb",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 64
+      }
+    },
+    {
+      "id": "nffcba4ffd1",
+      "kind": "activity",
+      "name": "Release",
+      "timeout": "PT5S",
+      "parent": "ndb2baa27ae",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 59
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0a5e9cb81f",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n17d948d5c8",
+      "to": "n269d1ec2e1",
+      "label": "no"
+    },
+    {
+      "from": "n17d948d5c8",
+      "to": "n4f8be2bcdb",
+      "label": "yes"
+    },
+    {
+      "from": "n269d1ec2e1",
+      "to": "n8eb245a09b",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "n269d1ec2e1",
+      "to": "ndb2baa27ae"
+    },
+    {
+      "from": "n2861c23926",
+      "to": "n0be780d8ff",
+      "label": "yes"
+    },
+    {
+      "from": "n2861c23926",
+      "to": "n4f8be2bcdb",
+      "label": "no"
+    },
+    {
+      "from": "n2eb61d881e",
+      "to": "ndb2baa27ae",
+      "label": "no"
+    },
+    {
+      "from": "n2eb61d881e",
+      "to": "nffcba4ffd1",
+      "label": "yes"
+    },
+    {
+      "from": "n4f8be2bcdb",
+      "to": "n0a5e9cb81f"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n4f8be2bcdb"
+    },
+    {
+      "from": "n8eb245a09b",
+      "to": "ndb2baa27ae"
+    },
+    {
+      "from": "na3f0130412",
+      "to": "n2861c23926"
+    },
+    {
+      "from": "nbc86b5a4aa",
+      "to": "na3f0130412",
+      "label": "else"
+    },
+    {
+      "from": "nbc86b5a4aa",
+      "to": "na3f0130412",
+      "label": "order.note != null"
+    },
+    {
+      "from": "nbc86b5a4aa",
+      "to": "nff6bf94d5a",
+      "label": "order.express"
+    },
+    {
+      "from": "ndb2baa27ae",
+      "to": "nbc86b5a4aa"
+    },
+    {
+      "from": "nff6bf94d5a",
+      "to": "na3f0130412"
+    }
+  ],
+  "stats": {
+    "nodes": 15,
+    "unknown": 1
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 33
+      },
+      "text": "RequestContext(\"shop\", \"refunds\")"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 34
+      },
+      "text": "Tracer(\"refunds\")"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 39
+      },
+      "text": "withRequestContext(context) { helper.known(order.id) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 48
+      },
+      "text": "tracer.span(\"refund\") { try { withRequestContext(context) { steps.refund(order.…"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 50
+      },
+      "text": "withRequestContext(context) { steps.refund(order.id) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 54
+      },
+      "text": "traced(\"failed\") { steps.audit(order.id + text) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 59
+      },
+      "text": "retrying(2) { steps.release(line) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 64
+      },
+      "text": "withRequestContext(context) { steps.notify(order.id) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 70
+      },
+      "text": "tracer.span(\"summary\") { helper.remember(orders.first()) }"
+    }
+  ],
+  "leftOutCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 39
+      },
+      "reason": "unseen-code",
+      "label": "Helper.known",
+      "candidates": [
+        "shop.OrderRepository.find(kotlin.String)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 39
+      },
+      "reason": "unsupported",
+      "label": "withRequestContext"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 41
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 44
+      },
+      "reason": "dynamic-dispatch",
+      "label": "OrderMapper.toText"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 46
+      },
+      "reason": "unseen-code",
+      "label": "Helper.describe",
+      "candidates": [
+        "shop.OrderMapper.toText(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 48
+      },
+      "reason": "unsupported",
+      "label": "span"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 50
+      },
+      "reason": "unsupported",
+      "label": "withRequestContext"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 51
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 53
+      },
+      "reason": "unseen-code",
+      "label": "Helper.describe",
+      "candidates": [
+        "shop.OrderMapper.toText(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 54
+      },
+      "reason": "unsupported",
+      "label": "traced"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 58
+      },
+      "reason": "unseen-code",
+      "label": "Helper.price",
+      "candidates": [
+        "shop.PricingClient.quote(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 59
+      },
+      "reason": "unsupported",
+      "label": "retrying"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 61
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 64
+      },
+      "reason": "unsupported",
+      "label": "withRequestContext"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 65
+      },
+      "reason": "unseen-code",
+      "label": "Helper.describe",
+      "candidates": [
+        "shop.OrderMapper.toText(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 66
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 70
+      },
+      "reason": "unsupported",
+      "label": "span"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Refunds.kt",
+        "line": 71
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    }
+  ]
+}

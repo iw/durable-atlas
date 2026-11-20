@@ -103,6 +103,11 @@ class RealFailuresExtractionTest {
     }
 
     @Test
+    fun `an overview keeps every step of the full document, and its golden file is there where it differs`() {
+        assertEquals(emptyList<String>(), assertOverviewsKeepTheSteps(backend, discovery, "overview/failures"))
+    }
+
+    @Test
     fun `sparing the functions that hold nothing changes no graph`() {
         assertTrue(assertSparingChangesNothing(backend, discovery) > 0)
     }

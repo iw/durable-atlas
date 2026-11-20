@@ -8,6 +8,7 @@ import io.github.iw.durableatlas.analyser.discovery.Discovery
 import io.github.iw.durableatlas.analyser.discovery.ImplementedEntryPoint
 import io.github.iw.durableatlas.analyser.discovery.WorkflowImplementation
 import io.github.iw.durableatlas.analyser.discovery.WorkflowType
+import io.github.iw.durableatlas.ir.Detail
 import io.github.iw.durableatlas.ir.EdgeKind
 import io.github.iw.durableatlas.ir.EntryPoint
 import io.github.iw.durableatlas.ir.EntryPointKind
@@ -47,6 +48,9 @@ import io.github.iw.durableatlas.ir.normalized
  * calls into libraries the model lacks, so that none of them goes missing unseen: those in the
  * code that was read for the workflow, and those in the functions that were looked through and
  * found to hold nothing else.
+ *
+ * A document made as an overview ([Detail.OVERVIEW]) has no node for a call behind which a step
+ * is only possible, and lists those calls as well (see [LeftOut]).
  */
 class WorkflowGraphs(
     private val backend: SourceBackend,
@@ -58,6 +62,11 @@ class WorkflowGraphs(
      * nested deeper becomes an `unknown` node, if a step is certain to lie behind it.
      */
     private val maxDepth: Int = DEFAULT_MAX_DEPTH,
+    /**
+     * How much of what could not be read the documents show: every call with its `unknown` node,
+     * or only those behind which a step is certain, with the others listed (see [LeftOut]).
+     */
+    private val detail: Detail = Detail.FULL,
 ) {
     private val names = TemporalNames(backend)
     private val tracer = ValueTracer(backend)
@@ -122,6 +131,7 @@ class WorkflowGraphs(
             workflow.name,
             if (lenient) UnresolvedCalls(backend, tracer, stubs) { stubClasses } else null,
         )
+        val leftOut = if (detail == Detail.OVERVIEW) LeftOut() else null
         val extractor = GraphExtractor(
             backend,
             recognizer,
@@ -130,6 +140,7 @@ class WorkflowGraphs(
             noted::add,
             registrations.optionsFor(implementation.declaration.name),
             failures,
+            leftOut,
         )
         val className = implementation.declaration.name
         val declared = implementation.declaration.location
@@ -217,6 +228,8 @@ class WorkflowGraphs(
         return IrDocument(
             commit = commit,
             modelMode = modelMode,
+            // Only an overview says what it is: a document that shows everything is written as it always was.
+            detail = Detail.OVERVIEW.takeIf { leftOut != null },
             workflowType = workflow.name,
             interfaceName = workflow.declaration.name,
             implementation = className,
@@ -227,6 +240,7 @@ class WorkflowGraphs(
             edges = edges,
             // Everything that was read or looked through for this document, handlers included.
             skippedCalls = recognizer.skipped,
+            leftOutCalls = leftOut?.all.orEmpty(),
         ).normalized()
     }
 

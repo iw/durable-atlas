@@ -64,6 +64,11 @@ class SilentExtractionTest {
         whole(implementation).filter { it.startsWith("node activity") || it.startsWith("node localActivity") }
 
     @Test
+    fun `an overview keeps every step of the full document, and its golden file is there where it differs`() {
+        assertEquals(emptyList<String>(), assertOverviewsKeepTheSteps(backend, discovery, "overview/silent"))
+    }
+
+    @Test
     fun `every document is well formed and gives the golden IR`() {
         val expected = SilentSources.FILES.keys - SilentSources.SHARED + "Twice"
         val names = IrFiles.names(documents).map { it.removeSuffix(IrFiles.SUFFIX) }

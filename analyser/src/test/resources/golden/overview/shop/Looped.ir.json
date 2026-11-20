@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "detail": "overview",
+  "workflowType": "Looped",
+  "interface": "shop.Looped",
+  "implementation": "shop.LoopedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Looped",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n49d10f1e0e",
+      "kind": "activity",
+      "name": "Reserve",
+      "timeout": "PT5S",
+      "parent": "ncfd8c7b7d2",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Looped.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Looped.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n70144bcabd",
+      "kind": "activity",
+      "name": "Ship",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Looped.kt",
+        "line": 48
+      }
+    },
+    {
+      "id": "ncfd8c7b7d2",
+      "kind": "loop",
+      "label": "for each line",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Looped.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "ncfd8c7b7d2"
+    },
+    {
+      "from": "n70144bcabd",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "ncfd8c7b7d2",
+      "to": "n70144bcabd"
+    }
+  ],
+  "stats": {
+    "nodes": 5,
+    "unknown": 0
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Looped.kt",
+        "line": 36
+      },
+      "text": "traced(\"line\") { steps.reserve(line) }"
+    }
+  ],
+  "leftOutCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Looped.kt",
+        "line": 36
+      },
+      "reason": "unsupported",
+      "label": "traced"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Looped.kt",
+        "line": 42
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Looped.kt",
+        "line": 46
+      },
+      "reason": "unseen-code",
+      "label": "Helper.known",
+      "candidates": [
+        "shop.OrderRepository.find(kotlin.String)"
+      ]
+    }
+  ]
+}

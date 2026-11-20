@@ -62,6 +62,21 @@ object Fixtures {
      */
     val callIr: Path = sampleIr.resolve("calls")
 
+    /**
+     * The documents the analyser's tests expect of a degraded model for workflows whose steps stand among calls
+     * that cannot be read: blocks handed to a library that is missing, and helpers that call what no class implements.
+     */
+    val shopIr: Path = sampleIr.resolve("shop")
+
+    /** The overviews the analyser's tests expect of the same workflows: the documents without those calls. */
+    val shopOverviewIr: Path = sampleIr.resolveSibling("overview").resolve("shop")
+
+    /** The full document of one of the workflows in [shopIr], by the name of its file without `.ir.json`. */
+    fun shop(file: String): IrDocument = document(shopIr.resolve("$file.ir.json"))
+
+    /** The overview of one of the workflows in [shopIr]. */
+    fun shopOverview(file: String): IrDocument = document(shopOverviewIr.resolve("$file.ir.json"))
+
     /** The document of one of the workflows in [callIr], by the name of its file without `.ir.json`. */
     fun call(file: String): IrDocument = document(callIr.resolve("$file.ir.json"))
 

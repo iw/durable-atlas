@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "detail": "overview",
+  "workflowType": "Caught",
+  "interface": "shop.Caught",
+  "implementation": "shop.CaughtImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Caught",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n40919bad36",
+      "kind": "activity",
+      "name": "Refund",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Caught.kt",
+        "line": 47
+      }
+    },
+    {
+      "id": "n427a4b3114",
+      "kind": "activity",
+      "name": "Reserve",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Caught.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Caught.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n902ac0808f",
+      "kind": "activity",
+      "name": "Charge",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Caught.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf01c921707",
+      "kind": "activity",
+      "name": "Release",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Caught.kt",
+        "line": 41
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n40919bad36",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n427a4b3114",
+      "to": "n902ac0808f"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n427a4b3114"
+    },
+    {
+      "from": "n902ac0808f",
+      "to": "n40919bad36",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "n902ac0808f",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n902ac0808f",
+      "to": "nf01c921707",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "nf01c921707",
+      "to": "n40919bad36",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "nf01c921707",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 6,
+    "unknown": 0
+  },
+  "leftOutCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Caught.kt",
+        "line": 38
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Caught.kt",
+        "line": 45
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    }
+  ]
+}

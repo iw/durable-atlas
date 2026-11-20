@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "detail": "overview",
+  "workflowType": "Emptied",
+  "interface": "shop.Emptied",
+  "implementation": "shop.EmptiedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Emptied",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Emptied.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n7fe7a03de8",
+      "kind": "compensation",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Emptied.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "n9fdd029001",
+      "kind": "activity",
+      "name": "Charge",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Emptied.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "n9fdd029001"
+    },
+    {
+      "from": "n7fe7a03de8",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n9fdd029001",
+      "to": "n7fe7a03de8",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "n9fdd029001",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 0
+  },
+  "leftOutCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Emptied.kt",
+        "line": 36
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Emptied.kt",
+        "line": 38
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Emptied.kt",
+        "line": 39
+      },
+      "reason": "unseen-code",
+      "label": "Helper.price",
+      "candidates": [
+        "shop.PricingClient.quote(shop.Order)"
+      ]
+    }
+  ]
+}

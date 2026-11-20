@@ -32,7 +32,8 @@ tasks.test {
     // documents the analyser's tests expect, and leave pictures of the diagrams for a person to
     // review.
     inputs.files(
-        fileTree(layout.settingsDirectory.dir("analyser/src/test/resources/golden/ir")) { include("*.ir.json", "ends/*.ir.json", "exits/*.ir.json", "constructs/*.ir.json", "patterns/*.ir.json", "silent/*.ir.json", "open/*.ir.json", "options/*.ir.json", "calls/*.ir.json", "stepfree/*.ir.json", "failures/*.ir.json") },
+        fileTree(layout.settingsDirectory.dir("analyser/src/test/resources/golden/ir")) { include("*.ir.json", "ends/*.ir.json", "exits/*.ir.json", "constructs/*.ir.json", "patterns/*.ir.json", "silent/*.ir.json", "open/*.ir.json", "options/*.ir.json", "calls/*.ir.json", "stepfree/*.ir.json", "failures/*.ir.json", "shop/*.ir.json") },
+        fileTree(layout.settingsDirectory.dir("analyser/src/test/resources/golden/overview")) { include("shop/*.ir.json") },
         fileTree(layout.settingsDirectory.dir("fixtures/sample-monorepo/histories")) { include("*.json") },
         fileTree(layout.settingsDirectory.dir("demo")) { include("expected/*.ir.json", "histories/*.json") },
     )

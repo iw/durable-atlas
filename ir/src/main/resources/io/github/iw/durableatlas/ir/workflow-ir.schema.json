@@ -31,6 +31,10 @@
       "description": "How the source model was obtained.",
       "enum": ["gradle", "degraded"]
     },
+    "detail": {
+      "description": "How much of what the analysis could not read the document shows. full, or absent: every call that could not be read has its unknown node. overview: only the calls behind which a step is certain have one. A call that is not modelled and is handed code (reason unsupported) has none, and what the code holds stands in the flow where the call is made, once; a call that leads to a function without a body that no class of the analysed sources implements (reason unseen-code, and dynamic-dispatch without candidates) has none; a branch, a loop or a lane that held nothing else is gone with them. leftOutCalls lists these calls. Every other node is the one that a full document of the same sources has, with the same id.",
+      "enum": ["full", "overview"]
+    },
     "workflowType": {
       "description": "Workflow type name as registered with Temporal. A class that runs for every workflow type without an implementation of its own has no such name: it is called 'dynamic-' followed by the simple name of the class, and its interface is that of the SDK.",
       "$ref": "#/$defs/nonEmptyString"
@@ -65,6 +69,12 @@
       "type": "array",
       "minItems": 1,
       "items": { "$ref": "#/$defs/skippedCall" }
+    },
+    "leftOutCalls": {
+      "description": "The calls that the document has no node for because its detail is overview, ordered by file, line, reason and label. Only such a document has any. Absent where nothing was left out.",
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/leftOutCall" }
     }
   },
   "$defs": {
@@ -285,6 +295,30 @@
         "text": {
           "description": "The call as it is written, on one line and shortened where it is long.",
           "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "leftOutCall": {
+      "description": "A call that an overview has no node for: the unknown node that a full document of the same sources has in its place, without its id. It is listed once, however often the code it stands in is drawn.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["loc", "reason", "label"],
+      "properties": {
+        "loc": {
+          "description": "Where the call is written.",
+          "$ref": "#/$defs/sourceLocation"
+        },
+        "reason": {
+          "description": "Why the call could not be read: unsupported, the call is not modelled and what the code handed to it holds stands in the flow in its place; unseen-code, the call is one of a function of the analysed sources that is not drawn from the inside and that calls a function without a body that no class of the analysed sources implements; dynamic-dispatch, the code that is drawn calls such a function itself.",
+          "enum": ["unsupported", "unseen-code", "dynamic-dispatch"]
+        },
+        "label": {
+          "description": "What is called: the function, or what the code handed over is.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "candidates": {
+          "description": "For unseen-code: the functions without a body that are called behind the call and that no class of the analysed sources implements.",
+          "$ref": "#/$defs/stringSet"
         }
       }
     },

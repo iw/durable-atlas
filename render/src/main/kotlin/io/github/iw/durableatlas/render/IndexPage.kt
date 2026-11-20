@@ -18,6 +18,8 @@ data class IndexEntry(
     val files: List<DiagramLink>,
     /** How many calls that did not resolve the document left out as calls into libraries. */
     val skipped: Int = 0,
+    /** How many calls the document has no node for because it is an overview. */
+    val leftOut: Int = 0,
     /** The formats the workflow has no file in, because no diagram of it was drawn in time. */
     val missing: List<MissingDiagram> = emptyList(),
     /** The formats whose file shows the workflow more simply than was asked for, because drawing it as asked took too long. */
@@ -38,6 +40,7 @@ data class IndexEntry(
             unknown = document.nodes.count { it.kind == NodeKind.UNKNOWN },
             files = files,
             skipped = document.skippedCalls.size,
+            leftOut = document.leftOutCalls.size,
             missing = missing,
             simplified = simplified,
         )
@@ -79,6 +82,7 @@ object IndexPage {
         gaps(sorted.flatMap { entry -> entry.missing.map { entry.workflowType to it } }).forEach(::block)
         simpler(sorted.flatMap { entry -> entry.simplified.map { entry.workflowType to it } }).forEach(::block)
         skipped(sorted)?.let(::block)
+        leftOut(sorted)?.let(::block)
         sections.forEach(::block)
         return page.toString().trimEnd('\n') + "\n"
     }
@@ -135,12 +139,24 @@ object IndexPage {
             "The page of each workflow lists its own, and so does its IR file."
     }
 
+    /** What the column of calls left out counts, where there is one. */
+    private fun leftOut(entries: List<IndexEntry>): String? {
+        val total = entries.sumOf { it.leftOut }
+        if (total == 0) return null
+        val calls = if (total == 1) "1 call that could not be read has" else "$total calls that could not be read have"
+        return "Left out: the diagrams are overviews, and $calls no node in them: calls that were handed code, which is drawn " +
+            "as run once where the call is made, and calls that lead to code that is not in the analysed sources. " +
+            "The page of each workflow lists its own, and so does its IR file; an analysis with `--detail full` draws each as an unknown node."
+    }
+
     private fun table(entries: List<IndexEntry>): String {
-        // The column is there only where something was skipped.
+        // Each of the two columns is there only where something was skipped, or left out.
         val skipping = entries.any { it.skipped > 0 }
+        val leaving = entries.any { it.leftOut > 0 }
+        val counted = listOf("Skipped").takeIf { skipping }.orEmpty() + listOf("Left out").takeIf { leaving }.orEmpty()
         val rows = mutableListOf(
-            Markdown.row(*(listOf("Workflow", "Implementation", "Model", "Nodes", "Unknown") + listOf("Skipped").takeIf { skipping }.orEmpty() + "Diagram").toTypedArray()),
-            "|---|---|---|---:|---:|${if (skipping) "---:|" else ""}---|",
+            Markdown.row(*(listOf("Workflow", "Implementation", "Model", "Nodes", "Unknown") + counted + "Diagram").toTypedArray()),
+            "|---|---|---|---:|---:|${"---:|".repeat(counted.size)}---|",
         )
         entries.forEach { entry ->
             rows += Markdown.row(
@@ -151,7 +167,7 @@ object IndexPage {
                         if (entry.modelMode == ModelMode.DEGRADED) "`degraded`" else PageContent.modeName(entry.modelMode),
                         entry.nodes.toString(),
                         entry.unknown.toString(),
-                    ) + listOf(entry.skipped.toString()).takeIf { skipping }.orEmpty() +
+                    ) + listOf(entry.skipped.toString()).takeIf { skipping }.orEmpty() + listOf(entry.leftOut.toString()).takeIf { leaving }.orEmpty() +
                         (entry.files.map { Markdown.link(it.format, it.file) } + entry.missing.map { "no ${it.format}" }).joinToString(" · ")
                     ).toTypedArray(),
             )

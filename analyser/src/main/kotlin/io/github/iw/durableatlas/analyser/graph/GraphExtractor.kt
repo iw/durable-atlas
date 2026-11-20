@@ -37,6 +37,8 @@ internal class GraphExtractor(
     registered: ActivityEnvironment = ActivityEnvironment(),
     /** Tells which exceptions fail the execution of a workflow, and which only its task. */
     private val failures: FailureTypes = FailureTypes(backend),
+    /** Is told the calls that have no node, where the graphs are those of an overview; `null` where every call gets its node. */
+    private val leftOut: LeftOut? = null,
 ) {
     private val reader = FlowReader(backend, recognizer, tracer, maxDepth, warn, registered, failures)
 
@@ -61,13 +63,13 @@ internal class GraphExtractor(
         val isHandler = kind != EntryPointKind.WORKFLOW_METHOD
         // The workflow method runs first, whatever is asked of the reading; what it sets for activities a handler finds set.
         val read = function?.let { reader.read(it, implementation, thorough = isHandler, constructor, main = entryPointId == WorkflowGraphs.MAIN) }
-        val graph = GraphLayout(entryPointId, failures, strict(kind)).layOut(function?.location ?: fallback, read?.flow, isHandler)
+        val graph = GraphLayout(entryPointId, failures, strict(kind), leftOut).layOut(function?.location ?: fallback, read?.flow, isHandler)
         return Extracted(graph, read?.state ?: StateUse(), read?.listeners.orEmpty(), read?.changes ?: StateUse())
     }
 
     /** The graph of a handler the workflow registered itself. */
     fun extract(entryPointId: String, listener: FlowReader.Listener, fallback: SourceLocation?): Extracted =
-        Extracted(GraphLayout(entryPointId, failures, strict(listener.kind)).layOut(listener.location ?: fallback, listener.flow, isHandler = true), listener.state)
+        Extracted(GraphLayout(entryPointId, failures, strict(listener.kind), leftOut).layOut(listener.location ?: fallback, listener.flow, isHandler = true), listener.state)
 
     /**
      * Whether an exception that leaves an entry point of [kind] is drawn only where it may fail

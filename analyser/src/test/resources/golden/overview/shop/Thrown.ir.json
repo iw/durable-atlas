@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "detail": "overview",
+  "workflowType": "Thrown",
+  "interface": "shop.Thrown",
+  "implementation": "shop.ThrownImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Thrown",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Thrown.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "nbc781ea513",
+      "kind": "activity",
+      "name": "Audit",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Thrown.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "ne9675603c8",
+      "kind": "activity",
+      "name": "Ship",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Thrown.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf71416153f",
+      "kind": "fail",
+      "name": "Rejected",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Thrown.kt",
+        "line": 38
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "nbc781ea513"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "ne9675603c8"
+    },
+    {
+      "from": "nbc781ea513",
+      "to": "nf71416153f"
+    },
+    {
+      "from": "ne9675603c8",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 5,
+    "unknown": 0
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Thrown.kt",
+        "line": 36
+      },
+      "text": "traced(\"check\") { steps.audit(id) throw ApplicationFailure.newFailure(\"not allo…"
+    }
+  ],
+  "leftOutCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Thrown.kt",
+        "line": 36
+      },
+      "reason": "unsupported",
+      "label": "traced"
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "detail": "overview",
+  "workflowType": "Wrapped",
+  "interface": "shop.Wrapped",
+  "implementation": "shop.WrappedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Wrapped",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n122fc86d97",
+      "kind": "activity",
+      "name": "Reserve",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Wrapped.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n418fc86767",
+      "kind": "activity",
+      "name": "Ship",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Wrapped.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Wrapped.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n122fc86d97",
+      "to": "n418fc86767"
+    },
+    {
+      "from": "n418fc86767",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n122fc86d97"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 0
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Wrapped.kt",
+        "line": 33
+      },
+      "text": "RequestContext(\"shop\", \"worker\")"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Wrapped.kt",
+        "line": 36
+      },
+      "text": "withRequestContext(context) { steps.reserve(id) }"
+    }
+  ],
+  "leftOutCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Wrapped.kt",
+        "line": 36
+      },
+      "reason": "unsupported",
+      "label": "withRequestContext"
+    }
+  ]
+}

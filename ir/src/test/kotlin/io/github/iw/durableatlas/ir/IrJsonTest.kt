@@ -220,6 +220,42 @@ class IrJsonTest {
     }
 
     @Test
+    fun `an overview says what it is after the mode of its model, and lists what it leaves out last, in order and each once`() {
+        val before = IrJson.encode(document)
+        assertFalse("detail" in before)
+        assertFalse("leftOutCalls" in before)
+        assertEquals(null, IrJson.decode(before).detail)
+
+        val wrapper = LeftOutCall(SourceLocation("orders/src/main/kotlin/Order.kt", 12), UnknownReasons.UNSUPPORTED, "withRequestContext")
+        val helper = LeftOutCall(
+            SourceLocation("orders/src/main/kotlin/Order.kt", 12),
+            UnknownReasons.UNSEEN_CODE,
+            "Events.enriched",
+            listOf("com.example.orders.Mapper.write(kotlin.Any)", "com.example.orders.Enricher.enrich(com.example.orders.Event)"),
+        )
+        val direct = LeftOutCall(SourceLocation("orders/src/main/kotlin/Logs.kt", 30), UnknownReasons.DYNAMIC_DISPATCH, "Enricher.enrich")
+        val overview = document.copy(detail = Detail.OVERVIEW, leftOutCalls = listOf(wrapper, helper, direct, wrapper))
+        val text = IrJson.encode(overview)
+
+        assertContains(text, "  \"modelMode\": \"gradle\",\n  \"detail\": \"overview\",\n  \"workflowType\": \"OrderWorkflow\",")
+        // By file, line and reason; the candidates of a call are sorted like those of a node.
+        assertEquals(listOf(direct, helper.copy(candidates = helper.candidates.sorted()), wrapper), IrJson.decode(text).leftOutCalls)
+        assertEquals(overview.normalized(), IrJson.decode(text))
+        assertContains(
+            text,
+            "  \"stats\": {\n    \"nodes\": 10,\n    \"unknown\": 1\n  },\n  \"leftOutCalls\": [\n    {\n      \"loc\": {\n" +
+                "        \"file\": \"orders/src/main/kotlin/Logs.kt\",\n        \"line\": 30\n      },\n" +
+                "      \"reason\": \"dynamic-dispatch\",\n      \"label\": \"Enricher.enrich\"\n    },",
+        )
+        assertTrue(text.endsWith("      \"reason\": \"unsupported\",\n      \"label\": \"withRequestContext\"\n    }\n  ]\n}\n"))
+        // A document of a degraded model lists them after the calls it skipped.
+        val both = overview.copy(modelMode = ModelMode.DEGRADED, skippedCalls = listOf(SkippedCall(SourceLocation("orders/src/main/kotlin/Logs.kt", 9), "log.atInfo()")))
+        assertTrue(IrJson.encode(both).indexOf("\"skippedCalls\"") < IrJson.encode(both).indexOf("\"leftOutCalls\""))
+        // A document that shows everything may say so, and reads like one that says nothing.
+        assertContains(IrJson.encode(document.copy(detail = Detail.FULL)), "\"detail\": \"full\"")
+    }
+
+    @Test
     fun `an edge from the workflow method to an await it wakes keeps its label`() {
         val woken = document.copy(edges = document.edges + IrEdge("main", "n02", EdgeKind.WAKES, "paid"))
         val text = IrJson.encode(woken)

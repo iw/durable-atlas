@@ -16,7 +16,9 @@ show which paths executions took. Keep it that way:
   modules and classpaths.
 - A diagram never claims more than the analysis knows. What cannot be told is an `unknown`
   node with a reason, a warning on stderr, or an optional field left out. It is never a
-  guess drawn as a fact.
+  guess drawn as a fact. An overview, the default detail, leaves out the calls behind which
+  a step is only possible; it lists each one and says so below the diagram, and
+  `--detail full` draws them all.
 - The IR is the contract between the stages. The analyser writes it, both renderers and the
   overlay read it, and none of them reaches around it into another stage.
 - Output is deterministic: the same commit and options give the same bytes.
@@ -68,6 +70,26 @@ The Modules table in the README says what each module owns.
   all three or none.
 - `wakes` and `cancels` edges are no part of the flow (`EdgeKind.isFlow`). They never count
   for implied exits, for lanes or for which entry point owns a node.
+
+## Overview and full detail
+
+- `--detail full` is the analysis as it is read and cleared. `--detail overview`, the
+  default, is the same graph without the `unknown` nodes of calls behind which a step is
+  only possible: a call that is not modelled and is handed code, whose code then stands in
+  place, and a call into a function that no class of the sources implements.
+- An overview never adds to the full document: no node, no way from one step to the next,
+  no field on a node other than the `label` of an `unknown` node that had none. Every node
+  it keeps has the id of the full document. `OverviewContract` in the test fixtures of `ir`
+  says what that means, and the analyser's tests hold every set of golden sources to it; a
+  change to `GraphLayout` keeps them passing.
+- A new place that makes an `unknown` node says whether a step is certain behind the call.
+  If none is, an overview leaves the node out through `GraphLayout.leaveOut`, which lists it.
+- A full document has no field that says so: `detail` and `leftOutCalls` are written into an
+  overview alone, and a renderer draws nothing for `detail` by itself. The diagram of an
+  overview that differs from the full document in `detail` alone is byte for byte the
+  diagram of the full document.
+- Golden files of overviews live under `golden/overview/` of the analyser's tests, one for
+  each document whose overview differs from the full one, and none for the others.
 
 ## Drawing
 
@@ -148,7 +170,7 @@ and, if you touched `fixtures/sample-monorepo/` or `demo/`, in that directory:
 ```
 
 CI runs the build, the fixture's build and the installed tool on JDK 17 and JDK 25, on
-every push to `main` and every pull request. The build runs some 2,900 tests; the
+every push to `main` and every pull request. The build runs some 3,500 tests; the
 integration tests start Gradle builds of the fixture and take several minutes. A quiet
 build is not a stalled one.
 

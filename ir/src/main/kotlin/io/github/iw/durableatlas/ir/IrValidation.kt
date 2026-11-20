@@ -76,6 +76,18 @@ fun IrDocument.validate(): List<String> {
         problems += "calls are skipped, which only a document of a degraded model does"
     }
 
+    for (leftOut in leftOutCalls) {
+        val place = "${leftOut.loc.file}:${leftOut.loc.line}"
+        if (leftOut.loc.line < 1) problems += "call left out at '$place' has no line"
+        if (leftOut.label.isBlank()) problems += "call left out at '$place' does not say what is called"
+        if (leftOut.reason !in LeftOutCall.REASONS) problems += "call left out at '$place' has the reason '${leftOut.reason}', for which no call is left out"
+    }
+    duplicates(leftOutCalls.map { "${it.loc.file}:${it.loc.line} ${it.reason} ${it.label} ${it.candidates.sorted().joinToString(" ")}".trimEnd() })
+        .forEach { problems += "call left out '$it' is listed twice" }
+    if (leftOutCalls.isNotEmpty() && detail != Detail.OVERVIEW) {
+        problems += "calls are left out, which only an overview does"
+    }
+
     val expected = IrStats.of(nodes)
     if (stats != expected) {
         problems += "stats are $stats but the nodes give $expected"

@@ -80,7 +80,7 @@ internal class SvgWriter(
         warningTop = Geometry.MARGIN + if (heading == null) 0.0 else Geometry.HEADING_LINE + NOTICE_GAP
         warning = content.warning?.let { wrap("Warning: $it", innerWidth) }.orEmpty()
         notes = (
-            listOfNotNull(overlay.title, content.limitNotice, content.simplifiedNotice, content.skippedNotice) +
+            listOfNotNull(overlay.title, content.limitNotice, content.simplifiedNotice, content.skippedNotice, content.leftOutNotice) +
                 content.notices +
                 overlay.facts.map { "${it.name}: ${it.value}" }
             ).flatMap { wrap(it.singleLine(), innerWidth) }
@@ -146,6 +146,7 @@ internal class SvgWriter(
                 attribute("nodes", document.nodes.size.toString()) +
                 attribute("unknownNodes", document.nodes.count { it.kind == NodeKind.UNKNOWN }.toString()) +
                 (if (document.skippedCalls.isEmpty()) "" else attribute("skippedCalls", document.skippedCalls.size.toString())) +
+                (if (document.leftOutCalls.isEmpty()) "" else attribute("leftOutCalls", document.leftOutCalls.size.toString())) +
                 attribute("collapsedRegions", limit.collapsedRegions.toString()) +
                 // Only a diagram that is drawn more simply than asked for says so, and how long the drawing as asked was given.
                 page.render.simplification?.let { attribute(SvgDiagrams.SIMPLIFIED, it.level.key) + attribute(SvgDiagrams.TIME_LIMIT, it.limit.toString()) }.orEmpty() +

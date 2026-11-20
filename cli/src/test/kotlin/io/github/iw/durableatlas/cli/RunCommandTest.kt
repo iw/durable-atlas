@@ -66,7 +66,7 @@ class RunCommandTest {
         val summary = result.summary()
         assertEquals(
             listOf(
-                "command", "commit", "mode", "cached", "fallback", "model", "ir", "diagrams", "index", "formats",
+                "command", "commit", "mode", "detail", "cached", "fallback", "model", "ir", "diagrams", "index", "formats",
                 "workflows", "exitCode",
             ),
             summary.keys.toList(),

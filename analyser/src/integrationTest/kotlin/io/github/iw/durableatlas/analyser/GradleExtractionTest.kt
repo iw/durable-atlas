@@ -16,6 +16,11 @@ class GradleExtractionTest : ExtractionContract(ModelMode.GRADLE) {
         GoldenFiles.assertMatches("ir/$workflowType.ir.json", IrJson.encode(document))
     }
 
+    override fun assertOverviewGolden(workflowType: String, overview: IrDocument?) {
+        val file = "overview/$workflowType.ir.json"
+        if (overview == null) GoldenFiles.assertAbsent(file) else GoldenFiles.assertMatches(file, IrJson.encode(overview))
+    }
+
     @Test
     fun `a workflow belongs to the module that declares the class implementing it`() {
         assertEquals(setOf(":workflows"), documents.map { it.module }.toSet())

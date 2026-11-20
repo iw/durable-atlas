@@ -80,6 +80,12 @@ class UnresolvedCallsExtractionTest {
     private fun List<IrDocument>.unresolved(): Int = sumOf { document -> document.nodes.count { it.reason == UnknownReasons.UNRESOLVED } }
 
     @Test
+    fun `an overview keeps every step of the full document, and its golden file is there where it differs`() {
+        // The blocks handed to two functions of a missing library stand where the functions are called.
+        assertEquals(listOf("Handed"), assertOverviewsKeepTheSteps(alone, TemporalDiscovery.discover(alone), "overview/calls"))
+    }
+
+    @Test
     fun `every document is well formed, and those of the degraded model are the golden ones`() {
         val types = listOf("Foreign", "Handed", "Logged", "Looped", "Newer", "Priced", "Served", "Starred", "Supplied")
         for (documents in listOf(degraded, built, strict)) {

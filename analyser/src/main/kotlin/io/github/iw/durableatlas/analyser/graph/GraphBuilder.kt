@@ -99,6 +99,14 @@ internal class GraphBuilder(private val entryPointId: String) {
         return id
     }
 
+    /**
+     * Takes the place among the ids that a node of [kind] at [location] would take, without
+     * adding one: the nodes that follow in the same place get the ids they would have had after it.
+     */
+    fun reserve(kind: NodeKind, location: SourceLocation?, inliningPath: List<String> = emptyList()) {
+        taken.merge(Slot(location, inliningPath, roleOf(kind)), 1, Int::plus)
+    }
+
     /** Adds an edge; one that is there already is not added again. */
     fun connect(from: String, to: String, kind: EdgeKind = EdgeKind.FLOW, label: String? = null) {
         edges += IrEdge(from = from, to = to, kind = kind, label = label)

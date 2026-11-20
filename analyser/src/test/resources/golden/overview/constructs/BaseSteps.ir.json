@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "detail": "overview",
+  "workflowType": "BaseSteps",
+  "interface": "constructs.BaseSteps",
+  "implementation": "constructs.BaseStepsImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "BaseSteps",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n5c37e1f2f0",
+      "kind": "activity",
+      "name": "Prepare",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/BaseSteps.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/BaseSteps.kt",
+        "line": 45
+      }
+    },
+    {
+      "id": "n70d1abdc6b",
+      "kind": "activity",
+      "name": "Check",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/BaseSteps.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n8e00be43ed",
+      "kind": "activity",
+      "name": "Work",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/BaseSteps.kt",
+        "line": 46
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf1bc7170a4",
+      "kind": "timer",
+      "duration": "PT1S",
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/BaseSteps.kt",
+        "line": 42
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n5c37e1f2f0",
+      "to": "n70d1abdc6b"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n5c37e1f2f0"
+    },
+    {
+      "from": "n70d1abdc6b",
+      "to": "nf1bc7170a4"
+    },
+    {
+      "from": "n8e00be43ed",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nf1bc7170a4",
+      "to": "n8e00be43ed"
+    }
+  ],
+  "stats": {
+    "nodes": 6,
+    "unknown": 0
+  },
+  "leftOutCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/constructs/BaseSteps.kt",
+        "line": 39
+      },
+      "reason": "unsupported",
+      "label": "lazy"
+    }
+  ]
+}

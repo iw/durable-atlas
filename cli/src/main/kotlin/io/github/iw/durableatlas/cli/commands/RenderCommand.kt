@@ -55,6 +55,7 @@ class RenderCommand : StageCommand(
                                 put("unknown", diagram.unknown)
                                 // Only a workflow whose document left calls out says how many.
                                 if (diagram.skippedCalls > 0) put("skipped", diagram.skippedCalls)
+                                if (diagram.leftOutCalls > 0) put("leftOut", diagram.leftOutCalls)
                                 put("collapsedRegions", diagram.collapsedRegions)
                                 put("files", Summaries.files(summary, diagram))
                                 Summaries.shortfall(this, diagram.missing, diagram.simplified)

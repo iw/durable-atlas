@@ -1,0 +1,1093 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Fulfilment",
+  "interface": "shop.Fulfilment",
+  "implementation": "shop.FulfilmentImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Fulfilment",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-cancel",
+      "kind": "signal",
+      "name": "cancel",
+      "start": "n5363e854ab",
+      "writes": [
+        "cancelled"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n001c0d4d68",
+      "kind": "unknown",
+      "label": "Helper.describe",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderMapper.toText(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "n05d7dd63d6",
+      "kind": "activity",
+      "name": "Reserve",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "n06a08ec235",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 92
+      }
+    },
+    {
+      "id": "n079d8c9a26",
+      "kind": "fail",
+      "name": "PaymentFailed",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 79
+      }
+    },
+    {
+      "id": "n13d254f730",
+      "kind": "unknown",
+      "reason": "dynamic-dispatch",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 72
+      }
+    },
+    {
+      "id": "n1479614b80",
+      "kind": "end"
+    },
+    {
+      "id": "n186543e89e",
+      "kind": "unknown",
+      "label": "Helper.describe",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderMapper.toText(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 78
+      }
+    },
+    {
+      "id": "n19b989f10a",
+      "kind": "activity",
+      "name": "Charge",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 74
+      }
+    },
+    {
+      "id": "n256dd491f8",
+      "kind": "activity",
+      "name": "Release",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 84
+      }
+    },
+    {
+      "id": "n2712e88462",
+      "kind": "unknown",
+      "reason": "dynamic-dispatch",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 93
+      }
+    },
+    {
+      "id": "n2cd21acd51",
+      "kind": "unknown",
+      "label": "Helper.price",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.PricingClient.quote(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 67
+      }
+    },
+    {
+      "id": "n30a655f7ae",
+      "kind": "unknown",
+      "label": "span",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 48
+      }
+    },
+    {
+      "id": "n3161813734",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "parent": "n393af9949c",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 63
+      }
+    },
+    {
+      "id": "n35fdd4f754",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 46
+      }
+    },
+    {
+      "id": "n3784c79d2f",
+      "kind": "unknown",
+      "label": "traced",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 69
+      }
+    },
+    {
+      "id": "n37ade57f41",
+      "kind": "unknown",
+      "label": "withRequestContext",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 102
+      }
+    },
+    {
+      "id": "n3843dc9246",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "n393af9949c",
+      "kind": "loop",
+      "label": "for each line",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 58
+      }
+    },
+    {
+      "id": "n41e471e852",
+      "kind": "activity",
+      "name": "Ship",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 98
+      }
+    },
+    {
+      "id": "n456c3b138e",
+      "kind": "unknown",
+      "label": "withRequestContext",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "n45852ab4a0",
+      "kind": "branch",
+      "label": "order.gift",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 53
+      }
+    },
+    {
+      "id": "n5363e854ab",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 106
+      }
+    },
+    {
+      "id": "n5ed54a9e75",
+      "kind": "activity",
+      "name": "Refund",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 83
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "n6af18957a2",
+      "kind": "branch",
+      "label": "helper.known(line)",
+      "parent": "n393af9949c",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 60
+      }
+    },
+    {
+      "id": "n71b4567d92",
+      "kind": "unknown",
+      "label": "Helper.known",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.find(kotlin.String)"
+      ],
+      "parent": "n393af9949c",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 60
+      }
+    },
+    {
+      "id": "n73a262187a",
+      "kind": "unknown",
+      "label": "withRequestContext",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 49
+      }
+    },
+    {
+      "id": "n84bdcb35ec",
+      "kind": "branch",
+      "label": "cancelled",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 81
+      }
+    },
+    {
+      "id": "n894337fdd8",
+      "kind": "unknown",
+      "label": "withRequestContext",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 96
+      }
+    },
+    {
+      "id": "n8ff239a044",
+      "kind": "branch",
+      "label": "!helper.known(order.id)",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 45
+      }
+    },
+    {
+      "id": "n902c56cbe7",
+      "kind": "activity",
+      "name": "Notify",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 102
+      }
+    },
+    {
+      "id": "n9474e0c9c3",
+      "kind": "unknown",
+      "label": "withRequestContext",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 77
+      }
+    },
+    {
+      "id": "n9bf6fb556f",
+      "kind": "unknown",
+      "label": "span",
+      "reason": "unsupported",
+      "parent": "n393af9949c",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 59
+      }
+    },
+    {
+      "id": "n9e2fe8e819",
+      "kind": "unknown",
+      "label": "Deep.nine",
+      "reason": "depth-limit",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Deep.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "na68d307f4c",
+      "kind": "unknown",
+      "reason": "dynamic-dispatch",
+      "candidates": [
+        "shop.EmailNotifier",
+        "shop.SmsNotifier"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 91
+      }
+    },
+    {
+      "id": "na9abb8b11c",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 86
+      }
+    },
+    {
+      "id": "naa872c8626",
+      "kind": "unknown",
+      "label": "withRequestContext",
+      "reason": "unsupported",
+      "parent": "n393af9949c",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 61
+      }
+    },
+    {
+      "id": "nb02eaee320",
+      "kind": "branch",
+      "label": "order.channel",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 89
+      }
+    },
+    {
+      "id": "nb0cc4109e2",
+      "kind": "activity",
+      "name": "Ship",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 96
+      }
+    },
+    {
+      "id": "nb0ef7859f2",
+      "kind": "branch",
+      "label": "order.express",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 95
+      }
+    },
+    {
+      "id": "nb14f0fd9bc",
+      "kind": "activity",
+      "name": "Reserve",
+      "timeout": "PT5S",
+      "parent": "n393af9949c",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 61
+      }
+    },
+    {
+      "id": "nb3ae246bcf",
+      "kind": "unknown",
+      "label": "Helper.known",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.find(kotlin.String)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 45
+      }
+    },
+    {
+      "id": "nd1a807c03b",
+      "kind": "unknown",
+      "label": "Helper.describe",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderMapper.toText(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 90
+      }
+    },
+    {
+      "id": "nd43a174e80",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 73
+      }
+    },
+    {
+      "id": "nd71a7c8169",
+      "kind": "activity",
+      "name": "Release",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 77
+      }
+    },
+    {
+      "id": "nd84f44f7e4",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 101
+      }
+    },
+    {
+      "id": "nd9aa5de973",
+      "kind": "unknown",
+      "label": "span",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 91
+      }
+    },
+    {
+      "id": "ndab7d1bf8e",
+      "kind": "unknown",
+      "reason": "dynamic-dispatch",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 56
+      }
+    },
+    {
+      "id": "ndacc675588",
+      "kind": "unknown",
+      "label": "span",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 96
+      }
+    },
+    {
+      "id": "ndcc0ee4dd3",
+      "kind": "unknown",
+      "label": "guarded",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 82
+      }
+    },
+    {
+      "id": "ne2006ce007",
+      "kind": "unknown",
+      "label": "traced",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Helper.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "ne3ce46dee4",
+      "kind": "unknown",
+      "label": "retrying",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 74
+      }
+    },
+    {
+      "id": "ne914c5f799",
+      "kind": "branch",
+      "label": "price > 1000",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 68
+      }
+    },
+    {
+      "id": "ne9cc7905d0",
+      "kind": "activity",
+      "name": "Audit",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 69
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nef312a6940",
+      "kind": "unknown",
+      "label": "span",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 102
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n001c0d4d68",
+      "to": "nb3ae246bcf"
+    },
+    {
+      "from": "n05d7dd63d6",
+      "to": "n45852ab4a0"
+    },
+    {
+      "from": "n06a08ec235",
+      "to": "nb0ef7859f2"
+    },
+    {
+      "from": "n13d254f730",
+      "to": "n84bdcb35ec"
+    },
+    {
+      "from": "n13d254f730",
+      "to": "n9474e0c9c3",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "n13d254f730",
+      "to": "nd43a174e80"
+    },
+    {
+      "from": "n186543e89e",
+      "to": "n079d8c9a26"
+    },
+    {
+      "from": "n19b989f10a",
+      "to": "n84bdcb35ec"
+    },
+    {
+      "from": "n19b989f10a",
+      "to": "n9474e0c9c3",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "n256dd491f8",
+      "to": "na9abb8b11c"
+    },
+    {
+      "from": "n2712e88462",
+      "to": "nb0ef7859f2"
+    },
+    {
+      "from": "n2cd21acd51",
+      "to": "ne914c5f799"
+    },
+    {
+      "from": "n30a655f7ae",
+      "to": "n45852ab4a0"
+    },
+    {
+      "from": "n30a655f7ae",
+      "to": "n73a262187a"
+    },
+    {
+      "from": "n35fdd4f754",
+      "to": "n30a655f7ae"
+    },
+    {
+      "from": "n3784c79d2f",
+      "to": "n13d254f730"
+    },
+    {
+      "from": "n3784c79d2f",
+      "to": "ne9cc7905d0"
+    },
+    {
+      "from": "n37ade57f41",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n37ade57f41",
+      "to": "nef312a6940"
+    },
+    {
+      "from": "n3843dc9246",
+      "to": "n393af9949c"
+    },
+    {
+      "from": "n393af9949c",
+      "to": "n2cd21acd51"
+    },
+    {
+      "from": "n41e471e852",
+      "to": "n9e2fe8e819"
+    },
+    {
+      "from": "n456c3b138e",
+      "to": "n001c0d4d68"
+    },
+    {
+      "from": "n456c3b138e",
+      "to": "nb3ae246bcf"
+    },
+    {
+      "from": "n45852ab4a0",
+      "to": "n3843dc9246",
+      "label": "yes"
+    },
+    {
+      "from": "n45852ab4a0",
+      "to": "ndab7d1bf8e",
+      "label": "no"
+    },
+    {
+      "from": "n5363e854ab",
+      "to": "n1479614b80"
+    },
+    {
+      "from": "n5ed54a9e75",
+      "to": "n256dd491f8"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n456c3b138e"
+    },
+    {
+      "from": "n6af18957a2",
+      "to": "n3161813734",
+      "label": "no"
+    },
+    {
+      "from": "n6af18957a2",
+      "to": "naa872c8626",
+      "label": "yes"
+    },
+    {
+      "from": "n71b4567d92",
+      "to": "n6af18957a2"
+    },
+    {
+      "from": "n73a262187a",
+      "to": "n05d7dd63d6"
+    },
+    {
+      "from": "n73a262187a",
+      "to": "n45852ab4a0"
+    },
+    {
+      "from": "n84bdcb35ec",
+      "to": "nb02eaee320",
+      "label": "no"
+    },
+    {
+      "from": "n84bdcb35ec",
+      "to": "ndcc0ee4dd3",
+      "label": "yes"
+    },
+    {
+      "from": "n894337fdd8",
+      "to": "n9e2fe8e819"
+    },
+    {
+      "from": "n894337fdd8",
+      "to": "nb0cc4109e2"
+    },
+    {
+      "from": "n8ff239a044",
+      "to": "n30a655f7ae",
+      "label": "no"
+    },
+    {
+      "from": "n8ff239a044",
+      "to": "n35fdd4f754",
+      "label": "yes"
+    },
+    {
+      "from": "n902c56cbe7",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n9474e0c9c3",
+      "to": "n186543e89e"
+    },
+    {
+      "from": "n9474e0c9c3",
+      "to": "nd71a7c8169"
+    },
+    {
+      "from": "n9bf6fb556f",
+      "to": "n393af9949c"
+    },
+    {
+      "from": "n9bf6fb556f",
+      "to": "n71b4567d92"
+    },
+    {
+      "from": "n9e2fe8e819",
+      "to": "nd84f44f7e4"
+    },
+    {
+      "from": "na68d307f4c",
+      "to": "nb0ef7859f2"
+    },
+    {
+      "from": "na9abb8b11c",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "naa872c8626",
+      "to": "n393af9949c"
+    },
+    {
+      "from": "naa872c8626",
+      "to": "nb14f0fd9bc"
+    },
+    {
+      "from": "nb02eaee320",
+      "to": "n06a08ec235",
+      "label": "\"post\""
+    },
+    {
+      "from": "nb02eaee320",
+      "to": "n2712e88462",
+      "label": "else"
+    },
+    {
+      "from": "nb02eaee320",
+      "to": "nd1a807c03b",
+      "label": "\"email\""
+    },
+    {
+      "from": "nb02eaee320",
+      "to": "nd9aa5de973",
+      "label": "\"sms\""
+    },
+    {
+      "from": "nb0cc4109e2",
+      "to": "n9e2fe8e819"
+    },
+    {
+      "from": "nb0ef7859f2",
+      "to": "ndacc675588",
+      "label": "yes"
+    },
+    {
+      "from": "nb0ef7859f2",
+      "to": "ne2006ce007",
+      "label": "no"
+    },
+    {
+      "from": "nb3ae246bcf",
+      "to": "n8ff239a044"
+    },
+    {
+      "from": "nd1a807c03b",
+      "to": "nb0ef7859f2"
+    },
+    {
+      "from": "nd43a174e80",
+      "to": "n9474e0c9c3",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "nd43a174e80",
+      "to": "ne3ce46dee4"
+    },
+    {
+      "from": "nd71a7c8169",
+      "to": "n186543e89e"
+    },
+    {
+      "from": "nd84f44f7e4",
+      "to": "n37ade57f41"
+    },
+    {
+      "from": "nd9aa5de973",
+      "to": "na68d307f4c"
+    },
+    {
+      "from": "nd9aa5de973",
+      "to": "nb0ef7859f2"
+    },
+    {
+      "from": "ndab7d1bf8e",
+      "to": "n393af9949c"
+    },
+    {
+      "from": "ndacc675588",
+      "to": "n894337fdd8"
+    },
+    {
+      "from": "ndacc675588",
+      "to": "n9e2fe8e819"
+    },
+    {
+      "from": "ndcc0ee4dd3",
+      "to": "n5ed54a9e75"
+    },
+    {
+      "from": "ndcc0ee4dd3",
+      "to": "na9abb8b11c"
+    },
+    {
+      "from": "ne2006ce007",
+      "to": "n41e471e852"
+    },
+    {
+      "from": "ne2006ce007",
+      "to": "n9e2fe8e819"
+    },
+    {
+      "from": "ne3ce46dee4",
+      "to": "n19b989f10a"
+    },
+    {
+      "from": "ne3ce46dee4",
+      "to": "n84bdcb35ec"
+    },
+    {
+      "from": "ne3ce46dee4",
+      "to": "n9474e0c9c3",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "ne914c5f799",
+      "to": "n13d254f730",
+      "label": "no"
+    },
+    {
+      "from": "ne914c5f799",
+      "to": "n3784c79d2f",
+      "label": "yes"
+    },
+    {
+      "from": "ne9cc7905d0",
+      "to": "n13d254f730"
+    },
+    {
+      "from": "nef312a6940",
+      "to": "n902c56cbe7"
+    },
+    {
+      "from": "nef312a6940",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 56,
+    "unknown": 33
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 36
+      },
+      "text": "RequestContext(\"shop\", \"fulfilment\")"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 37
+      },
+      "text": "Tracer(\"fulfilment\")"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 38
+      },
+      "text": "Retrier(3)"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 39
+      },
+      "text": "Locks()"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 44
+      },
+      "text": "withRequestContext(context) { helper.describe(order) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 48
+      },
+      "text": "tracer.span(\"reserve\") { withRequestContext(context) { retrier.run { steps.rese…"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 49
+      },
+      "text": "withRequestContext(context) { retrier.run { steps.reserve(order.id) } }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 59
+      },
+      "text": "tracer.span(\"line\") { if (helper.known(line)) { withRequestContext(context) { s…"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 61
+      },
+      "text": "withRequestContext(context) { steps.reserve(line) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 69
+      },
+      "text": "traced(\"review\") { steps.audit(order.id) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 74
+      },
+      "text": "retrying(3) { steps.charge(order.id) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 77
+      },
+      "text": "withRequestContext(context) { steps.release(order.id) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 82
+      },
+      "text": "locks.guarded(order.id) { steps.refund(order.id) steps.release(order.id) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 91
+      },
+      "text": "tracer.span(\"sms\") { notifier.send(order.id) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 96
+      },
+      "text": "tracer.span(\"express\") { withRequestContext(context) { steps.ship(order.id) } }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 96
+      },
+      "text": "withRequestContext(context) { steps.ship(order.id) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 102
+      },
+      "text": "tracer.span(\"done\") { steps.notify(order.id) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Fulfilment.kt",
+        "line": 102
+      },
+      "text": "withRequestContext(context) { tracer.span(\"done\") { steps.notify(order.id) } }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Helper.kt",
+        "line": 40
+      },
+      "text": "traced(action, block)"
+    }
+  ]
+}

@@ -1,0 +1,297 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Blocked",
+  "interface": "shop.Blocked",
+  "implementation": "shop.BlockedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Blocked",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n104863c9d3",
+      "kind": "unknown",
+      "label": "withRequestContext",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Blocked.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n11dc6cedec",
+      "kind": "branch",
+      "label": "order.gift",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Blocked.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "n14431766b9",
+      "kind": "branch",
+      "label": "order.express",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Blocked.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "n3503433d29",
+      "kind": "activity",
+      "name": "Ship",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Blocked.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n384f614718",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Blocked.kt",
+        "line": 56
+      }
+    },
+    {
+      "id": "n51f3354daf",
+      "kind": "activity",
+      "name": "Audit",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Blocked.kt",
+        "line": 49
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Blocked.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n776a13a638",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Blocked.kt",
+        "line": 51
+      }
+    },
+    {
+      "id": "n9340a1d256",
+      "kind": "activity",
+      "name": "Notify",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Blocked.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "n9e1a3e2717",
+      "kind": "branch",
+      "label": "order.channel",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Blocked.kt",
+        "line": 53
+      }
+    },
+    {
+      "id": "nb3382d9baa",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Blocked.kt",
+        "line": 45
+      }
+    },
+    {
+      "id": "nb46d6a157b",
+      "kind": "unknown",
+      "label": "Helper.describe",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderMapper.toText(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Blocked.kt",
+        "line": 58
+      }
+    },
+    {
+      "id": "nc0c0516dee",
+      "kind": "activity",
+      "name": "Notify",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Blocked.kt",
+        "line": 55
+      }
+    },
+    {
+      "id": "ndfe88d9dc2",
+      "kind": "unknown",
+      "label": "Helper.describe",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderMapper.toText(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Blocked.kt",
+        "line": 54
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf70ccfefff",
+      "kind": "branch",
+      "label": "order.note != null",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Blocked.kt",
+        "line": 48
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n104863c9d3",
+      "to": "n11dc6cedec"
+    },
+    {
+      "from": "n104863c9d3",
+      "to": "n3503433d29"
+    },
+    {
+      "from": "n11dc6cedec",
+      "to": "nb3382d9baa",
+      "label": "yes"
+    },
+    {
+      "from": "n11dc6cedec",
+      "to": "nf70ccfefff",
+      "label": "no"
+    },
+    {
+      "from": "n14431766b9",
+      "to": "n104863c9d3",
+      "label": "yes"
+    },
+    {
+      "from": "n14431766b9",
+      "to": "n9340a1d256",
+      "label": "no"
+    },
+    {
+      "from": "n3503433d29",
+      "to": "n11dc6cedec"
+    },
+    {
+      "from": "n384f614718",
+      "to": "nb46d6a157b"
+    },
+    {
+      "from": "n51f3354daf",
+      "to": "n9e1a3e2717"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n14431766b9"
+    },
+    {
+      "from": "n776a13a638",
+      "to": "n9e1a3e2717"
+    },
+    {
+      "from": "n9340a1d256",
+      "to": "n11dc6cedec"
+    },
+    {
+      "from": "n9e1a3e2717",
+      "to": "n384f614718",
+      "label": "else"
+    },
+    {
+      "from": "n9e1a3e2717",
+      "to": "nc0c0516dee",
+      "label": "\"sms\""
+    },
+    {
+      "from": "n9e1a3e2717",
+      "to": "ndfe88d9dc2",
+      "label": "\"email\""
+    },
+    {
+      "from": "nb3382d9baa",
+      "to": "nf70ccfefff"
+    },
+    {
+      "from": "nb46d6a157b",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nc0c0516dee",
+      "to": "nb46d6a157b"
+    },
+    {
+      "from": "ndfe88d9dc2",
+      "to": "nb46d6a157b"
+    },
+    {
+      "from": "nf70ccfefff",
+      "to": "n51f3354daf",
+      "label": "yes"
+    },
+    {
+      "from": "nf70ccfefff",
+      "to": "n776a13a638",
+      "label": "no"
+    }
+  ],
+  "stats": {
+    "nodes": 16,
+    "unknown": 6
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Blocked.kt",
+        "line": 33
+      },
+      "text": "RequestContext(\"shop\", \"worker\")"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Blocked.kt",
+        "line": 37
+      },
+      "text": "withRequestContext(context) { steps.ship(order.id) }"
+    }
+  ]
+}

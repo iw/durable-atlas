@@ -124,6 +124,11 @@ class OverlaidWorkflow(
      */
     val skippedCalls: Int = 0,
     /**
+     * How many calls the document has no node for because it is an overview. A step of an
+     * execution that has no node may lie behind one of them as well.
+     */
+    val leftOutCalls: Int = 0,
+    /**
      * The formats the workflow has no overlay in, because the diagram they are drawn on was not
      * arranged in the time the format allows.
      */
@@ -156,6 +161,7 @@ class OverlaidWorkflow(
             },
             commit = commit,
             skippedCalls = skippedCalls,
+            leftOutCalls = leftOutCalls,
             missing = missing,
             simplified = simplified,
         )
@@ -494,7 +500,10 @@ object OverlayDirectory {
                 ),
             )
             coverage.simplification?.let { simplified += SimplifiedDiagram(format.name, it) }
-            write(workflow.coverageFile(format), coverage.render(noted(OverlayTexts.coverage(workflow.coverage, coverageFile, document.skippedCalls.size))))
+            write(
+                workflow.coverageFile(format),
+                coverage.render(noted(OverlayTexts.coverage(workflow.coverage, coverageFile, document.skippedCalls.size, document.leftOutCalls.size))),
+            )
             val execution = prepared(
                 format,
                 PageOptions(
@@ -505,7 +514,10 @@ object OverlayDirectory {
                 ),
             )
             for (trace in workflow.traces) {
-                write(executionFile(trace, format), execution.render(noted(OverlayTexts.execution(trace, label(trace), document.skippedCalls.size))))
+                write(
+                    executionFile(trace, format),
+                    execution.render(noted(OverlayTexts.execution(trace, label(trace), document.skippedCalls.size, document.leftOutCalls.size))),
+                )
             }
         }
         // What an earlier run drew of this workflow type, and this one could not, would pass for this run's.
@@ -524,6 +536,7 @@ object OverlayDirectory {
             files = formats.map { DiagramLink(it.name, workflow.coverageFile(it)) },
             executions = executions,
             skippedCalls = document.skippedCalls.size,
+            leftOutCalls = document.leftOutCalls.size,
             // A page that holds the diagram is missing with it.
             missing = (options.formats - formats.toSet()).map { format -> missing.first().copy(format = format.name) },
             simplified = simplified,
@@ -601,8 +614,24 @@ internal object OverlayTexts {
             else -> "A step without a node may lie behind one of the $skipped calls that did not resolve and are not drawn."
         }
 
-    /** @param skipped how many calls that did not resolve the document has no node for */
-    fun coverage(coverage: WorkflowCoverage, coverageFile: String, skipped: Int = 0): DiagramOverlay {
+    /**
+     * What an event without a node may come from where the document is an overview: `null` if it
+     * left no call out or every event has its node.
+     *
+     * @param leftOut how many calls the document has no node for because it is an overview
+     */
+    fun behindLeftOut(unmapped: Int, leftOut: Int): String? =
+        when {
+            unmapped == 0 || leftOut == 0 -> null
+            leftOut == 1 -> "A step without a node may lie behind the 1 call that this overview leaves out."
+            else -> "A step without a node may lie behind one of the $leftOut calls that this overview leaves out."
+        }
+
+    /**
+     * @param skipped how many calls that did not resolve the document has no node for
+     * @param leftOut how many calls the document has no node for because it is an overview
+     */
+    fun coverage(coverage: WorkflowCoverage, coverageFile: String, skipped: Int = 0, leftOut: Int = 0): DiagramOverlay {
         val executions = if (coverage.executions == 1) "1 execution" else "${coverage.executions} executions"
         val uncertain = coverage.ambiguous.size
         return DiagramOverlay(
@@ -613,6 +642,7 @@ internal object OverlayTexts {
                 "${events(coverage.unmapped.size)} of the histories ${have(coverage.unmapped.size)} no node in this diagram (see $coverageFile)."
                     .takeIf { coverage.unmapped.isNotEmpty() },
                 behindSkipped(coverage.unmapped.size, skipped),
+                behindLeftOut(coverage.unmapped.size, leftOut),
                 "${matches(uncertain)} ${are(uncertain)} not certain, and what is in doubt was counted (see $coverageFile)."
                     .takeIf { uncertain > 0 },
                 (
@@ -632,8 +662,11 @@ internal object OverlayTexts {
     }
 
 
-    /** @param skipped how many calls that did not resolve the document has no node for */
-    fun execution(trace: ExecutionTrace, label: String, skipped: Int = 0): DiagramOverlay {
+    /**
+     * @param skipped how many calls that did not resolve the document has no node for
+     * @param leftOut how many calls the document has no node for because it is an overview
+     */
+    fun execution(trace: ExecutionTrace, label: String, skipped: Int = 0, leftOut: Int = 0): DiagramOverlay {
         val unmapped = trace.unmapped.take(LISTED).map { event ->
             val what = listOfNotNull(event.eventType, event.name).joinToString(" ")
             val source = when (event.likelySources.size) {
@@ -650,7 +683,11 @@ internal object OverlayTexts {
             decorator = ExecutionDecorator(trace),
             title = "${trace.history.workflowType}: ${trace.history.workflowId ?: label}",
             notices = listOf("The path of one execution. What is grey was not run.") + unmapped +
-                listOfNotNull("${events(more)} more ${have(more)} no node.".takeIf { more > 0 }, behindSkipped(trace.unmapped.size, skipped)) + outside,
+                listOfNotNull(
+                    "${events(more)} more ${have(more)} no node.".takeIf { more > 0 },
+                    behindSkipped(trace.unmapped.size, skipped),
+                    behindLeftOut(trace.unmapped.size, leftOut),
+                ) + outside,
             facts = listOfNotNull(
                 PageFact("History", trace.history.source),
                 trace.history.workflowId?.let { PageFact("Workflow id", it) },

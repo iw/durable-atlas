@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Kept",
+  "interface": "shop.Kept",
+  "implementation": "shop.KeptImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Kept",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1ddf1f5b9c",
+      "kind": "unknown",
+      "label": "\"Check\" + kind",
+      "reason": "computed-name",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Kept.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "n26bd582991",
+      "kind": "branch",
+      "label": "left > 0",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Deep.kt",
+        "line": 51
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Kept.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n816344c8b6",
+      "kind": "unknown",
+      "label": "Deep.again",
+      "reason": "recursion",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Deep.kt",
+        "line": 51
+      }
+    },
+    {
+      "id": "n82c92ef622",
+      "kind": "unknown",
+      "label": "RemoteSteps.push",
+      "reason": "unresolved",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Kept.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "naaab74fd39",
+      "kind": "activity",
+      "name": "Charge",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Deep.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "neea54bd86f",
+      "kind": "unknown",
+      "reason": "dynamic-dispatch",
+      "candidates": [
+        "shop.EmailNotifier",
+        "shop.SmsNotifier"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Kept.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "nfdec73a961",
+      "kind": "unknown",
+      "label": "Deep.nine",
+      "reason": "depth-limit",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Deep.kt",
+        "line": 41
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n1ddf1f5b9c",
+      "to": "neea54bd86f"
+    },
+    {
+      "from": "n26bd582991",
+      "to": "n1ddf1f5b9c",
+      "label": "no"
+    },
+    {
+      "from": "n26bd582991",
+      "to": "n816344c8b6",
+      "label": "yes"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nfdec73a961"
+    },
+    {
+      "from": "n816344c8b6",
+      "to": "n1ddf1f5b9c"
+    },
+    {
+      "from": "n82c92ef622",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "naaab74fd39",
+      "to": "n26bd582991"
+    },
+    {
+      "from": "neea54bd86f",
+      "to": "n82c92ef622"
+    },
+    {
+      "from": "nfdec73a961",
+      "to": "naaab74fd39"
+    }
+  ],
+  "stats": {
+    "nodes": 9,
+    "unknown": 5
+  }
+}

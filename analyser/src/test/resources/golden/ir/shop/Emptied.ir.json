@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Emptied",
+  "interface": "shop.Emptied",
+  "implementation": "shop.EmptiedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Emptied",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1ab345f38d",
+      "kind": "parallel",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Emptied.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n2a2e51968c",
+      "kind": "parallel",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Emptied.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n2fa9425a6a",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "parent": "n7fe7a03de8",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Emptied.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Emptied.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n7fe7a03de8",
+      "kind": "compensation",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Emptied.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "n8bd10b30b2",
+      "kind": "unknown",
+      "label": "Helper.price",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.PricingClient.quote(shop.Order)"
+      ],
+      "parent": "n1ab345f38d",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Emptied.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n9fdd029001",
+      "kind": "activity",
+      "name": "Charge",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Emptied.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "ne1ffeb9909",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "parent": "n2a2e51968c",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Emptied.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n1ab345f38d",
+      "to": "n9fdd029001"
+    },
+    {
+      "from": "n2a2e51968c",
+      "to": "n1ab345f38d"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n2a2e51968c"
+    },
+    {
+      "from": "n7fe7a03de8",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n9fdd029001",
+      "to": "n7fe7a03de8",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "n9fdd029001",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 9,
+    "unknown": 3
+  }
+}

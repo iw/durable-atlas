@@ -9,7 +9,9 @@ the code.
 A diagram says what the code can do, read from the code alone. Where the analysis cannot
 tell, the diagram says that it cannot: an `unknown` node with a reason, an optional field left
 out, a warning on stderr. It never draws a guess as a fact, and it prefers saying less to
-saying something wrong.
+saying something wrong. The overview, which is the default detail, leaves out the calls
+behind which a step is only possible; it counts and lists them, and
+[the full detail](#overview-and-full-detail) draws each.
 
 ## What is a node
 
@@ -156,6 +158,38 @@ can be a step is not drawn at all.
 
 `--max-unresolved-pct` turns the share of unknown nodes into an exit status, for a build
 that wants to notice when a workflow becomes unreadable.
+
+## Overview and full detail
+
+Most `unknown` nodes do not say that a step is there. A call of a library function around
+a block says that nothing is known of whether, when and how often the block runs; a helper
+that calls an interface no class implements says that a step may lie behind it. In a
+service that wraps its steps in request contexts and tracing, and maps and stores around
+them, such nodes outnumber the steps, and each brings branches that exist only to lead to
+it. The diagram then shows where the analysis ran out, not what the workflow does.
+
+So an analysis has two details, and the overview is the default:
+
+- **An overview shows what the workflow does.** It has no node for a call behind which a
+  step is only possible. Code handed to a call that is not modelled is read as run once,
+  where the call is made: that is what a wrapper does, and the full detail says where it
+  was assumed. A call into code that is not there is taken to hold no step.
+- **What is certain stays.** A call that is too deep, recurses, runs one of several classes
+  that hold a step, has a computed name or did not resolve and may be a step keeps its
+  node, and the node names the function called.
+- **Nothing else moves.** The flow is cleared and laid out as for the full detail, and what
+  is left out is passed over where the full detail draws it. Every node that stays has the
+  id and the place it has there; a branch, a loop or a lane is gone only where it holds
+  nothing else. A clause, or a copy of a `finally` block, that only a failure of a call
+  which is left out reaches stays reachable, from where the flow stood at the call.
+- **Nothing is dropped silently.** The document lists every call it left out, the diagram
+  counts them, and `--detail full` draws each.
+- **A loop that the flow never gets past is not emptied.** Without it, what stands after
+  it would look as if it were reached; it stays with its `unknown` nodes.
+
+The overview is a reading, not a proof: a wrapper may run its block twice or not at all,
+and a step may lie behind a call that was left out. An overlay says so where an event of a
+history fits no node.
 
 ## Degraded mode
 

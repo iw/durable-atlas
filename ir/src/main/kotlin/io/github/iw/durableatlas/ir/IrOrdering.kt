@@ -6,6 +6,9 @@ private val entryPointOrder: Comparator<EntryPoint> =
 private val skippedOrder: Comparator<SkippedCall> =
     compareBy<SkippedCall> { it.loc.file }.thenBy { it.loc.line }.thenBy { it.text }
 
+private val leftOutOrder: Comparator<LeftOutCall> =
+    compareBy<LeftOutCall> { it.loc.file }.thenBy { it.loc.line }.thenBy { it.reason }.thenBy { it.label }.thenBy { it.candidates.joinToString(" ") }
+
 private val edgeOrder: Comparator<IrEdge> =
     compareBy<IrEdge> { it.from }
         .thenBy { it.to }
@@ -21,6 +24,7 @@ private val edgeOrder: Comparator<IrEdge> =
  * - edges by from, to, kind, label
  * - property and candidate lists sorted, without duplicates
  * - skipped calls by file, line and text, without duplicates
+ * - calls left out by file, line, reason, label and candidates, without duplicates
  *
  * Strings compare by UTF-16 code unit, independent of locale.
  */
@@ -34,6 +38,7 @@ fun IrDocument.normalized(): IrDocument =
             .sortedBy { it.id },
         edges = edges.sortedWith(edgeOrder),
         skippedCalls = skippedCalls.distinct().sortedWith(skippedOrder),
+        leftOutCalls = leftOutCalls.map { it.copy(candidates = it.candidates.canonical()) }.distinct().sortedWith(leftOutOrder),
     )
 
 private fun List<String>.canonical(): List<String> = distinct().sorted()

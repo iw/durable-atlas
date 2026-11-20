@@ -61,6 +61,13 @@ class SyntheticExtractionTest {
     // ---- straight-line code
 
     @Test
+    fun `an overview keeps every step of the full document, and its golden file is there where it differs`() {
+        val golden = listOf("AwaitingWorkflow", "Poller", "RelayWorkflow", "RejectingWorkflow")
+        // One workflow that has no golden file hands a block to a function that is not modelled.
+        assertEquals(listOf("ReturnsWorkflow"), assertOverviewsKeepTheSteps(backend, TemporalDiscovery.discover(backend), "overview/linear", only = golden))
+    }
+
+    @Test
     fun `straight-line awaits, continue-as-new and failures give the golden IR`() {
         for (workflowType in listOf("AwaitingWorkflow", "Poller", "RelayWorkflow", "RejectingWorkflow")) {
             GoldenFiles.assertMatches("ir/linear/$workflowType.ir.json", IrJson.encode(document(workflowType)))

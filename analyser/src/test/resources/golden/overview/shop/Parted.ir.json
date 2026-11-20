@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "detail": "overview",
+  "workflowType": "Parted",
+  "interface": "shop.Parted",
+  "implementation": "shop.PartedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Parted",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n465de3edf3",
+      "kind": "activity",
+      "name": "Ship",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Parted.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Parted.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nd02b5e6245",
+      "kind": "await",
+      "timeout": "PT1H",
+      "reads": [
+        "paid"
+      ],
+      "label": "paid",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Parted.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n465de3edf3",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "nd02b5e6245"
+    },
+    {
+      "from": "nd02b5e6245",
+      "to": "n465de3edf3"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 0
+  },
+  "leftOutCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Parted.kt",
+        "line": 39
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    }
+  ]
+}

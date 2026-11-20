@@ -1,0 +1,837 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Quotes",
+  "interface": "shop.Quotes",
+  "implementation": "shop.QuotesImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Quotes",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0892e6b367",
+      "kind": "unknown",
+      "label": "Helper.describe",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderMapper.toText(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 64
+      }
+    },
+    {
+      "id": "n10116ff105",
+      "kind": "branch",
+      "label": "linePrice > 100 && helper.known(line)",
+      "parent": "nd3f1debfd8",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 59
+      }
+    },
+    {
+      "id": "n105404478f",
+      "kind": "unknown",
+      "reason": "dynamic-dispatch",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 46
+      }
+    },
+    {
+      "id": "n131197ed74",
+      "kind": "fail",
+      "name": "BadQuote",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 78
+      }
+    },
+    {
+      "id": "n175d727051",
+      "kind": "unknown",
+      "label": "Helper.price",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.PricingClient.quote(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 70
+      }
+    },
+    {
+      "id": "n18ff56cf3a",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 77
+      }
+    },
+    {
+      "id": "n1969f2e85f",
+      "kind": "unknown",
+      "label": "Helper.known",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.find(kotlin.String)"
+      ],
+      "parent": "nd3f1debfd8",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 59
+      }
+    },
+    {
+      "id": "n1b37164d73",
+      "kind": "branch",
+      "label": "order.express",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 67
+      }
+    },
+    {
+      "id": "n1c37807d2d",
+      "kind": "unknown",
+      "label": "Helper.poll",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.next()"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "n28a36da99b",
+      "kind": "unknown",
+      "reason": "dynamic-dispatch",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 48
+      }
+    },
+    {
+      "id": "n28e20ffd89",
+      "kind": "branch",
+      "label": "order.gift",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 48
+      }
+    },
+    {
+      "id": "n2c2289400e",
+      "kind": "activity",
+      "name": "Notify",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 67
+      }
+    },
+    {
+      "id": "n2f2144ea74",
+      "kind": "activity",
+      "name": "Charge",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 80
+      }
+    },
+    {
+      "id": "n3896e42643",
+      "kind": "branch",
+      "label": "text.isEmpty()",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 70
+      }
+    },
+    {
+      "id": "n3e7dc5083c",
+      "kind": "branch",
+      "label": "known == null",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "n4421ba4bee",
+      "kind": "activity",
+      "name": "Audit",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "n4f06e0369f",
+      "kind": "branch",
+      "label": "linePrice > 100",
+      "parent": "nd3f1debfd8",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 59
+      }
+    },
+    {
+      "id": "n58cd462ba2",
+      "kind": "unknown",
+      "label": "Helper.known",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.find(kotlin.String)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 74
+      }
+    },
+    {
+      "id": "n6375963c08",
+      "kind": "unknown",
+      "label": "Helper.price",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.PricingClient.quote(shop.Order)"
+      ],
+      "parent": "nd3f1debfd8",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 55
+      }
+    },
+    {
+      "id": "n63f6f74ea0",
+      "kind": "unknown",
+      "reason": "dynamic-dispatch",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 74
+      }
+    },
+    {
+      "id": "n669c747886",
+      "kind": "unknown",
+      "label": "Helper.describe",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderMapper.toText(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 72
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "n70c19ba8cb",
+      "kind": "branch",
+      "label": "total > 1000",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 65
+      }
+    },
+    {
+      "id": "n770175cabf",
+      "kind": "branch",
+      "label": "order.gift",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 72
+      }
+    },
+    {
+      "id": "n7935c4991f",
+      "kind": "unknown",
+      "reason": "dynamic-dispatch",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 49
+      }
+    },
+    {
+      "id": "n7b470c1684",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 67
+      }
+    },
+    {
+      "id": "n84f02dec41",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "parent": "nd3f1debfd8",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 60
+      }
+    },
+    {
+      "id": "n98820cb685",
+      "kind": "unknown",
+      "reason": "dynamic-dispatch",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "na3f02e323d",
+      "kind": "unknown",
+      "label": "Helper.describe",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderMapper.toText(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 48
+      }
+    },
+    {
+      "id": "na71a989ca7",
+      "kind": "branch",
+      "label": "note.length > 10",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 64
+      }
+    },
+    {
+      "id": "na935fd97a4",
+      "kind": "unknown",
+      "label": "withRequestContext",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 66
+      }
+    },
+    {
+      "id": "naae915e60c",
+      "kind": "branch",
+      "parent": "nd3f1debfd8",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 53
+      }
+    },
+    {
+      "id": "nbe607acfb4",
+      "kind": "unknown",
+      "label": "Helper.price",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.PricingClient.quote(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 49
+      }
+    },
+    {
+      "id": "nc0bbeb51d7",
+      "kind": "branch",
+      "label": "total > 1000 || helper.known(order.id)",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 65
+      }
+    },
+    {
+      "id": "nc1f7c6e308",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 72
+      }
+    },
+    {
+      "id": "nc36312ee6c",
+      "kind": "unknown",
+      "reason": "dynamic-dispatch",
+      "parent": "nd3f1debfd8",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 57
+      }
+    },
+    {
+      "id": "nc442e5cc0d",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "nc5a364539b",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 73
+      }
+    },
+    {
+      "id": "nc7c8510799",
+      "kind": "branch",
+      "label": "discounted < 0",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 76
+      }
+    },
+    {
+      "id": "nca046c171c",
+      "kind": "unknown",
+      "reason": "dynamic-dispatch",
+      "parent": "nd3f1debfd8",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 56
+      }
+    },
+    {
+      "id": "nd3f1debfd8",
+      "kind": "loop",
+      "label": "for each line",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 52
+      }
+    },
+    {
+      "id": "ndab9695f4e",
+      "kind": "branch",
+      "label": "repository.find(order.id) == null",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "ndd9125346f",
+      "kind": "unknown",
+      "reason": "dynamic-dispatch",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 64
+      }
+    },
+    {
+      "id": "ne3755b71a1",
+      "kind": "branch",
+      "label": "order.channel",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 71
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf208234474",
+      "kind": "unknown",
+      "label": "Helper.known",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.find(kotlin.String)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 65
+      }
+    },
+    {
+      "id": "nf41badaca8",
+      "kind": "branch",
+      "label": "helper.known(order.id)",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 74
+      }
+    },
+    {
+      "id": "nf83dba4a00",
+      "kind": "branch",
+      "label": "order.express",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 49
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0892e6b367",
+      "to": "n70c19ba8cb"
+    },
+    {
+      "from": "n10116ff105",
+      "to": "n84f02dec41",
+      "label": "yes"
+    },
+    {
+      "from": "n10116ff105",
+      "to": "nd3f1debfd8",
+      "label": "no"
+    },
+    {
+      "from": "n105404478f",
+      "to": "n28e20ffd89"
+    },
+    {
+      "from": "n175d727051",
+      "to": "ne3755b71a1"
+    },
+    {
+      "from": "n18ff56cf3a",
+      "to": "n131197ed74"
+    },
+    {
+      "from": "n1969f2e85f",
+      "to": "n10116ff105"
+    },
+    {
+      "from": "n1b37164d73",
+      "to": "n2c2289400e",
+      "label": "no"
+    },
+    {
+      "from": "n1b37164d73",
+      "to": "n7b470c1684",
+      "label": "yes"
+    },
+    {
+      "from": "n1c37807d2d",
+      "to": "n3e7dc5083c"
+    },
+    {
+      "from": "n28a36da99b",
+      "to": "nf83dba4a00"
+    },
+    {
+      "from": "n28e20ffd89",
+      "to": "n28a36da99b",
+      "label": "no"
+    },
+    {
+      "from": "n28e20ffd89",
+      "to": "na3f02e323d",
+      "label": "yes"
+    },
+    {
+      "from": "n2c2289400e",
+      "to": "n3896e42643"
+    },
+    {
+      "from": "n2f2144ea74",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n3896e42643",
+      "to": "n175d727051",
+      "label": "no"
+    },
+    {
+      "from": "n3896e42643",
+      "to": "ne3755b71a1",
+      "label": "yes"
+    },
+    {
+      "from": "n3e7dc5083c",
+      "to": "n105404478f",
+      "label": "no"
+    },
+    {
+      "from": "n3e7dc5083c",
+      "to": "nc442e5cc0d",
+      "label": "yes"
+    },
+    {
+      "from": "n4421ba4bee",
+      "to": "nd3f1debfd8"
+    },
+    {
+      "from": "n4f06e0369f",
+      "to": "n10116ff105",
+      "label": "no"
+    },
+    {
+      "from": "n4f06e0369f",
+      "to": "n1969f2e85f",
+      "label": "yes"
+    },
+    {
+      "from": "n58cd462ba2",
+      "to": "nf41badaca8"
+    },
+    {
+      "from": "n6375963c08",
+      "to": "n4f06e0369f"
+    },
+    {
+      "from": "n63f6f74ea0",
+      "to": "nc7c8510799"
+    },
+    {
+      "from": "n669c747886",
+      "to": "nc7c8510799"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n98820cb685"
+    },
+    {
+      "from": "n70c19ba8cb",
+      "to": "nc0bbeb51d7",
+      "label": "yes"
+    },
+    {
+      "from": "n70c19ba8cb",
+      "to": "nf208234474",
+      "label": "no"
+    },
+    {
+      "from": "n770175cabf",
+      "to": "n669c747886",
+      "label": "yes"
+    },
+    {
+      "from": "n770175cabf",
+      "to": "nc1f7c6e308",
+      "label": "no"
+    },
+    {
+      "from": "n7935c4991f",
+      "to": "n4421ba4bee"
+    },
+    {
+      "from": "n7b470c1684",
+      "to": "n3896e42643"
+    },
+    {
+      "from": "n98820cb685",
+      "to": "ndab9695f4e"
+    },
+    {
+      "from": "na3f02e323d",
+      "to": "nf83dba4a00"
+    },
+    {
+      "from": "na71a989ca7",
+      "to": "n0892e6b367",
+      "label": "yes"
+    },
+    {
+      "from": "na71a989ca7",
+      "to": "ndd9125346f",
+      "label": "no"
+    },
+    {
+      "from": "na935fd97a4",
+      "to": "n1b37164d73"
+    },
+    {
+      "from": "na935fd97a4",
+      "to": "n3896e42643"
+    },
+    {
+      "from": "naae915e60c",
+      "to": "n4f06e0369f",
+      "label": "line.isEmpty()"
+    },
+    {
+      "from": "naae915e60c",
+      "to": "n6375963c08",
+      "label": "line.startsWith(\"gift\")"
+    },
+    {
+      "from": "naae915e60c",
+      "to": "nc36312ee6c",
+      "label": "else"
+    },
+    {
+      "from": "naae915e60c",
+      "to": "nca046c171c",
+      "label": "line.startsWith(\"bulk\")"
+    },
+    {
+      "from": "nbe607acfb4",
+      "to": "n4421ba4bee"
+    },
+    {
+      "from": "nc0bbeb51d7",
+      "to": "n3896e42643",
+      "label": "no"
+    },
+    {
+      "from": "nc0bbeb51d7",
+      "to": "na935fd97a4",
+      "label": "yes"
+    },
+    {
+      "from": "nc1f7c6e308",
+      "to": "nc7c8510799"
+    },
+    {
+      "from": "nc36312ee6c",
+      "to": "n4f06e0369f"
+    },
+    {
+      "from": "nc442e5cc0d",
+      "to": "n28e20ffd89"
+    },
+    {
+      "from": "nc5a364539b",
+      "to": "nc7c8510799"
+    },
+    {
+      "from": "nc7c8510799",
+      "to": "n18ff56cf3a",
+      "label": "yes"
+    },
+    {
+      "from": "nc7c8510799",
+      "to": "n2f2144ea74",
+      "label": "no"
+    },
+    {
+      "from": "nca046c171c",
+      "to": "n4f06e0369f"
+    },
+    {
+      "from": "nd3f1debfd8",
+      "to": "na71a989ca7"
+    },
+    {
+      "from": "ndab9695f4e",
+      "to": "n1c37807d2d",
+      "label": "yes"
+    },
+    {
+      "from": "ndab9695f4e",
+      "to": "n3e7dc5083c",
+      "label": "no"
+    },
+    {
+      "from": "ndd9125346f",
+      "to": "n70c19ba8cb"
+    },
+    {
+      "from": "ne3755b71a1",
+      "to": "n58cd462ba2",
+      "label": "else"
+    },
+    {
+      "from": "ne3755b71a1",
+      "to": "n770175cabf",
+      "label": "\"email\""
+    },
+    {
+      "from": "ne3755b71a1",
+      "to": "nc5a364539b",
+      "label": "\"sms\""
+    },
+    {
+      "from": "nf208234474",
+      "to": "nc0bbeb51d7"
+    },
+    {
+      "from": "nf41badaca8",
+      "to": "n63f6f74ea0",
+      "label": "yes"
+    },
+    {
+      "from": "nf41badaca8",
+      "to": "nc7c8510799",
+      "label": "no"
+    },
+    {
+      "from": "nf83dba4a00",
+      "to": "n7935c4991f",
+      "label": "yes"
+    },
+    {
+      "from": "nf83dba4a00",
+      "to": "nbe607acfb4",
+      "label": "no"
+    }
+  ],
+  "stats": {
+    "nodes": 48,
+    "unknown": 25
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 39
+      },
+      "text": "RequestContext(\"shop\", \"quotes\")"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 66
+      },
+      "text": "withRequestContext(context) { if (order.express) helper.remember(order) else st…"
+    }
+  ]
+}

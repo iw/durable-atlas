@@ -10,6 +10,7 @@ import io.github.iw.durableatlas.analyser.inventory.Inventory
 import io.github.iw.durableatlas.analyser.inventory.InventoryJson
 import io.github.iw.durableatlas.analyser.inventory.StandaloneActivities
 import io.github.iw.durableatlas.analyser.inventory.StandaloneActivitiesJson
+import io.github.iw.durableatlas.ir.Detail
 import io.github.iw.durableatlas.ir.IrDocument
 import io.github.iw.durableatlas.ir.IrJson
 import io.github.iw.durableatlas.modelextractor.ExtractedModel
@@ -40,6 +41,12 @@ data class AnalysisRequest(
      * node stands at the call.
      */
     val maxDepth: Int = WorkflowGraphs.DEFAULT_MAX_DEPTH,
+    /**
+     * How much of what the analysis could not read the documents show. [Detail.FULL]: every call
+     * that could not be read has its `unknown` node. [Detail.OVERVIEW]: only the calls behind
+     * which a step is certain have one; the others are listed in the document.
+     */
+    val detail: Detail = Detail.FULL,
 )
 
 /** The IR of one workflow type as one class implements it, and the file it was written to. */
@@ -139,7 +146,7 @@ class Analyser(private val log: (String) -> Unit = {}) {
         warnings: MutableList<String>,
     ): List<IrDocument> {
         val only = request.workflowType
-        val graphs = WorkflowGraphs(backend, model.index.commit, model.index.mode, request.maxDepth)
+        val graphs = WorkflowGraphs(backend, model.index.commit, model.index.mode, request.maxDepth, request.detail)
         val documents = discovery.workflows.flatMap { workflow ->
             if (workflow.implementations.isEmpty() && (only == null || only == workflow.name)) {
                 log(

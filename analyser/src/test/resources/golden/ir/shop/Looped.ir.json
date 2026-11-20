@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Looped",
+  "interface": "shop.Looped",
+  "implementation": "shop.LoopedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Looped",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n49d10f1e0e",
+      "kind": "activity",
+      "name": "Reserve",
+      "timeout": "PT5S",
+      "parent": "ncfd8c7b7d2",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Looped.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n5568099682",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "parent": "nca13190495",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Looped.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "n62edb343e3",
+      "kind": "unknown",
+      "label": "traced",
+      "reason": "unsupported",
+      "parent": "ncfd8c7b7d2",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Looped.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Looped.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n70144bcabd",
+      "kind": "activity",
+      "name": "Ship",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Looped.kt",
+        "line": 48
+      }
+    },
+    {
+      "id": "n8c0c58c04e",
+      "kind": "loop",
+      "label": "while true",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Looped.kt",
+        "line": 45
+      }
+    },
+    {
+      "id": "n99ffcae0be",
+      "kind": "branch",
+      "label": "helper.known(order.id)",
+      "parent": "n8c0c58c04e",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Looped.kt",
+        "line": 46
+      }
+    },
+    {
+      "id": "nca13190495",
+      "kind": "loop",
+      "label": "for each line",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Looped.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "ncfd8c7b7d2",
+      "kind": "loop",
+      "label": "for each line",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Looped.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nfd8b1fe5f9",
+      "kind": "unknown",
+      "label": "Helper.known",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.find(kotlin.String)"
+      ],
+      "parent": "n8c0c58c04e",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Looped.kt",
+        "line": 46
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n62edb343e3",
+      "to": "n49d10f1e0e"
+    },
+    {
+      "from": "n62edb343e3",
+      "to": "ncfd8c7b7d2"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "ncfd8c7b7d2"
+    },
+    {
+      "from": "n70144bcabd",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n99ffcae0be",
+      "to": "n70144bcabd",
+      "label": "yes"
+    },
+    {
+      "from": "n99ffcae0be",
+      "to": "n8c0c58c04e",
+      "label": "no"
+    },
+    {
+      "from": "nca13190495",
+      "to": "n8c0c58c04e"
+    },
+    {
+      "from": "ncfd8c7b7d2",
+      "to": "nca13190495"
+    },
+    {
+      "from": "nfd8b1fe5f9",
+      "to": "n99ffcae0be"
+    }
+  ],
+  "stats": {
+    "nodes": 11,
+    "unknown": 3
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Looped.kt",
+        "line": 36
+      },
+      "text": "traced(\"line\") { steps.reserve(line) }"
+    }
+  ]
+}

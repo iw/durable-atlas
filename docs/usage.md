@@ -35,7 +35,8 @@ tree: changes that are not committed are not seen. The repository is never modif
 | `--force` | Extract the model again even if one for the commit exists. |
 | `--jdk-home <dir>` | The JDK whose classes the sources are resolved against. By default, the JDK that runs the tool. |
 | `--max-depth <n>` | How many calls deep to follow the functions a workflow calls, 8 by default. A step that lies deeper shows as an `unknown` node at the call. |
-| `--max-unresolved-pct <n>` | Exit with status 2 if more than this percentage of a workflow's nodes are `unknown`. |
+| `--detail overview\|full` | How much of what the analysis could not read to show; see [Overview and full detail](#overview-and-full-detail). `overview` is the default. |
+| `--max-unresolved-pct <n>` | Exit with status 2 if more than this percentage of a workflow's nodes are `unknown`. The calls an overview left out are no nodes and do not count. |
 | `--json` | Print a machine-readable summary on stdout. |
 
 and the [diagram options](#diagram-options).
@@ -95,7 +96,9 @@ other libraries does not resolve:
   a stub, does not name the Temporal API and names no function of the sources) is taken for
   a call into a missing library. It is not drawn. It is counted in the summary's `Skipped`
   column, listed on the workflow's Markdown page and in the IR under `skippedCalls`, and
-  noted below its SVG diagram.
+  noted below its SVG diagram. If it is handed code that holds a step, that code is drawn
+  as for any call that is not modelled: in place in an overview, behind an `unknown` node
+  with `--detail full`.
 - A call that does not resolve and may be a step is an `unknown` node with the reason
   `unresolved`.
 - A class, function or property that the sources declare more than once under one name, as
@@ -112,6 +115,48 @@ been moved or built elsewhere, pass `--force` to make the model again.
 A model whose sources hold Java files and no Kotlin file gives an inventory and no diagram:
 workflows are read from Kotlin. Java sources beside Kotlin ones are read for what they
 declare.
+
+### Overview and full detail
+
+Where the analysis cannot read a call, a diagram says so with an `unknown` node. Behind some
+of these calls a step of the workflow is certain. Behind most a step is only possible: they
+say where the analysis ran out, not what the workflow does, and a workflow that calls much
+such code is hard to read for them. `--detail` says which of them are drawn.
+
+**`--detail overview`**, the default, draws the workflow without the calls behind which a
+step is only possible:
+
+- A call that is not modelled and is handed code, such as a wrapper of a library around a
+  block (reason `unsupported`), has no node. What the block holds is drawn where the call is
+  made, as if the call ran it once; there is no way past the block. Where a block never
+  completes, what follows it is still reached past it.
+- A call that leads to a function without a body that no class of the sources implements
+  (reasons `unseen-code`, and `dynamic-dispatch` without candidates) is left out.
+- A branch whose ways held nothing else is no branch, and a loop or a parallel lane that
+  held nothing else is not drawn. A branch that keeps a step on one way stays, and its other
+  ways lead on.
+- The `unknown` nodes behind which a step is certain stay: `depth-limit`, `recursion`,
+  `computed-name`, `dynamic-dispatch` with candidates, `unresolved`, and a workflow method or
+  handler without a Kotlin body. Each says which function was called.
+- A loop that never ends by itself and holds nothing but such calls stays as it is, with its
+  nodes: nothing after it is reached, and the calls are all that says why.
+
+Every other node is the node of the full diagram, with the same id, so the overlay of a
+history counts the same steps in either detail. What was left out is not lost: the summary
+has a `Left out` column, stderr says how many calls there were, each IR file lists its own
+under `leftOutCalls` with reason, function and place, the workflow's Markdown page lists them
+under "Calls left out", and a note below its SVG diagram says how many there are and why.
+
+**`--detail full`** draws every such call as an `unknown` node, each block behind its node
+with a way past it, and every branch that leads to one. Use it to see where the analysis
+stops, or to find the call a history's unmapped event may lie behind:
+
+```bash
+durable-atlas run --repo path/to/repo --commit HEAD --out .durable-atlas --detail full
+```
+
+An IR file says `"detail": "overview"` if it is an overview. The diagrams are drawn from the
+IR files, so `render` and `overlay` show whichever detail the files they are given have.
 
 ### Exit status
 
@@ -144,11 +189,13 @@ An SVG diagram draws every construct as a card with its own icon and colour, reg
 parallel sections, compensations) as boxes around their steps, the signal, query and update
 handlers in a band above the main flow, and a legend. Dotted green edges lead from a handler
 to the awaits it can end. Below the drawing it says what is worth knowing about it: calls
-that were left out, regions drawn as single nodes, a drawing made more simply.
+that were skipped or left out of an overview, regions drawn as single nodes, a drawing made
+more simply.
 
 The Mermaid diagram of the same workflow is a `flowchart TD` in a fenced block, which Git
 hosts draw in place. Its page also lists the workflow's properties, links the diagrams of its
-child workflows, and says where each `unknown` node is.
+child workflows, says where each `unknown` node is, and lists the calls that were skipped or
+left out of an overview.
 
 The same commit and options always give the same bytes.
 
@@ -187,7 +234,7 @@ durable-atlas render --ir out/ir --out out/diagrams
   `--keep-scratch`, which keeps the scratch checkout for you to look at. The model goes to
   `<out>/<sha>`.
 - `analyse` takes `--model` (the directory that holds the model's `index.json`), `--out`,
-  `--max-depth`, `--max-unresolved-pct` and `--jdk-home` as `run` does, and
+  `--max-depth`, `--detail`, `--max-unresolved-pct` and `--jdk-home` as `run` does, and
   `--workflow <type>`, which writes the IR of that workflow type only. The inventory always
   covers everything.
 - `render` takes `--ir`, `--out` and the diagram options.
@@ -253,7 +300,9 @@ overlays of a workflow line up with each other. If `<out>` already holds the wor
 the arrangement; otherwise the diagram is drawn first.
 
 An event of a history that fits no node is counted as unmapped and listed in the coverage
-file, with the nodes it may lie behind: a step behind an `unknown` call, for one. That is a
+file, with the nodes it may lie behind: a step behind an `unknown` call, for one. Where the
+IR is an overview that left calls out, the overlay says that the step may lie behind one of
+them; an analysis with `--detail full` gives each such call its node. That is a
 finding, and the exit status stays 0 unless `--max-unmapped-pct <n>` sets a limit. Events
 that say what was done to an execution from outside (a request to cancel it, changed
 options) are counted apart. A history whose workflow type has no IR is reported and left

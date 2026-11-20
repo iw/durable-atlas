@@ -1111,7 +1111,9 @@ internal class FlowReader(
          * @param timesOut whether the step raises a `TimeoutException` when its time is up
          */
         private fun step(call: Call, node: IrNode, outcomes: Outcomes?, cancels: Any? = null, queue: QueueWait? = null, timesOut: Boolean = false) {
-            val step = Step(node, call.location, outcomes, cancels, queue, timesOut)
+            // A node that says only why the call could not be read is told what was called, for whoever wants to say it.
+            val called = if (node.kind == NodeKind.UNKNOWN && node.label == null) recognizer.label(call) else null
+            val step = Step(node, call.location, outcomes, cancels, queue, timesOut, called = called)
             add(step)
             lastStep = call to step
             if (outcomes != null) gate = Gate(outcomes, call, node.reads.toSet())
@@ -1521,10 +1523,12 @@ internal class FlowReader(
         /**
          * Reads code handed to something that decides whether and when it runs. If it holds
          * anything, [marker] stands for what is not modelled and the code follows it.
+         *
+         * @param behind the step in front that stands for what is not modelled, where the call is one that is not followed
          */
-        private fun uncharted(marker: IrNode?, location: SourceLocation, handedOver: List<Code>, lambdaLabel: String?) {
+        private fun uncharted(marker: IrNode?, location: SourceLocation, handedOver: List<Code>, lambdaLabel: String?, behind: Step? = null) {
             val read = handedOver.map { code -> perhaps { collectApart { later(code, lambdaLabel) } } }
-            if (read.any { it.hasContent }) add(Uncharted(marker, location, read)) else keepRegistrations(*read.toTypedArray())
+            if (read.any { it.hasContent }) add(Uncharted(marker, location, read, behind)) else keepRegistrations(*read.toTypedArray())
         }
 
         // ---- lambdas
@@ -1647,7 +1651,7 @@ internal class FlowReader(
             when (target) {
                 null -> return Followed.NOT
                 // Nothing is known of what runs: a step may lie behind the call, and none is certain to.
-                is Target.Unknown -> cutOff(UnknownReasons.DYNAMIC_DISPATCH, null, emptyList(), use, handedOver, firm = false)
+                is Target.Unknown -> cutOff(UnknownReasons.DYNAMIC_DISPATCH, null, emptyList(), use, handedOver, firm = false, called = recognizer.label(callee.function))
                 is Target.Several -> {
                     // Whichever function runs, what it reads and writes is read and written here.
                     if (entry.thorough) {
@@ -1655,7 +1659,7 @@ internal class FlowReader(
                     }
                     val held = probe.summary(target.functions)
                     if (!holdsStep(held, handedOver)) return undrawn(use, recognizer.label(callee.function), held, handedOver)
-                    cutOff(UnknownReasons.DYNAMIC_DISPATCH, null, target.classes, use, handedOver)
+                    cutOff(UnknownReasons.DYNAMIC_DISPATCH, null, target.classes, use, handedOver, called = recognizer.label(callee.function))
                 }
                 is Target.One -> {
                     val function = target.function
@@ -1725,11 +1729,21 @@ internal class FlowReader(
          * Says that a call is not followed, and why; what was handed over to it may run all the same.
          *
          * @param firm whether a step is certain to lie behind the call, see [Step.firm]
+         * @param called what the call is called, where [label] does not say, see [Step.called]
          */
-        private fun cutOff(reason: String, label: String?, candidates: List<String>, use: Use, handedOver: List<Code>, firm: Boolean = true) {
+        private fun cutOff(
+            reason: String,
+            label: String?,
+            candidates: List<String>,
+            use: Use,
+            handedOver: List<Code>,
+            firm: Boolean = true,
+            called: String? = null,
+        ) {
             val node = IrNode(id = "", kind = NodeKind.UNKNOWN, reason = reason, label = label?.let(Captions::of), candidates = candidates)
-            add(Step(node, use.location, firm = firm))
-            uncharted(null, use.location, handedOver, use.name)
+            val step = Step(node, use.location, firm = firm, called = called)
+            add(step)
+            uncharted(null, use.location, handedOver, use.name, behind = step)
         }
 
         /**

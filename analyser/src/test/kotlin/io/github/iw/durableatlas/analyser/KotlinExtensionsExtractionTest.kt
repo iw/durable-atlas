@@ -66,6 +66,12 @@ class KotlinExtensionsExtractionTest {
     private fun IrDocument.shape(): List<String> = (nodeOutline().map { "node $it" } + edgeOutline().map { "edge $it" }).map { it.replace(LINE, "") }.sorted()
 
     @Test
+    fun `an overview keeps every step of the full document, and its golden file is there where it differs`() {
+        val golden = KotlinExtensionSources.WRITTEN + "Nameless"
+        assertEquals(emptyList<String>(), assertOverviewsKeepTheSteps(backend, TemporalDiscovery.discover(backend), "overview/extensions", only = golden))
+    }
+
+    @Test
     fun `every document is well formed, both models give the same, and those of the degraded one are the golden ones`() {
         val types = KotlinExtensionSources.WRITTEN.flatMap { listOf(it, "${it}Twin") } + listOf("Nameless", "WiredBare", "WiredByType")
         assertEquals(types.sorted(), degraded.map { it.workflowType })

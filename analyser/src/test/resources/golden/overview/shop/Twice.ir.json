@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "detail": "overview",
+  "workflowType": "Twice",
+  "interface": "shop.Twice",
+  "implementation": "shop.TwiceImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Twice",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Twice.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "neb00343a5b",
+      "kind": "activity",
+      "name": "Notify",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Twice.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "nebf3574a15",
+      "kind": "activity",
+      "name": "Charge",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Twice.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nfb85d9f1d5",
+      "kind": "activity",
+      "name": "Refund",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Twice.kt",
+        "line": 35
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "nebf3574a15"
+    },
+    {
+      "from": "neb00343a5b",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nebf3574a15",
+      "to": "nfb85d9f1d5"
+    },
+    {
+      "from": "nfb85d9f1d5",
+      "to": "neb00343a5b"
+    }
+  ],
+  "stats": {
+    "nodes": 5,
+    "unknown": 0
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Twice.kt",
+        "line": 35
+      },
+      "text": "either({ steps.charge(id) }) { steps.refund(id) }"
+    }
+  ],
+  "leftOutCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Twice.kt",
+        "line": 35
+      },
+      "reason": "unsupported",
+      "label": "either"
+    }
+  ]
+}

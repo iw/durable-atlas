@@ -77,7 +77,9 @@ and the tool's dependencies. See [docs/install.md](docs/install.md).
   handler wakes which wait.
 - **Says what it cannot tell.** A step chosen at run time, a call too deep to follow or code
   that is not there to read is an `unknown` node with its reason and its place in the
-  source. A guess is never drawn as a fact. See [docs/decisions.md](docs/decisions.md).
+  source. A guess is never drawn as a fact. By default a diagram is an overview: a call
+  behind which a step is only possible is left out and listed, and `--detail full` draws
+  every one. See [docs/decisions.md](docs/decisions.md).
 - **Writes SVG, Mermaid and HTML.** An SVG diagram is one self-contained file without
   script: a card per step with its own icon and colour, regions as boxes, handlers in a
   band above the flow, a legend, and links to the diagrams of child workflows and, if you
@@ -111,10 +113,11 @@ and the tool's dependencies. See [docs/install.md](docs/install.md).
 
 ```text
 durable-atlas run     --repo DIR --commit REV --out DIR [--mode gradle|degraded] [--force]
-                      [--max-depth N] [--max-unresolved-pct N] [--jdk-home DIR] [diagram options]
+                      [--max-depth N] [--detail overview|full] [--max-unresolved-pct N]
+                      [--jdk-home DIR] [diagram options]
 durable-atlas model   --repo DIR --commit REV --out DIR [--mode gradle|degraded] [--force] [--keep-scratch]
-durable-atlas analyse --model DIR --out DIR [--workflow TYPE] [--max-depth N] [--max-unresolved-pct N]
-                      [--jdk-home DIR]
+durable-atlas analyse --model DIR --out DIR [--workflow TYPE] [--max-depth N] [--detail overview|full]
+                      [--max-unresolved-pct N] [--jdk-home DIR]
 durable-atlas render  --ir DIR --out DIR [diagram options]
 durable-atlas fetch   --workflow-type TYPE --limit N --out DIR [--since TIME] [--until TIME]
                       [--address HOST:PORT] [--namespace NAME] [--api-key KEY] [--tls | --no-tls] [--profile NAME] …
@@ -169,12 +172,15 @@ the tests analyse. Both are Gradle builds of their own.
 ./gradlew build
 ```
 
-runs some 2,900 tests. The suite covers:
+runs some 3,500 tests. The suite covers:
 
 - the IR: its schema, its canonical form, validation, and the demo's document;
 - model extraction from the sample repository, through its Gradle build and without it;
 - the analysis of Kotlin sources written for each construct, against the IR expected for
   them, in both modes, and of the demo against its hand-written IR;
+- the overview of every one of those sources against its full detail: the same steps with
+  the same ids, no way between two steps that the full detail lacks, and every call that
+  was left out listed;
 - the SDK's naming rules, activity options, fail types and Kotlin extensions;
 - both renderers on every document: Mermaid text that parses, golden files compared byte
   for byte, the structure of the SVG, where labels lie, how edges are routed, rows and

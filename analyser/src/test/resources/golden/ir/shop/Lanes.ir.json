@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Lanes",
+  "interface": "shop.Lanes",
+  "implementation": "shop.LanesImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Lanes",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n47c0eb3cfe",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "parent": "nb766a8b8af",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Lanes.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "n47c3cb0a0e",
+      "kind": "parallel",
+      "join": "first",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Lanes.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "n5a52ecb563",
+      "kind": "activity",
+      "name": "Charge",
+      "timeout": "PT5S",
+      "parent": "n47c3cb0a0e",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Lanes.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Lanes.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n7e9ee536ed",
+      "kind": "unknown",
+      "label": "Helper.price",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.PricingClient.quote(shop.Order)"
+      ],
+      "parent": "n47c3cb0a0e",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Lanes.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "nb766a8b8af",
+      "kind": "parallel",
+      "waitsFor": "nothing",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Lanes.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "nec80170797",
+      "kind": "activity",
+      "name": "Audit",
+      "timeout": "PT5S",
+      "parent": "nb766a8b8af",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Lanes.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nedd6aea7eb",
+      "kind": "activity",
+      "name": "Ship",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Lanes.kt",
+        "line": 44
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n47c0eb3cfe",
+      "to": "nec80170797"
+    },
+    {
+      "from": "n47c3cb0a0e",
+      "to": "nb766a8b8af"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n47c3cb0a0e"
+    },
+    {
+      "from": "nb766a8b8af",
+      "to": "nedd6aea7eb"
+    },
+    {
+      "from": "nedd6aea7eb",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 9,
+    "unknown": 2
+  }
+}

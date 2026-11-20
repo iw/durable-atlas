@@ -82,6 +82,8 @@ data class RenderedDiagram(
     val dynamic: Boolean = false,
     /** How many calls that did not resolve the document left out as calls into libraries; see `IrDocument.skippedCalls`. */
     val skippedCalls: Int = 0,
+    /** How many calls the document has no node for because it is an overview; see `IrDocument.leftOutCalls`. */
+    val leftOutCalls: Int = 0,
     /** The formats the workflow has no file in, because no diagram of it was drawn in the time the format allows. */
     val missing: List<MissingDiagram> = emptyList(),
     /** The formats whose file shows the workflow more simply than was asked for, because drawing it as asked took too long. */
@@ -166,6 +168,7 @@ object DiagramDirectory {
                     collapsedRegions = prepared.maxOf { it.second?.limit?.collapsedRegions ?: 0 },
                     dynamic = document.isDynamic,
                     skippedCalls = entry.skipped,
+                    leftOutCalls = entry.leftOut,
                     missing = entry.missing,
                     simplified = entry.simplified,
                 )

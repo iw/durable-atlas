@@ -55,6 +55,11 @@ class RegionEndExtractionTest {
         documents.single { it.workflowType == workflowType }.outline().filterNot { it.startsWith("entry point ") }
 
     @Test
+    fun `an overview keeps every step of the full document, and its golden file is there where it differs`() {
+        assertEquals(emptyList<String>(), assertOverviewsKeepTheSteps(backend, discovery, "overview/ends"))
+    }
+
+    @Test
     fun `every document is well formed and gives the golden IR`() {
         assertEquals(RegionEndSources.FILES.keys - "Tasks", documents.map { it.workflowType }.toSet())
         for (document in documents) {

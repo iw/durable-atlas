@@ -1,12 +1,14 @@
 package io.github.iw.durableatlas.render.markdown
 
+import io.github.iw.durableatlas.ir.LeftOutCall
 import io.github.iw.durableatlas.ir.SkippedCall
 import io.github.iw.durableatlas.render.PageContent
 
 /**
  * A Markdown page for one workflow: a header, the diagram in whatever form the format embeds it,
- * links to the diagrams of its child workflows, the calls that could not be resolved, and the
- * calls that were left out of the diagram as unresolved calls into libraries.
+ * links to the diagrams of its child workflows, the calls that could not be resolved, the calls
+ * that were left out of the diagram as unresolved calls into libraries, and those an overview
+ * has no node for.
  */
 internal object MarkdownPage {
     /** @param diagram Markdown that shows the diagram, for example a fenced block */
@@ -27,7 +29,22 @@ internal object MarkdownPage {
         childWorkflows(content.childWorkflows)?.let(::block)
         unknownNodes(content.unknownNodes)?.let(::block)
         skippedCalls(content.skippedCalls)?.let(::block)
+        leftOutCalls(content.leftOutCalls)?.let(::block)
         return page.toString().trimEnd('\n') + "\n"
+    }
+
+    private fun leftOutCalls(leftOut: List<LeftOutCall>): String? {
+        if (leftOut.isEmpty()) return null
+        val lines = leftOut.map { call ->
+            buildString {
+                append("- ").append(Markdown.code(call.reason)).append(": ").append(Markdown.code(call.label))
+                append(" at ").append(Markdown.code("${call.loc.file}:${call.loc.line}"))
+                if (call.candidates.isNotEmpty()) {
+                    append("; candidates: ").append(call.candidates.joinToString(", ", transform = Markdown::code))
+                }
+            }
+        }
+        return (listOf("## Calls left out", "", PageContent.LEFT_OUT_CALLS, "") + lines).joinToString("\n")
     }
 
     private fun skippedCalls(skipped: List<SkippedCall>): String? {

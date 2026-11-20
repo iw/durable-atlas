@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "detail": "overview",
+  "workflowType": "Chained",
+  "interface": "shop.Chained",
+  "implementation": "shop.ChainedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Chained",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Chained.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n7541089b4e",
+      "kind": "activity",
+      "name": "Ship",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Chained.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "nb068f6c543",
+      "kind": "activity",
+      "name": "Audit",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Chained.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "nb068f6c543"
+    },
+    {
+      "from": "n7541089b4e",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nb068f6c543",
+      "to": "n7541089b4e"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 0
+  },
+  "leftOutCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Chained.kt",
+        "line": 36
+      },
+      "reason": "unsupported",
+      "label": "Promise.thenApply"
+    }
+  ]
+}

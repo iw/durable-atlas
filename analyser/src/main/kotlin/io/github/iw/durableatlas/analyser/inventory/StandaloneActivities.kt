@@ -19,7 +19,8 @@ import kotlinx.serialization.json.Json
  *
  * An activity counts as called if a workflow has an activity or local activity step of its
  * name, whichever stub the step goes through. What the analysis could not follow may call an
- * activity all the same, so the workflow types that hold such calls are named.
+ * activity all the same, so the workflow types that hold such calls are named: those with an
+ * `unknown` node, and those whose document is an overview that left such a call out.
  *
  * Property order is the key order of the JSON form.
  */
@@ -69,7 +70,10 @@ data class StandaloneActivities(
                     )
                 }
             }
-            val unresolved = documents.filter { document -> document.nodes.any { it.kind == NodeKind.UNKNOWN } }.map { it.workflowType }
+            // A call that an overview left out is one the analysis could not follow, like one that kept its node.
+            val unresolved = documents
+                .filter { document -> document.nodes.any { it.kind == NodeKind.UNKNOWN } || document.leftOutCalls.isNotEmpty() }
+                .map { it.workflowType }
             return StandaloneActivities(
                 commit = commit,
                 modelMode = modelMode,

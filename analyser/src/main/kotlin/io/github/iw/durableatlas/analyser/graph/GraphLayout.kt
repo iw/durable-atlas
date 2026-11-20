@@ -60,6 +60,15 @@ import java.util.IdentityHashMap
  * and does something stays. And where something that is drawn has no other way to go, as a
  * step that such a `throw` follows, the way stays as well, down to its `fail` node: a node has
  * to lead somewhere, and nothing else says that the flow ends there.
+ *
+ * An overview is laid out from the same flow, cleared in the same way, so that every node it
+ * draws is the node of the full graph, in the same place. What it leaves out (see [LeftOut]) is
+ * passed over where the full graph draws it: the node takes its place among the ids and is not
+ * added, and the flow stays where it stands. A clause, or a copy of a `finally`, that only a
+ * failure of such a call reaches is entered from there, so that all it holds is drawn. Code
+ * handed to a call that is not modelled is laid out once, in place. A branch none of whose ways
+ * shows anything is passed over with what it holds, and so is a loop or a lane that holds
+ * nothing. A loop that the flow never gets past stays as the full graph has it.
  */
 internal class GraphLayout(
     entryPointId: String,
@@ -70,6 +79,8 @@ internal class GraphLayout(
      * outcome of its own: a query, which fails, and a validator, which rejects its update.
      */
     private val strict: Boolean = true,
+    /** Is told the calls that have no node, where the graph is an overview; `null` where every call gets its node. */
+    private val leftOut: LeftOut? = null,
 ) {
     private val graph = GraphBuilder(entryPointId)
 
@@ -94,6 +105,15 @@ internal class GraphLayout(
 
     /** Above zero while laying out what stays as it was read: every failure that leaves it is drawn as one. */
     private var kept = 0
+
+    /** In an overview: above zero while passing over a loop that holds nothing, in which nothing is drawn. */
+    private var hidden = 0
+
+    /** In an overview: above zero while laying out what stays as a full graph has it. */
+    private var whole = 0
+
+    /** Whether the calls that an overview has no node for are left out where the layout stands. */
+    private val overview: Boolean get() = leftOut != null && whole == 0
 
     /** The child workflows being laid out in a region nothing waits for, whose start the flow outside waits for. */
     private val startAwaited: MutableSet<Step> = Collections.newSetFromMap(IdentityHashMap())
@@ -153,6 +173,16 @@ internal class GraphLayout(
 
         /** The ways out that pass through `finally`, each with the ends that take it. */
         val leaving = LinkedHashMap<Continuation, MutableList<End>>()
+
+        /**
+         * In an overview, for each clause: where the flow stood at the calls that are left out
+         * and that may fail with what the clause catches. The clause is entered from there only
+         * if nothing that is drawn leads to it.
+         */
+        val spare = flow.handlers.map { ArrayList<End>() }
+
+        /** In an overview: the same for the ways out that pass through `finally`. */
+        val spareLeaving = HashMap<Continuation, MutableList<End>>()
     }
 
     /** Where a path goes when it does not simply run on. */
@@ -253,7 +283,9 @@ internal class GraphLayout(
     }
 
     private fun step(flow: Step) {
-        val id = emit(if (flow in startAwaited) flow.node.copy(waitsFor = WaitsFor.START) else flow.node, flow.location)
+        if (overview && !flow.firm) return leaveOut(flow.node, flow.location, flow.called)
+        val node = named(flow)
+        val id = emit(if (flow in startAwaited) node.copy(waitsFor = WaitsFor.START) else node, flow.location)
         flow.cancels?.let { graph.cancel(id, it, overBefore(id)) }
         graph.wait(id, flow.queue, flow.wokenByFlow)
         fail(id, flow.node.kind)
@@ -263,6 +295,98 @@ internal class GraphLayout(
         }
         val outcomes = flow.outcomes
         if (outcomes != null && open.isNotEmpty()) open = outcomes.states.map { End(id, scenario = it) }
+    }
+
+    /**
+     * The node of [flow]. In an overview the node of a call that could not be read names the
+     * call, where it does not anyway: the node is what is left to say what was called.
+     */
+    private fun named(flow: Step): IrNode {
+        val node = flow.node
+        val called = flow.called?.takeIf { leftOut != null && node.kind == NodeKind.UNKNOWN && node.label == null } ?: return node
+        return node.copy(label = Captions.of(called))
+    }
+
+    // ---- what an overview leaves out
+
+    /**
+     * Passes over a node that is not drawn. It takes its place among the ids all the same, so
+     * that the nodes that are drawn have the ids they have in a full graph, and the flow stays
+     * where it stands.
+     */
+    private fun pass(kind: NodeKind, location: SourceLocation?) {
+        graph.reserve(kind, location, path)
+    }
+
+    /**
+     * Leaves out the call that [node] stands for in a full graph. Where a clause, or a copy of
+     * a `finally` on the way to one, is reached by nothing but what the call may fail with, that
+     * way is kept, and leaves from where the flow stands: what the clause holds is drawn as in
+     * the full graph. Where something that is drawn fails the same way, nothing is said of the call.
+     *
+     * @param called what the call is called, where the node does not say
+     * @param fails whether a failure of the call is one of the flow: not so for what nothing waits for
+     */
+    private fun leaveOut(node: IrNode, location: SourceLocation?, called: String? = null, fails: Boolean = true) {
+        pass(node.kind, location)
+        leftOut?.note(node, location, called)
+        if (!fails || muted > 0) return
+        for (type in FailureTypes.raisedBy(node.kind)) {
+            for (handled in catching(type).first) {
+                route(open.map { End(it.from, EdgeKind.EXCEPTION, handled.label(), it.entry) }, handled, spare = true)
+            }
+        }
+    }
+
+    /**
+     * Passes over a choice none of whose ways shows anything: each way is gone through for what
+     * it leaves out and registers, from where the flow stands, and the flow goes on from there.
+     *
+     * @param branch whether a full graph has a node for the choice, and not only the ways out of the step that decides it
+     */
+    private fun passOver(flow: Choice, branch: Boolean) {
+        if (branch) pass(NodeKind.BRANCH, flow.location)
+        val ends = open
+        val after = ArrayList<End>()
+        for (arm in flow.arms) {
+            // Where a step decides the choice, a way that none of its outcomes takes is not gone at all.
+            open = if (branch) ends else ends.filter { it.scenario in arm.scenarios }
+            layout(arm.body)
+            after += open
+        }
+        open = after.distinct()
+    }
+
+    /** Passes over a loop that holds nothing: its body is gone through for what it leaves out and registers, and nothing in it is drawn. */
+    private fun passOver(flow: Repeat) {
+        pass(NodeKind.LOOP, flow.location)
+        val ends = open
+        frames += LoopFrame(flow.frame, NOWHERE)
+        hidden++
+        layout(flow.body)
+        hidden--
+        frames.removeAt(frames.lastIndex)
+        open = ends
+    }
+
+    /** Passes over a lane that nothing waits for and that shows nothing. */
+    private fun passOver(flow: Fork) {
+        pass(NodeKind.PARALLEL, flow.location)
+        val ends = open
+        frames += Unawaited(NOWHERE)
+        layout(flow.body)
+        frames.removeAt(frames.lastIndex)
+        open = ends
+    }
+
+    /** Lays out what stays as a full graph has it, with every call that is left out elsewhere. */
+    private fun entire(block: () -> Unit) {
+        whole++
+        try {
+            block()
+        } finally {
+            whole--
+        }
     }
 
     // ---- sequences and parallel regions
@@ -307,10 +431,13 @@ internal class GraphLayout(
     private fun aside(flow: Fork) {
         val only = flow.body.onlyStep()?.takeUnless { it.node.kind.isTerminal }
         if (only != null) {
-            val id = emit(only.node.copy(waitsFor = if (only.startAwaited) WaitsFor.START else WaitsFor.NOTHING), only.location)
+            // What nothing waits for fails unseen: nothing of a call that is left out leads anywhere.
+            if (overview && !only.firm) return leaveOut(only.node, only.location, only.called, fails = false)
+            val id = emit(named(only).copy(waitsFor = if (only.startAwaited) WaitsFor.START else WaitsFor.NOTHING), only.location)
             graph.wait(id, only.queue, only.wokenByFlow)
             return
         }
+        if (overview && (hidden > 0 || !flow.body.shows())) return passOver(flow)
         val direct = flow.body.direct()
         // A child the lane starts beside itself says of itself that only its start is waited for,
         // and means the lane: beside one of those, a child that means the flow outside could not be told from it.
@@ -361,6 +488,25 @@ internal class GraphLayout(
         val lanes = (first until last).mapNotNull { index -> (parts[index] as? Fork)?.takeIf { it.awaited } }
         val nothingElse = (first until last).none { !parts[it].isLane() && parts[it].hasContent }
         val race = lanes.first().race?.takeIf { race -> nothingElse && lanes.all { it.race === race } && race.lanes.size == lanes.size }
+        if (overview && (hidden > 0 || (first until last).none { parts[it].shows() })) {
+            // A region none of whose lanes shows anything: each lane is gone through from where the flow stands.
+            pass(NodeKind.PARALLEL, (parts[first] as Fork).location)
+            val ends = open
+            var along = ends
+            for (index in first until last) {
+                val part = parts[index]
+                if (part is Fork && part.awaited) {
+                    open = ends
+                    layout(part.body)
+                } else {
+                    open = along
+                    layout(part)
+                    along = open
+                }
+            }
+            open = along
+            return last
+        }
         val id = emit(IrNode(id = "", kind = NodeKind.PARALLEL, join = LaneJoin.FIRST.takeIf { race != null }), (parts[first] as Fork).location)
         regions += id
         val entry = listOf(End(id, entry = true))
@@ -388,9 +534,11 @@ internal class GraphLayout(
 
     private fun choice(flow: Choice) {
         val decided = flow.outcomes
-        if (decided != null && open.all { it.scenario != null && it.scenario in decided.states }) return fold(flow)
+        val folded = decided != null && open.all { it.scenario != null && it.scenario in decided.states }
         // The other ways end in a failure that is not drawn: there is nothing to decide.
-        if (flow.narrowed && flow.arms.size == 1) return layout(flow.arms.single().body)
+        if (!folded && flow.narrowed && flow.arms.size == 1) return layout(flow.arms.single().body)
+        if (overview && (hidden > 0 || flow.arms.none { it.body.shows() })) return passOver(flow, branch = !folded)
+        if (folded) return fold(flow)
         val id = emit(IrNode(id = "", kind = NodeKind.BRANCH, label = flow.label), flow.location)
         val after = ArrayList<End>()
         for (arm in flow.arms) {
@@ -421,6 +569,10 @@ internal class GraphLayout(
     // ---- loops and lambdas
 
     private fun repeat(flow: Repeat) {
+        if (overview && (hidden > 0 || !flow.body.showsSteps(flow.floor))) {
+            // Nothing follows a loop that the flow never gets past: without it, what stands after it would look as if something did.
+            return if (flow.closed && hidden == 0) entire { repeat(flow) } else passOver(flow)
+        }
         val id = emit(IrNode(id = "", kind = NodeKind.LOOP, label = flow.label, retry = flow.retry), flow.location)
         val frame = LoopFrame(flow.frame, id)
         frames += frame
@@ -469,15 +621,20 @@ internal class GraphLayout(
      * Sends [ends] on their way to [continuation]. If the way leads out of a `try` with a
      * `finally`, they wait there: the `finally` is laid out once for each way out, when the `try`
      * is complete, and the way goes on from its end.
+     *
+     * @param spare whether the ends stand for a call that an overview leaves out: they are taken
+     *   only where nothing that is drawn takes the same way, see [leaveOut]
      */
-    private fun route(ends: List<End>, continuation: Continuation) {
+    private fun route(ends: List<End>, continuation: Continuation, spare: Boolean = false) {
         if (ends.isEmpty()) return
         val floor = continuation.within?.let(frames::indexOf) ?: -1
         val barrier = (frames.lastIndex downTo floor + 1)
             .map { frames[it] }
             .firstOrNull { it is TryFrame && it.flow.finally.hasContent } as TryFrame?
         if (barrier != null) {
-            barrier.leaving.getOrPut(continuation) { ArrayList() } += ends
+            // The way out takes its place among the others whoever takes it, so that the copies of the `finally` are laid out in one order.
+            val taking = barrier.leaving.getOrPut(continuation) { ArrayList() }
+            if (spare) barrier.spareLeaving.getOrPut(continuation) { ArrayList() } += ends else taking += ends
             return
         }
         when (continuation) {
@@ -489,7 +646,7 @@ internal class GraphLayout(
             is Continuation.Break -> continuation.within.breaks += ends
             // Going round again is what the body of a loop does anyway; from where is worth saying.
             is Continuation.Next -> fall(ends, continuation.within.region)
-            is Continuation.Handled -> continuation.within.caught[continuation.handler] += ends
+            is Continuation.Handled -> (if (spare) continuation.within.spare else continuation.within.caught)[continuation.handler] += ends
             is Continuation.Failed -> {
                 open = ends
                 emit(IrNode(id = "", kind = NodeKind.FAIL, name = continuation.name, label = continuation.label), continuation.location)
@@ -583,7 +740,7 @@ internal class GraphLayout(
     private fun undrawn(flow: Undrawn) {
         if (flow.unseen.isNotEmpty()) {
             val unseen = IrNode(id = "", kind = NodeKind.UNKNOWN, reason = UnknownReasons.UNSEEN_CODE, label = Captions.of(flow.label), candidates = flow.unseen)
-            step(Step(unseen, flow.location))
+            if (overview) leaveOut(unseen, flow.location) else step(Step(unseen, flow.location))
         }
         if (flow.raises.isEmpty() || open.isEmpty()) return
         if (flow.never) return raise(flow.raises, flow.location)
@@ -602,6 +759,9 @@ internal class GraphLayout(
         frame.catching = false
         for ((index, handler) in flow.handlers.withIndex()) {
             var sources: List<End> = frame.caught[index]
+            // In an overview: a clause that only a call which is left out may reach is entered from where the flow stood at that call.
+            val spared = sources.isEmpty() && frame.spare[index].isNotEmpty()
+            if (spared) sources = frame.spare[index]
             // A clause that no step of the body is known to reach is entered from where the `try` begins.
             if (sources.isEmpty() && handler.body.hasContent) {
                 sources = before.map { End(it.from, EdgeKind.EXCEPTION, handler.label, it.entry) }
@@ -609,7 +769,8 @@ internal class GraphLayout(
             open = sources.distinct()
             if (open.isEmpty()) continue
             layout(handler.body)
-            normal += open
+            // A failure that is passed over from where the flow goes on anyway says nothing of its own.
+            normal += if (spared) open.filterNot { end -> end in sources && normal.any { it.from == end.from && it.entry == end.entry && it.kind == EdgeKind.FLOW } } else open
         }
         frames.removeAt(frames.lastIndex)
         open = normal.distinct()
@@ -619,7 +780,8 @@ internal class GraphLayout(
         layout(flow.finally)
         val after = open
         for ((continuation, ends) in frame.leaving) {
-            open = ends.distinct()
+            // In an overview: a way out that only a call which is left out takes is taken from where the flow stood at that call.
+            open = ends.ifEmpty { frame.spareLeaving[continuation].orEmpty() }.distinct()
             layout(flow.finally)
             route(open, continuation)
         }
@@ -705,7 +867,7 @@ internal class GraphLayout(
             is Uncharted -> {
                 val parts = flow.parts.map(::prune)
                 // What is not modelled may pass by what it is handed: the flow goes on either way.
-                if (parts.none { it.hasContent }) emptied(parts, completes = true) else Uncharted(flow.marker, flow.location, parts)
+                if (parts.none { it.hasContent }) emptied(parts, completes = true) else Uncharted(flow.marker, flow.location, parts, flow.behind)
             }
         }
 
@@ -870,6 +1032,18 @@ internal class GraphLayout(
     // ---- what is not modelled
 
     private fun uncharted(flow: Uncharted) {
+        // An overview reads the code as run once, where it is handed over: no node says that nothing is known of that.
+        if (overview && (flow.marker != null || flow.behind?.firm == false)) {
+            flow.marker?.let { leaveOut(it, flow.location) }
+            val before = open
+            for (part in flow.parts) {
+                // What follows code that the flow does not go on from is reached past it, as in a full graph.
+                if (open.isEmpty()) open = before
+                layout(part)
+            }
+            if (open.isEmpty()) open = before
+            return
+        }
         flow.marker?.let { step(Step(it, flow.location)) }
         val anchor = open
         val after = LinkedHashSet(anchor)
@@ -885,6 +1059,9 @@ internal class GraphLayout(
         const val NO_BODY = "workflow method without a Kotlin body"
         const val NO_HANDLER_BODY = "handler without a Kotlin body"
         const val DETACHED = "detached"
+
+        /** The region of what is passed over and has no node: no region at all. */
+        const val NOWHERE = ""
 
         /** What the branch at a call asks that may fail, after the name of the function called. */
         const val THROWS = "throws?"

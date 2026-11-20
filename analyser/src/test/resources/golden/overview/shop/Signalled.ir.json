@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "detail": "overview",
+  "workflowType": "Signalled",
+  "interface": "shop.Signalled",
+  "implementation": "shop.SignalledImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Signalled",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-paid",
+      "kind": "signal",
+      "name": "paid",
+      "start": "n903338ed48",
+      "reads": [
+        "helper"
+      ],
+      "writes": [
+        "paid"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n2c177446c8",
+      "kind": "await",
+      "reads": [
+        "paid"
+      ],
+      "label": "paid",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Signalled.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n355c223ca3",
+      "kind": "end"
+    },
+    {
+      "id": "n65b08fa346",
+      "kind": "activity",
+      "name": "Ship",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Signalled.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Signalled.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n903338ed48",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Signalled.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n2c177446c8",
+      "to": "n65b08fa346"
+    },
+    {
+      "from": "n65b08fa346",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n2c177446c8"
+    },
+    {
+      "from": "n903338ed48",
+      "to": "n355c223ca3"
+    },
+    {
+      "from": "signal-paid",
+      "to": "n2c177446c8",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 6,
+    "unknown": 0
+  },
+  "leftOutCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Signalled.kt",
+        "line": 44
+      },
+      "reason": "unseen-code",
+      "label": "Helper.known",
+      "candidates": [
+        "shop.OrderRepository.find(kotlin.String)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Signalled.kt",
+        "line": 45
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    }
+  ]
+}

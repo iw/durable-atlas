@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Delegated",
+  "interface": "shop.Delegated",
+  "implementation": "shop.DelegatedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Delegated",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-stop",
+      "kind": "signal",
+      "name": "stop",
+      "start": "nec6da4d85f"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1126899241",
+      "kind": "unknown",
+      "label": "workflow method without a Kotlin body",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Delegated.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n2acd099355",
+      "kind": "unknown",
+      "label": "handler without a Kotlin body",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Delegated.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Delegated.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nb2fe49d2f1",
+      "kind": "end"
+    },
+    {
+      "id": "nec6da4d85f",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Delegated.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n1126899241",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n2acd099355",
+      "to": "nb2fe49d2f1"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n1126899241"
+    },
+    {
+      "from": "nec6da4d85f",
+      "to": "n2acd099355"
+    }
+  ],
+  "stats": {
+    "nodes": 6,
+    "unknown": 2
+  }
+}

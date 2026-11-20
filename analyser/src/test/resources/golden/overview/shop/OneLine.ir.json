@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "detail": "overview",
+  "workflowType": "OneLine",
+  "interface": "shop.OneLine",
+  "implementation": "shop.OneLineImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "OneLine",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/OneLine.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n70b2e87763",
+      "kind": "unknown",
+      "label": "Notifier.send",
+      "reason": "dynamic-dispatch",
+      "candidates": [
+        "shop.EmailNotifier",
+        "shop.SmsNotifier"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/OneLine.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "n9d351476ca",
+      "kind": "activity",
+      "name": "Ship",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/OneLine.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nff7df9a270",
+      "kind": "branch",
+      "label": "order.express",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/OneLine.kt",
+        "line": 37
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "n70b2e87763"
+    },
+    {
+      "from": "n70b2e87763",
+      "to": "nff7df9a270"
+    },
+    {
+      "from": "n9d351476ca",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nff7df9a270",
+      "to": "n9d351476ca",
+      "label": "yes"
+    },
+    {
+      "from": "nff7df9a270",
+      "to": "nedd528afe0",
+      "label": "no"
+    }
+  ],
+  "stats": {
+    "nodes": 5,
+    "unknown": 1
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/OneLine.kt",
+        "line": 36
+      },
+      "text": "traced(\"tell\") { notifier.send(order.id) }"
+    }
+  ],
+  "leftOutCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/OneLine.kt",
+        "line": 36
+      },
+      "reason": "unsupported",
+      "label": "traced"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/OneLine.kt",
+        "line": 37
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Cleaned",
+  "interface": "shop.Cleaned",
+  "implementation": "shop.CleanedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Cleaned",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n1fc1e80abd",
+      "kind": "activity",
+      "name": "Release",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Cleaned.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "n64b7f3d6e9",
+      "kind": "activity",
+      "name": "Release",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Cleaned.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Cleaned.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n7788c225ad",
+      "kind": "activity",
+      "name": "Notify",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Cleaned.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "nd3cfcde827",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Cleaned.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "ne3cf86720e",
+      "kind": "activity",
+      "name": "Reserve",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Cleaned.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n1fc1e80abd",
+      "to": "n7788c225ad",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "n1fc1e80abd",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n64b7f3d6e9",
+      "to": "n7788c225ad"
+    },
+    {
+      "from": "n64b7f3d6e9",
+      "to": "n7788c225ad",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "ne3cf86720e"
+    },
+    {
+      "from": "n7788c225ad",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nd3cfcde827",
+      "to": "n1fc1e80abd"
+    },
+    {
+      "from": "nd3cfcde827",
+      "to": "n64b7f3d6e9",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "ne3cf86720e",
+      "to": "nd3cfcde827"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 1
+  }
+}

@@ -54,6 +54,12 @@ internal class Step(
      * class of the sources implements. A step may lie behind it; none is certain to.
      */
     val firm: Boolean = true,
+    /**
+     * What the call is called that the node stands for, where the node does not say so itself:
+     * the function or method called. An overview names the call on every node of a call that
+     * could not be read, and lists by it the calls it leaves out (see [LeftOut]).
+     */
+    val called: String? = null,
 ) : Flow {
     /** True for a child workflow whose start the flow waits for, by waiting for its execution. */
     var startAwaited = false
@@ -327,6 +333,8 @@ internal class Uncharted(
     val marker: IrNode?,
     val location: SourceLocation,
     val parts: List<Flow>,
+    /** The step in front that stands for what is not modelled, where that is a call which is not followed. */
+    val behind: Step? = null,
 ) : Flow {
     override val hasContent: Boolean get() = true
 }

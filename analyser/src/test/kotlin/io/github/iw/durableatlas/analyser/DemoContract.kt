@@ -4,6 +4,7 @@ import io.github.iw.durableatlas.analyser.discovery.TemporalDiscovery
 import io.github.iw.durableatlas.analyser.graph.WorkflowGraphs
 import io.github.iw.durableatlas.analyser.testing.DemoModels
 import io.github.iw.durableatlas.analyser.testing.DemoSources
+import io.github.iw.durableatlas.ir.Detail
 import io.github.iw.durableatlas.ir.IrDocument
 import io.github.iw.durableatlas.ir.IrJson
 import io.github.iw.durableatlas.ir.ModelMode
@@ -72,6 +73,19 @@ abstract class DemoContract(protected val mode: ModelMode) {
         )
         // `Order.totalCents` and `warehouseWorkflowId` are followed and hold nothing: every node is a line of the workflow class.
         assertEquals(setOf("orders/src/main/kotlin/com/example/orders/OrderWorkflowImpl.kt"), actual.nodes.mapNotNull { it.loc?.file }.toSet())
+    }
+
+    @Test
+    fun `an overview of the demo leaves nothing out, and names the call that cannot be followed`() {
+        val backend = DemoSources.of(mode)
+        val overviews = WorkflowGraphs(backend, FIXED_COMMIT, mode, detail = Detail.OVERVIEW).extract(TemporalDiscovery.discover(backend))
+
+        assertEquals(listOf("OrderWorkflow"), assertOverviewsKeepTheSteps(documents, overviews) { _, _ -> })
+        val order = overviews.single { it.implementation == expected.implementation }
+        assertEquals(emptyList(), order.leftOutCalls)
+        // The node says which function was called, not only that one of two classes runs it.
+        assertEquals("DiscountPolicy.discountCents", order.nodesOf(NodeKind.UNKNOWN).single().label)
+        assertEquals(actual, order.copy(detail = null, nodes = order.nodes.map { if (it.kind == NodeKind.UNKNOWN) it.copy(label = null) else it }))
     }
 
     @Test

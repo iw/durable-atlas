@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "detail": "overview",
+  "workflowType": "Unseen",
+  "interface": "plain.Unseen",
+  "implementation": "plain.UnseenImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Unseen",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0b9bb16d4c",
+      "kind": "branch",
+      "label": "Events.build throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Unseen.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "n2135533b30",
+      "kind": "branch",
+      "label": "Builder.build throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Unseen.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "n2615af849a",
+      "kind": "fail",
+      "name": "IllegalArgumentException",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Unseen.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n4bef9400b2",
+      "kind": "activity",
+      "name": "Two",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Unseen.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "n624b3076ce",
+      "kind": "activity",
+      "name": "One",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Unseen.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Unseen.kt",
+        "line": 24
+      }
+    },
+    {
+      "id": "n7c81e1d13b",
+      "kind": "branch",
+      "label": "UnseenImpl.announce throws?",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Unseen.kt",
+        "line": 30
+      }
+    },
+    {
+      "id": "naca686d919",
+      "kind": "fail",
+      "label": "IllegalStateException, UnknownEvent",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Unseen.kt",
+        "line": 27
+      }
+    },
+    {
+      "id": "ncef7065ea4",
+      "kind": "fail",
+      "name": "IllegalStateException",
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Unseen.kt",
+        "line": 28
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0b9bb16d4c",
+      "to": "n2135533b30",
+      "label": "no"
+    },
+    {
+      "from": "n0b9bb16d4c",
+      "to": "naca686d919",
+      "label": "yes"
+    },
+    {
+      "from": "n2135533b30",
+      "to": "n4bef9400b2",
+      "label": "no"
+    },
+    {
+      "from": "n2135533b30",
+      "to": "ncef7065ea4",
+      "label": "yes"
+    },
+    {
+      "from": "n4bef9400b2",
+      "to": "n7c81e1d13b"
+    },
+    {
+      "from": "n624b3076ce",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n0b9bb16d4c"
+    },
+    {
+      "from": "n7c81e1d13b",
+      "to": "n2615af849a",
+      "label": "yes"
+    },
+    {
+      "from": "n7c81e1d13b",
+      "to": "n624b3076ce",
+      "label": "no"
+    }
+  ],
+  "stats": {
+    "nodes": 10,
+    "unknown": 0
+  },
+  "leftOutCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Unseen.kt",
+        "line": 25
+      },
+      "reason": "unseen-code",
+      "label": "Events.enriched",
+      "candidates": [
+        "plain.Enricher.enrich(plain.Event)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Unseen.kt",
+        "line": 26
+      },
+      "reason": "dynamic-dispatch",
+      "label": "Enricher.enrich"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Unseen.kt",
+        "line": 30
+      },
+      "reason": "unseen-code",
+      "label": "UnseenImpl.announce",
+      "candidates": [
+        "plain.Enricher.enrich(plain.Event)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/plain/Unseen.kt",
+        "line": 41
+      },
+      "reason": "dynamic-dispatch",
+      "label": "Enricher.enrich"
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Direct",
+  "interface": "shop.Direct",
+  "implementation": "shop.DirectImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Direct",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n325103c679",
+      "kind": "unknown",
+      "reason": "dynamic-dispatch",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Direct.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "n3ba65dbbc1",
+      "kind": "unknown",
+      "reason": "dynamic-dispatch",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Direct.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Direct.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n6dc0b6180b",
+      "kind": "activity",
+      "name": "Charge",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Direct.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "na4b1f43bac",
+      "kind": "activity",
+      "name": "Reserve",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Direct.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "nb96e2f29e8",
+      "kind": "unknown",
+      "reason": "dynamic-dispatch",
+      "candidates": [
+        "shop.EmailNotifier",
+        "shop.SmsNotifier"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Direct.kt",
+        "line": 43
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n325103c679",
+      "to": "na4b1f43bac"
+    },
+    {
+      "from": "n3ba65dbbc1",
+      "to": "n6dc0b6180b"
+    },
+    {
+      "from": "n3ba65dbbc1",
+      "to": "nb96e2f29e8"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n325103c679"
+    },
+    {
+      "from": "n6dc0b6180b",
+      "to": "nb96e2f29e8"
+    },
+    {
+      "from": "na4b1f43bac",
+      "to": "n3ba65dbbc1"
+    },
+    {
+      "from": "nb96e2f29e8",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 3
+  }
+}

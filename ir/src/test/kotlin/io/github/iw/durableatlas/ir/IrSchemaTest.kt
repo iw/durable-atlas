@@ -73,6 +73,8 @@ class IrSchemaTest {
         assertEquals(serialNames(ModelMode.serializer()), schemaEnum("properties", "modelMode"))
         assertEquals(serialNames(WaitsFor.serializer()), schemaEnum("\$defs", "node", "properties", "waitsFor"))
         assertEquals(serialNames(Join.serializer()), schemaEnum("\$defs", "node", "properties", "join"))
+        assertEquals(serialNames(Detail.serializer()), schemaEnum("properties", "detail"))
+        assertEquals(LeftOutCall.REASONS.toList(), schemaEnum("\$defs", "leftOutCall", "properties", "reason"))
     }
 
     @Test
@@ -84,6 +86,41 @@ class IrSchemaTest {
         assertEquals(serialNames(IrEdge.serializer()), schemaProperties("\$defs", "edge"))
         assertEquals(serialNames(IrStats.serializer()), schemaProperties("\$defs", "stats"))
         assertEquals(serialNames(SkippedCall.serializer()), schemaProperties("\$defs", "skippedCall"))
+        assertEquals(serialNames(LeftOutCall.serializer()), schemaProperties("\$defs", "leftOutCall"))
+    }
+
+    @Test
+    fun `an overview matches the schema where it says what it is and each call it leaves out has its place, its reason and its label`() {
+        val overview = SampleDocuments.orderWorkflow.copy(
+            detail = Detail.OVERVIEW,
+            leftOutCalls = listOf(
+                LeftOutCall(SourceLocation("orders/src/main/kotlin/Orders.kt", 9), UnknownReasons.UNSUPPORTED, "withRequestContext"),
+                LeftOutCall(
+                    SourceLocation("orders/src/main/kotlin/Orders.kt", 12),
+                    UnknownReasons.UNSEEN_CODE,
+                    "Events.enriched",
+                    listOf("com.example.orders.Enricher.enrich(com.example.orders.Event)"),
+                ),
+            ),
+        )
+        val text = IrJson.encode(overview)
+        checker.assertValid(text)
+        // An overview that left nothing out says what it is and no more, and a document may say that it shows everything.
+        checker.assertValid(IrJson.encode(SampleDocuments.orderWorkflow.copy(detail = Detail.OVERVIEW)))
+        checker.assertValid(IrJson.encode(SampleDocuments.orderWorkflow.copy(detail = Detail.FULL)))
+
+        val malformed = mapOf(
+            "a detail that is none" to text.replace("\"detail\": \"overview\"", "\"detail\": \"brief\""),
+            "a call without a label" to text.replace("\"label\": \"withRequestContext\"", "\"label\": \"\""),
+            "a call without a reason" to text.replace("      \"reason\": \"unsupported\",\n", ""),
+            "a call left out for a reason that keeps its node" to text.replace("\"reason\": \"unsupported\"", "\"reason\": \"depth-limit\""),
+            "a call with something else" to text.replace("\"label\": \"withRequestContext\"", "\"label\": \"withRequestContext\",\n      \"text\": \"withRequestContext(context) { }\""),
+            "an empty list" to valid.trimEnd().removeSuffix("}").trimEnd() + ",\n  \"leftOutCalls\": []\n}\n",
+        )
+        for ((description, changed) in malformed) {
+            assertTrue(changed != text && changed != valid, "$description: the sample was not changed")
+            assertTrue(checker.violations(changed).isNotEmpty(), "$description: expected a schema violation")
+        }
     }
 
     @Test

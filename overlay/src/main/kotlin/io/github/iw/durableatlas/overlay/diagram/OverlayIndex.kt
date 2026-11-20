@@ -146,7 +146,10 @@ internal object OverlayIndex {
                 }
             }
         }
-        val behind = OverlayTexts.behindSkipped(events.size, workflow.skippedCalls)?.let { listOf("", "$it The IR file of the workflow lists them.") }.orEmpty()
+        val behind = listOfNotNull(
+            OverlayTexts.behindSkipped(events.size, workflow.skippedCalls),
+            OverlayTexts.behindLeftOut(events.size, workflow.leftOutCalls),
+        ).flatMap { listOf("", "$it The IR file of the workflow lists them.") }
         return (listOf("Events without a node:", "") + lines + behind).joinToString("\n")
     }
 

@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Forever",
+  "interface": "shop.Forever",
+  "implementation": "shop.ForeverImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Forever",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0c85b49d8a",
+      "kind": "unknown",
+      "label": "Helper.poll",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.next()"
+      ],
+      "parent": "n8e4019cd4b",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Forever.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Forever.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n8e4019cd4b",
+      "kind": "loop",
+      "label": "while true",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Forever.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "nf35397c897",
+      "kind": "activity",
+      "name": "Audit",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Forever.kt",
+        "line": 35
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "nf35397c897"
+    },
+    {
+      "from": "nf35397c897",
+      "to": "n8e4019cd4b"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 1
+  }
+}

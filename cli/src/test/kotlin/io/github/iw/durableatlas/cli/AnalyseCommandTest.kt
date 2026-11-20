@@ -52,9 +52,11 @@ class AnalyseCommandTest {
         assertEquals(ExitCode.SUCCESS, result.statusCode, result.stderr)
         val summary = result.summary()
         assertEquals(
-            listOf("command", "commit", "mode", "inventory", "workflows", "activityInterfaces", "standaloneActivities", "warnings"),
+            listOf("command", "commit", "mode", "detail", "inventory", "workflows", "activityInterfaces", "standaloneActivities", "warnings"),
             summary.keys.toList(),
         )
+        // What is written is an overview unless it is asked for in full.
+        assertEquals("overview", summary.text("detail"))
         assertEquals("analyse", summary.text("command"))
         assertEquals(SampleModels.degraded.index.commit, summary.text("commit"))
         assertEquals("degraded", summary.text("mode"))

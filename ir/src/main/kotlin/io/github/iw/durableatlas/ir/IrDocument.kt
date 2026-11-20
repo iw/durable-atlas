@@ -57,6 +57,11 @@ data class IrDocument(
     val commit: String,
     val modelMode: ModelMode,
     /**
+     * How much of what the analysis could not read the document shows. Unset in a document that
+     * shows all of it, which reads like one that says [Detail.FULL]. See [Detail].
+     */
+    val detail: Detail? = null,
+    /**
      * Workflow type name as registered with Temporal. A class that runs for every workflow type
      * without an implementation of its own has no such name: it is called `dynamic-` followed by
      * the simple name of the class, and its interface is the SDK's `DynamicWorkflow`.
@@ -79,6 +84,11 @@ data class IrDocument(
      * ordered by place. Only a document of a [ModelMode.DEGRADED] model has any; see [SkippedCall].
      */
     val skippedCalls: List<SkippedCall> = emptyList(),
+    /**
+     * The calls that the document has no node for because it is an overview, ordered by place.
+     * Only a document whose [detail] is [Detail.OVERVIEW] has any; see [LeftOutCall].
+     */
+    val leftOutCalls: List<LeftOutCall> = emptyList(),
 ) {
     /** Whether the document is that of a class that runs for every workflow type without an implementation of its own. */
     val isDynamic: Boolean get() = interfaceName == DYNAMIC_INTERFACE
@@ -102,6 +112,75 @@ enum class ModelMode {
     /** The model came from a file system scan, after Gradle extraction was skipped or failed. */
     @SerialName("degraded")
     DEGRADED,
+}
+
+/**
+ * How much of what the analysis could not read a document shows.
+ *
+ * An `unknown` node stands for a call the analysis could not read. Behind some of these calls a
+ * step of the workflow is certain; behind the others one is only possible, and most of them hold
+ * none. A document that shows them all says exactly where the analysis ran out, and a workflow
+ * that calls much code of that kind is hard to read for it.
+ */
+@Serializable
+enum class Detail {
+    /** Every call the analysis could not read has its node. */
+    @SerialName("full")
+    FULL,
+
+    /**
+     * Only the calls behind which a step is certain have a node. The others have none, and
+     * [IrDocument.leftOutCalls] lists them:
+     *
+     * - A call that is not modelled and is handed code ([UnknownReasons.UNSUPPORTED]): what the
+     *   code holds stands in the flow where the call is made, once, as if the call ran it there.
+     * - A call that leads to a function without a body that no class of the analysed sources
+     *   implements ([UnknownReasons.UNSEEN_CODE], and [UnknownReasons.DYNAMIC_DISPATCH] without
+     *   candidates).
+     *
+     * A branch, a loop or a lane that held nothing else is gone with them. Every other node is
+     * the one a [FULL] document of the same sources has, with the same id, and no way leads
+     * from one of them to the next that the full document does not have. An `unknown` node
+     * that stays names its call in [IrNode.label], also where the full document's has none.
+     *
+     * Two things of the full document stay although they hang on a call that is left out. A
+     * clause, or a copy of a `finally` block, that only a failure of such a call reaches is
+     * still entered: its `exception` edge starts where the flow stood at the call. And a loop
+     * that the flow never gets past is not emptied: it stays as the full document has it,
+     * with the `unknown` nodes in it.
+     */
+    @SerialName("overview")
+    OVERVIEW,
+}
+
+/**
+ * A call that a document has no node for because it is an overview ([Detail.OVERVIEW]): the
+ * `unknown` node that a full document of the same sources has in its place, without its id.
+ *
+ * The calls are listed so that none goes missing unseen. A call is listed once, however often
+ * the code it stands in is drawn.
+ */
+@Serializable
+data class LeftOutCall(
+    /** Where the call is written. */
+    val loc: SourceLocation,
+    /**
+     * Why the call could not be read: [UnknownReasons.UNSUPPORTED], [UnknownReasons.UNSEEN_CODE]
+     * or [UnknownReasons.DYNAMIC_DISPATCH].
+     */
+    val reason: String,
+    /** What is called: the function, or what the code handed over is. */
+    val label: String,
+    /**
+     * For [UnknownReasons.UNSEEN_CODE]: the functions without a body that are called behind the
+     * call and that no class of the analysed sources implements.
+     */
+    val candidates: List<String> = emptyList(),
+) {
+    companion object {
+        /** The reasons a call is left out of an overview for. */
+        val REASONS: Set<String> = setOf(UnknownReasons.UNSUPPORTED, UnknownReasons.UNSEEN_CODE, UnknownReasons.DYNAMIC_DISPATCH)
+    }
 }
 
 /**

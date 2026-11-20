@@ -13,6 +13,7 @@ import io.github.iw.durableatlas.cli.StageCommand
 import io.github.iw.durableatlas.cli.Stages
 import io.github.iw.durableatlas.cli.Summaries
 import io.github.iw.durableatlas.cli.Unresolved
+import io.github.iw.durableatlas.ir.Detail
 import io.github.iw.durableatlas.ir.IrStats
 import io.github.iw.durableatlas.ir.ModelMode
 import io.github.iw.durableatlas.modelextractor.ModelRequest
@@ -68,6 +69,7 @@ class RunCommand : StageCommand(
     )
         .path(mustExist = true, canBeFile = false)
     private val maxDepth: Int by maxDepthOption()
+    private val detail: Detail by detailOption()
     private val maxUnresolvedPct: Double? by maxUnresolvedPctOption()
     private val diagrams by DiagramOptions()
 
@@ -81,7 +83,7 @@ class RunCommand : StageCommand(
         }
         // The model knows the commit by its full SHA, however --commit named it.
         val irDirectory = root.resolve(IR_DIRECTORY).resolve(model.commit)
-        attempt { stages.analyse(AnalysisRequest(model = model.directory, out = irDirectory, jdkHome = jdkHome, maxDepth = maxDepth)) }
+        attempt { stages.analyse(AnalysisRequest(model = model.directory, out = irDirectory, jdkHome = jdkHome, maxDepth = maxDepth, detail = detail)) }
         val diagramsDirectory = root.resolve(DIAGRAMS_DIRECTORY).resolve(model.commit)
         val rendered = attempt { stages.renderAlone(irDirectory, diagramsDirectory, diagrams.directoryOptions(ProgressLines(::log))) }
 
@@ -114,6 +116,8 @@ class RunCommand : StageCommand(
             put("command", commandName)
             put("commit", model.commit)
             put("mode", model.mode.name.lowercase())
+            // Only an overview says what it is, as its IR files do.
+            if (detail == Detail.OVERVIEW) put("detail", detail.name.lowercase())
             put("cached", model.cached)
             put("fallback", model.fallback)
             put("model", model.directory.toString())
@@ -135,6 +139,7 @@ class RunCommand : StageCommand(
                                 put("unknownPct", Unresolved.rounded(Unresolved.percentage(diagram.stats())))
                                 // Only a workflow whose document left calls out says how many.
                                 if (diagram.skippedCalls > 0) put("skipped", diagram.skippedCalls)
+                                if (diagram.leftOutCalls > 0) put("leftOut", diagram.leftOutCalls)
                                 put("overThreshold", diagram in overThreshold)
                                 put("ir", irDirectory.resolve(diagram.irFile).toString())
                                 put("files", Summaries.files(rendered, diagram))
@@ -151,19 +156,24 @@ class RunCommand : StageCommand(
     private fun describe(model: ModelResult, rendered: RenderSummary): String =
         buildString {
             val names = Summaries.workflowNames(rendered.diagrams.map { Summaries.Listed(it.workflowType, it.implementation, it.dynamic) })
-            // The column is there only where calls were left out, which a degraded model alone does.
+            // Each of the two columns is there only where calls were left out: as calls into libraries, which a
+            // degraded model alone does, or as calls an overview has no node for.
             val skipping = rendered.diagrams.any { it.skippedCalls > 0 }
+            val leaving = rendered.diagrams.any { it.leftOutCalls > 0 }
             val rows = rendered.diagrams.mapIndexed { index, diagram ->
                 listOf(names[index], diagram.nodes.toString(), diagram.unknown.toString()) +
                     listOf(diagram.skippedCalls.toString()).takeIf { skipping }.orEmpty() +
+                    listOf(diagram.leftOutCalls.toString()).takeIf { leaving }.orEmpty() +
                     diagram.files.joinToString(", ") { rendered.outDir.resolve(it.file).toString() }
             }
-            val header = TABLE_HEADER.dropLast(1) + listOf(SKIPPED_COLUMN).takeIf { skipping }.orEmpty() + TABLE_HEADER.last()
-            append(Summaries.table(header, rows, rightAligned = if (skipping) setOf(1, 2, 3) else setOf(1, 2))).append('\n')
+            val counted = listOf(SKIPPED_COLUMN).takeIf { skipping }.orEmpty() + listOf(LEFT_OUT_COLUMN).takeIf { leaving }.orEmpty()
+            val header = TABLE_HEADER.dropLast(1) + counted + TABLE_HEADER.last()
+            append(Summaries.table(header, rows, rightAligned = (1..2 + counted.size).toSet())).append('\n')
             append("${rendered.diagrams.size} workflow(s) drawn from the ${model.mode.name.lowercase()} model of ${model.commit}\n")
             if (skipping) {
                 append("${rendered.diagrams.sumOf { it.skippedCalls }} unresolved call(s) taken for calls into libraries and not drawn, listed on the page of each workflow\n")
             }
+            if (leaving) append("${Summaries.leftOut(rendered.diagrams.sumOf { it.leftOutCalls })}, listed on the page of each workflow\n")
             Summaries.shortfallLines(rendered.diagrams.mapIndexed { index, diagram -> Summaries.Shortfall(names[index], diagram.missing, diagram.simplified) })
                 .forEach { append(it).append('\n') }
             append(rendered.outDir.resolve(rendered.index))
@@ -177,5 +187,6 @@ class RunCommand : StageCommand(
 
         private val TABLE_HEADER = listOf("Workflow type", "Nodes", "Unknown", "File")
         private const val SKIPPED_COLUMN = "Skipped"
+        private const val LEFT_OUT_COLUMN = "Left out"
     }
 }

@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Helped",
+  "interface": "shop.Helped",
+  "implementation": "shop.HelpedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Helped",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n091ffd2427",
+      "kind": "unknown",
+      "label": "Helper.describe",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderMapper.toText(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Helped.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n0ded32ed66",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Helped.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n4b1155820a",
+      "kind": "unknown",
+      "label": "Helper.price",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.PricingClient.quote(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Helped.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Helped.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n6aa16baedb",
+      "kind": "activity",
+      "name": "Charge",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Helped.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "nc1de7d1d5c",
+      "kind": "activity",
+      "name": "Reserve",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Helped.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n091ffd2427",
+      "to": "nc1de7d1d5c"
+    },
+    {
+      "from": "n0ded32ed66",
+      "to": "n4b1155820a"
+    },
+    {
+      "from": "n4b1155820a",
+      "to": "n6aa16baedb"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n091ffd2427"
+    },
+    {
+      "from": "n6aa16baedb",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nc1de7d1d5c",
+      "to": "n0ded32ed66"
+    }
+  ],
+  "stats": {
+    "nodes": 7,
+    "unknown": 3
+  }
+}

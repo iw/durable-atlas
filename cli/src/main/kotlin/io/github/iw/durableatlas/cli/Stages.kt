@@ -82,6 +82,14 @@ internal class Stages(private val log: (String) -> Unit) {
                     "Each IR file lists its own under skippedCalls",
             )
         }
+        val leftOut = result.workflows.map { it.document.leftOutCalls }
+        if (leftOut.any { it.isNotEmpty() }) {
+            log(
+                "${leftOut.sumOf { it.size }} call(s) that could not be read and behind which a step is only possible have no node in this overview: " +
+                    "${leftOut.flatten().distinct().size} place(s) in the sources, met in ${leftOut.count { it.isNotEmpty() }} of ${leftOut.size} workflow(s). " +
+                    "Each IR file lists its own under leftOutCalls; --detail full draws each as an unknown node",
+            )
+        }
         if (result.failures.isNotEmpty()) {
             result.failures.dropLast(1).forEach { log("failed: $it") }
             throw StageFailure(result.failures.last())

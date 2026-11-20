@@ -11,6 +11,7 @@ import io.github.iw.durableatlas.cli.StageCommand
 import io.github.iw.durableatlas.cli.Stages
 import io.github.iw.durableatlas.cli.Summaries
 import io.github.iw.durableatlas.cli.Unresolved
+import io.github.iw.durableatlas.ir.Detail
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.add
 import kotlinx.serialization.json.buildJsonArray
@@ -31,6 +32,7 @@ class AnalyseCommand : StageCommand(
         .required()
     private val workflow: String? by option("--workflow", metavar = "type", help = "Write the IR of this workflow type only.")
     private val maxDepth: Int by maxDepthOption()
+    private val detail: Detail by detailOption()
     private val maxUnresolvedPct: Double? by maxUnresolvedPctOption()
     private val jdkHome: Path? by option(
         "--jdk-home",
@@ -40,7 +42,7 @@ class AnalyseCommand : StageCommand(
         .path(mustExist = true, canBeFile = false)
 
     override fun run() {
-        val request = AnalysisRequest(model = model, out = out, jdkHome = jdkHome, workflowType = workflow, maxDepth = maxDepth)
+        val request = AnalysisRequest(model = model, out = out, jdkHome = jdkHome, workflowType = workflow, maxDepth = maxDepth, detail = detail)
         val result = attempt { Stages(::log).analyse(request) }
         val selected = workflow
         if (selected != null && result.inventory.workflows.none { it.workflowType == selected }) {
@@ -63,6 +65,8 @@ class AnalyseCommand : StageCommand(
             put("command", commandName)
             put("commit", inventory.commit)
             put("mode", inventory.modelMode.name.lowercase())
+            // Only an overview says what it is, as its IR files do.
+            if (detail == Detail.OVERVIEW) put("detail", detail.name.lowercase())
             put("inventory", result.inventoryFile.toString())
             put(
                 "workflows",
@@ -108,6 +112,7 @@ class AnalyseCommand : StageCommand(
             put("unknown", workflow.document.stats.unknown)
             // Only a document that left calls out says how many.
             if (workflow.document.skippedCalls.isNotEmpty()) put("skipped", workflow.document.skippedCalls.size)
+            if (workflow.document.leftOutCalls.isNotEmpty()) put("leftOut", workflow.document.leftOutCalls.size)
         }
 
     private fun describe(result: AnalysisResult): String =
@@ -122,5 +127,7 @@ class AnalyseCommand : StageCommand(
             append("${result.workflows.size} IR file(s) in ${result.inventoryFile.parent}")
             val skipped = result.workflows.sumOf { it.document.skippedCalls.size }
             if (skipped > 0) append("\n$skipped unresolved call(s) taken for calls into libraries and not drawn, listed in the IR files")
+            val leftOut = result.workflows.sumOf { it.document.leftOutCalls.size }
+            if (leftOut > 0) append("\n${Summaries.leftOut(leftOut)}, listed in the IR files")
         }
 }

@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "detail": "overview",
+  "workflowType": "Stored",
+  "interface": "shop.Stored",
+  "implementation": "shop.StoredImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Stored",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Stored.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n8272ebf935",
+      "kind": "activity",
+      "name": "Ship",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Stored.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "nc6f142e59d",
+      "kind": "activity",
+      "name": "Audit",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Stored.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n696bb56a3b",
+      "to": "nc6f142e59d"
+    },
+    {
+      "from": "n8272ebf935",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nc6f142e59d",
+      "to": "n8272ebf935"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 0
+  },
+  "leftOutCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Stored.kt",
+        "line": 36
+      },
+      "reason": "unsupported",
+      "label": "lambda"
+    }
+  ]
+}

@@ -33,4 +33,17 @@ object GoldenFiles {
             fail("Golden file $relativePath differs in its byte encoding")
         }
     }
+
+    /**
+     * Checks that there is no golden file [relativePath]: nothing gives its text any more. When
+     * the files are rewritten, one that is left over is removed.
+     */
+    fun assertAbsent(relativePath: String) {
+        val file = root.resolve(relativePath)
+        if (System.getProperty(UPDATE_PROPERTY).toBoolean()) {
+            Files.deleteIfExists(file)
+            return
+        }
+        if (Files.exists(file)) fail("Golden file ${file.toAbsolutePath()} is left over; rerun with -D$UPDATE_PROPERTY=true to remove it")
+    }
 }

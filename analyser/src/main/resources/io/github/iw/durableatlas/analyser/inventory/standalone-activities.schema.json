@@ -31,7 +31,7 @@
       "items": { "$ref": "#/$defs/activity" }
     },
     "unresolvedWorkflows": {
-      "description": "Workflow types with a call the analysis could not follow, or without a graph, ordered by name. A listed activity may be called from one of them.",
+      "description": "Workflow types with a call the analysis could not follow, whether it has an unknown node or was left out of an overview, or without a graph, ordered by name. A listed activity may be called from one of them.",
       "type": "array",
       "items": { "$ref": "#/$defs/nonEmptyString" },
       "uniqueItems": true

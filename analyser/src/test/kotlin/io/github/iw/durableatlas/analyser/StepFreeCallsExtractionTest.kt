@@ -99,6 +99,12 @@ class StepFreeCallsExtractionTest {
     }
 
     @Test
+    fun `an overview keeps every step of the full document, and its golden file is there where it differs`() {
+        // One workflow calls what no class implements, itself and through a helper: those four nodes are gone.
+        assertEquals(listOf("Unseen"), assertOverviewsKeepTheSteps(backend, discovery, "overview/stepfree"))
+    }
+
+    @Test
     fun `sparing the functions that hold nothing changes no graph`() {
         assertTrue(assertSparingChangesNothing(backend, discovery) > 0)
     }

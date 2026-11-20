@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "detail": "overview",
+  "workflowType": "Nested",
+  "interface": "shop.Nested",
+  "implementation": "shop.NestedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Nested",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n048c6601ef",
+      "kind": "activity",
+      "name": "Ship",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Nested.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "n2718a9ce28",
+      "kind": "activity",
+      "name": "Reserve",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Nested.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n58e69d63c0",
+      "kind": "activity",
+      "name": "Charge",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Nested.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Nested.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n048c6601ef",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n2718a9ce28",
+      "to": "n58e69d63c0"
+    },
+    {
+      "from": "n58e69d63c0",
+      "to": "n048c6601ef"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n2718a9ce28"
+    }
+  ],
+  "stats": {
+    "nodes": 5,
+    "unknown": 0
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Nested.kt",
+        "line": 33
+      },
+      "text": "RequestContext(\"shop\", \"worker\")"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Nested.kt",
+        "line": 34
+      },
+      "text": "Tracer(\"shop\")"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Nested.kt",
+        "line": 37
+      },
+      "text": "tracer.span(\"order\") { withRequestContext(context) { steps.reserve(id) retrying…"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Nested.kt",
+        "line": 38
+      },
+      "text": "withRequestContext(context) { steps.reserve(id) retrying(3) { steps.charge(id) …"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Nested.kt",
+        "line": 40
+      },
+      "text": "retrying(3) { steps.charge(id) }"
+    }
+  ],
+  "leftOutCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Nested.kt",
+        "line": 37
+      },
+      "reason": "unsupported",
+      "label": "span"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Nested.kt",
+        "line": 38
+      },
+      "reason": "unsupported",
+      "label": "withRequestContext"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Nested.kt",
+        "line": 40
+      },
+      "reason": "unsupported",
+      "label": "retrying"
+    }
+  ]
+}

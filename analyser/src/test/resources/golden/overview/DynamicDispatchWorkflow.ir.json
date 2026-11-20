@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "gradle",
+  "detail": "overview",
+  "workflowType": "DynamicDispatchWorkflow",
+  "interface": "com.example.fixture.workflows.hardcases.DynamicDispatchWorkflow",
+  "implementation": "com.example.fixture.workflows.hardcases.DynamicDispatchWorkflowImpl",
+  "module": ":workflows",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "DynamicDispatchWorkflow",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n5716450e96",
+      "kind": "unknown",
+      "label": "Notifier.notify",
+      "reason": "dynamic-dispatch",
+      "candidates": [
+        "com.example.fixture.helpers.EmailNotifier",
+        "com.example.fixture.helpers.SmsNotifier"
+      ],
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/hardcases/DynamicDispatchWorkflow.kt",
+        "line": 23
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "workflows/src/main/kotlin/com/example/fixture/workflows/hardcases/DynamicDispatchWorkflow.kt",
+        "line": 20
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n5716450e96",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n5716450e96"
+    }
+  ],
+  "stats": {
+    "nodes": 3,
+    "unknown": 1
+  }
+}

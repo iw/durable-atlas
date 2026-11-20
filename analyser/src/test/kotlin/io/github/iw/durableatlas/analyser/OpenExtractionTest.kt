@@ -61,6 +61,11 @@ class OpenExtractionTest {
     private fun whole(implementation: String): List<String> = document(implementation).outline()
 
     @Test
+    fun `an overview keeps every step of the full document, and its golden file is there where it differs`() {
+        assertEquals(emptyList<String>(), assertOverviewsKeepTheSteps(backend, discovery, "overview/open"))
+    }
+
+    @Test
     fun `every document is well formed and gives the golden IR`() {
         val names = IrFiles.names(documents).map { it.removeSuffix(IrFiles.SUFFIX) }
         assertEquals(OpenSources.FILES.keys - OpenSources.SHARED, names.toSet())

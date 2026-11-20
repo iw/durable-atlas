@@ -153,6 +153,9 @@ internal object Summaries {
 
     private const val NANOS = 1e9
 
+    /** What a command says of the calls that the overviews it made have no node for, where there are any. */
+    fun leftOut(count: Int): String = "$count call(s) that could not be read left out of the overview (--detail full draws each as an unknown node)"
+
     /** A table for people: columns as wide as their widest cell, two spaces apart. */
     fun table(header: List<String>, rows: List<List<String>>, rightAligned: Set<Int> = emptySet()): String {
         val lines = listOf(header) + rows

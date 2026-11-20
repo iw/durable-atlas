@@ -23,6 +23,9 @@ object SvgDocuments {
     /** The documents the analyser's tests expect for the sample repository. */
     private val analysed: Path = Path.of("..", "analyser", "src", "test", "resources", "golden", "ir")
 
+    /** The overviews the analyser's tests expect of the same sources, where they differ from the full documents. */
+    private val overviews: Path = Path.of("..", "analyser", "src", "test", "resources", "golden", "overview")
+
     /**
      * Documents in which the label of an edge once had no place: a call that may throw, or a step
      * that may fail, with a clause below it that runs a step, where what stands beside the two
@@ -46,6 +49,11 @@ object SvgDocuments {
         Files.walk(analysed).use { paths ->
             paths.filter { it.isRegularFile() && it.name.endsWith(".ir.json") }.sorted().forEach {
                 documents["analyser/${analysed.relativize(it).toString().removeSuffix(".ir.json")}"] = IrJson.decode(Files.readString(it))
+            }
+        }
+        Files.walk(overviews).use { paths ->
+            paths.filter { it.isRegularFile() && it.name.endsWith(".ir.json") }.sorted().forEach {
+                documents["overview/${overviews.relativize(it).toString().removeSuffix(".ir.json")}"] = IrJson.decode(Files.readString(it))
             }
         }
         documents["made/saga"] = saga(12)

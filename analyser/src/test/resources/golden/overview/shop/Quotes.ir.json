@@ -1,0 +1,416 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "detail": "overview",
+  "workflowType": "Quotes",
+  "interface": "shop.Quotes",
+  "implementation": "shop.QuotesImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Quotes",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n131197ed74",
+      "kind": "fail",
+      "name": "BadQuote",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 78
+      }
+    },
+    {
+      "id": "n1b37164d73",
+      "kind": "branch",
+      "label": "order.express",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 67
+      }
+    },
+    {
+      "id": "n2c2289400e",
+      "kind": "activity",
+      "name": "Notify",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 67
+      }
+    },
+    {
+      "id": "n2f2144ea74",
+      "kind": "activity",
+      "name": "Charge",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 80
+      }
+    },
+    {
+      "id": "n4421ba4bee",
+      "kind": "activity",
+      "name": "Audit",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 50
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "nc0bbeb51d7",
+      "kind": "branch",
+      "label": "total > 1000 || helper.known(order.id)",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 65
+      }
+    },
+    {
+      "id": "nc7c8510799",
+      "kind": "branch",
+      "label": "discounted < 0",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 76
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n1b37164d73",
+      "to": "n2c2289400e",
+      "label": "no"
+    },
+    {
+      "from": "n1b37164d73",
+      "to": "nc7c8510799",
+      "label": "yes"
+    },
+    {
+      "from": "n2c2289400e",
+      "to": "nc7c8510799"
+    },
+    {
+      "from": "n2f2144ea74",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n4421ba4bee",
+      "to": "nc0bbeb51d7"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n4421ba4bee"
+    },
+    {
+      "from": "nc0bbeb51d7",
+      "to": "n1b37164d73",
+      "label": "yes"
+    },
+    {
+      "from": "nc0bbeb51d7",
+      "to": "nc7c8510799",
+      "label": "no"
+    },
+    {
+      "from": "nc7c8510799",
+      "to": "n131197ed74",
+      "label": "yes"
+    },
+    {
+      "from": "nc7c8510799",
+      "to": "n2f2144ea74",
+      "label": "no"
+    }
+  ],
+  "stats": {
+    "nodes": 9,
+    "unknown": 0
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 39
+      },
+      "text": "RequestContext(\"shop\", \"quotes\")"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 66
+      },
+      "text": "withRequestContext(context) { if (order.express) helper.remember(order) else st…"
+    }
+  ],
+  "leftOutCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 42
+      },
+      "reason": "dynamic-dispatch",
+      "label": "OrderRepository.find"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 42
+      },
+      "reason": "unseen-code",
+      "label": "Helper.poll",
+      "candidates": [
+        "shop.OrderRepository.next()"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 44
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 46
+      },
+      "reason": "dynamic-dispatch",
+      "label": "OrderMapper.toText"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 48
+      },
+      "reason": "dynamic-dispatch",
+      "label": "OrderMapper.toText"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 48
+      },
+      "reason": "unseen-code",
+      "label": "Helper.describe",
+      "candidates": [
+        "shop.OrderMapper.toText(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 49
+      },
+      "reason": "dynamic-dispatch",
+      "label": "PricingClient.quote"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 49
+      },
+      "reason": "unseen-code",
+      "label": "Helper.price",
+      "candidates": [
+        "shop.PricingClient.quote(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 55
+      },
+      "reason": "unseen-code",
+      "label": "Helper.price",
+      "candidates": [
+        "shop.PricingClient.quote(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 56
+      },
+      "reason": "dynamic-dispatch",
+      "label": "PricingClient.quote"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 57
+      },
+      "reason": "dynamic-dispatch",
+      "label": "PricingClient.quote"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 59
+      },
+      "reason": "unseen-code",
+      "label": "Helper.known",
+      "candidates": [
+        "shop.OrderRepository.find(kotlin.String)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 60
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 64
+      },
+      "reason": "dynamic-dispatch",
+      "label": "OrderMapper.toText"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 64
+      },
+      "reason": "unseen-code",
+      "label": "Helper.describe",
+      "candidates": [
+        "shop.OrderMapper.toText(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 65
+      },
+      "reason": "unseen-code",
+      "label": "Helper.known",
+      "candidates": [
+        "shop.OrderRepository.find(kotlin.String)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 66
+      },
+      "reason": "unsupported",
+      "label": "withRequestContext"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 67
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 70
+      },
+      "reason": "unseen-code",
+      "label": "Helper.price",
+      "candidates": [
+        "shop.PricingClient.quote(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 72
+      },
+      "reason": "unseen-code",
+      "label": "Helper.describe",
+      "candidates": [
+        "shop.OrderMapper.toText(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 72
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 73
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 74
+      },
+      "reason": "dynamic-dispatch",
+      "label": "OrderMapper.toText"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 74
+      },
+      "reason": "unseen-code",
+      "label": "Helper.known",
+      "candidates": [
+        "shop.OrderRepository.find(kotlin.String)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Quotes.kt",
+        "line": 77
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    }
+  ]
+}

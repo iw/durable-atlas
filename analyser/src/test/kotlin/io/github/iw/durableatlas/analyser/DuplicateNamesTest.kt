@@ -105,6 +105,11 @@ class DuplicateNamesTest {
     }
 
     @Test
+    fun `an overview keeps every step of the full document, and its golden file is there where it differs`() {
+        assertEquals(emptyList<String>(), assertOverviewsKeepTheSteps(merged, mergedDiscovery, "overview/twice"))
+    }
+
+    @Test
     fun `every document is well formed, a workflow that is declared twice is drawn once, and nothing is taken for a call into a library`() {
         val types = listOf("OnlyA", "OnlyB", "Twice")
         for (documents in listOf(one, two)) {

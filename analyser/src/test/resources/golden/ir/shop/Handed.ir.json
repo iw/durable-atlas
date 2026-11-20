@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Handed",
+  "interface": "shop.Handed",
+  "implementation": "shop.HandedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Handed",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0028f980fa",
+      "kind": "activity",
+      "name": "Ship",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Handed.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Handed.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n8d4882d84f",
+      "kind": "activity",
+      "name": "Charge",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Handed.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "ne91010beda",
+      "kind": "unknown",
+      "label": "traced",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Helper.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0028f980fa",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "ne91010beda"
+    },
+    {
+      "from": "n8d4882d84f",
+      "to": "n0028f980fa"
+    },
+    {
+      "from": "ne91010beda",
+      "to": "n0028f980fa"
+    },
+    {
+      "from": "ne91010beda",
+      "to": "n8d4882d84f"
+    }
+  ],
+  "stats": {
+    "nodes": 5,
+    "unknown": 1
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Helper.kt",
+        "line": 40
+      },
+      "text": "traced(action, block)"
+    }
+  ]
+}

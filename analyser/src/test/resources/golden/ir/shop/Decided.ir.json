@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Decided",
+  "interface": "shop.Decided",
+  "implementation": "shop.DecidedImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Decided",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n12b697242a",
+      "kind": "branch",
+      "label": "helper.known(order.id)",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Decided.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "n43dfbfb789",
+      "kind": "unknown",
+      "label": "Helper.price",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.PricingClient.quote(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Decided.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Decided.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n868a0d5247",
+      "kind": "activity",
+      "name": "Notify",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Decided.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "nccedb3ea01",
+      "kind": "activity",
+      "name": "Ship",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Decided.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "ndab87ac463",
+      "kind": "branch",
+      "label": "helper.price(order) > 100",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Decided.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "ndf0a95c49c",
+      "kind": "unknown",
+      "label": "Helper.known",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.find(kotlin.String)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Decided.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n12b697242a",
+      "to": "n43dfbfb789",
+      "label": "no"
+    },
+    {
+      "from": "n12b697242a",
+      "to": "n868a0d5247",
+      "label": "yes"
+    },
+    {
+      "from": "n43dfbfb789",
+      "to": "ndab87ac463"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "ndf0a95c49c"
+    },
+    {
+      "from": "n868a0d5247",
+      "to": "n43dfbfb789"
+    },
+    {
+      "from": "nccedb3ea01",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "ndab87ac463",
+      "to": "nccedb3ea01",
+      "label": "no"
+    },
+    {
+      "from": "ndab87ac463",
+      "to": "nedd528afe0",
+      "label": "yes"
+    },
+    {
+      "from": "ndf0a95c49c",
+      "to": "n12b697242a"
+    }
+  ],
+  "stats": {
+    "nodes": 8,
+    "unknown": 2
+  }
+}

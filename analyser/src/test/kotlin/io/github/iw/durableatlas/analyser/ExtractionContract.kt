@@ -6,6 +6,7 @@ import io.github.iw.durableatlas.analyser.discovery.TemporalDiscovery
 import io.github.iw.durableatlas.analyser.graph.IrFiles
 import io.github.iw.durableatlas.analyser.graph.WorkflowGraphs
 import io.github.iw.durableatlas.analyser.testing.SampleSources
+import io.github.iw.durableatlas.ir.Detail
 import io.github.iw.durableatlas.ir.EdgeKind
 import io.github.iw.durableatlas.ir.EntryPoint
 import io.github.iw.durableatlas.ir.EntryPointKind
@@ -42,6 +43,12 @@ abstract class ExtractionContract(protected val mode: ModelMode) {
     /** Compares the document of a workflow whose IR is final with its golden file. */
     protected abstract fun assertGolden(workflowType: String, document: IrDocument)
 
+    /**
+     * Compares the overview of a workflow with its golden file, if it differs from the full
+     * document; [overview] is `null` if it does not, and there is no such file then.
+     */
+    protected abstract fun assertOverviewGolden(workflowType: String, overview: IrDocument?)
+
     /** The document of a workflow type when calls are followed [maxDepth] deep. */
     protected fun document(workflowType: String, maxDepth: Int): IrDocument {
         val workflow = discovery.workflows.single { it.name == workflowType }
@@ -52,6 +59,13 @@ abstract class ExtractionContract(protected val mode: ModelMode) {
     fun `every workflow type gives the golden IR`() {
         assertEquals(documents.map { it.workflowType }.sorted(), GOLDEN.sorted())
         for (workflowType in GOLDEN) assertGolden(workflowType, document(workflowType))
+    }
+
+    @Test
+    fun `an overview keeps every step of the full document, and its golden file is there where it differs`() {
+        val overviews = WorkflowGraphs(backend, FIXED_COMMIT, mode, detail = Detail.OVERVIEW).extract(discovery)
+        // The one node of these workflows that says only why its call could not be read is told what was called.
+        assertEquals(listOf("DynamicDispatchWorkflow"), assertOverviewsKeepTheSteps(documents, overviews, ::assertOverviewGolden))
     }
 
     @Test

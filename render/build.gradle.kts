@@ -33,6 +33,7 @@ tasks.test {
     inputs.files(
         fileTree(layout.settingsDirectory.dir("demo/expected")) { include("*.ir.json") },
         fileTree(layout.settingsDirectory.dir("analyser/src/test/resources/golden/ir")) { include("**/*.ir.json") },
+        fileTree(layout.settingsDirectory.dir("analyser/src/test/resources/golden/overview")) { include("**/*.ir.json") },
     )
         .withPropertyName("documentsOfOtherModules")
         .withPathSensitivity(PathSensitivity.RELATIVE)

@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Caught",
+  "interface": "shop.Caught",
+  "implementation": "shop.CaughtImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Caught",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n40919bad36",
+      "kind": "activity",
+      "name": "Refund",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Caught.kt",
+        "line": 47
+      }
+    },
+    {
+      "id": "n427a4b3114",
+      "kind": "activity",
+      "name": "Reserve",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Caught.kt",
+        "line": 35
+      }
+    },
+    {
+      "id": "n565cfc87cd",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Caught.kt",
+        "line": 38
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Caught.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n902ac0808f",
+      "kind": "activity",
+      "name": "Charge",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Caught.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "nd00ba96292",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Caught.kt",
+        "line": 45
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nf01c921707",
+      "kind": "activity",
+      "name": "Release",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Caught.kt",
+        "line": 41
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n40919bad36",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "n427a4b3114",
+      "to": "n565cfc87cd"
+    },
+    {
+      "from": "n565cfc87cd",
+      "to": "n902ac0808f"
+    },
+    {
+      "from": "n565cfc87cd",
+      "to": "nf01c921707",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n427a4b3114"
+    },
+    {
+      "from": "n902ac0808f",
+      "to": "nd00ba96292"
+    },
+    {
+      "from": "n902ac0808f",
+      "to": "nf01c921707",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "nd00ba96292",
+      "to": "n40919bad36",
+      "kind": "exception",
+      "label": "ActivityFailure"
+    },
+    {
+      "from": "nd00ba96292",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nf01c921707",
+      "to": "nd00ba96292"
+    }
+  ],
+  "stats": {
+    "nodes": 8,
+    "unknown": 2
+  }
+}

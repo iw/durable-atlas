@@ -64,6 +64,11 @@ class PatternExtractionTest {
     private fun whole(implementation: String): List<String> = document(implementation).outline()
 
     @Test
+    fun `an overview keeps every step of the full document, and its golden file is there where it differs`() {
+        assertEquals(emptyList<String>(), assertOverviewsKeepTheSteps(backend, discovery, "overview/patterns"))
+    }
+
+    @Test
     fun `every document is well formed and gives the golden IR`() {
         val expected = PatternSources.FILES.keys - PatternSources.SHARED - "Notices" +
             setOf("Courier", "Carrier", "Notices", "Notice--patterns.NotifyImpl", "Notice--patterns.RemindImpl")

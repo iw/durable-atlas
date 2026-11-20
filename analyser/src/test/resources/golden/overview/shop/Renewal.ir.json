@@ -1,0 +1,415 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "detail": "overview",
+  "workflowType": "Renewal",
+  "interface": "shop.Renewal",
+  "implementation": "shop.RenewalImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Renewal",
+      "start": "n696bb56a3b"
+    },
+    {
+      "id": "signal-changed",
+      "kind": "signal",
+      "name": "changed",
+      "start": "nc5db52fd5e",
+      "reads": [
+        "changes",
+        "context",
+        "helper"
+      ],
+      "writes": [
+        "changes"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0026f8c79a",
+      "kind": "unknown",
+      "label": "\"Renew\" + kind",
+      "reason": "computed-name",
+      "parent": "n32207687ae",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 59
+      }
+    },
+    {
+      "id": "n021907a3e6",
+      "kind": "unknown",
+      "label": "RemoteSteps.push",
+      "reason": "unresolved",
+      "parent": "n32207687ae",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 65
+      }
+    },
+    {
+      "id": "n32207687ae",
+      "kind": "loop",
+      "label": "while round < 12",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 44
+      }
+    },
+    {
+      "id": "n3abffbdbde",
+      "kind": "branch",
+      "label": "price == 0L",
+      "parent": "n32207687ae",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 51
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 42
+      }
+    },
+    {
+      "id": "n7221477ddf",
+      "kind": "parallel",
+      "parent": "n32207687ae",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 55
+      }
+    },
+    {
+      "id": "n85ab296dfc",
+      "kind": "unknown",
+      "label": "Notifier.send",
+      "reason": "dynamic-dispatch",
+      "candidates": [
+        "shop.EmailNotifier",
+        "shop.SmsNotifier"
+      ],
+      "parent": "n32207687ae",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 64
+      }
+    },
+    {
+      "id": "n8698057cec",
+      "kind": "await",
+      "timeout": "PT720H",
+      "reads": [
+        "changes"
+      ],
+      "label": "changes > 0",
+      "parent": "n32207687ae",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 46
+      }
+    },
+    {
+      "id": "n889cd039ec",
+      "kind": "branch",
+      "label": "helper.known(order.id)",
+      "parent": "n32207687ae",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 58
+      }
+    },
+    {
+      "id": "n88eb832f21",
+      "kind": "activity",
+      "name": "Audit",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 69
+      }
+    },
+    {
+      "id": "na84ef0ccf2",
+      "kind": "end"
+    },
+    {
+      "id": "nb6e678602e",
+      "kind": "timer",
+      "duration": "PT24H",
+      "parent": "n32207687ae",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 67
+      }
+    },
+    {
+      "id": "nc5db52fd5e",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 72
+      }
+    },
+    {
+      "id": "ne9061ea6e9",
+      "kind": "activity",
+      "name": "Charge",
+      "timeout": "PT5S",
+      "parent": "n7221477ddf",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 55
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n0026f8c79a",
+      "to": "n85ab296dfc"
+    },
+    {
+      "from": "n021907a3e6",
+      "to": "nb6e678602e"
+    },
+    {
+      "from": "n32207687ae",
+      "to": "n88eb832f21"
+    },
+    {
+      "from": "n3abffbdbde",
+      "to": "n7221477ddf",
+      "label": "no"
+    },
+    {
+      "from": "n3abffbdbde",
+      "to": "n88eb832f21",
+      "label": "yes"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n32207687ae"
+    },
+    {
+      "from": "n7221477ddf",
+      "to": "n889cd039ec"
+    },
+    {
+      "from": "n85ab296dfc",
+      "to": "n021907a3e6"
+    },
+    {
+      "from": "n8698057cec",
+      "to": "n3abffbdbde"
+    },
+    {
+      "from": "n889cd039ec",
+      "to": "n0026f8c79a",
+      "label": "yes"
+    },
+    {
+      "from": "n889cd039ec",
+      "to": "n85ab296dfc",
+      "label": "no"
+    },
+    {
+      "from": "n88eb832f21",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nc5db52fd5e",
+      "to": "na84ef0ccf2"
+    },
+    {
+      "from": "signal-changed",
+      "to": "n8698057cec",
+      "kind": "wakes"
+    }
+  ],
+  "stats": {
+    "nodes": 15,
+    "unknown": 3
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 38
+      },
+      "text": "RequestContext(\"shop\", \"renewal\")"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 39
+      },
+      "text": "Tracer(\"renewal\")"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 50
+      },
+      "text": "tracer.span(\"price\") { helper.price(order) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 55
+      },
+      "text": "withRequestContext(context) { steps.charge(order.id) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 63
+      },
+      "text": "tracer.span(\"tell\") { notifier.send(order.id) remote.push(order.id) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 69
+      },
+      "text": "withRequestContext(context) { steps.audit(order.id) }"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 73
+      },
+      "text": "withRequestContext(context) { helper.remember(order) }"
+    }
+  ],
+  "leftOutCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 48
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 50
+      },
+      "reason": "unseen-code",
+      "label": "Helper.price",
+      "candidates": [
+        "shop.PricingClient.quote(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 50
+      },
+      "reason": "unsupported",
+      "label": "span"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 52
+      },
+      "reason": "unseen-code",
+      "label": "Helper.describe",
+      "candidates": [
+        "shop.OrderMapper.toText(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 55
+      },
+      "reason": "unsupported",
+      "label": "withRequestContext"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 56
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 58
+      },
+      "reason": "unseen-code",
+      "label": "Helper.known",
+      "candidates": [
+        "shop.OrderRepository.find(kotlin.String)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 61
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 63
+      },
+      "reason": "unsupported",
+      "label": "span"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 69
+      },
+      "reason": "unsupported",
+      "label": "withRequestContext"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 73
+      },
+      "reason": "unsupported",
+      "label": "withRequestContext"
+    },
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/Renewal.kt",
+        "line": 74
+      },
+      "reason": "unseen-code",
+      "label": "Helper.remember",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ]
+    }
+  ]
+}

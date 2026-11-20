@@ -82,7 +82,9 @@ classes. The result is the inventory.
    certain. `FailureTypes` and `FailTypes` decide which exceptions fail the execution.
    `UnresolvedCalls` judges a call that does not resolve in a degraded model.
 3. `GraphLayout` lays the flow out as nodes and edges, by the region convention of
-   [ir.md](ir.md#regions-and-implied-edges).
+   [ir.md](ir.md#regions-and-implied-edges). For an overview it lays out the same flow and
+   passes over the calls behind which a step is only possible (`Overview.kt`), so that
+   every node it draws is the node of the full detail.
 4. `WorkflowGraphs` joins the graphs of a workflow's entry points into one document and adds
    the edges between them: `wakes`, from what writes a property to the awaits that read it
    (`State`), and `cancels`.
@@ -147,6 +149,7 @@ downloads histories through the SDK's service client.
 | Whether a function is drawn from the inside | `analyser/graph/StepProbe` |
 | Whether an exception fails the execution | `analyser/graph/FailureTypes`, `FailTypes` |
 | What an unresolved call is taken for in a degraded model | `analyser/graph/UnresolvedCalls` |
+| What an overview leaves out, and what it has to keep | `analyser/graph/Overview`, `GraphLayout`; `OverviewContract` in the test fixtures of `ir` |
 | How regions and their edges are written | `analyser/graph/GraphLayout`; read by `render/layout/LayoutBuilder` and `overlay/mapping/FlowGraph` |
 | The order of nodes, edges and keys in a document | `ir/IrOrdering`, `ir/IrJson` |
 | The words on nodes | `render/layout/NodeText`, `render/svg/scene/CardTexts` |

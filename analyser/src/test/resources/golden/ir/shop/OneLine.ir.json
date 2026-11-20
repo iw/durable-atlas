@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "OneLine",
+  "interface": "shop.OneLine",
+  "implementation": "shop.OneLineImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "OneLine",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n34977933cd",
+      "kind": "unknown",
+      "label": "traced",
+      "reason": "unsupported",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/OneLine.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/OneLine.kt",
+        "line": 34
+      }
+    },
+    {
+      "id": "n70b2e87763",
+      "kind": "unknown",
+      "reason": "dynamic-dispatch",
+      "candidates": [
+        "shop.EmailNotifier",
+        "shop.SmsNotifier"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/OneLine.kt",
+        "line": 36
+      }
+    },
+    {
+      "id": "n83ad22f1df",
+      "kind": "unknown",
+      "label": "Helper.remember",
+      "reason": "unseen-code",
+      "candidates": [
+        "shop.OrderRepository.save(shop.Order)"
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/shop/OneLine.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "n9d351476ca",
+      "kind": "activity",
+      "name": "Ship",
+      "timeout": "PT5S",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/OneLine.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "nb801b4aa0d",
+      "kind": "branch",
+      "label": "order.gift",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/OneLine.kt",
+        "line": 37
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    },
+    {
+      "id": "nff7df9a270",
+      "kind": "branch",
+      "label": "order.express",
+      "loc": {
+        "file": "app/src/main/kotlin/shop/OneLine.kt",
+        "line": 37
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "n34977933cd",
+      "to": "n70b2e87763"
+    },
+    {
+      "from": "n34977933cd",
+      "to": "nb801b4aa0d"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n34977933cd"
+    },
+    {
+      "from": "n70b2e87763",
+      "to": "nb801b4aa0d"
+    },
+    {
+      "from": "n83ad22f1df",
+      "to": "nff7df9a270"
+    },
+    {
+      "from": "n9d351476ca",
+      "to": "nedd528afe0"
+    },
+    {
+      "from": "nb801b4aa0d",
+      "to": "n83ad22f1df",
+      "label": "yes"
+    },
+    {
+      "from": "nb801b4aa0d",
+      "to": "nff7df9a270",
+      "label": "no"
+    },
+    {
+      "from": "nff7df9a270",
+      "to": "n9d351476ca",
+      "label": "yes"
+    },
+    {
+      "from": "nff7df9a270",
+      "to": "nedd528afe0",
+      "label": "no"
+    }
+  ],
+  "stats": {
+    "nodes": 8,
+    "unknown": 3
+  },
+  "skippedCalls": [
+    {
+      "loc": {
+        "file": "app/src/main/kotlin/shop/OneLine.kt",
+        "line": 36
+      },
+      "text": "traced(\"tell\") { notifier.send(order.id) }"
+    }
+  ]
+}

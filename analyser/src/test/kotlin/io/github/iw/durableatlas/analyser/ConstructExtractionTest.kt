@@ -58,6 +58,12 @@ class ConstructExtractionTest {
     private fun whole(workflowType: String): List<String> = documents.single { it.workflowType == workflowType }.outline()
 
     @Test
+    fun `an overview keeps every step of the full document, and its golden file is there where it differs`() {
+        // The block handed to `lazy` stands where the property is declared; nothing else of these sources is left out.
+        assertEquals(listOf("BaseSteps"), assertOverviewsKeepTheSteps(backend, discovery, "overview/constructs"))
+    }
+
+    @Test
     fun `every document is well formed and gives the golden IR`() {
         val expected = ConstructSources.FILES.keys - ConstructSources.SHARED - "Fallback" + "dynamic-Fallback"
         assertEquals(expected, documents.map { it.workflowType }.toSet())

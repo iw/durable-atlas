@@ -139,6 +139,35 @@ class IrValidationTest {
     }
 
     @Test
+    fun `only an overview leaves calls out, each once, for one of its reasons and with a label`() {
+        val call = LeftOutCall(SourceLocation("orders/src/main/kotlin/Order.kt", 12), UnknownReasons.UNSUPPORTED, "withRequestContext")
+        val overview = document.copy(detail = Detail.OVERVIEW)
+
+        assertEquals(emptyList(), overview.validate())
+        assertEquals(emptyList(), document.copy(detail = Detail.FULL).validate())
+        // Two calls on one line, and one call for two reasons, are each a call of their own.
+        assertEquals(
+            emptyList(),
+            overview.copy(leftOutCalls = listOf(call, call.copy(label = "traced"), call.copy(reason = UnknownReasons.DYNAMIC_DISPATCH))).validate(),
+        )
+        for (full in listOf(document, document.copy(detail = Detail.FULL))) {
+            assertEquals(listOf("calls are left out, which only an overview does"), full.copy(leftOutCalls = listOf(call)).validate())
+        }
+        assertEquals(
+            listOf("call left out 'orders/src/main/kotlin/Order.kt:12 unsupported withRequestContext' is listed twice"),
+            overview.copy(leftOutCalls = listOf(call, call)).validate(),
+        )
+        assertEquals(
+            listOf(
+                "call left out at 'orders/src/main/kotlin/Order.kt:0' has no line",
+                "call left out at 'orders/src/main/kotlin/Order.kt:0' does not say what is called",
+                "call left out at 'orders/src/main/kotlin/Order.kt:0' has the reason 'recursion', for which no call is left out",
+            ),
+            overview.copy(leftOutCalls = listOf(LeftOutCall(SourceLocation("orders/src/main/kotlin/Order.kt", 0), UnknownReasons.RECURSION, " "))).validate(),
+        )
+    }
+
+    @Test
     fun `a node for a call behind which something cannot be followed names the call and what cannot be followed`() {
         val unseen = IrNode(
             id = "n30",

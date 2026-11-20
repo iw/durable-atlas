@@ -42,6 +42,15 @@ the analyser's tests hold what the analysis makes of the demo to it.
 - `skippedCalls`, only in a document of a degraded model and only where there are any, lists
   the calls that did not resolve and were taken for calls into libraries the model lacks:
   `{ "loc": { "file", "line" }, "text" }` each. No node stands for such a call.
+- `detail`, after `modelMode`, says how much of what the analysis could not read the
+  document shows. `"overview"`: the document has no node for a call behind which a step is
+  only possible ([Overviews](#overviews)). Absent, or `"full"`: every such call has its
+  `unknown` node. The analyser writes the field only into an overview; the worked example is
+  a full document.
+- `leftOutCalls`, only in an overview and only where there are any, lists the calls it has no
+  node for: `{ "loc": { "file", "line" }, "reason", "label", "candidates" }` each, what the
+  `unknown` node of the full document says, without its id. `candidates` is there for
+  `unseen-code` alone.
 
 A document is flat: a list of nodes and a list of edges. Nesting is said by a node's
 `parent`, and each entry point's graph begins at its `start` node.
@@ -135,6 +144,30 @@ analysis could not follow. Its `reason` says why:
 | `unsupported` | The construct is not modelled. |
 | `unresolved` | The call did not resolve to a declaration. `candidates` names the functions of the sources the compiler could not choose among. |
 | `unseen-code` | The call leads to a function without a body that no class of the sources implements, so what runs there cannot be seen. `candidates` names such functions. |
+
+### Overviews
+
+A document whose `detail` is `overview` leaves out the calls behind which a step is only
+possible, and lists them under `leftOutCalls`:
+
+- `unsupported`, where the call was handed code. What the code holds stands in the flow where
+  the call is made, once, in the order of the code. A full document has the node in front of
+  it, and an edge from the node past each block.
+- `unseen-code`, and `dynamic-dispatch` without `candidates`.
+
+So the `unknown` nodes of an overview have the reasons `depth-limit`, `recursion`,
+`computed-name`, `unresolved`, `dynamic-dispatch` with `candidates`, and `unsupported` only
+for a workflow method or a handler without a Kotlin body. Each has a `label` that names the
+function called; in a full document a `dynamic-dispatch` node has none. One exception keeps a
+node of the other reasons: a loop that the flow never gets past, and that would be left
+empty, stays as the full document has it.
+
+A `branch` none of whose ways holds anything else is gone with what it held, and so is a
+`loop` or a `parallel` region. Every other node of an overview is a node of the full
+document of the same sources, with the same `id` and fields, and no way leads from one of
+them to the next that the full document does not have. A clause or a copy of a `finally`
+block that only a failure of a call which is left out reaches is still there: its
+`exception` edge starts where the flow stood at the call.
 
 ## Edges
 

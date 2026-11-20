@@ -6,9 +6,11 @@ import com.github.ajalt.clikt.parameters.options.OptionWithValues
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.double
+import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.clikt.parameters.types.restrictTo
 import io.github.iw.durableatlas.analyser.graph.WorkflowGraphs
+import io.github.iw.durableatlas.ir.Detail
 
 /** Threshold option shared by the commands that analyse workflows. */
 internal fun ParameterHolder.maxUnresolvedPctOption(): NullableOption<Double, Double> =
@@ -19,6 +21,18 @@ internal fun ParameterHolder.maxUnresolvedPctOption(): NullableOption<Double, Do
     )
         .double()
         .restrictTo(0.0..100.0)
+
+/** Detail option shared by the commands that analyse workflows. */
+internal fun ParameterHolder.detailOption(): OptionWithValues<Detail, Detail, Detail> =
+    option(
+        "--detail",
+        help = "How much of what the analysis could not read to show. 'overview' (the default) has no unknown node for a " +
+            "call behind which a step is only possible: code handed to a call that is not modelled is drawn as run once " +
+            "where the call is made, a call into code that is not in the sources is left out, and each IR file lists " +
+            "what was left out. 'full' gives every such call its unknown node.",
+    )
+        .enum<Detail> { it.name.lowercase() }
+        .default(Detail.OVERVIEW)
 
 /** Depth option shared by the commands that analyse workflows. */
 internal fun ParameterHolder.maxDepthOption(): OptionWithValues<Int, Int, Int> =

@@ -57,6 +57,11 @@ class OptionExtractionTest {
             .filter { it.startsWith("node activity") || it.startsWith("node localActivity") }
 
     @Test
+    fun `an overview keeps every step of the full document, and its golden file is there where it differs`() {
+        assertEquals(emptyList<String>(), assertOverviewsKeepTheSteps(backend, discovery, "overview/options"))
+    }
+
+    @Test
     fun `every document is well formed and gives the golden IR`() {
         val names = IrFiles.names(documents).map { it.removeSuffix(IrFiles.SUFFIX) }
         assertEquals(setOf("Copies", "Unread", "Helpers", "ByInit", "ByProperty", "ByConstructor", "ByFile", "Branched", "Handed"), names.toSet())
