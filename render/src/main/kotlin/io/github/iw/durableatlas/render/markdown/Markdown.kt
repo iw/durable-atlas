@@ -27,6 +27,9 @@ object Markdown {
 
     fun link(label: String, file: String): String = "[${text(label)}](${target(file)})"
 
+    /** A link with [text] as an inline code span, to [url], which is already a relative URL with nothing in it to encode. */
+    fun codeLink(text: String, url: String): String = "[${code(text)}]($url)"
+
     /** Content of a table cell; pipes end a cell even inside a code span. */
     fun cell(markdown: String): String = markdown.replace("|", "\\|")
 

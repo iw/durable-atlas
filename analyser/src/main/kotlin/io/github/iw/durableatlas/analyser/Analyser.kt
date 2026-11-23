@@ -18,6 +18,7 @@ import io.github.iw.durableatlas.ir.Detail
 import io.github.iw.durableatlas.ir.IrDocument
 import io.github.iw.durableatlas.ir.IrJson
 import io.github.iw.durableatlas.ir.ModelMode
+import io.github.iw.durableatlas.ir.ModelType
 import io.github.iw.durableatlas.ir.Request
 import io.github.iw.durableatlas.modelextractor.ExtractedModel
 import io.github.iw.durableatlas.modelextractor.ModelFormatException
@@ -111,6 +112,7 @@ class Analyser(private val log: (String) -> Unit = {}) {
         val withoutGraph = ArrayList<String>()
         val warnings = ArrayList<String>()
         var requests: Map<String, List<Request>> = emptyMap()
+        var types: Map<String, ModelType> = emptyMap()
         val (discovery, documents) = SourceBackends.open(model, request.jdkHome, log).use { backend ->
             log("the sources are ready for analysis after ${millisSince(started)} ms")
             val discovery = TemporalDiscovery.discover(backend)
@@ -119,7 +121,9 @@ class Analyser(private val log: (String) -> Unit = {}) {
                 "found ${discovery.workflows.size} workflow type(s) and " +
                     "${discovery.activityInterfaces.size} activity interface(s) after ${millisSince(started)} ms",
             )
-            requests = ActivityRequests(backend, request.clients, request.maxDepth, configurations(model)).of(discovery)
+            val activityRequests = ActivityRequests(backend, request.clients, request.maxDepth, configurations(model))
+            requests = activityRequests.of(discovery)
+            types = activityRequests.types(requests)
             if (requests.isNotEmpty()) {
                 log("found ${requests.values.sumOf { it.size }} request(s) of ${requests.size} activity type(s) after ${millisSince(started)} ms")
             }
@@ -134,7 +138,7 @@ class Analyser(private val log: (String) -> Unit = {}) {
             )
         }
 
-        val inventory = Inventory.of(discovery, model.index.commit, model.index.mode, requests)
+        val inventory = Inventory.of(discovery, model.index.commit, model.index.mode, requests, types)
         val out = request.out.toAbsolutePath().normalize()
         Files.createDirectories(out)
         val inventoryFile = out.resolve(InventoryJson.FILE_NAME)
@@ -212,7 +216,7 @@ class Analyser(private val log: (String) -> Unit = {}) {
             val near = resources.filter { resource -> file != null && serviceRoot(resource)?.let(file::startsWith) == true }
             val files = if (near.isNotEmpty() || manifest?.mode == ModelMode.DEGRADED) near else resources
             read.getOrPut(files) {
-                if (files.isEmpty()) Configuration.NONE else Configuration.read(files.map { model.sourceRoot.resolve(it).normalize() }) { log("warning: $it") }
+                if (files.isEmpty()) Configuration.NONE else Configuration.read(files.map { model.sourceRoot.resolve(it).normalize() to it }) { log("warning: $it") }
             }
         }
     }

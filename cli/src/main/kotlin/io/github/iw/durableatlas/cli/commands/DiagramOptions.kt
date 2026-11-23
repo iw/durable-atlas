@@ -29,7 +29,8 @@ class DiagramOptions : OptionGroup(name = "Diagram options") {
     val formats: List<DiagramFormat> by option(
         "--format",
         metavar = choices().joinToString("|"),
-        help = "Diagram format to write. The default, '$ALL', writes every format.",
+        help = "Diagram format to write. The default, '$ALL', writes every format. Where activities make requests, the " +
+            "endpoints page is written with the diagrams: as HTML with 'svg', as Markdown with 'mermaid'.",
     )
         .convert { name ->
             select(name) ?: fail("'$name' is not a format this tool can write (choose from ${choices().joinToString(", ")})")
@@ -70,8 +71,8 @@ class DiagramOptions : OptionGroup(name = "Diagram options") {
     val sourceBaseUrl: String? by option(
         "--source-base-url",
         metavar = "url",
-        help = "Link each card of an SVG diagram to <url>/<file>#L<line>. '{commit}' in the URL stands " +
-            "for the commit the diagram was drawn from.",
+        help = "Link each card of an SVG diagram that links nowhere else, and each caller on the endpoints page, to " +
+            "<url>/<file>#L<line>. '{commit}' in the URL stands for the commit the diagram was drawn from.",
     )
 
     val background: Background by option(
@@ -84,7 +85,7 @@ class DiagramOptions : OptionGroup(name = "Diagram options") {
     val noRequests: Boolean by option(
         "--no-requests",
         help = "Draw activities without what they ask of other services: no line under the name of an activity's card, " +
-            "no request in its tooltip, its Mermaid node or the Markdown page.",
+            "no request in its tooltip, its Mermaid node or the Markdown page, and no endpoints page or OpenAPI documents.",
     )
         .flag()
 

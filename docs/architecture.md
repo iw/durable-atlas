@@ -99,8 +99,14 @@ function of each class of the sources that implements it, and `RequestReader` re
 the clients `--client` names (`ClientSpec`). `RequestValues` follows the URI or the operation
 of a request back to what made it, through `ValueTracer`, and knows the three forms of
 MicroProfile Config; `Configuration` reads a service's configuration files, with SnakeYAML
-Engine for YAML, for the host of a key. The requests are put on the nodes that run the
-activity type, and in the inventory.
+Engine for YAML, for the hosts of a key in each profile and the naming strategy of Quarkus for
+Jackson. `Codecs` knows the writers and readers of Jackson and kotlinx.serialization and what
+a body is made of; `Answers` follows the answer forward from the call that sends it, through
+the `Frames` of the functions it is handed to and returned from; `StaticTypes` gives the type
+of an expression along the trail of the value; `Models` reads the shape of each type a request
+sends or reads, and of the types those reach, through `SourceBackend.shape`, which reads a
+class of the sources or of a jar. The requests are put on the nodes that run the activity
+type, and in the inventory with the `types` table.
 
 Documents are written in canonical order (`IrOrdering.kt`), under the names `IrFiles` gives
 them.
@@ -139,6 +145,15 @@ back and redraws the same diagram with decorations, without arranging anything.
 the long-running steps ask. A drawing that runs out of time is tried again at the next
 `Simplification.Level`.
 
+**The endpoints page.** `EndpointPages` decides which pages the formats call for and writes
+them, with the OpenAPI documents, into `endpoints/` before the index. It reads nothing but the
+documents and the part of `inventory.json` that `InventoryPart` takes: `EndpointSet` gathers
+the requests into services, operations, activities and models; `Targets` splits a target into
+server and path; `Shapes` gives the fields of a model as a use of it fills in its type
+parameters. `EndpointsHtml` and `EndpointsMarkdown` write the page, `ServiceMaps` the map of
+each service, `MarkdownAnchors` the headings whose anchors GitHub and GitLab agree on, and
+`OpenApi` the documents. The diagrams get their links through `PageOptions.endpoints`.
+
 ## Overlay
 
 `HistoryJson` reads a history with the Temporal SDK's own types. `Occurrences` reduces it
@@ -163,6 +178,12 @@ downloads histories through the SDK's service client.
 | Whether an exception fails the execution | `analyser/graph/FailureTypes`, `FailTypes` |
 | What an unresolved call is taken for in a degraded model | `analyser/graph/UnresolvedCalls` |
 | What a request is, and how its target, operation and host are read | `analyser/requests/RequestReader`, `RequestValues`, `Configuration` |
+| What a request sends, and the type a body is written as or read as | `analyser/requests/Codecs`, `StaticTypes` |
+| Where the answer goes, and how deep it is followed | `analyser/requests/Answers`, `Frames`, `RequestReader.enter` |
+| The shape of a model and the names it has on the wire | `analyser/requests/Models`, `ir/TypeNames` (`WireNames`), `analyser/backend/SymbolReader.shape` |
+| What a service is called | `ir/ServiceNames` |
+| What the endpoints page and the OpenAPI documents say | `render/endpoints/EndpointSet`, `EndpointsHtml`, `EndpointsMarkdown`, `OpenApi` |
+| Where a card links | `render/svg/SvgWriter` (`childLink`, `endpointLink`, `sourceLink`), `render/EndpointPages` |
 | What an overview leaves out, and what it has to keep | `analyser/graph/Overview`, `GraphLayout`; `OverviewContract` in the test fixtures of `ir` |
 | How regions and their edges are written | `analyser/graph/GraphLayout`; read by `render/layout/LayoutBuilder` and `overlay/mapping/FlowGraph` |
 | The order of nodes, edges and keys in a document | `ir/IrOrdering`, `ir/IrJson` |

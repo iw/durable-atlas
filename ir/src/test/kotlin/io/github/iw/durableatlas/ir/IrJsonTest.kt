@@ -194,6 +194,36 @@ class IrJsonTest {
     }
 
     @Test
+    fun `what a request sends and receives is written after what it asks, each part only where it is set`() {
+        val request = Request(
+            kind = RequestKind.HTTP,
+            service = "billing",
+            method = "POST",
+            target = "{billing.url}/charges/{id}",
+            parameters = listOf(RequestParameter("id", ParameterLocation.PATH, "kotlin.String")),
+            sends = Payload(PayloadKind.TYPE, "com.example.Charge", mediaType = "application/json", format = PayloadFormat.JACKSON),
+            receives = Payload(PayloadKind.TEXT),
+            keys = listOf("billing.url"),
+            hosts = listOf(ConfiguredValue("billing.url", "https://billing.prod.example.com", profile = "prod")),
+            loc = SourceLocation("billing/src/main/kotlin/Billing.kt", 7),
+        )
+        val requesting = document.copy(nodes = document.nodes.map { if (it.id == "n05") it.copy(requests = listOf(request)) else it })
+        val text = IrJson.encode(requesting)
+        assertEquals(listOf(request), IrJson.decode(text).nodes.single { it.id == "n05" }.requests)
+        assertContains(
+            text,
+            "\"kind\": \"http\",\n          \"service\": \"billing\",\n          \"method\": \"POST\",\n" +
+                "          \"target\": \"{billing.url}/charges/{id}\",\n          \"parameters\": [\n            {\n" +
+                "              \"name\": \"id\",\n              \"in\": \"path\",\n              \"type\": \"kotlin.String\"\n            }\n          ],\n" +
+                "          \"sends\": {\n            \"kind\": \"type\",\n            \"type\": \"com.example.Charge\",\n" +
+                "            \"mediaType\": \"application/json\",\n            \"format\": \"jackson\"\n          },\n" +
+                "          \"receives\": {\n            \"kind\": \"text\"\n          },\n",
+        )
+        // Nothing of what is not set: no arguments, no constant, no naming.
+        for (key in listOf("arguments", "constant", "naming", "profile\": null")) assertFalse(key in text, key)
+    }
+
+    @Test
     fun `what an upsert writes and that a loop is a retry are written where they are set, and nowhere else`() {
         val step = IrNode("n1", NodeKind.UPSERT_SEARCH_ATTRIBUTES)
         val loop = IrNode("n2", NodeKind.LOOP, label = "retry on failure")

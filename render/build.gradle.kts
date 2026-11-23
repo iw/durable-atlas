@@ -25,6 +25,10 @@ dependencies {
 
     testImplementation(testFixtures(project(":ir")))
     testImplementation(libs.batik.transcoder)
+    // The JSON Schema of OpenAPI 3.1, from the files of a library that validates against it.
+    testImplementation(libs.vertx.openapi) {
+        isTransitive = false
+    }
 }
 
 tasks.test {
@@ -34,6 +38,7 @@ tasks.test {
         fileTree(layout.settingsDirectory.dir("demo/expected")) { include("*.ir.json") },
         fileTree(layout.settingsDirectory.dir("analyser/src/test/resources/golden/ir")) { include("**/*.ir.json") },
         fileTree(layout.settingsDirectory.dir("analyser/src/test/resources/golden/overview")) { include("**/*.ir.json") },
+        fileTree(layout.settingsDirectory.dir("analyser/src/test/resources/golden/inventory")) { include("**/*.json") },
     )
         .withPropertyName("documentsOfOtherModules")
         .withPathSensitivity(PathSensitivity.RELATIVE)

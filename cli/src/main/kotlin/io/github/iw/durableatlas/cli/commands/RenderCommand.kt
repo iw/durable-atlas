@@ -19,7 +19,8 @@ import java.nio.file.Path
 
 class RenderCommand : StageCommand(
     name = "render",
-    summary = "Turn IR files into one diagram per workflow type and format, plus an index page.",
+    summary = "Turn IR files into one diagram per workflow type and format, plus an index page and, where activities make " +
+        "requests, an endpoints page with an OpenAPI document per service.",
 ) {
     private val ir: Path by option("--ir", metavar = "ir-dir", help = "Directory of IR files written by 'analyse'.")
         .path(mustExist = true, canBeFile = false)
@@ -65,6 +66,7 @@ class RenderCommand : StageCommand(
                 },
             )
             put("skipped", buildJsonArray { summary.skipped.forEach { add(it) } })
+            Summaries.endpoints(this, summary)
         }
 
     private fun describe(summary: RenderSummary): String =
@@ -73,6 +75,7 @@ class RenderCommand : StageCommand(
             val shortfalls = summary.diagrams.mapIndexed { index, diagram -> Summaries.Shortfall(names[index], diagram.missing, diagram.simplified) }
             append("${summary.diagrams.size} workflow(s) drawn as ${Summaries.formatsDrawn(diagrams.formats.map { it.name }, shortfalls)}\n")
             Summaries.shortfallLines(shortfalls).forEach { append(it).append('\n') }
+            Summaries.endpointsLine(summary)?.let { append(it).append('\n') }
             append(summary.outDir.resolve(summary.index))
         }
 }

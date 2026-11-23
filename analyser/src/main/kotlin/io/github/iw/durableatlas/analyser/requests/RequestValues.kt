@@ -33,7 +33,7 @@ internal class Place(val selfClass: String?, val function: FunctionDecl?, val ty
  * MicroProfile Config has: `@ConfigProperty`, `@ConfigMapping` and `Config.getValue`. A part
  * that is computed is known by its name.
  */
-internal class RequestValues(private val backend: SourceBackend, private val tracer: ValueTracer) {
+internal class RequestValues(private val backend: SourceBackend, private val tracer: ValueTracer, private val types: StaticTypes = StaticTypes(backend)) {
     private val properties = HashMap<PropertyId, PropertyDecl?>()
     private val constructorParameters = HashMap<String, Map<String, List<AnnotationUse>>>()
 
@@ -45,14 +45,15 @@ internal class RequestValues(private val backend: SourceBackend, private val tra
      *   it better than [code] tells: the text of an expression in a string template
      */
     private fun parts(code: Code, scope: Scope, place: Place, site: String?, depth: Int): List<Part> {
-        if (depth > MAX_DEPTH) return listOf(Part.Name(site ?: written(code)))
+        if (depth > MAX_DEPTH) return listOf(Part.Name(site ?: written(code), types.name(types.of(code), place, code.location.file)))
         val trail = tracer.trail(code, scope)
         val origin = trail.passed.last()
         val here = within(place, trail.passed)
         config(origin, here, depth)?.let { return listOf(it) }
         fun name(): List<Part> {
             val read = origin.code is LocalRead || origin.code is PropertyRead
-            return listOf(Part.Name(if (read || site == null) written(origin.code) else site))
+            val type = types.name(types.along(trail), here, code.location.file)
+            return listOf(Part.Name(if (read || site == null) written(origin.code) else site, type))
         }
         return when (val value = origin.code) {
             is Literal -> text(value.constant)?.let { listOf(Part.Text(it)) } ?: name()

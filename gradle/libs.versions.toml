@@ -31,6 +31,10 @@ xbase-lib = "2.42.0"
 inter-font = "4.1"
 # Test only: turns SVG diagrams into PNG files for review.
 batik = "1.20"
+# Test only: the official JSON Schema of OpenAPI 3.1 (2022-10-07), which the tests check the OpenAPI
+# documents of the endpoints page against. Only its schema files are used, none of its classes, so
+# its dependencies stay out.
+vertx-openapi = "4.5.10"
 # Reads the application.yaml files whose values the requests of activities are made with. YAML 1.2,
 # with no dependencies of its own.
 snakeyaml-engine = "3.2"
@@ -53,6 +57,7 @@ junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 json-schema-validator = { module = "com.networknt:json-schema-validator", version.ref = "json-schema-validator" }
+vertx-openapi = { module = "io.vertx:vertx-openapi", version.ref = "vertx-openapi" }
 
 analysis-api = { module = "org.jetbrains.kotlin:analysis-api-for-ide", version.ref = "kotlin" }
 analysis-api-standalone = { module = "org.jetbrains.kotlin:analysis-api-standalone-for-ide", version.ref = "kotlin" }

@@ -11,6 +11,7 @@ import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonObjectBuilder
+import kotlinx.serialization.json.add
 import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
@@ -38,6 +39,32 @@ internal object Summaries {
                 )
             }
         }
+
+    /**
+     * The endpoints page and the OpenAPI documents written with the diagrams, with how many
+     * services, operations and models they show; nothing where none was written.
+     */
+    fun endpoints(builder: JsonObjectBuilder, summary: RenderSummary) {
+        val endpoints = summary.endpoints ?: return
+        builder.put(
+            "endpoints",
+            buildJsonObject {
+                put("pages", buildJsonArray { endpoints.pages.forEach { add(summary.outDir.resolve(it).toString()) } })
+                put("openapi", buildJsonArray { endpoints.documents.forEach { add(summary.outDir.resolve(it).toString()) } })
+                put("services", endpoints.services)
+                put("operations", endpoints.operations)
+                put("models", endpoints.models)
+            },
+        )
+    }
+
+    /** The line that says where the endpoints page is and what it shows; `null` where none was written. */
+    fun endpointsLine(summary: RenderSummary): String? {
+        val endpoints = summary.endpoints ?: return null
+        fun count(n: Int, one: String) = if (n == 1) "1 $one" else "$n ${one}s"
+        val shown = "${count(endpoints.services, "service")}, ${count(endpoints.operations, "operation")} and ${count(endpoints.models, "model")}"
+        return "endpoints page of $shown: ${endpoints.pages.joinToString(", ") { summary.outDir.resolve(it).toString() }}"
+    }
 
     /**
      * A workflow as a table lists it.

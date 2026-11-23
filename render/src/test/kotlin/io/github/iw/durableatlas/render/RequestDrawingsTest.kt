@@ -3,6 +3,9 @@ package io.github.iw.durableatlas.render
 import io.github.iw.durableatlas.ir.IrDocument
 import io.github.iw.durableatlas.ir.IrJson
 import io.github.iw.durableatlas.ir.NodeKind
+import io.github.iw.durableatlas.ir.Payload
+import io.github.iw.durableatlas.ir.PayloadFormat
+import io.github.iw.durableatlas.ir.PayloadKind
 import io.github.iw.durableatlas.ir.Request
 import io.github.iw.durableatlas.ir.RequestKind
 import io.github.iw.durableatlas.ir.SourceLocation
@@ -56,16 +59,16 @@ class RequestDrawingsTest {
     private fun withRequests(document: IrDocument, name: String, requests: List<Request>): IrDocument =
         document.copy(nodes = document.nodes.map { if (it.name == name) it.copy(requests = requests) else it })
 
-    private fun http(target: String, line: Int) =
-        Request(kind = RequestKind.HTTP, method = "GET", target = target, loc = SourceLocation("app/src/main/kotlin/requests/More.kt", line))
+    private fun http(target: String, line: Int, service: String = "api") =
+        Request(kind = RequestKind.HTTP, service = service, method = "GET", target = target, loc = SourceLocation("app/src/main/kotlin/requests/More.kt", line))
 
     @Test
-    fun `a card shows the first request under the name of the activity, and how many more there are`() {
+    fun `a card shows the first request briefly under the name of the activity, and how many more there are`() {
         val dom = SvgDom(svg(requested))
-        // Cut to the width of the card, as a name is.
-        assertEquals(listOf("ACTIVITY", "Helper", "POST https://api.example…"), card(dom, requested, "Helper"))
-        assertEquals(listOf("ACTIVITY", "Announce", "POST https://mai… +1 more"), card(dom, requested, "Announce"))
-        assertEquals(listOf("ACTIVITY", "Named", "ServiceClient · named-fn"), card(dom, requested, "Named"))
+        // The method and the service, or FN and the operation of a client.
+        assertEquals(listOf("ACTIVITY", "Helper", "POST api"), card(dom, requested, "Helper"))
+        assertEquals(listOf("ACTIVITY", "Announce", "POST mail +1"), card(dom, requested, "Announce"))
+        assertEquals(listOf("ACTIVITY", "Named", "FN named-fn"), card(dom, requested, "Named"))
         // An activity without requests has its card as before.
         assertEquals(listOf("ACTIVITY", "Call"), card(dom, requested, "Call"))
         SvgDiagrams.check(SvgDiagrams.positionedGraph(svg(requested)), requested)
@@ -73,22 +76,22 @@ class RequestDrawingsTest {
 
     @Test
     fun `a long request is cut as names are, and the count of more stays whole`() {
-        val long = http("https://api.example.com/" + "segment/".repeat(20) + "{id}", 3)
+        val long = http("https://api.example.com/" + "segment/".repeat(20) + "{id}", 3, service = "a-service-whose-name-is-longer-than-a-card")
         val document = withRequests(requested, "Helper", listOf(long) + (4..7).map { http("https://api.example.com/$it", it) })
         val dom = SvgDom(svg(document))
         val line = card(dom, document, "Helper")[2]
-        assertEquals("GET https://api.e… +4 more", line)
+        assertEquals("GET a-service-whose… +4", line)
         // The tooltip has them all, whole.
         assertContains(tooltip(dom, document, "Helper"), "\nGET ${long.target}\nGET https://api.example.com/4\n")
     }
 
     @Test
-    fun `the tooltip of a card lists every request with its host, its response type and the class that makes it`() {
+    fun `the tooltip of a card lists every request in full with its host, what it sends and reads, its response type and the class that makes it`() {
         val dom = SvgDom(svg(requested))
         assertEquals(
             "ACTIVITY: Announce\n" +
-                "POST https://mail.example.com/send · response String · in MailNotices\n" +
-                "ServiceClient · text-send · in TextNotices",
+                "POST https://mail.example.com/send · sends text · answer not read · response String · in MailNotices\n" +
+                "ServiceClient · text-send · answer not read · in TextNotices",
             tooltip(dom, requested, "Announce"),
         )
         val hosted = Request(
@@ -97,12 +100,14 @@ class RequestDrawingsTest {
             target = "{billing.url}/v1/charges",
             keys = listOf("billing.url"),
             host = "http://billing.example.com",
+            sends = Payload(PayloadKind.TYPE, "com.example.Charge", format = PayloadFormat.JACKSON),
             response = "String",
+            receives = Payload(PayloadKind.TYPE, "kotlin.collections.List<com.example.Receipt>", format = PayloadFormat.JACKSON),
             loc = SourceLocation("app/src/main/kotlin/requests/Billing.kt", 9),
         )
         val document = withRequests(requested, "Call", listOf(hosted))
         assertEquals(
-            "ACTIVITY: Call\nPUT {billing.url}/v1/charges · host http://billing.example.com · response String",
+            "ACTIVITY: Call\nPUT {billing.url}/v1/charges · host http://billing.example.com · sends Charge · reads List<Receipt> · response String",
             tooltip(SvgDom(svg(document)), document, "Call"),
         )
     }
@@ -121,8 +126,8 @@ class RequestDrawingsTest {
         val mermaid = MermaidRenderer.render(requested)
         MermaidLint.check(mermaid)
         // Mermaid's colon is written as an entity, as in any other text of a node.
-        assertContains(mermaid, "[\"Helper<br/>POST https#58;//api.example.com/orders/{id}\"]")
-        assertContains(mermaid, "[\"Announce<br/>POST https#58;//mail.example.com/send +1 more\"]")
+        assertContains(mermaid, "[\"Helper<br/>POST api\"]")
+        assertContains(mermaid, "[\"Announce<br/>POST mail +1\"]")
         assertContains(mermaid, "[\"Call\"]")
     }
 
@@ -141,7 +146,7 @@ class RequestDrawingsTest {
         assertEquals(plain.edges.size, drawn.edges.size)
         assertEquals(listOf("ACTIVITY", "Helper"), card(plain, without, "Helper"))
         // Every other document of the tests has none, and draws as it did.
-        val others = SvgDocuments.all().filterKeys { it != "analyser/requests/Requested" }
+        val others = SvgDocuments.all().filterKeys { it != "analyser/requests/Requested" && it != "analyser/payloads/Paying" }
         assertTrue(others.values.all { document -> document.nodes.none { it.requests.isNotEmpty() } })
     }
 
@@ -164,5 +169,14 @@ class RequestDrawingsTest {
         }
         assertContains(Files.readString(temp.resolve("on").resolve("Requested.md")), "## Requests")
         assertTrue(node(requested, "Helper").kind == NodeKind.ACTIVITY)
+        // Drawn with them, a card links to its one operation on the endpoints page, or to the entry of its activity, which lists several.
+        val on = SvgDom(Files.readString(temp.resolve("on").resolve("Requested.svg")))
+        fun link(name: String) = on.nodes.single { it.getAttribute("id") == node(requested, name).id }.parentNode.let { it as org.w3c.dom.Element }
+            .takeIf { it.localName == "a" }?.getAttributeNS("http://www.w3.org/1999/xlink", "href")
+        assertEquals("endpoints/index.html#op-api-post-orders-id", link("Helper"))
+        assertEquals("endpoints/index.html#op-serviceclient-named-fn", link("Named"))
+        assertEquals("endpoints/index.html#activity-announce", link("Announce"))
+        assertEquals(null, link("Call"))
+        assertContains(Files.readString(temp.resolve("on").resolve("endpoints/index.html")), "id=\"activity-announce\"")
     }
 }

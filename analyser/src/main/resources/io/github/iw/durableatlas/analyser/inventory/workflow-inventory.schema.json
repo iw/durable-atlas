@@ -34,6 +34,12 @@
       "description": "Activity interfaces, ordered by interface.",
       "type": "array",
       "items": { "$ref": "#/$defs/activityInterface" }
+    },
+    "types": {
+      "description": "The shape of each type that the requests of the activities send or receive, and of each type those types reach through their properties, keyed by the fully qualified name of the class without type arguments; a class whose source was not analysed by the name the sources write it with. Absent where no request names a type.",
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/modelType" }
     }
   },
   "$defs": {
@@ -46,6 +52,225 @@
       "type": "string",
       "pattern": "^:"
     },
+    "requestParameter": {
+      "description": "A parameter of the target of a request.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "in"],
+      "properties": {
+        "name": {
+          "description": "For a part of the path, the name the target writes it with inside {...}; for a part of the query, its key.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "in": {
+          "description": "path: a computed part of the path. query: a part of the query.",
+          "enum": ["path", "query"]
+        },
+        "type": {
+          "description": "The type of the expression that gives the value, where it is computed and its type is known. Written as Kotlin writes types, with fully qualified names, ? for a nullable type and * for a star projection; a class whose source was not analysed is named as the sources write it, by the name an import gives it where there is one.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "value": {
+          "description": "For a part of the query, its value as the target writes it: fixed text, {key} or {name}.",
+          "type": "string"
+        }
+      }
+    },
+    "requestArgument": {
+      "description": "An argument of a call of a client, other than the one that says the operation.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["position"],
+      "properties": {
+        "name": {
+          "description": "The name of the parameter it is given to, where the call names it or it resolves.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "position": {
+          "description": "Its place among the arguments as written, from 1.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "type": {
+          "description": "The type of the expression handed over, where it is known. Written as Kotlin writes types, with fully qualified names, ? for a nullable type and * for a star projection; a class whose source was not analysed is named as the sources write it, by the name an import gives it where there is one.",
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "payload": {
+      "description": "What a request sends, or what the code makes of its answer.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "description": "none: no body. text: text the code puts together or keeps as it is. type: an object the code converts, of the type given. not-read: an answer the code discards or whose body it never asks for. unknown: what is sent or what becomes of the answer could not be followed.",
+          "enum": ["none", "text", "type", "not-read", "unknown"]
+        },
+        "type": {
+          "description": "For type: the type of the object written into the body or read out of it; a type of the analysed sources names its entry in the inventory's types table by its name without type arguments. Written as Kotlin writes types, with fully qualified names, ? for a nullable type and * for a star projection; a class whose source was not analysed is named as the sources write it, by the name an import gives it where there is one.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "mediaType": {
+          "description": "The media type the code gives the body, from a Content-Type or Accept header.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "format": {
+          "description": "The library that writes the object or reads it: jackson (ObjectMapper, with or without jackson-module-kotlin) or kotlinx (kotlinx.serialization's Json).",
+          "enum": ["jackson", "kotlinx"]
+        },
+        "naming": {
+          "description": "For jackson: the naming strategy that quarkus.jackson.property-naming-strategy gives in the configuration of the module that makes the request, as written there.",
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "if": { "properties": { "kind": { "const": "type" } } },
+      "then": { "required": ["type"] },
+      "else": { "not": { "required": ["type"] } }
+    },
+    "configuredValue": {
+      "description": "A value of a configuration property, as a file or the code gives it.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "value"],
+      "properties": {
+        "key": { "$ref": "#/$defs/nonEmptyString" },
+        "value": {
+          "description": "The value as written; a ${...} expression in it is kept as written.",
+          "type": "string"
+        },
+        "profile": {
+          "description": "The profile the value is given for, such as prod; absent for the value without a profile.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "file": {
+          "description": "The file that gives the value, relative to the root of the analysed repository with / separators; absent for the default the code gives where no file gives a value.",
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "modelType": {
+      "description": "The shape of a type that requests send or receive, as read from the sources.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "description": "object: a class whose properties are written as the fields of an object. enum: an enum class. alternatives: a sealed class or interface, or one with @JsonSubTypes, that is one of its subtypes. not-read: a class whose source was not analysed, such as one from a jar, known by its name alone.",
+          "enum": ["object", "enum", "alternatives", "not-read"]
+        },
+        "typeParameters": {
+          "description": "The names of the class's type parameters, in order, which its properties may use as types.",
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "properties": {
+          "description": "For object: the properties a serialiser writes, in the order of the class: those of the primary constructor, then the public properties with a backing field, those marked @JsonIgnore or @Transient left out.",
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/modelProperty" }
+        },
+        "values": {
+          "description": "For enum: the entries, in the order of the class.",
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/modelValue" }
+        },
+        "subtypes": {
+          "description": "For alternatives: the types it may be, in the order the sources give them.",
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/modelSubtype" }
+        },
+        "jsonDiscriminator": {
+          "description": "For alternatives: the property Jackson writes the type in, as @JsonTypeInfo gives it (its property, or the default of its use).",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "serialDiscriminator": {
+          "description": "For alternatives: the property @JsonClassDiscriminator names for kotlinx.serialization.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "jsonNaming": {
+          "description": "The naming strategy @JsonNaming gives the class, by the simple name of the strategy class as written, such as SnakeCaseStrategy.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "serialName": {
+          "description": "The name @SerialName gives the class itself.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "jsonName": {
+          "description": "The name @JsonTypeName gives the class itself.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "loc": {
+          "description": "Where the class is declared; absent for a class that is not of the analysed sources.",
+          "$ref": "#/$defs/location"
+        }
+      }
+    },
+    "modelProperty": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "type"],
+      "properties": {
+        "name": {
+          "description": "The name of the property in Kotlin.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "type": {
+          "description": "Its type, nullable where it ends in ?. Written as Kotlin writes types, with fully qualified names, ? for a nullable type and * for a star projection; a class whose source was not analysed is named as the sources write it, by the name an import gives it where there is one.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "optional": {
+          "description": "True if the property has a default value, so that an object may be read without it.",
+          "const": true
+        },
+        "jsonName": {
+          "description": "The name @JsonProperty gives it, on the property or any of its use-site targets.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "serialName": {
+          "description": "The name @SerialName gives it.",
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "modelValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "jsonName": {
+          "description": "The name @JsonProperty gives the entry.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "serialName": {
+          "description": "The name @SerialName gives the entry.",
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "modelSubtype": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "description": "The type, by its fully qualified name.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "jsonName": {
+          "description": "The name @JsonSubTypes.Type gives it for Jackson, or @JsonTypeName on the class.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "serialName": {
+          "description": "The name @SerialName on the class gives it for kotlinx.serialization.",
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
     "request": {
       "description": "A request to another service. A part of it that the code computes is written as {name}, by the name the code gives it; a part that comes from a configuration property is written as {key}.",
       "type": "object",
@@ -56,6 +281,10 @@
           "description": "http: an HTTP request sent with java.net.http.HttpClient. client: a call of a client that the analysis was told of with --client.",
           "enum": ["http", "client"]
         },
+        "service": {
+          "description": "The name of the service the request goes to, as the endpoints page names it: for http, the first label of the host the target starts with, or more labels where two hosts would otherwise share a name, or the key or name the target starts with where no host is configured; for client, the simple name of the client. Every request of a commit is named against all the others.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
         "method": {
           "description": "For http: the HTTP method, or the expression that gives it as {name} where it is computed. Absent where the code that builds the request is not seen or does not say it.",
           "$ref": "#/$defs/nonEmptyString"
@@ -63,6 +292,12 @@
         "target": {
           "description": "For http: the URI, with its constant parts as written, each part from a configuration property as {key} and each other computed part as {name}.",
           "$ref": "#/$defs/nonEmptyString"
+        },
+        "parameters": {
+          "description": "For http: the parameters of the target, each computed part of its path by the name the target gives it and each part of its query by its key, in the order of the target.",
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/requestParameter" }
         },
         "client": {
           "description": "For client: the simple name of the class of the client, where it is known.",
@@ -76,9 +311,27 @@
           "description": "For client: the value of the argument named with --client: as text where it is constant, as {key} where it comes from a configuration property, as {name} where it is computed.",
           "$ref": "#/$defs/nonEmptyString"
         },
+        "constant": {
+          "description": "For client: the constant of the sources that gives operation, by its fully qualified name, where one does.",
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "arguments": {
+          "description": "For client: the arguments other than the one that says the operation, in the order written, each with the type of the expression handed over.",
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/requestArgument" }
+        },
+        "sends": {
+          "description": "For http: what the request sends as its body, where the code that builds it is seen.",
+          "$ref": "#/$defs/payload"
+        },
         "response": {
           "description": "The type of what the request gives back, with simple names, where the code says it.",
           "$ref": "#/$defs/nonEmptyString"
+        },
+        "receives": {
+          "description": "What the code makes of the answer: the type it reads the body as, text it keeps as it is, an answer it does not read, or unknown where that could not be followed.",
+          "$ref": "#/$defs/payload"
         },
         "keys": {
           "description": "The configuration properties the request is made with, in the order the code uses them.",
@@ -90,6 +343,12 @@
         "host": {
           "description": "The value configured for the key that the target starts with, found in application.yaml, application.yml or application.properties of the module that holds the class: the host, or the start of the URI, the request goes to. A ${...} expression in it is kept as written.",
           "type": "string"
+        },
+        "hosts": {
+          "description": "Every value configured for the key the target starts with, and for a second key that follows it directly: the value without a profile and that of the prod profile, each from the file that gives it, or the default the code gives where no file gives one.",
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/configuredValue" }
         },
         "class": {
           "description": "Fully qualified name of the class that makes the request, where several classes of the analysed sources implement the activity type.",

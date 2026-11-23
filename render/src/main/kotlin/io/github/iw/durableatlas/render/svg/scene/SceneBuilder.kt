@@ -47,8 +47,8 @@ import kotlin.math.max
  */
 internal class SceneBuilder(private val layout: DiagramLayout, measurer: TextMeasurer, maxLabelLength: Int) {
     private val fitter = TextFitter(measurer)
-    private val texts = CardTexts(maxLabelLength)
     private val document = layout.document
+    private val texts = CardTexts(maxLabelLength, document.nodes.flatMap { it.requests })
     private val nodes: Map<String, IrNode> = document.nodes.associateBy { it.id }
     private val positions: Map<IrEdge, Int> = document.edges.withIndex().associate { (index, edge) -> edge to index }
     private val mainEntry = document.entryPoints.firstOrNull { it.kind == EntryPointKind.WORKFLOW_METHOD }

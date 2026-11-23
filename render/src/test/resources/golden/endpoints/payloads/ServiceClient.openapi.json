@@ -1,0 +1,205 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "ServiceClient",
+    "version": "0000000000000000000000000000000000000000",
+    "description": "The operations of ServiceClient that the activities call, as their code calls them; written by Durable Atlas from the analysis of the sources. It is not the service's own description."
+  },
+  "x-durable-atlas": {
+    "kind": "client",
+    "type": "ServiceClient",
+    "call": "invoke"
+  },
+  "paths": {
+    "/book-fn": {
+      "post": {
+        "operationId": "book-fn",
+        "x-constant": "payloads.PayloadsImpl.BOOK",
+        "requestBody": {
+          "description": "The arguments of the call other than the one that names the operation, by name, or by place where the call does not name them.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "payload"
+                ],
+                "properties": {
+                  "payload": {
+                    "$ref": "#/components/schemas/Charge"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "The code reads the answer as Booking.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Booking"
+                }
+              }
+            }
+          }
+        },
+        "x-used-by": [
+          {
+            "activity": "Client",
+            "interface": "payloads.Payloads",
+            "workflows": [],
+            "source": "app/src/main/kotlin/payloads/Payloads.kt:173"
+          }
+        ]
+      }
+    },
+    "/count-fn": {
+      "post": {
+        "operationId": "count-fn",
+        "requestBody": {
+          "description": "The arguments of the call other than the one that names the operation, by name, or by place where the call does not name them.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "payload"
+                ],
+                "properties": {
+                  "payload": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "The code reads the answer as Int.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        },
+        "x-used-by": [
+          {
+            "activity": "Expected",
+            "interface": "payloads.Payloads",
+            "workflows": [],
+            "source": "app/src/main/kotlin/payloads/Payloads.kt:176"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Booking": {
+        "type": "object",
+        "x-kotlin-type": "payloads.Booking",
+        "required": [
+          "booking_id"
+        ],
+        "properties": {
+          "booking_id": {
+            "type": "string",
+            "x-kotlin-name": "id"
+          },
+          "level": {
+            "$ref": "#/components/schemas/Level"
+          }
+        }
+      },
+      "Charge": {
+        "type": "object",
+        "x-kotlin-type": "payloads.Charge",
+        "required": [
+          "orderId",
+          "total",
+          "method"
+        ],
+        "properties": {
+          "orderId": {
+            "type": "string"
+          },
+          "total": {
+            "$ref": "#/components/schemas/Money",
+            "x-kotlin-name": "amount"
+          },
+          "method": {
+            "$ref": "#/components/schemas/Method"
+          },
+          "key": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "Level": {
+        "type": "string",
+        "x-kotlin-type": "payloads.Level",
+        "enum": [
+          "standard",
+          "express"
+        ]
+      },
+      "Method": {
+        "type": "string",
+        "x-kotlin-type": "payloads.Method",
+        "enum": [
+          "CARD",
+          "bank-transfer"
+        ]
+      },
+      "Money": {
+        "type": "object",
+        "x-kotlin-type": "payloads.Money",
+        "required": [
+          "cents"
+        ],
+        "properties": {
+          "cents": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "rate": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Rate"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "Rate": {
+        "description": "Not read: the analysis did not have the source of Rate, so its fields are not known.",
+        "x-kotlin-type": "org.example.rates.Rate"
+      }
+    }
+  }
+}

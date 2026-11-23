@@ -77,7 +77,7 @@ internal object MarkdownPage {
         val rows = requests.map { row ->
             Markdown.row(
                 Markdown.code(row.activity),
-                Markdown.code(row.request),
+                row.link?.let { Markdown.codeLink(row.request, it) } ?: Markdown.code(row.request),
                 row.host?.let(Markdown::code).orEmpty(),
                 row.response?.let(Markdown::code).orEmpty(),
                 Markdown.code(row.source),

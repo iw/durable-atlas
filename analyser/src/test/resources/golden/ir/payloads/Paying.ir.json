@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflowType": "Paying",
+  "interface": "payloads.Paying",
+  "implementation": "payloads.PayingImpl",
+  "module": ":app",
+  "entryPoints": [
+    {
+      "id": "main",
+      "kind": "workflowMethod",
+      "name": "Paying",
+      "start": "n696bb56a3b"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n5175b82721",
+      "kind": "activity",
+      "name": "Jackson",
+      "timeout": "PT5S",
+      "requests": [
+        {
+          "kind": "http",
+          "service": "billing",
+          "method": "POST",
+          "target": "{billing.url}/charges",
+          "sends": {
+            "kind": "type",
+            "type": "payloads.Charge",
+            "format": "jackson"
+          },
+          "response": "String",
+          "receives": {
+            "kind": "type",
+            "type": "payloads.Receipt",
+            "format": "jackson"
+          },
+          "keys": [
+            "billing.url"
+          ],
+          "host": "http://billing.example.com",
+          "hosts": [
+            {
+              "key": "billing.url",
+              "value": "http://billing.example.com",
+              "file": "app/src/main/resources/application.yaml"
+            },
+            {
+              "key": "billing.url",
+              "value": "https://billing.prod.example.com",
+              "profile": "prod",
+              "file": "app/src/main/resources/application.yaml"
+            }
+          ],
+          "loc": {
+            "file": "app/src/main/kotlin/payloads/Payloads.kt",
+            "line": 75
+          }
+        }
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/payloads/Payloads.kt",
+        "line": 40
+      }
+    },
+    {
+      "id": "n696bb56a3b",
+      "kind": "start",
+      "loc": {
+        "file": "app/src/main/kotlin/payloads/Payloads.kt",
+        "line": 39
+      }
+    },
+    {
+      "id": "nd2342d6c3a",
+      "kind": "activity",
+      "name": "Serial",
+      "timeout": "PT5S",
+      "requests": [
+        {
+          "kind": "http",
+          "service": "billing",
+          "method": "PUT",
+          "target": "{billing.url}/bookings",
+          "sends": {
+            "kind": "type",
+            "type": "payloads.Booking",
+            "mediaType": "application/json",
+            "format": "kotlinx"
+          },
+          "response": "String",
+          "receives": {
+            "kind": "type",
+            "type": "payloads.Booking",
+            "format": "kotlinx"
+          },
+          "keys": [
+            "billing.url"
+          ],
+          "host": "http://billing.example.com",
+          "hosts": [
+            {
+              "key": "billing.url",
+              "value": "http://billing.example.com",
+              "file": "app/src/main/resources/application.yaml"
+            },
+            {
+              "key": "billing.url",
+              "value": "https://billing.prod.example.com",
+              "profile": "prod",
+              "file": "app/src/main/resources/application.yaml"
+            }
+          ],
+          "loc": {
+            "file": "app/src/main/kotlin/payloads/Payloads.kt",
+            "line": 94
+          }
+        }
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/payloads/Payloads.kt",
+        "line": 41
+      }
+    },
+    {
+      "id": "nedd528afe0",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n5175b82721",
+      "to": "nd2342d6c3a"
+    },
+    {
+      "from": "n696bb56a3b",
+      "to": "n5175b82721"
+    },
+    {
+      "from": "nd2342d6c3a",
+      "to": "nedd528afe0"
+    }
+  ],
+  "stats": {
+    "nodes": 4,
+    "unknown": 0
+  }
+}

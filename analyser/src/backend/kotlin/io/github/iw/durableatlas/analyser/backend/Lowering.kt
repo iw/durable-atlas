@@ -112,6 +112,7 @@ import org.jetbrains.kotlin.psi.KtStringTemplateEntryWithExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtSuperTypeCallEntry
 import org.jetbrains.kotlin.psi.KtThisExpression
+import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
@@ -298,13 +299,14 @@ internal class Lowering(
             is KtBinaryExpression -> binary(expression)
             is KtUnaryExpression -> unary(expression)
             is KtBinaryExpressionWithTypeRHS ->
-                other(expression, expression.operationReference.text, listOf(expression.left))
+                other(expression, expression.operationReference.text, listOf(expression.left)).copy(type = expression.right?.let(::writtenType))
             is KtIsExpression ->
                 other(expression, expression.operationReference.text, listOf(expression.leftHandSide))
             is KtArrayAccessExpression ->
                 other(expression, "[]", listOfNotNull(expression.arrayExpression) + expression.indexExpressions)
             // What an object literal or a local declaration contains is not part of the enclosing flow.
             is KtObjectLiteralExpression -> other(expression, "object", emptyList())
+                .copy(type = expression.objectDeclaration.superTypeListEntries.firstOrNull()?.typeReference?.let(::writtenType))
             is KtDeclaration -> other(expression, "declaration", emptyList())
             else -> other(expression, null, expression.children.filterIsInstance<KtExpression>())
         }
@@ -862,6 +864,9 @@ internal class Lowering(
     }
 
     private fun typeRef(type: KaType): TypeRef = with(ka) { with(reader) { typeRef(type) } }
+
+    /** The type [reference] writes; see [SymbolReader.declaredType]. */
+    private fun writtenType(reference: KtTypeReference): TypeRef? = safely { with(ka) { with(reader) { declaredType(reference.type, reference) } } }
 
     private fun callee(symbol: KaFunctionSymbol): Callee = with(ka) { with(reader) { callee(symbol) } }
 

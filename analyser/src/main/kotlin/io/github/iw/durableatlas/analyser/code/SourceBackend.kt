@@ -36,6 +36,19 @@ interface SourceBackend : AutoCloseable {
     fun properties(className: String): List<PropertyDecl>
 
     /**
+     * What a serialiser sees of the class with this fully qualified name, from the sources or
+     * from a library; `null` if there is no such class, or it is not a class whose objects hold
+     * values (an annotation class).
+     */
+    fun shape(className: String): ClassShape? = null
+
+    /**
+     * The fully qualified name that an import of the source file [file] (relative to the root of
+     * the analysed repository) gives the simple name [name]; `null` if no import names it.
+     */
+    fun imported(file: String, name: String): String? = null
+
+    /**
      * The declaration of a function of the sources. [id] must have come from this backend, as the
      * callee of a call or with a function of a class; `null` for any other id, and for functions
      * of libraries.

@@ -1,0 +1,1032 @@
+{
+  "schemaVersion": 1,
+  "commit": "0000000000000000000000000000000000000000",
+  "modelMode": "degraded",
+  "workflows": [
+    {
+      "workflowType": "Paying",
+      "interface": "payloads.Paying",
+      "module": ":app",
+      "loc": {
+        "file": "app/src/main/kotlin/payloads/Payloads.kt",
+        "line": 28
+      },
+      "entryPoints": [
+        {
+          "kind": "workflowMethod",
+          "name": "Paying",
+          "method": "pay"
+        }
+      ],
+      "implementations": [
+        {
+          "class": "payloads.PayingImpl",
+          "module": ":app",
+          "loc": {
+            "file": "app/src/main/kotlin/payloads/Payloads.kt",
+            "line": 33
+          }
+        }
+      ]
+    }
+  ],
+  "activityInterfaces": [
+    {
+      "interface": "payloads.Payloads",
+      "module": ":app",
+      "loc": {
+        "file": "app/src/main/kotlin/payloads/Payloads.kt",
+        "line": 46
+      },
+      "activities": [
+        {
+          "name": "Bytes",
+          "method": "bytes",
+          "requests": [
+            {
+              "kind": "http",
+              "service": "billing",
+              "method": "PATCH",
+              "target": "{billing.url}/refunds/{id}",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "type": "kotlin.String"
+                }
+              ],
+              "sends": {
+                "kind": "type",
+                "type": "kotlin.collections.List<payloads.Line>",
+                "mediaType": "application/json",
+                "format": "jackson"
+              },
+              "response": "String",
+              "receives": {
+                "kind": "type",
+                "type": "kotlin.collections.List<payloads.Line>",
+                "format": "jackson"
+              },
+              "keys": [
+                "billing.url"
+              ],
+              "host": "http://billing.example.com",
+              "hosts": [
+                {
+                  "key": "billing.url",
+                  "value": "http://billing.example.com",
+                  "file": "app/src/main/resources/application.yaml"
+                },
+                {
+                  "key": "billing.url",
+                  "value": "https://billing.prod.example.com",
+                  "profile": "prod",
+                  "file": "app/src/main/resources/application.yaml"
+                }
+              ],
+              "loc": {
+                "file": "app/src/main/kotlin/payloads/Payloads.kt",
+                "line": 84
+              }
+            }
+          ]
+        },
+        {
+          "name": "Client",
+          "method": "client",
+          "requests": [
+            {
+              "kind": "client",
+              "service": "ServiceClient",
+              "client": "ServiceClient",
+              "call": "invoke",
+              "operation": "book-fn",
+              "constant": "payloads.PayloadsImpl.BOOK",
+              "arguments": [
+                {
+                  "name": "payload",
+                  "position": 2,
+                  "type": "payloads.Charge"
+                }
+              ],
+              "response": "Booking",
+              "receives": {
+                "kind": "type",
+                "type": "payloads.Booking"
+              },
+              "loc": {
+                "file": "app/src/main/kotlin/payloads/Payloads.kt",
+                "line": 173
+              }
+            }
+          ]
+        },
+        {
+          "name": "Deep",
+          "method": "deep",
+          "requests": [
+            {
+              "kind": "http",
+              "service": "billing",
+              "method": "GET",
+              "target": "{billing.url}/deep/{id}",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "type": "kotlin.String"
+                }
+              ],
+              "sends": {
+                "kind": "none"
+              },
+              "response": "String",
+              "receives": {
+                "kind": "type",
+                "type": "payloads.Receipt",
+                "format": "jackson"
+              },
+              "keys": [
+                "billing.url"
+              ],
+              "host": "http://billing.example.com",
+              "hosts": [
+                {
+                  "key": "billing.url",
+                  "value": "http://billing.example.com",
+                  "file": "app/src/main/resources/application.yaml"
+                },
+                {
+                  "key": "billing.url",
+                  "value": "https://billing.prod.example.com",
+                  "profile": "prod",
+                  "file": "app/src/main/resources/application.yaml"
+                }
+              ],
+              "loc": {
+                "file": "app/src/main/kotlin/payloads/Payloads.kt",
+                "line": 164
+              }
+            }
+          ]
+        },
+        {
+          "name": "Empty",
+          "method": "empty",
+          "requests": [
+            {
+              "kind": "http",
+              "service": "billing",
+              "method": "GET",
+              "target": "{billing.url}/health",
+              "sends": {
+                "kind": "none"
+              },
+              "response": "String",
+              "receives": {
+                "kind": "text"
+              },
+              "keys": [
+                "billing.url"
+              ],
+              "host": "http://billing.example.com",
+              "hosts": [
+                {
+                  "key": "billing.url",
+                  "value": "http://billing.example.com",
+                  "file": "app/src/main/resources/application.yaml"
+                },
+                {
+                  "key": "billing.url",
+                  "value": "https://billing.prod.example.com",
+                  "profile": "prod",
+                  "file": "app/src/main/resources/application.yaml"
+                }
+              ],
+              "loc": {
+                "file": "app/src/main/kotlin/payloads/Payloads.kt",
+                "line": 107
+              }
+            }
+          ]
+        },
+        {
+          "name": "Events",
+          "method": "events",
+          "requests": [
+            {
+              "kind": "http",
+              "service": "billing",
+              "method": "GET",
+              "target": "{billing.url}/events",
+              "sends": {
+                "kind": "none"
+              },
+              "response": "String",
+              "receives": {
+                "kind": "type",
+                "type": "kotlin.collections.List<payloads.Event>",
+                "format": "jackson"
+              },
+              "keys": [
+                "billing.url"
+              ],
+              "host": "http://billing.example.com",
+              "hosts": [
+                {
+                  "key": "billing.url",
+                  "value": "http://billing.example.com",
+                  "file": "app/src/main/resources/application.yaml"
+                },
+                {
+                  "key": "billing.url",
+                  "value": "https://billing.prod.example.com",
+                  "profile": "prod",
+                  "file": "app/src/main/resources/application.yaml"
+                }
+              ],
+              "loc": {
+                "file": "app/src/main/kotlin/payloads/Payloads.kt",
+                "line": 144
+              }
+            }
+          ]
+        },
+        {
+          "name": "Expected",
+          "method": "expected",
+          "requests": [
+            {
+              "kind": "client",
+              "service": "ServiceClient",
+              "client": "ServiceClient",
+              "call": "invoke",
+              "operation": "count-fn",
+              "arguments": [
+                {
+                  "name": "payload",
+                  "position": 2,
+                  "type": "kotlin.String"
+                }
+              ],
+              "response": "Int",
+              "receives": {
+                "kind": "type",
+                "type": "kotlin.Int"
+              },
+              "loc": {
+                "file": "app/src/main/kotlin/payloads/Payloads.kt",
+                "line": 176
+              }
+            }
+          ]
+        },
+        {
+          "name": "File",
+          "method": "file",
+          "requests": [
+            {
+              "kind": "http",
+              "service": "billing",
+              "method": "POST",
+              "target": "{billing.url}/files",
+              "sends": {
+                "kind": "unknown"
+              },
+              "receives": {
+                "kind": "not-read"
+              },
+              "keys": [
+                "billing.url"
+              ],
+              "host": "http://billing.example.com",
+              "hosts": [
+                {
+                  "key": "billing.url",
+                  "value": "http://billing.example.com",
+                  "file": "app/src/main/resources/application.yaml"
+                },
+                {
+                  "key": "billing.url",
+                  "value": "https://billing.prod.example.com",
+                  "profile": "prod",
+                  "file": "app/src/main/resources/application.yaml"
+                }
+              ],
+              "loc": {
+                "file": "app/src/main/kotlin/payloads/Payloads.kt",
+                "line": 139
+              }
+            }
+          ]
+        },
+        {
+          "name": "Helper",
+          "method": "helper",
+          "requests": [
+            {
+              "kind": "http",
+              "service": "billing",
+              "method": "POST",
+              "target": "{billing.url}/charges",
+              "sends": {
+                "kind": "type",
+                "type": "payloads.Charge",
+                "format": "jackson"
+              },
+              "response": "String",
+              "receives": {
+                "kind": "type",
+                "type": "payloads.Receipt",
+                "format": "jackson"
+              },
+              "keys": [
+                "billing.url"
+              ],
+              "host": "http://billing.example.com",
+              "hosts": [
+                {
+                  "key": "billing.url",
+                  "value": "http://billing.example.com",
+                  "file": "app/src/main/resources/application.yaml"
+                },
+                {
+                  "key": "billing.url",
+                  "value": "https://billing.prod.example.com",
+                  "profile": "prod",
+                  "file": "app/src/main/resources/application.yaml"
+                }
+              ],
+              "loc": {
+                "file": "app/src/main/kotlin/payloads/Payloads.kt",
+                "line": 119
+              }
+            }
+          ]
+        },
+        {
+          "name": "Jackson",
+          "method": "jackson",
+          "requests": [
+            {
+              "kind": "http",
+              "service": "billing",
+              "method": "POST",
+              "target": "{billing.url}/charges",
+              "sends": {
+                "kind": "type",
+                "type": "payloads.Charge",
+                "format": "jackson"
+              },
+              "response": "String",
+              "receives": {
+                "kind": "type",
+                "type": "payloads.Receipt",
+                "format": "jackson"
+              },
+              "keys": [
+                "billing.url"
+              ],
+              "host": "http://billing.example.com",
+              "hosts": [
+                {
+                  "key": "billing.url",
+                  "value": "http://billing.example.com",
+                  "file": "app/src/main/resources/application.yaml"
+                },
+                {
+                  "key": "billing.url",
+                  "value": "https://billing.prod.example.com",
+                  "profile": "prod",
+                  "file": "app/src/main/resources/application.yaml"
+                }
+              ],
+              "loc": {
+                "file": "app/src/main/kotlin/payloads/Payloads.kt",
+                "line": 75
+              }
+            }
+          ]
+        },
+        {
+          "name": "Lost",
+          "method": "lost",
+          "requests": [
+            {
+              "kind": "http",
+              "service": "billing",
+              "method": "GET",
+              "target": "{billing.url}/lost",
+              "sends": {
+                "kind": "none"
+              },
+              "response": "String",
+              "receives": {
+                "kind": "unknown"
+              },
+              "keys": [
+                "billing.url"
+              ],
+              "host": "http://billing.example.com",
+              "hosts": [
+                {
+                  "key": "billing.url",
+                  "value": "http://billing.example.com",
+                  "file": "app/src/main/resources/application.yaml"
+                },
+                {
+                  "key": "billing.url",
+                  "value": "https://billing.prod.example.com",
+                  "profile": "prod",
+                  "file": "app/src/main/resources/application.yaml"
+                }
+              ],
+              "loc": {
+                "file": "app/src/main/kotlin/payloads/Payloads.kt",
+                "line": 130
+              }
+            }
+          ]
+        },
+        {
+          "name": "Pair",
+          "method": "pair",
+          "requests": [
+            {
+              "kind": "http",
+              "service": "billing",
+              "method": "GET",
+              "target": "{billing.url}/pair",
+              "sends": {
+                "kind": "none"
+              },
+              "response": "String",
+              "receives": {
+                "kind": "type",
+                "type": "kotlin.Pair<kotlin.String, kotlin.Int>",
+                "format": "jackson"
+              },
+              "keys": [
+                "billing.url"
+              ],
+              "host": "http://billing.example.com",
+              "hosts": [
+                {
+                  "key": "billing.url",
+                  "value": "http://billing.example.com",
+                  "file": "app/src/main/resources/application.yaml"
+                },
+                {
+                  "key": "billing.url",
+                  "value": "https://billing.prod.example.com",
+                  "profile": "prod",
+                  "file": "app/src/main/resources/application.yaml"
+                }
+              ],
+              "loc": {
+                "file": "app/src/main/kotlin/payloads/Payloads.kt",
+                "line": 159
+              }
+            }
+          ]
+        },
+        {
+          "name": "Scans",
+          "method": "scans",
+          "requests": [
+            {
+              "kind": "http",
+              "service": "billing",
+              "method": "GET",
+              "target": "{billing.url}/scans",
+              "sends": {
+                "kind": "none"
+              },
+              "response": "String",
+              "receives": {
+                "kind": "type",
+                "type": "payloads.Scan",
+                "format": "kotlinx"
+              },
+              "keys": [
+                "billing.url"
+              ],
+              "host": "http://billing.example.com",
+              "hosts": [
+                {
+                  "key": "billing.url",
+                  "value": "http://billing.example.com",
+                  "file": "app/src/main/resources/application.yaml"
+                },
+                {
+                  "key": "billing.url",
+                  "value": "https://billing.prod.example.com",
+                  "profile": "prod",
+                  "file": "app/src/main/resources/application.yaml"
+                }
+              ],
+              "loc": {
+                "file": "app/src/main/kotlin/payloads/Payloads.kt",
+                "line": 149
+              }
+            }
+          ]
+        },
+        {
+          "name": "Serial",
+          "method": "serial",
+          "requests": [
+            {
+              "kind": "http",
+              "service": "billing",
+              "method": "PUT",
+              "target": "{billing.url}/bookings",
+              "sends": {
+                "kind": "type",
+                "type": "payloads.Booking",
+                "mediaType": "application/json",
+                "format": "kotlinx"
+              },
+              "response": "String",
+              "receives": {
+                "kind": "type",
+                "type": "payloads.Booking",
+                "format": "kotlinx"
+              },
+              "keys": [
+                "billing.url"
+              ],
+              "host": "http://billing.example.com",
+              "hosts": [
+                {
+                  "key": "billing.url",
+                  "value": "http://billing.example.com",
+                  "file": "app/src/main/resources/application.yaml"
+                },
+                {
+                  "key": "billing.url",
+                  "value": "https://billing.prod.example.com",
+                  "profile": "prod",
+                  "file": "app/src/main/resources/application.yaml"
+                }
+              ],
+              "loc": {
+                "file": "app/src/main/kotlin/payloads/Payloads.kt",
+                "line": 94
+              }
+            }
+          ]
+        },
+        {
+          "name": "Stream",
+          "method": "stream",
+          "requests": [
+            {
+              "kind": "http",
+              "service": "billing",
+              "method": "GET",
+              "target": "{billing.url}/lines/{id}?page={page}",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "type": "kotlin.String"
+                },
+                {
+                  "name": "page",
+                  "in": "query",
+                  "type": "kotlin.Int",
+                  "value": "{page}"
+                }
+              ],
+              "sends": {
+                "kind": "none"
+              },
+              "response": "InputStream",
+              "receives": {
+                "kind": "type",
+                "type": "payloads.Page<payloads.Line>",
+                "format": "jackson"
+              },
+              "keys": [
+                "billing.url"
+              ],
+              "host": "http://billing.example.com",
+              "hosts": [
+                {
+                  "key": "billing.url",
+                  "value": "http://billing.example.com",
+                  "file": "app/src/main/resources/application.yaml"
+                },
+                {
+                  "key": "billing.url",
+                  "value": "https://billing.prod.example.com",
+                  "profile": "prod",
+                  "file": "app/src/main/resources/application.yaml"
+                }
+              ],
+              "loc": {
+                "file": "app/src/main/kotlin/payloads/Payloads.kt",
+                "line": 124
+              }
+            }
+          ]
+        },
+        {
+          "name": "Text",
+          "method": "text",
+          "requests": [
+            {
+              "kind": "http",
+              "service": "billing",
+              "method": "POST",
+              "target": "{billing.url}/notes",
+              "sends": {
+                "kind": "text",
+                "mediaType": "text/plain"
+              },
+              "receives": {
+                "kind": "not-read"
+              },
+              "keys": [
+                "billing.url"
+              ],
+              "host": "http://billing.example.com",
+              "hosts": [
+                {
+                  "key": "billing.url",
+                  "value": "http://billing.example.com",
+                  "file": "app/src/main/resources/application.yaml"
+                },
+                {
+                  "key": "billing.url",
+                  "value": "https://billing.prod.example.com",
+                  "profile": "prod",
+                  "file": "app/src/main/resources/application.yaml"
+                }
+              ],
+              "loc": {
+                "file": "app/src/main/kotlin/payloads/Payloads.kt",
+                "line": 102
+              }
+            }
+          ]
+        },
+        {
+          "name": "Tree",
+          "method": "tree",
+          "requests": [
+            {
+              "kind": "http",
+              "service": "billing",
+              "method": "GET",
+              "target": "{billing.url}/tree",
+              "sends": {
+                "kind": "none"
+              },
+              "response": "String",
+              "receives": {
+                "kind": "type",
+                "type": "payloads.Node",
+                "format": "jackson"
+              },
+              "keys": [
+                "billing.url"
+              ],
+              "host": "http://billing.example.com",
+              "hosts": [
+                {
+                  "key": "billing.url",
+                  "value": "http://billing.example.com",
+                  "file": "app/src/main/resources/application.yaml"
+                },
+                {
+                  "key": "billing.url",
+                  "value": "https://billing.prod.example.com",
+                  "profile": "prod",
+                  "file": "app/src/main/resources/application.yaml"
+                }
+              ],
+              "loc": {
+                "file": "app/src/main/kotlin/payloads/Payloads.kt",
+                "line": 154
+              }
+            }
+          ]
+        }
+      ],
+      "implementations": [
+        {
+          "class": "payloads.PayloadsImpl",
+          "module": ":app",
+          "loc": {
+            "file": "app/src/main/kotlin/payloads/Payloads.kt",
+            "line": 65
+          }
+        }
+      ]
+    }
+  ],
+  "types": {
+    "kotlin.Pair": {
+      "kind": "object",
+      "typeParameters": [
+        "A",
+        "B"
+      ],
+      "properties": [
+        {
+          "name": "first",
+          "type": "A"
+        },
+        {
+          "name": "second",
+          "type": "B"
+        }
+      ]
+    },
+    "org.example.rates.Rate": {
+      "kind": "not-read"
+    },
+    "payloads.Booking": {
+      "kind": "object",
+      "properties": [
+        {
+          "name": "id",
+          "type": "kotlin.String",
+          "serialName": "booking_id"
+        },
+        {
+          "name": "level",
+          "type": "payloads.Level",
+          "optional": true
+        }
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/payloads/Serial.kt",
+        "line": 8
+      }
+    },
+    "payloads.Charge": {
+      "kind": "object",
+      "properties": [
+        {
+          "name": "orderId",
+          "type": "kotlin.String"
+        },
+        {
+          "name": "amount",
+          "type": "payloads.Money",
+          "jsonName": "total"
+        },
+        {
+          "name": "method",
+          "type": "payloads.Method"
+        },
+        {
+          "name": "key",
+          "type": "java.util.UUID?",
+          "optional": true
+        },
+        {
+          "name": "note",
+          "type": "kotlin.String?",
+          "optional": true
+        }
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/payloads/Models.kt",
+        "line": 17
+      }
+    },
+    "payloads.Event": {
+      "kind": "alternatives",
+      "subtypes": [
+        {
+          "type": "payloads.Event.Placed",
+          "jsonName": "placed"
+        },
+        {
+          "type": "payloads.Event.Dropped",
+          "jsonName": "dropped"
+        }
+      ],
+      "jsonDiscriminator": "kind",
+      "loc": {
+        "file": "app/src/main/kotlin/payloads/Models.kt",
+        "line": 41
+      }
+    },
+    "payloads.Event.Dropped": {
+      "kind": "object",
+      "properties": [
+        {
+          "name": "reason",
+          "type": "kotlin.String?"
+        }
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/payloads/Models.kt",
+        "line": 44
+      }
+    },
+    "payloads.Event.Placed": {
+      "kind": "object",
+      "properties": [
+        {
+          "name": "at",
+          "type": "java.time.Instant"
+        }
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/payloads/Models.kt",
+        "line": 42
+      }
+    },
+    "payloads.Level": {
+      "kind": "enum",
+      "values": [
+        {
+          "name": "STANDARD",
+          "serialName": "standard"
+        },
+        {
+          "name": "EXPRESS",
+          "serialName": "express"
+        }
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/payloads/Serial.kt",
+        "line": 11
+      }
+    },
+    "payloads.Line": {
+      "kind": "object",
+      "properties": [
+        {
+          "name": "sku",
+          "type": "kotlin.String"
+        },
+        {
+          "name": "quantity",
+          "type": "kotlin.Int"
+        }
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/payloads/Models.kt",
+        "line": 32
+      }
+    },
+    "payloads.Method": {
+      "kind": "enum",
+      "values": [
+        {
+          "name": "CARD"
+        },
+        {
+          "name": "BANK_TRANSFER",
+          "jsonName": "bank-transfer"
+        }
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/payloads/Models.kt",
+        "line": 15
+      }
+    },
+    "payloads.Money": {
+      "kind": "object",
+      "properties": [
+        {
+          "name": "cents",
+          "type": "kotlin.Long"
+        },
+        {
+          "name": "currency",
+          "type": "kotlin.String",
+          "optional": true
+        },
+        {
+          "name": "rate",
+          "type": "org.example.rates.Rate?",
+          "optional": true
+        }
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/payloads/Models.kt",
+        "line": 13
+      }
+    },
+    "payloads.Node": {
+      "kind": "object",
+      "properties": [
+        {
+          "name": "name",
+          "type": "kotlin.String"
+        },
+        {
+          "name": "parent",
+          "type": "payloads.Node?"
+        },
+        {
+          "name": "children",
+          "type": "kotlin.collections.List<payloads.Node>"
+        }
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/payloads/Models.kt",
+        "line": 47
+      }
+    },
+    "payloads.Page": {
+      "kind": "object",
+      "typeParameters": [
+        "T"
+      ],
+      "properties": [
+        {
+          "name": "items",
+          "type": "kotlin.collections.List<T>"
+        },
+        {
+          "name": "next",
+          "type": "kotlin.String?"
+        }
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/payloads/Models.kt",
+        "line": 34
+      }
+    },
+    "payloads.Receipt": {
+      "kind": "object",
+      "properties": [
+        {
+          "name": "chargeId",
+          "type": "kotlin.String"
+        },
+        {
+          "name": "takenAt",
+          "type": "java.time.Instant"
+        },
+        {
+          "name": "lines",
+          "type": "kotlin.collections.List<payloads.Line>"
+        },
+        {
+          "name": "totals",
+          "type": "kotlin.collections.Map<kotlin.String, payloads.Money>"
+        }
+      ],
+      "jsonNaming": "KebabCaseStrategy",
+      "loc": {
+        "file": "app/src/main/kotlin/payloads/Models.kt",
+        "line": 30
+      }
+    },
+    "payloads.Scan": {
+      "kind": "alternatives",
+      "subtypes": [
+        {
+          "type": "payloads.Scan.Seen",
+          "serialName": "seen"
+        },
+        {
+          "type": "payloads.Scan.Gone",
+          "serialName": "gone"
+        }
+      ],
+      "loc": {
+        "file": "app/src/main/kotlin/payloads/Serial.kt",
+        "line": 14
+      }
+    },
+    "payloads.Scan.Gone": {
+      "kind": "object",
+      "properties": [
+        {
+          "name": "at",
+          "type": "kotlin.String"
+        }
+      ],
+      "serialName": "gone",
+      "loc": {
+        "file": "app/src/main/kotlin/payloads/Serial.kt",
+        "line": 21
+      }
+    },
+    "payloads.Scan.Seen": {
+      "kind": "object",
+      "properties": [
+        {
+          "name": "at",
+          "type": "kotlin.String"
+        }
+      ],
+      "serialName": "seen",
+      "loc": {
+        "file": "app/src/main/kotlin/payloads/Serial.kt",
+        "line": 17
+      }
+    }
+  }
+}

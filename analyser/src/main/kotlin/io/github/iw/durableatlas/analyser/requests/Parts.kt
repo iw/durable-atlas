@@ -1,5 +1,8 @@
 package io.github.iw.durableatlas.analyser.requests
 
+import io.github.iw.durableatlas.ir.ParameterLocation
+import io.github.iw.durableatlas.ir.RequestParameter
+
 /**
  * A piece of a text that the code builds: a URI, or the operation a client is asked for. What the
  * code fixes is kept as it is; what it computes is told by where it comes from.
@@ -11,8 +14,11 @@ internal sealed interface Part {
     /** The value of a configuration property. */
     data class Key(val key: String, val default: String? = null) : Part
 
-    /** A value the code computes, by the name it is written with. */
-    data class Name(val written: String) : Part
+    /**
+     * A value the code computes, by the name it is written with, and with the type of the
+     * expression it comes from as requests write types, where that is known.
+     */
+    data class Name(val written: String, val type: String? = null) : Part
 }
 
 /** The parts as one text: a key as `{key}`, a computed value as `{name}`. */
@@ -29,6 +35,65 @@ internal fun List<Part>.constant(): String? = if (all { it is Part.Text }) joinT
 
 /** The configuration properties among the parts, each once, in order. */
 internal fun List<Part>.keys(): List<String> = filterIsInstance<Part.Key>().map { it.key }.distinct()
+
+/**
+ * The parts at the start of a target that say where it goes rather than what it asks for: the
+ * key or computed part it starts with, and a second key that follows that one directly; or, for
+ * a target that starts with fixed text, none. How many there are.
+ */
+internal fun List<Part>.serverParts(): Int {
+    val first = firstOrNull() ?: return 0
+    if (first is Part.Text) return 0
+    return if (first is Part.Key && getOrNull(1) is Part.Key) 2 else 1
+}
+
+/**
+ * The parameters of a target: each computed part of its path and each key in it after the start
+ * (see [serverParts]), by the name the target writes it with; each part of its query, by its key.
+ */
+internal fun List<Part>.parameters(): List<RequestParameter> {
+    val parameters = ArrayList<RequestParameter>()
+    val rest = drop(serverParts())
+    val question = rest.indexOfFirst { it is Part.Text && '?' in it.text }
+    val path = if (question < 0) rest else rest.take(question)
+    for (part in path) {
+        when (part) {
+            is Part.Name -> parameters += RequestParameter(part.written, ParameterLocation.PATH, part.type)
+            is Part.Key -> parameters += RequestParameter(part.key, ParameterLocation.PATH)
+            is Part.Text -> Unit
+        }
+    }
+    if (question < 0) return parameters.distinctBy { it.name }
+    // The query as pieces: the fixed text after the `?`, then the parts after it, split at each `&`.
+    val split = rest[question] as Part.Text
+    val pieces = listOf<Part>(Part.Text(split.text.substringAfter('?'))) + rest.drop(question + 1)
+    val items = ArrayList<MutableList<Part>>().apply { add(ArrayList()) }
+    for (piece in pieces) {
+        if (piece !is Part.Text) {
+            items.last() += piece
+            continue
+        }
+        val texts = piece.text.split('&')
+        texts.forEachIndexed { index, text ->
+            if (index > 0) items += ArrayList<Part>()
+            if (text.isNotEmpty()) items.last() += Part.Text(text)
+        }
+    }
+    for (item in items) {
+        if (item.isEmpty()) continue
+        val head = item.first()
+        if (head is Part.Text && '=' in head.text) {
+            val key = head.text.substringBefore('=')
+            val value = listOf<Part>(Part.Text(head.text.substringAfter('='))) + item.drop(1)
+            val computed = value.filterIsInstance<Part.Name>().singleOrNull()?.takeIf { value.joined().size == 1 }
+            if (key.isNotEmpty()) parameters += RequestParameter(key, ParameterLocation.QUERY, computed?.type, value.joined().text())
+        } else if (item.size == 1 && head is Part.Name) {
+            // A query that is computed as a whole, or a part of it whose key is computed as well.
+            parameters += RequestParameter(head.written, ParameterLocation.QUERY, head.type, "{${head.written}}")
+        }
+    }
+    return parameters.distinctBy { it.location to it.name }
+}
 
 /** Neighbouring texts joined, empty texts left out. */
 internal fun List<Part>.joined(): List<Part> {

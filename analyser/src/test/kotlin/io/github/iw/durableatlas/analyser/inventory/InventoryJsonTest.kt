@@ -2,6 +2,11 @@ package io.github.iw.durableatlas.analyser.inventory
 
 import io.github.iw.durableatlas.analyser.FIXED_COMMIT
 import io.github.iw.durableatlas.ir.EntryPointKind
+import io.github.iw.durableatlas.ir.ModelKind
+import io.github.iw.durableatlas.ir.ModelProperty
+import io.github.iw.durableatlas.ir.ModelSubtype
+import io.github.iw.durableatlas.ir.ModelType
+import io.github.iw.durableatlas.ir.ModelValue
 import io.github.iw.durableatlas.ir.ModelMode
 import io.github.iw.durableatlas.ir.SourceLocation
 import io.github.iw.durableatlas.ir.testing.JsonSchemaChecker
@@ -98,6 +103,32 @@ class InventoryJsonTest {
         assertContains(newer.message.orEmpty(), "Unsupported inventory schemaVersion 2")
         assertFailsWith<InventoryFormatException> { InventoryJson.decode("[]") }
         assertFailsWith<InventoryFormatException> { InventoryJson.decode(json.replace("\"commit\"", "\"comit\"")) }
+    }
+
+    @Test
+    fun `the models the requests send and receive are a table after the activities, by qualified name, in the schema`() {
+        assertTrue("\"types\"" !in InventoryJson.encode(inventory))
+        val typed = inventory.copy(
+            types = sortedMapOf(
+                "com.example.Charge" to ModelType(
+                    ModelKind.OBJECT,
+                    properties = listOf(ModelProperty("orderId", "kotlin.String", jsonName = "order_id"), ModelProperty("note", "kotlin.String?", optional = true)),
+                    jsonNaming = "SnakeCaseStrategy",
+                    loc = SourceLocation("billing/src/main/kotlin/Models.kt", 3),
+                ),
+                "com.example.Event" to ModelType(ModelKind.ALTERNATIVES, subtypes = listOf(ModelSubtype("com.example.Event.Placed", jsonName = "placed")), jsonDiscriminator = "kind"),
+                "com.example.Method" to ModelType(ModelKind.ENUM, values = listOf(ModelValue("CARD"), ModelValue("BANK_TRANSFER", jsonName = "bank-transfer"))),
+                "com.example.Page" to ModelType(ModelKind.OBJECT, typeParameters = listOf("T"), properties = listOf(ModelProperty("items", "kotlin.collections.List<T>"))),
+                "org.example.Rate" to ModelType(ModelKind.NOT_READ),
+            ),
+        )
+        val json = InventoryJson.encode(typed)
+        schema.assertValid(json)
+        assertEquals(typed, InventoryJson.decode(json))
+        assertContains(json, "  ],\n  \"types\": {\n    \"com.example.Charge\": {\n      \"kind\": \"object\",\n")
+        assertContains(json, "\"org.example.Rate\": {\n      \"kind\": \"not-read\"\n    }\n  }\n}\n")
+        assertTrue(schema.violations(json.replace("\"kind\": \"not-read\"", "\"kind\": \"interface\"")).isNotEmpty())
+        assertTrue(schema.violations(json.replace("\"typeParameters\": [\n        \"T\"\n      ]", "\"typeParameters\": []")).isNotEmpty())
     }
 
     @Test

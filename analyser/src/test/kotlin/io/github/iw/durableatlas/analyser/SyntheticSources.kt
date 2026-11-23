@@ -28,6 +28,9 @@ class SyntheticSources(private val directory: Path) {
     /** Whether the manifests list the resource files, as a model made before they were exported does not. */
     var listResources: Boolean = true
 
+    /** Jars the modules have besides those of a degraded model, as a model made from the build has a repository's libraries. */
+    var libraries: List<Path> = emptyList()
+
     /** Declares a module and the modules it depends on. Files go under `<name>/src/main/kotlin`. */
     fun module(path: String, vararg dependencies: String): SyntheticSources {
         modules[path] = dependencies.toList()
@@ -71,7 +74,7 @@ class SyntheticSources(private val directory: Path) {
                 path = path,
                 sources = roots.map { directory.resolve(ModelLayout.SOURCE_DIRECTORY).relativize(it).joinToString("/") },
                 projectDeps = dependencies.sorted(),
-                jars = classpath().map { it.toString() },
+                jars = (classpath() + libraries).map { it.toString() },
                 mode = ModelMode.DEGRADED,
                 resources = if (listResources) resources[path].orEmpty().sorted() else emptyList(),
             )

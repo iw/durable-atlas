@@ -84,8 +84,10 @@ and the tool's dependencies. See [docs/install.md](docs/install.md).
   activity type is read for the HTTP requests it sends with `java.net.http`, and for the calls
   of the repository's own clients that `--client` names. A request shows its method and
   target, or its client and operation, with a configuration key and the host that
-  `application.yaml` or `application.properties` gives it, as MicroProfile Config reads them.
-  See [docs/usage.md](docs/usage.md#requests-of-activities).
+  `application.yaml` or `application.properties` gives it, as MicroProfile Config reads them,
+  and what it sends and reads as Jackson or kotlinx.serialization types. An endpoints page
+  lists every operation the activities call with its models, and an OpenAPI 3.1 document per
+  service goes beside it. See [docs/usage.md](docs/usage.md#requests-of-activities).
 - **Writes SVG, Mermaid and HTML.** An SVG diagram is one self-contained file without
   script: a card per step with its own icon and colour, regions as boxes, handlers in a
   band above the flow, a legend, and links to the diagrams of child workflows and, if you
@@ -147,7 +149,7 @@ that was exceeded, 3 a run that fell back to degraded mode.
 | `ir` | The workflow IR: types, JSON form, schema, canonical order, validation |
 | `model-extractor` | The model of a commit: reads the repository through git, asks its Gradle build for modules and classpaths, or builds a degraded model |
 | `analyser` | From model to IR: the Kotlin Analysis API backend in a class loader of its own, discovery of workflows and activities, the flow and the graph of each entry point, the requests of each activity |
-| `render` | From IR to diagrams: Mermaid, SVG (laid out with the Eclipse Layout Kernel), HTML pages, the index, the time limit |
+| `render` | From IR to diagrams: Mermaid, SVG (laid out with the Eclipse Layout Kernel), HTML pages, the index, the time limit, the endpoints page and OpenAPI documents |
 | `overlay` | From IR and event histories to coverage: reading and fetching histories, mapping events to nodes, overlay diagrams, the version map |
 | `cli` | The `durable-atlas` command: options, summaries, progress and exit statuses |
 | `build-logic` | The convention plugins the modules share |

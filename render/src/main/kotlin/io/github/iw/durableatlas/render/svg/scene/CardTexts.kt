@@ -3,6 +3,7 @@ package io.github.iw.durableatlas.render.svg.scene
 import io.github.iw.durableatlas.ir.EntryPointKind
 import io.github.iw.durableatlas.ir.IrNode
 import io.github.iw.durableatlas.ir.NodeKind
+import io.github.iw.durableatlas.ir.Request
 import io.github.iw.durableatlas.render.layout.CollapsedRegion
 import io.github.iw.durableatlas.render.layout.Durations
 import io.github.iw.durableatlas.render.layout.HandlerGroup
@@ -20,8 +21,13 @@ import io.github.iw.durableatlas.render.svg.StyleKinds
  */
 internal class CardText(val kindLabel: String, val name: String?, val detail: String? = null, val more: String? = null)
 
-/** The words of the SVG notation. */
-internal class CardTexts(private val maxLength: Int) {
+/**
+ * The words of the SVG notation.
+ *
+ * @param requests every request of the document, which name the services of those that do not
+ *   name their own
+ */
+internal class CardTexts(private val maxLength: Int, private val requests: List<Request> = emptyList()) {
     private fun text(value: String?): String? = value?.singleLine(maxLength)?.takeIf { it.isNotEmpty() }
 
     /** A node's own words for itself: its label when it has one, else its name. */
@@ -33,7 +39,7 @@ internal class CardTexts(private val maxLength: Int) {
      * The words of a node's card. A step that the flow does not wait for says so below its name,
      * and a child workflow says after its kind what becomes of it when its parent closes, where
      * that is not the usual. An activity that asks something of other services names the first
-     * request below its name, and how many more it makes.
+     * request briefly below its name, by its method and service, and how many more it makes.
      */
     fun of(node: IrNode): CardText {
         val text = plain(node)
@@ -71,7 +77,7 @@ internal class CardTexts(private val maxLength: Int) {
             NodeKind.CANCEL_EXTERNAL -> CardText(kind, display(node) ?: "another workflow")
             NodeKind.UPSERT_SEARCH_ATTRIBUTES, NodeKind.UPSERT_MEMO -> CardText(kind, text(node.label) ?: NodeText.written(node, ::text))
             NodeKind.ACTIVITY, NodeKind.LOCAL_ACTIVITY -> {
-                val first = RequestTexts.of(node).firstOrNull()?.let { text(RequestTexts.short(it)) }
+                val first = RequestTexts.of(node).firstOrNull()?.let { text(RequestTexts.brief(it, requests)) }
                 if (first == null) CardText(kind, display(node)) else CardText(kind, display(node) ?: "activity", first, RequestTexts.more(node))
             }
             else -> CardText(kind, display(node))

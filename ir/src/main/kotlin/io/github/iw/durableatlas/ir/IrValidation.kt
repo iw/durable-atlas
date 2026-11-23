@@ -45,6 +45,7 @@ fun IrDocument.validate(): List<String> {
         if (node.requests.isNotEmpty() && node.kind != NodeKind.ACTIVITY && node.kind != NodeKind.LOCAL_ACTIVITY) {
             problems += "node '${node.id}' has requests, which only an activity makes"
         }
+        for (request in node.requests) problems += request.problems().map { "node '${node.id}' has a request at ${request.loc.file}:${request.loc.line} that $it" }
         if (node.retry && node.kind != NodeKind.LOOP) problems += "node '${node.id}' is marked as a retry, which only a loop can be"
         if (node.join != null && node.kind != NodeKind.PARALLEL) {
             problems += "node '${node.id}' says which lanes are waited for, which only a parallel region can"
@@ -108,4 +109,20 @@ private fun ancestorsOf(node: IrNode, nodesById: Map<String, IrNode>): Set<Strin
         current = nodesById[current]?.parent
     }
     return seen
+}
+
+/** What is wrong with a request that a JSON Schema does not tell. */
+internal fun Request.problems(): List<String> {
+    val problems = ArrayList<String>()
+    for ((name, payload) in listOf("sends" to sends, "receives" to receives)) {
+        if (payload == null) continue
+        if ((payload.kind == PayloadKind.TYPE) != (payload.type != null)) problems += "$name ${payload.kind.name.lowercase()} with a type only where it is a type"
+        if (payload.naming != null && payload.format != PayloadFormat.JACKSON) problems += "$name gives a naming strategy without Jackson"
+    }
+    if (sends?.kind == PayloadKind.NOT_READ) problems += "sends what is not read"
+    if (receives?.kind == PayloadKind.NONE) problems += "receives nothing, which is said as not read"
+    if (kind == RequestKind.CLIENT && (sends != null || parameters.isNotEmpty())) problems += "is a call of a client and sends a body or has parameters of a target"
+    if (kind == RequestKind.HTTP && (arguments.isNotEmpty() || constant != null)) problems += "is an HTTP request and has arguments or a constant of a client"
+    if (arguments.map { it.position }.let { it.toSet().size != it.size }) problems += "has two arguments at one place"
+    return problems
 }

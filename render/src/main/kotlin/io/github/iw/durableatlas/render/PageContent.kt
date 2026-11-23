@@ -63,7 +63,7 @@ internal class PageContent(
      * @param request what it is, short
      * @param source where it is made, and by which class where several implement the activity type
      */
-    class RequestRow(val activity: String, val request: String, val host: String?, val response: String?, val source: String)
+    class RequestRow(val activity: String, val request: String, val host: String?, val response: String?, val source: String, val link: String? = null)
 
     companion object {
         const val DEGRADED_WARNING: String =
@@ -163,6 +163,7 @@ internal class PageContent(
                                 host = request.host,
                                 response = request.response,
                                 source = request.className?.let { "$place (${it.substringAfterLast('.')})" } ?: place,
+                                link = options.endpoints?.of(request),
                             )
                         }
                     },

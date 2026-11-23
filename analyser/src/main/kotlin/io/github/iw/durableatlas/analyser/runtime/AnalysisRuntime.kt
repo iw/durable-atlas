@@ -141,6 +141,10 @@ private class ContextSwitchingBackend(
 
     override fun properties(className: String) = withContextClassLoader(loader) { delegate.properties(className) }
 
+    override fun shape(className: String) = withContextClassLoader(loader) { delegate.shape(className) }
+
+    override fun imported(file: String, name: String) = withContextClassLoader(loader) { delegate.imported(file, name) }
+
     override fun function(id: FunctionId) =
         withContextClassLoader(loader) { delegate.function(id) }
 

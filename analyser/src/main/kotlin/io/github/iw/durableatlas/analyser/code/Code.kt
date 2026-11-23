@@ -324,4 +324,10 @@ data class Other(
     val text: String,
     val operands: List<Code>,
     override val location: SourceLocation,
+    /**
+     * The type that the expression says, where it says one: the type of a cast (`as`, `as?`),
+     * and the first supertype of an object literal as it is written, with a class that does not
+     * resolve named by [TypeRef.unresolved] and its type arguments read one by one.
+     */
+    val type: TypeRef? = null,
 ) : Code

@@ -23,9 +23,16 @@
       "requests": [
         {
           "kind": "http",
+          "service": "mail",
           "method": "POST",
           "target": "https://mail.example.com/send",
+          "sends": {
+            "kind": "text"
+          },
           "response": "String",
+          "receives": {
+            "kind": "not-read"
+          },
           "class": "requests.MailNotices",
           "loc": {
             "file": "app/src/main/kotlin/requests/Requested.kt",
@@ -34,9 +41,20 @@
         },
         {
           "kind": "client",
+          "service": "ServiceClient",
           "client": "ServiceClient",
           "call": "invoke",
           "operation": "text-send",
+          "arguments": [
+            {
+              "name": "payload",
+              "position": 2,
+              "type": "kotlin.String"
+            }
+          ],
+          "receives": {
+            "kind": "not-read"
+          },
           "class": "requests.TextNotices",
           "loc": {
             "file": "app/src/main/kotlin/requests/Requested.kt",
@@ -57,9 +75,23 @@
       "requests": [
         {
           "kind": "http",
+          "service": "api",
           "method": "POST",
           "target": "https://api.example.com/orders/{id}",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "type": "kotlin.String"
+            }
+          ],
+          "sends": {
+            "kind": "none"
+          },
           "response": "String",
+          "receives": {
+            "kind": "text"
+          },
           "loc": {
             "file": "app/src/main/kotlin/requests/HttpCalls.kt",
             "line": 80
@@ -97,10 +129,22 @@
       "requests": [
         {
           "kind": "client",
+          "service": "ServiceClient",
           "client": "ServiceClient",
           "call": "invoke",
           "operation": "named-fn",
+          "arguments": [
+            {
+              "name": "payload",
+              "position": 2,
+              "type": "kotlin.String"
+            }
+          ],
           "response": "List<Item>",
+          "receives": {
+            "kind": "type",
+            "type": "kotlin.collections.List<requests.Item>"
+          },
           "loc": {
             "file": "app/src/main/kotlin/requests/ClientCalls.kt",
             "line": 77

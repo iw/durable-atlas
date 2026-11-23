@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Endpoints</title>
+<style>
+:root{--paper:#F6F4EE;--surface:#FFFFFF;--sunk:#F0EDE5;--ink:#101820;--ink-2:#344054;--muted:#5B6472;--rule:#D9D4C7;--rule-soft:#E7E3D9;--edge:#B9B3A4;
+--activity:#2563EB;--activity-ink:#1D4ED8;--activity-tint:#EAF1FE;--on-activity:#FFFFFF;--key:#9D174D;
+--get:#166534;--get-bg:#E3F2E7;--post:#1D4ED8;--post-bg:#E6EEFD;--put:#9A4A07;--put-bg:#FBEEDA;--patch:#6D28D9;--patch-bg:#EFE8FE;
+--delete:#B42318;--delete-bg:#FCE8EB;--fn:#0F766E;--fn-bg:#DFF2EE;--other:#475569;--other-bg:#EEF0F4;
+--sans:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+@media (prefers-color-scheme:dark){:root{--paper:#0F1216;--surface:#171B21;--sunk:#1D222A;--ink:#E8EAED;--ink-2:#C3C9D2;--muted:#98A2B3;--rule:#2B323C;--rule-soft:#242A33;--edge:#3D4652;
+--activity:#3B76F0;--activity-ink:#8DB2FF;--activity-tint:#172440;--key:#F28BB8;
+--get:#7AD49A;--get-bg:#15291D;--post:#8DB2FF;--post-bg:#172540;--put:#F0B163;--put-bg:#2E2213;--patch:#BBA2FA;--patch-bg:#241B3A;
+--delete:#F4978E;--delete-bg:#341B1E;--fn:#5FD0C0;--fn-bg:#11292A;--other:#C3C9D2;--other-bg:#242A33;color-scheme:dark}}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 14px/1.55 var(--sans);padding:28px 16px 56px}
+a{color:var(--activity-ink)}
+code{font-family:var(--mono);font-size:.92em}
+.wrap{max-width:1240px;margin:0 auto}
+.top{display:grid;gap:10px;padding-bottom:24px;border-bottom:1px solid var(--rule);margin-bottom:28px}
+.eyebrow{margin:0;font:600 12px/1 var(--sans)}
+.top h1{margin:0;font:700 34px/1.1 var(--sans);letter-spacing:-.02em}
+.lede{margin:0;max-width:72ch;font-size:15px;color:var(--ink-2)}
+.stats{display:flex;flex-wrap:wrap;gap:6px 22px;margin:4px 0 0}
+.stats div{display:flex;align-items:baseline;gap:6px}
+.stats dt{order:2;color:var(--muted);font-size:13px}
+.stats dd{order:1;margin:0;font:600 18px/1 var(--sans);font-variant-numeric:tabular-nums}
+.files{margin:0;font-size:13px;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.layout{display:grid;grid-template-columns:196px minmax(0,1fr);gap:40px;align-items:start}
+.index{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;display:grid;gap:6px;font-size:13px}
+.index-h{margin:12px 0 2px;font:600 10.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.index-h:first-child{margin-top:0}
+.index ul{list-style:none;margin:0;padding:0;display:grid;gap:1px}
+.index a{display:flex;align-items:center;gap:8px;padding:3px 8px;margin-left:-8px;border-radius:6px;color:var(--ink);text-decoration:none}
+.index .n{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums;font-size:12px}
+.dot{width:8px;height:8px;border-radius:2px;flex:none;background:var(--post)}
+.dot-client{background:var(--fn);border-radius:50%}
+main{min-width:0;display:grid;gap:8px}
+.block{display:grid;gap:14px;padding-bottom:28px}
+.block-head{display:grid;gap:4px}
+.block-head h2{margin:0;font:650 21px/1.2 var(--sans);letter-spacing:-.01em}
+.block-head p{margin:0;color:var(--muted);max-width:76ch}
+.scroll,.map-scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:10px}
+.map-scroll{padding:4px}
+.muted{color:var(--muted)}
+.label{font:600 10.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.matrix{border-collapse:collapse;font-size:12.5px}
+.matrix th,.matrix td{border-bottom:1px solid var(--rule-soft);padding:3px 6px}
+.matrix thead th{vertical-align:bottom;border-bottom:1px solid var(--rule)}
+.matrix th.col{padding:6px 2px}
+.matrix th.col a{writing-mode:vertical-rl;transform:rotate(180deg);display:inline-block;max-height:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink);text-decoration:none;font:500 12px var(--mono)}
+.matrix tbody th{text-align:left;font-weight:600;white-space:nowrap;position:sticky;left:0;background:var(--surface)}
+.matrix td{text-align:center;min-width:20px;font-variant-numeric:tabular-nums}
+.matrix td a{display:inline-block;min-width:18px;border-radius:4px;background:var(--activity-tint);text-decoration:none;font-weight:600}
+.matrix .corner{text-align:left;color:var(--muted);font:600 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase}
+.acts{border-collapse:collapse;width:100%;font-size:13px}
+.acts th,.acts td{text-align:left;vertical-align:top;padding:7px 10px;border-bottom:1px solid var(--rule-soft)}
+.acts thead th{font:600 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.acts tr:target{background:var(--activity-tint)}
+.acts .iface{margin-top:3px;font-size:12px;color:var(--muted)}
+.calls{list-style:none;margin:0;padding:0;display:grid;gap:3px}
+.calls a{color:var(--ink);text-decoration:none;font:500 12.5px var(--mono)}
+.service{padding:26px 0 18px;border-top:1px solid var(--rule);display:grid;gap:14px}
+.svc-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}
+.svc-kind{font:600 10.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);flex-basis:100%}
+.svc-head h2{margin:0;font:600 20px/1.2 var(--mono)}
+.oas{font-size:12.5px;margin-left:auto}
+.server{flex-basis:100%;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 16px;margin:2px 0 0;font-size:13px;color:var(--muted)}
+.server code{color:var(--ink);overflow-wrap:anywhere}
+.server .key,.server .var{color:var(--key)}
+.server .profile code{color:var(--ink-2)}
+.map{display:block}
+.map .edge{fill:none;stroke:var(--edge);stroke-width:1.4}
+.map .act-card{fill:var(--surface);stroke:var(--activity);stroke-width:1.5}
+.map .act-tile{fill:var(--activity)}
+.map .act-k{fill:var(--activity);font:700 9.5px var(--sans);letter-spacing:.06em}
+.map .act-name{fill:var(--ink);font:600 13px var(--sans)}
+.map .row-bg{fill:var(--sunk)}
+.map .row-t{fill:var(--ink);font:500 11.5px var(--mono)}
+.bt{font:600 9.5px var(--mono)}
+.b-get{fill:var(--get-bg)}.t-get{fill:var(--get)}.b-post{fill:var(--post-bg)}.t-post{fill:var(--post)}
+.b-put{fill:var(--put-bg)}.t-put{fill:var(--put)}.b-patch{fill:var(--patch-bg)}.t-patch{fill:var(--patch)}
+.b-delete{fill:var(--delete-bg)}.t-delete{fill:var(--delete)}.b-fn{fill:var(--fn-bg)}.t-fn{fill:var(--fn)}
+.b-head,.b-options,.b-trace,.b-http{fill:var(--other-bg)}.t-head,.t-options,.t-trace,.t-http{fill:var(--other)}
+.ops{display:grid;gap:14px}
+.op{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:14px 16px 15px;display:grid;gap:12px;min-width:0}
+.op:target{box-shadow:0 0 0 2px var(--activity);border-color:transparent}
+.op-line{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;min-width:0}
+.m{font:600 11px/1 var(--mono);padding:4px 6px;border-radius:5px;letter-spacing:.03em;flex:none;display:inline-block}
+.m-get{color:var(--get);background:var(--get-bg)}.m-post{color:var(--post);background:var(--post-bg)}
+.m-put{color:var(--put);background:var(--put-bg)}.m-patch{color:var(--patch);background:var(--patch-bg)}
+.m-delete{color:var(--delete);background:var(--delete-bg)}.m-fn{color:var(--fn);background:var(--fn-bg)}
+.m-head,.m-options,.m-trace,.m-http{color:var(--other);background:var(--other-bg)}
+.path,.sig{font:500 15px/1.35 var(--mono);color:var(--ink);overflow-wrap:anywhere;min-width:0}
+.path .p,.sig .sp,.panel .sp,.sig .p{color:var(--key)}
+.sig .sn{font-weight:600}
+.const{margin:0;font-size:13px;color:var(--muted)}
+.const code{color:var(--ink-2)}
+.params{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+.params .label{margin-right:4px}
+.param{display:inline-flex;align-items:baseline;gap:6px;padding:3px 8px;border:1px solid var(--rule);border-radius:6px;font:400 12px var(--mono)}
+.param .in{font:500 10.5px var(--sans);color:var(--muted)}
+.param .val{color:var(--key)}
+.panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.panel{background:var(--sunk);border-radius:8px;padding:10px 12px 11px;min-width:0}
+.panel-head{margin-top:7px;display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;font:500 13px/1.4 var(--mono)}
+.media{font:400 11.5px var(--mono);color:var(--muted)}
+.none,.state{font:500 13px var(--sans);color:var(--muted)}
+.s-unknown,.s-not-read{color:var(--key)}
+.why{margin:6px 0 0;font-size:12.5px;color:var(--muted)}
+.fields{list-style:none;margin:9px 0 0;padding:8px 0 0;border-top:1px solid var(--rule-soft);display:grid;gap:3px}
+.fields li{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:12px;font:400 12.5px/1.45 var(--mono)}
+.fields li.one{display:block;font:500 12px var(--sans)}
+.f-name{color:var(--ink);overflow-wrap:anywhere}
+.f-type{color:var(--ink-2);overflow-wrap:anywhere}
+.opt{font:500 10px var(--sans);color:var(--muted);margin-left:6px;letter-spacing:.03em;white-space:nowrap;overflow-wrap:normal;display:inline-block}
+.values{display:flex;flex-wrap:wrap;gap:4px 6px;margin:9px 0 0;padding:8px 0 0;border-top:1px solid var(--rule-soft);list-style:none}
+.values li{font:500 11.5px var(--mono);padding:2px 6px;border-radius:4px;background:var(--surface);color:var(--ink-2)}
+.t-ref{color:var(--activity-ink);text-decoration:none;border-bottom:1px dotted currentColor}
+.t-null,.t-any{color:var(--muted)}
+.usedby{display:grid;gap:7px;padding-top:10px;border-top:1px solid var(--rule-soft)}
+.usedby ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.usedby li{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-size:13px}
+.act-chip{display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 5px;border-radius:6px;background:var(--activity);color:var(--on-activity);font:600 12.5px/1.2 var(--sans);text-decoration:none}
+.act-chip svg{width:14px;height:14px;flex:none}
+.wf-name{font-weight:600;color:var(--ink)}
+.src{margin-left:auto;font:400 11.5px var(--mono);color:var(--muted)}
+.model-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px;align-items:start}
+.model{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:12px 14px 13px;display:grid;gap:4px;min-width:0}
+.model:target{box-shadow:0 0 0 2px var(--activity);border-color:transparent}
+.model header{display:flex;align-items:baseline;gap:8px}
+.model h3{margin:0;font:600 14.5px var(--mono);overflow-wrap:anywhere}
+.m-kind{margin-left:auto;font:600 10px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.m-svc{margin:0;font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.model .values li{background:var(--sunk)}
+.m-use{margin:8px 0 0;padding-top:8px;border-top:1px solid var(--rule-soft);display:grid;gap:3px;font-size:12px;color:var(--muted)}
+.m-use a{color:var(--ink-2);text-decoration:none;font:400 11.5px var(--mono)}
+.m-use .m{font-size:9.5px;padding:2px 4px;margin-right:4px}
+.note{margin-top:10px;padding-top:18px;border-top:1px solid var(--rule);color:var(--muted);font-size:13px;display:grid;gap:8px;max-width:84ch}
+.note p{margin:0}
+@media (max-width:960px){.layout{grid-template-columns:minmax(0,1fr);gap:18px}.index{position:static;max-height:none}.index ul{display:flex;flex-wrap:wrap;gap:4px}.index a{margin-left:0;border:1px solid var(--rule)}}
+@media (max-width:520px){.top h1{font-size:28px}.op{padding:12px}.fields li{grid-template-columns:minmax(0,1fr);gap:0}.src{margin-left:0;flex-basis:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+<p class="eyebrow"><a href="../index.md">All workflows</a></p>
+<h1>Endpoints</h1>
+<p class="lede">Every service operation the activities call, what it sends and gets back, and the workflows that depend on it, as the code of commit <code>0000000000000000000000000000000000000000</code> shows them. Each service is also an OpenAPI&nbsp;3.1 document next to this page.</p>
+<dl class="stats">
+<div><dt>Services</dt><dd>2</dd></div>
+<div><dt>Operations</dt><dd>15</dd></div>
+<div><dt>Calls</dt><dd>16</dd></div>
+<div><dt>Models</dt><dd>17</dd></div>
+<div><dt>Workflows</dt><dd>1</dd></div>
+</dl>
+<p class="files"><span class="label">OpenAPI</span> <a href="billing.openapi.json"><code>billing.openapi.json</code></a> <a href="ServiceClient.openapi.json"><code>ServiceClient.openapi.json</code></a></p>
+</header>
+<div class="layout">
+<nav class="index" aria-label="Index">
+<p class="index-h">Page</p>
+<ul><li><a href="#who-calls-what">Who calls what</a></li><li><a href="#activities">Activities</a></li><li><a href="#models">Models</a></li></ul>
+<p class="index-h">Services</p>
+<ul>
+<li><a href="#service-billing"><span class="dot"></span>billing<span class="n">13</span></a></li>
+<li><a href="#service-serviceclient"><span class="dot dot-client"></span>ServiceClient<span class="n">2</span></a></li>
+</ul>
+</nav>
+<main>
+<section class="block" id="who-calls-what">
+<div class="block-head"><h2>Who calls what</h2>
+<p>Each workflow against each service its activities call: the number is how many of the service's operations the workflow reaches. A service's own section draws its callers.</p></div>
+<div class="scroll"><table class="matrix">
+<thead><tr><th class="corner">Workflow</th><th class="col"><a href="#service-billing" title="billing"><span>billing</span></a></th><th class="col"><a href="#service-serviceclient" title="ServiceClient"><span>ServiceClient</span></a></th></tr></thead>
+<tbody>
+<tr><th><a class="wf-name" href="../Paying.html">Paying</a></th><td><a href="#service-billing" title="Paying → billing: 2 operations">2</a></td><td></td></tr>
+<tr><th><span class="muted">No workflow</span></th><td><a href="#service-billing" title="Activities no workflow runs → billing: 12 operations">12</a></td><td><a href="#service-serviceclient" title="Activities no workflow runs → ServiceClient: 2 operations">2</a></td></tr>
+</tbody></table></div>
+</section>
+<section class="block" id="activities">
+<div class="block-head"><h2>Activities</h2><p>Each activity type that calls another service, the operations it calls in the order of its code, and the workflows that run it.</p></div>
+<div class="scroll"><table class="acts">
+<thead><tr><th>Activity</th><th>Calls</th><th>Workflows</th></tr></thead>
+<tbody>
+<tr id="activity-bytes"><th><span class="act-chip"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Bytes</span><div class="iface"><code>Payloads</code></div></th><td><ul class="calls"><li><a href="#op-billing-patch-refunds-id"><span class="m m-patch">PATCH</span> billing /refunds/{id}</a></li></ul></td><td><span class="muted">none of these sources</span></td></tr>
+<tr id="activity-client"><th><span class="act-chip"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Client</span><div class="iface"><code>Payloads</code></div></th><td><ul class="calls"><li><a href="#op-serviceclient-book-fn"><span class="m m-fn">FN</span> book-fn</a></li></ul></td><td><span class="muted">none of these sources</span></td></tr>
+<tr id="activity-deep"><th><span class="act-chip"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Deep</span><div class="iface"><code>Payloads</code></div></th><td><ul class="calls"><li><a href="#op-billing-get-deep-id"><span class="m m-get">GET</span> billing /deep/{id}</a></li></ul></td><td><span class="muted">none of these sources</span></td></tr>
+<tr id="activity-empty"><th><span class="act-chip"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Empty</span><div class="iface"><code>Payloads</code></div></th><td><ul class="calls"><li><a href="#op-billing-get-health"><span class="m m-get">GET</span> billing /health</a></li></ul></td><td><span class="muted">none of these sources</span></td></tr>
+<tr id="activity-events"><th><span class="act-chip"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Events</span><div class="iface"><code>Payloads</code></div></th><td><ul class="calls"><li><a href="#op-billing-get-events"><span class="m m-get">GET</span> billing /events</a></li></ul></td><td><span class="muted">none of these sources</span></td></tr>
+<tr id="activity-expected"><th><span class="act-chip"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Expected</span><div class="iface"><code>Payloads</code></div></th><td><ul class="calls"><li><a href="#op-serviceclient-count-fn"><span class="m m-fn">FN</span> count-fn</a></li></ul></td><td><span class="muted">none of these sources</span></td></tr>
+<tr id="activity-file"><th><span class="act-chip"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>File</span><div class="iface"><code>Payloads</code></div></th><td><ul class="calls"><li><a href="#op-billing-post-files"><span class="m m-post">POST</span> billing /files</a></li></ul></td><td><span class="muted">none of these sources</span></td></tr>
+<tr id="activity-helper"><th><span class="act-chip"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Helper</span><div class="iface"><code>Payloads</code></div></th><td><ul class="calls"><li><a href="#op-billing-post-charges"><span class="m m-post">POST</span> billing /charges</a></li></ul></td><td><span class="muted">none of these sources</span></td></tr>
+<tr id="activity-jackson"><th><span class="act-chip"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Jackson</span><div class="iface"><code>Payloads</code></div></th><td><ul class="calls"><li><a href="#op-billing-post-charges"><span class="m m-post">POST</span> billing /charges</a></li></ul></td><td><a class="wf-name" href="../Paying.html">Paying</a></td></tr>
+<tr id="activity-lost"><th><span class="act-chip"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Lost</span><div class="iface"><code>Payloads</code></div></th><td><ul class="calls"><li><a href="#op-billing-get-lost"><span class="m m-get">GET</span> billing /lost</a></li></ul></td><td><span class="muted">none of these sources</span></td></tr>
+<tr id="activity-pair"><th><span class="act-chip"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Pair</span><div class="iface"><code>Payloads</code></div></th><td><ul class="calls"><li><a href="#op-billing-get-pair"><span class="m m-get">GET</span> billing /pair</a></li></ul></td><td><span class="muted">none of these sources</span></td></tr>
+<tr id="activity-scans"><th><span class="act-chip"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Scans</span><div class="iface"><code>Payloads</code></div></th><td><ul class="calls"><li><a href="#op-billing-get-scans"><span class="m m-get">GET</span> billing /scans</a></li></ul></td><td><span class="muted">none of these sources</span></td></tr>
+<tr id="activity-serial"><th><span class="act-chip"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Serial</span><div class="iface"><code>Payloads</code></div></th><td><ul class="calls"><li><a href="#op-billing-put-bookings"><span class="m m-put">PUT</span> billing /bookings</a></li></ul></td><td><a class="wf-name" href="../Paying.html">Paying</a></td></tr>
+<tr id="activity-stream"><th><span class="act-chip"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Stream</span><div class="iface"><code>Payloads</code></div></th><td><ul class="calls"><li><a href="#op-billing-get-lines-id"><span class="m m-get">GET</span> billing /lines/{id}</a></li></ul></td><td><span class="muted">none of these sources</span></td></tr>
+<tr id="activity-text"><th><span class="act-chip"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Text</span><div class="iface"><code>Payloads</code></div></th><td><ul class="calls"><li><a href="#op-billing-post-notes"><span class="m m-post">POST</span> billing /notes</a></li></ul></td><td><span class="muted">none of these sources</span></td></tr>
+<tr id="activity-tree"><th><span class="act-chip"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Tree</span><div class="iface"><code>Payloads</code></div></th><td><ul class="calls"><li><a href="#op-billing-get-tree"><span class="m m-get">GET</span> billing /tree</a></li></ul></td><td><span class="muted">none of these sources</span></td></tr>
+</tbody></table></div>
+</section>
+<section class="service" id="service-billing">
+<div class="svc-head"><span class="svc-kind">HTTP service · 13 operations</span>
+<h2>billing</h2>
+<a class="oas" href="billing.openapi.json">OpenAPI <code>billing.openapi.json</code></a>
+<p class="server"><span><code>http://billing.example.com</code></span><span>from <code class="key">billing.url</code> in <code>app/src/main/resources/application.yaml</code></span></p>
+<p class="server"><span><code>https://billing.prod.example.com</code></span><span>from <code class="key">billing.url</code> in <code>app/src/main/resources/application.yaml</code></span><span class="profile">profile <code>prod</code></span></p>
+</div>
+<div class="map-scroll"><svg class="map" viewBox="0 0 666 680" width="666" height="680" role="img" aria-label="The activities that call billing and the operations they call">
+<path class="edge" d="M244 28C286 28,286 21,328 21"/>
+<path class="edge" d="M244 76C286 76,286 47,328 47"/>
+<path class="edge" d="M244 124C286 124,286 47,328 47"/>
+<path class="edge" d="M244 172C286 172,286 73,328 73"/>
+<path class="edge" d="M244 220C286 220,286 99,328 99"/>
+<path class="edge" d="M244 268C286 268,286 125,328 125"/>
+<path class="edge" d="M244 316C286 316,286 151,328 151"/>
+<path class="edge" d="M244 364C286 364,286 177,328 177"/>
+<path class="edge" d="M244 412C286 412,286 203,328 203"/>
+<path class="edge" d="M244 460C286 460,286 229,328 229"/>
+<path class="edge" d="M244 508C286 508,286 255,328 255"/>
+<path class="edge" d="M244 556C286 556,286 281,328 281"/>
+<path class="edge" d="M244 604C286 604,286 307,328 307"/>
+<path class="edge" d="M244 652C286 652,286 333,328 333"/>
+<a href="#activity-serial"><g class="act"><title>Serial calls 1 operation of billing</title><rect class="act-card" x="8" y="8" width="236" height="40" rx="6"/><path class="act-tile" d="M14 8H38V48H14A6 6 0 0 1 8 42V14A6 6 0 0 1 14 8Z"/><svg x="14" y="19" width="18" height="18" viewBox="0 0 20 20" class="act-icon"><path d='M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z' fill='#fff'/></svg><text class="act-k" x="47" y="23">ACTIVITY</text><text class="act-name" x="47" y="39">Serial</text></g></a>
+<a href="#activity-helper"><g class="act"><title>Helper calls 1 operation of billing</title><rect class="act-card" x="8" y="56" width="236" height="40" rx="6"/><path class="act-tile" d="M14 56H38V96H14A6 6 0 0 1 8 90V62A6 6 0 0 1 14 56Z"/><svg x="14" y="67" width="18" height="18" viewBox="0 0 20 20" class="act-icon"><path d='M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z' fill='#fff'/></svg><text class="act-k" x="47" y="71">ACTIVITY</text><text class="act-name" x="47" y="87">Helper</text></g></a>
+<a href="#activity-jackson"><g class="act"><title>Jackson calls 1 operation of billing</title><rect class="act-card" x="8" y="104" width="236" height="40" rx="6"/><path class="act-tile" d="M14 104H38V144H14A6 6 0 0 1 8 138V110A6 6 0 0 1 14 104Z"/><svg x="14" y="115" width="18" height="18" viewBox="0 0 20 20" class="act-icon"><path d='M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z' fill='#fff'/></svg><text class="act-k" x="47" y="119">ACTIVITY</text><text class="act-name" x="47" y="135">Jackson</text></g></a>
+<a href="#activity-deep"><g class="act"><title>Deep calls 1 operation of billing</title><rect class="act-card" x="8" y="152" width="236" height="40" rx="6"/><path class="act-tile" d="M14 152H38V192H14A6 6 0 0 1 8 186V158A6 6 0 0 1 14 152Z"/><svg x="14" y="163" width="18" height="18" viewBox="0 0 20 20" class="act-icon"><path d='M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z' fill='#fff'/></svg><text class="act-k" x="47" y="167">ACTIVITY</text><text class="act-name" x="47" y="183">Deep</text></g></a>
+<a href="#activity-events"><g class="act"><title>Events calls 1 operation of billing</title><rect class="act-card" x="8" y="200" width="236" height="40" rx="6"/><path class="act-tile" d="M14 200H38V240H14A6 6 0 0 1 8 234V206A6 6 0 0 1 14 200Z"/><svg x="14" y="211" width="18" height="18" viewBox="0 0 20 20" class="act-icon"><path d='M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z' fill='#fff'/></svg><text class="act-k" x="47" y="215">ACTIVITY</text><text class="act-name" x="47" y="231">Events</text></g></a>
+<a href="#activity-file"><g class="act"><title>File calls 1 operation of billing</title><rect class="act-card" x="8" y="248" width="236" height="40" rx="6"/><path class="act-tile" d="M14 248H38V288H14A6 6 0 0 1 8 282V254A6 6 0 0 1 14 248Z"/><svg x="14" y="259" width="18" height="18" viewBox="0 0 20 20" class="act-icon"><path d='M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z' fill='#fff'/></svg><text class="act-k" x="47" y="263">ACTIVITY</text><text class="act-name" x="47" y="279">File</text></g></a>
+<a href="#activity-empty"><g class="act"><title>Empty calls 1 operation of billing</title><rect class="act-card" x="8" y="296" width="236" height="40" rx="6"/><path class="act-tile" d="M14 296H38V336H14A6 6 0 0 1 8 330V302A6 6 0 0 1 14 296Z"/><svg x="14" y="307" width="18" height="18" viewBox="0 0 20 20" class="act-icon"><path d='M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z' fill='#fff'/></svg><text class="act-k" x="47" y="311">ACTIVITY</text><text class="act-name" x="47" y="327">Empty</text></g></a>
+<a href="#activity-stream"><g class="act"><title>Stream calls 1 operation of billing</title><rect class="act-card" x="8" y="344" width="236" height="40" rx="6"/><path class="act-tile" d="M14 344H38V384H14A6 6 0 0 1 8 378V350A6 6 0 0 1 14 344Z"/><svg x="14" y="355" width="18" height="18" viewBox="0 0 20 20" class="act-icon"><path d='M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z' fill='#fff'/></svg><text class="act-k" x="47" y="359">ACTIVITY</text><text class="act-name" x="47" y="375">Stream</text></g></a>
+<a href="#activity-lost"><g class="act"><title>Lost calls 1 operation of billing</title><rect class="act-card" x="8" y="392" width="236" height="40" rx="6"/><path class="act-tile" d="M14 392H38V432H14A6 6 0 0 1 8 426V398A6 6 0 0 1 14 392Z"/><svg x="14" y="403" width="18" height="18" viewBox="0 0 20 20" class="act-icon"><path d='M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z' fill='#fff'/></svg><text class="act-k" x="47" y="407">ACTIVITY</text><text class="act-name" x="47" y="423">Lost</text></g></a>
+<a href="#activity-text"><g class="act"><title>Text calls 1 operation of billing</title><rect class="act-card" x="8" y="440" width="236" height="40" rx="6"/><path class="act-tile" d="M14 440H38V480H14A6 6 0 0 1 8 474V446A6 6 0 0 1 14 440Z"/><svg x="14" y="451" width="18" height="18" viewBox="0 0 20 20" class="act-icon"><path d='M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z' fill='#fff'/></svg><text class="act-k" x="47" y="455">ACTIVITY</text><text class="act-name" x="47" y="471">Text</text></g></a>
+<a href="#activity-pair"><g class="act"><title>Pair calls 1 operation of billing</title><rect class="act-card" x="8" y="488" width="236" height="40" rx="6"/><path class="act-tile" d="M14 488H38V528H14A6 6 0 0 1 8 522V494A6 6 0 0 1 14 488Z"/><svg x="14" y="499" width="18" height="18" viewBox="0 0 20 20" class="act-icon"><path d='M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z' fill='#fff'/></svg><text class="act-k" x="47" y="503">ACTIVITY</text><text class="act-name" x="47" y="519">Pair</text></g></a>
+<a href="#activity-bytes"><g class="act"><title>Bytes calls 1 operation of billing</title><rect class="act-card" x="8" y="536" width="236" height="40" rx="6"/><path class="act-tile" d="M14 536H38V576H14A6 6 0 0 1 8 570V542A6 6 0 0 1 14 536Z"/><svg x="14" y="547" width="18" height="18" viewBox="0 0 20 20" class="act-icon"><path d='M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z' fill='#fff'/></svg><text class="act-k" x="47" y="551">ACTIVITY</text><text class="act-name" x="47" y="567">Bytes</text></g></a>
+<a href="#activity-scans"><g class="act"><title>Scans calls 1 operation of billing</title><rect class="act-card" x="8" y="584" width="236" height="40" rx="6"/><path class="act-tile" d="M14 584H38V624H14A6 6 0 0 1 8 618V590A6 6 0 0 1 14 584Z"/><svg x="14" y="595" width="18" height="18" viewBox="0 0 20 20" class="act-icon"><path d='M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z' fill='#fff'/></svg><text class="act-k" x="47" y="599">ACTIVITY</text><text class="act-name" x="47" y="615">Scans</text></g></a>
+<a href="#activity-tree"><g class="act"><title>Tree calls 1 operation of billing</title><rect class="act-card" x="8" y="632" width="236" height="40" rx="6"/><path class="act-tile" d="M14 632H38V672H14A6 6 0 0 1 8 666V638A6 6 0 0 1 14 632Z"/><svg x="14" y="643" width="18" height="18" viewBox="0 0 20 20" class="act-icon"><path d='M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z' fill='#fff'/></svg><text class="act-k" x="47" y="647">ACTIVITY</text><text class="act-name" x="47" y="663">Tree</text></g></a>
+<a href="#op-billing-put-bookings"><g class="op-row"><title>PUT billing /bookings</title><rect class="row-bg" x="328" y="9" width="330" height="24" rx="5"/><rect class="b-put" x="336" y="13.5" width="29.8" height="15" rx="3"/><text class="bt t-put" x="350.9" y="24.5" text-anchor="middle">PUT</text><text class="row-t" x="371.8" y="25">/bookings</text></g></a>
+<a href="#op-billing-post-charges"><g class="op-row"><title>POST billing /charges</title><rect class="row-bg" x="328" y="35" width="330" height="24" rx="5"/><rect class="b-post" x="336" y="39.5" width="36.4" height="15" rx="3"/><text class="bt t-post" x="354.2" y="50.5" text-anchor="middle">POST</text><text class="row-t" x="378.4" y="51">/charges</text></g></a>
+<a href="#op-billing-get-deep-id"><g class="op-row"><title>GET billing /deep/{id}</title><rect class="row-bg" x="328" y="61" width="330" height="24" rx="5"/><rect class="b-get" x="336" y="65.5" width="29.8" height="15" rx="3"/><text class="bt t-get" x="350.9" y="76.5" text-anchor="middle">GET</text><text class="row-t" x="371.8" y="77">/deep/{id}</text></g></a>
+<a href="#op-billing-get-events"><g class="op-row"><title>GET billing /events</title><rect class="row-bg" x="328" y="87" width="330" height="24" rx="5"/><rect class="b-get" x="336" y="91.5" width="29.8" height="15" rx="3"/><text class="bt t-get" x="350.9" y="102.5" text-anchor="middle">GET</text><text class="row-t" x="371.8" y="103">/events</text></g></a>
+<a href="#op-billing-post-files"><g class="op-row"><title>POST billing /files</title><rect class="row-bg" x="328" y="113" width="330" height="24" rx="5"/><rect class="b-post" x="336" y="117.5" width="36.4" height="15" rx="3"/><text class="bt t-post" x="354.2" y="128.5" text-anchor="middle">POST</text><text class="row-t" x="378.4" y="129">/files</text></g></a>
+<a href="#op-billing-get-health"><g class="op-row"><title>GET billing /health</title><rect class="row-bg" x="328" y="139" width="330" height="24" rx="5"/><rect class="b-get" x="336" y="143.5" width="29.8" height="15" rx="3"/><text class="bt t-get" x="350.9" y="154.5" text-anchor="middle">GET</text><text class="row-t" x="371.8" y="155">/health</text></g></a>
+<a href="#op-billing-get-lines-id"><g class="op-row"><title>GET billing /lines/{id}</title><rect class="row-bg" x="328" y="165" width="330" height="24" rx="5"/><rect class="b-get" x="336" y="169.5" width="29.8" height="15" rx="3"/><text class="bt t-get" x="350.9" y="180.5" text-anchor="middle">GET</text><text class="row-t" x="371.8" y="181">/lines/{id}</text></g></a>
+<a href="#op-billing-get-lost"><g class="op-row"><title>GET billing /lost</title><rect class="row-bg" x="328" y="191" width="330" height="24" rx="5"/><rect class="b-get" x="336" y="195.5" width="29.8" height="15" rx="3"/><text class="bt t-get" x="350.9" y="206.5" text-anchor="middle">GET</text><text class="row-t" x="371.8" y="207">/lost</text></g></a>
+<a href="#op-billing-post-notes"><g class="op-row"><title>POST billing /notes</title><rect class="row-bg" x="328" y="217" width="330" height="24" rx="5"/><rect class="b-post" x="336" y="221.5" width="36.4" height="15" rx="3"/><text class="bt t-post" x="354.2" y="232.5" text-anchor="middle">POST</text><text class="row-t" x="378.4" y="233">/notes</text></g></a>
+<a href="#op-billing-get-pair"><g class="op-row"><title>GET billing /pair</title><rect class="row-bg" x="328" y="243" width="330" height="24" rx="5"/><rect class="b-get" x="336" y="247.5" width="29.8" height="15" rx="3"/><text class="bt t-get" x="350.9" y="258.5" text-anchor="middle">GET</text><text class="row-t" x="371.8" y="259">/pair</text></g></a>
+<a href="#op-billing-patch-refunds-id"><g class="op-row"><title>PATCH billing /refunds/{id}</title><rect class="row-bg" x="328" y="269" width="330" height="24" rx="5"/><rect class="b-patch" x="336" y="273.5" width="43" height="15" rx="3"/><text class="bt t-patch" x="357.5" y="284.5" text-anchor="middle">PATCH</text><text class="row-t" x="385" y="285">/refunds/{id}</text></g></a>
+<a href="#op-billing-get-scans"><g class="op-row"><title>GET billing /scans</title><rect class="row-bg" x="328" y="295" width="330" height="24" rx="5"/><rect class="b-get" x="336" y="299.5" width="29.8" height="15" rx="3"/><text class="bt t-get" x="350.9" y="310.5" text-anchor="middle">GET</text><text class="row-t" x="371.8" y="311">/scans</text></g></a>
+<a href="#op-billing-get-tree"><g class="op-row"><title>GET billing /tree</title><rect class="row-bg" x="328" y="321" width="330" height="24" rx="5"/><rect class="b-get" x="336" y="325.5" width="29.8" height="15" rx="3"/><text class="bt t-get" x="350.9" y="336.5" text-anchor="middle">GET</text><text class="row-t" x="371.8" y="337">/tree</text></g></a>
+</svg></div>
+<div class="ops">
+<article class="op" id="op-billing-put-bookings">
+<div class="op-line"><span class="m m-put">PUT</span><code class="path">/bookings</code></div>
+<div class="panels">
+<div class="panel"><div class="label">Request</div>
+<div class="panel-head"><span class="type"><a class="t-ref" href="#model-payloads-booking">Booking</a></span><span class="media">application/json</span><span class="media">kotlinx.serialization</span></div>
+<ul class="fields"><li><span class="f-name" title="Kotlin: id">booking_id</span><span class="f-type">String</span></li><li><span class="f-name">level</span><span class="f-type"><a class="t-ref" href="#model-payloads-level">Level</a><span class="opt">optional</span></span></li></ul>
+</div>
+<div class="panel"><div class="label">Response</div>
+<div class="panel-head"><span class="type"><a class="t-ref" href="#model-payloads-booking">Booking</a></span><span class="media">kotlinx.serialization</span></div>
+<ul class="fields"><li><span class="f-name" title="Kotlin: id">booking_id</span><span class="f-type">String</span></li><li><span class="f-name">level</span><span class="f-type"><a class="t-ref" href="#model-payloads-level">Level</a><span class="opt">optional</span></span></li></ul>
+</div>
+</div>
+<div class="usedby"><span class="label">Called by</span><ul>
+<li><a class="act-chip" href="#activity-serial"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Serial</a> <span class="muted">in</span> <span><a class="wf-name" href="../Paying.html">Paying</a></span><span class="src">app/src/main/kotlin/payloads/Payloads.kt:94</span></li>
+</ul></div>
+</article>
+<article class="op" id="op-billing-post-charges">
+<div class="op-line"><span class="m m-post">POST</span><code class="path">/charges</code></div>
+<div class="panels">
+<div class="panel"><div class="label">Request</div>
+<div class="panel-head"><span class="type"><a class="t-ref" href="#model-payloads-charge">Charge</a></span><span class="media">Jackson</span></div>
+<ul class="fields"><li><span class="f-name">orderId</span><span class="f-type">String</span></li><li><span class="f-name" title="Kotlin: amount">total</span><span class="f-type"><a class="t-ref" href="#model-payloads-money">Money</a></span></li><li><span class="f-name">method</span><span class="f-type"><a class="t-ref" href="#model-payloads-method">Method</a></span></li><li><span class="f-name">key</span><span class="f-type">UUID<span class="t-null" title="may be null">?</span><span class="opt">optional</span></span></li><li><span class="f-name">note</span><span class="f-type">String<span class="t-null" title="may be null">?</span><span class="opt">optional</span></span></li></ul>
+</div>
+<div class="panel"><div class="label">Response</div>
+<div class="panel-head"><span class="type"><a class="t-ref" href="#model-payloads-receipt">Receipt</a></span><span class="media">Jackson</span></div>
+<ul class="fields"><li><span class="f-name" title="Kotlin: chargeId">charge-id</span><span class="f-type">String</span></li><li><span class="f-name" title="Kotlin: takenAt">taken-at</span><span class="f-type">Instant</span></li><li><span class="f-name">lines</span><span class="f-type">List&lt;<a class="t-ref" href="#model-payloads-line">Line</a>&gt;</span></li><li><span class="f-name">totals</span><span class="f-type">Map&lt;String, <a class="t-ref" href="#model-payloads-money">Money</a>&gt;</span></li></ul>
+</div>
+</div>
+<div class="usedby"><span class="label">Called by</span><ul>
+<li><a class="act-chip" href="#activity-helper"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Helper</a> <span class="muted">in no workflow of these sources</span><span class="src">app/src/main/kotlin/payloads/Payloads.kt:119</span></li>
+<li><a class="act-chip" href="#activity-jackson"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Jackson</a> <span class="muted">in</span> <span><a class="wf-name" href="../Paying.html">Paying</a></span><span class="src">app/src/main/kotlin/payloads/Payloads.kt:75</span></li>
+</ul></div>
+</article>
+<article class="op" id="op-billing-get-deep-id">
+<div class="op-line"><span class="m m-get">GET</span><code class="path">/deep/<span class="p">{id}</span></code></div>
+<div class="params"><span class="label">Parameters</span><span class="param"><span>id</span><span class="in">path</span>String</span></div>
+<div class="panels">
+<div class="panel"><div class="label">Request</div>
+<div class="panel-head"><span class="state s-none">No body</span></div>
+<p class="why">The request sends no body.</p>
+</div>
+<div class="panel"><div class="label">Response</div>
+<div class="panel-head"><span class="type"><a class="t-ref" href="#model-payloads-receipt">Receipt</a></span><span class="media">Jackson</span></div>
+<ul class="fields"><li><span class="f-name" title="Kotlin: chargeId">charge-id</span><span class="f-type">String</span></li><li><span class="f-name" title="Kotlin: takenAt">taken-at</span><span class="f-type">Instant</span></li><li><span class="f-name">lines</span><span class="f-type">List&lt;<a class="t-ref" href="#model-payloads-line">Line</a>&gt;</span></li><li><span class="f-name">totals</span><span class="f-type">Map&lt;String, <a class="t-ref" href="#model-payloads-money">Money</a>&gt;</span></li></ul>
+</div>
+</div>
+<div class="usedby"><span class="label">Called by</span><ul>
+<li><a class="act-chip" href="#activity-deep"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Deep</a> <span class="muted">in no workflow of these sources</span><span class="src">app/src/main/kotlin/payloads/Payloads.kt:164</span></li>
+</ul></div>
+</article>
+<article class="op" id="op-billing-get-events">
+<div class="op-line"><span class="m m-get">GET</span><code class="path">/events</code></div>
+<div class="panels">
+<div class="panel"><div class="label">Request</div>
+<div class="panel-head"><span class="state s-none">No body</span></div>
+<p class="why">The request sends no body.</p>
+</div>
+<div class="panel"><div class="label">Response</div>
+<div class="panel-head"><span class="type">List&lt;<a class="t-ref" href="#model-payloads-event">Event</a>&gt;</span><span class="media">Jackson</span></div>
+<ul class="fields"><li class="one">One of · <span class="muted">told apart by </span><code>kind</code></li><li><span class="f-name">placed</span><span class="f-type"><a class="t-ref" href="#model-payloads-event-placed">Placed</a></span></li><li><span class="f-name">dropped</span><span class="f-type"><a class="t-ref" href="#model-payloads-event-dropped">Dropped</a></span></li></ul>
+</div>
+</div>
+<div class="usedby"><span class="label">Called by</span><ul>
+<li><a class="act-chip" href="#activity-events"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Events</a> <span class="muted">in no workflow of these sources</span><span class="src">app/src/main/kotlin/payloads/Payloads.kt:144</span></li>
+</ul></div>
+</article>
+<article class="op" id="op-billing-post-files">
+<div class="op-line"><span class="m m-post">POST</span><code class="path">/files</code></div>
+<div class="panels">
+<div class="panel"><div class="label">Request</div>
+<div class="panel-head"><span class="state s-unknown">Unknown</span></div>
+<p class="why">A body is sent, but where it comes from could not be followed.</p>
+</div>
+<div class="panel"><div class="label">Response</div>
+<div class="panel-head"><span class="state s-not-read">Not read</span></div>
+<p class="why">The code does not read the answer: it is discarded, or its body is never asked for.</p>
+</div>
+</div>
+<div class="usedby"><span class="label">Called by</span><ul>
+<li><a class="act-chip" href="#activity-file"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>File</a> <span class="muted">in no workflow of these sources</span><span class="src">app/src/main/kotlin/payloads/Payloads.kt:139</span></li>
+</ul></div>
+</article>
+<article class="op" id="op-billing-get-health">
+<div class="op-line"><span class="m m-get">GET</span><code class="path">/health</code></div>
+<div class="panels">
+<div class="panel"><div class="label">Request</div>
+<div class="panel-head"><span class="state s-none">No body</span></div>
+<p class="why">The request sends no body.</p>
+</div>
+<div class="panel"><div class="label">Response</div>
+<div class="panel-head"><span class="state s-text">Text</span></div>
+<p class="why">The code keeps the answer as text and does not convert it.</p>
+</div>
+</div>
+<div class="usedby"><span class="label">Called by</span><ul>
+<li><a class="act-chip" href="#activity-empty"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Empty</a> <span class="muted">in no workflow of these sources</span><span class="src">app/src/main/kotlin/payloads/Payloads.kt:107</span></li>
+</ul></div>
+</article>
+<article class="op" id="op-billing-get-lines-id">
+<div class="op-line"><span class="m m-get">GET</span><code class="path">/lines/<span class="p">{id}</span></code></div>
+<div class="params"><span class="label">Parameters</span><span class="param"><span>id</span><span class="in">path</span>String</span><span class="param"><span>page</span><span class="in">query</span>Int = <span class="val">{page}</span></span></div>
+<div class="panels">
+<div class="panel"><div class="label">Request</div>
+<div class="panel-head"><span class="state s-none">No body</span></div>
+<p class="why">The request sends no body.</p>
+</div>
+<div class="panel"><div class="label">Response</div>
+<div class="panel-head"><span class="type"><a class="t-ref" href="#model-payloads-page">Page</a>&lt;<a class="t-ref" href="#model-payloads-line">Line</a>&gt;</span><span class="media">Jackson</span></div>
+<ul class="fields"><li><span class="f-name">items</span><span class="f-type">List&lt;<a class="t-ref" href="#model-payloads-line">Line</a>&gt;</span></li><li><span class="f-name">next</span><span class="f-type">String<span class="t-null" title="may be null">?</span></span></li></ul>
+</div>
+</div>
+<div class="usedby"><span class="label">Called by</span><ul>
+<li><a class="act-chip" href="#activity-stream"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Stream</a> <span class="muted">in no workflow of these sources</span><span class="src">app/src/main/kotlin/payloads/Payloads.kt:124</span></li>
+</ul></div>
+</article>
+<article class="op" id="op-billing-get-lost">
+<div class="op-line"><span class="m m-get">GET</span><code class="path">/lost</code></div>
+<div class="panels">
+<div class="panel"><div class="label">Request</div>
+<div class="panel-head"><span class="state s-none">No body</span></div>
+<p class="why">The request sends no body.</p>
+</div>
+<div class="panel"><div class="label">Response</div>
+<div class="panel-head"><span class="state s-unknown">Unknown</span></div>
+<p class="why">What the code makes of the answer could not be followed.</p>
+</div>
+</div>
+<div class="usedby"><span class="label">Called by</span><ul>
+<li><a class="act-chip" href="#activity-lost"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Lost</a> <span class="muted">in no workflow of these sources</span><span class="src">app/src/main/kotlin/payloads/Payloads.kt:130</span></li>
+</ul></div>
+</article>
+<article class="op" id="op-billing-post-notes">
+<div class="op-line"><span class="m m-post">POST</span><code class="path">/notes</code></div>
+<div class="panels">
+<div class="panel"><div class="label">Request</div>
+<div class="panel-head"><span class="state s-text">Text</span><span class="media">text/plain</span></div>
+<p class="why">The code puts the body together as text; its structure is not read.</p>
+</div>
+<div class="panel"><div class="label">Response</div>
+<div class="panel-head"><span class="state s-not-read">Not read</span></div>
+<p class="why">The code does not read the answer: it is discarded, or its body is never asked for.</p>
+</div>
+</div>
+<div class="usedby"><span class="label">Called by</span><ul>
+<li><a class="act-chip" href="#activity-text"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Text</a> <span class="muted">in no workflow of these sources</span><span class="src">app/src/main/kotlin/payloads/Payloads.kt:102</span></li>
+</ul></div>
+</article>
+<article class="op" id="op-billing-get-pair">
+<div class="op-line"><span class="m m-get">GET</span><code class="path">/pair</code></div>
+<div class="panels">
+<div class="panel"><div class="label">Request</div>
+<div class="panel-head"><span class="state s-none">No body</span></div>
+<p class="why">The request sends no body.</p>
+</div>
+<div class="panel"><div class="label">Response</div>
+<div class="panel-head"><span class="type"><a class="t-ref" href="#model-kotlin-pair">Pair</a>&lt;String, Int&gt;</span><span class="media">Jackson</span></div>
+<ul class="fields"><li><span class="f-name">first</span><span class="f-type">String</span></li><li><span class="f-name">second</span><span class="f-type">Int</span></li></ul>
+</div>
+</div>
+<div class="usedby"><span class="label">Called by</span><ul>
+<li><a class="act-chip" href="#activity-pair"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Pair</a> <span class="muted">in no workflow of these sources</span><span class="src">app/src/main/kotlin/payloads/Payloads.kt:159</span></li>
+</ul></div>
+</article>
+<article class="op" id="op-billing-patch-refunds-id">
+<div class="op-line"><span class="m m-patch">PATCH</span><code class="path">/refunds/<span class="p">{id}</span></code></div>
+<div class="params"><span class="label">Parameters</span><span class="param"><span>id</span><span class="in">path</span>String</span></div>
+<div class="panels">
+<div class="panel"><div class="label">Request</div>
+<div class="panel-head"><span class="type">List&lt;<a class="t-ref" href="#model-payloads-line">Line</a>&gt;</span><span class="media">application/json</span><span class="media">Jackson</span></div>
+<ul class="fields"><li><span class="f-name">sku</span><span class="f-type">String</span></li><li><span class="f-name">quantity</span><span class="f-type">Int</span></li></ul>
+</div>
+<div class="panel"><div class="label">Response</div>
+<div class="panel-head"><span class="type">List&lt;<a class="t-ref" href="#model-payloads-line">Line</a>&gt;</span><span class="media">Jackson</span></div>
+<ul class="fields"><li><span class="f-name">sku</span><span class="f-type">String</span></li><li><span class="f-name">quantity</span><span class="f-type">Int</span></li></ul>
+</div>
+</div>
+<div class="usedby"><span class="label">Called by</span><ul>
+<li><a class="act-chip" href="#activity-bytes"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Bytes</a> <span class="muted">in no workflow of these sources</span><span class="src">app/src/main/kotlin/payloads/Payloads.kt:84</span></li>
+</ul></div>
+</article>
+<article class="op" id="op-billing-get-scans">
+<div class="op-line"><span class="m m-get">GET</span><code class="path">/scans</code></div>
+<div class="panels">
+<div class="panel"><div class="label">Request</div>
+<div class="panel-head"><span class="state s-none">No body</span></div>
+<p class="why">The request sends no body.</p>
+</div>
+<div class="panel"><div class="label">Response</div>
+<div class="panel-head"><span class="type"><a class="t-ref" href="#model-payloads-scan">Scan</a></span><span class="media">kotlinx.serialization</span></div>
+<ul class="fields"><li class="one">One of · <span class="muted">told apart by </span><code>type</code></li><li><span class="f-name">seen</span><span class="f-type"><a class="t-ref" href="#model-payloads-scan-seen">Seen</a></span></li><li><span class="f-name">gone</span><span class="f-type"><a class="t-ref" href="#model-payloads-scan-gone">Gone</a></span></li></ul>
+</div>
+</div>
+<div class="usedby"><span class="label">Called by</span><ul>
+<li><a class="act-chip" href="#activity-scans"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Scans</a> <span class="muted">in no workflow of these sources</span><span class="src">app/src/main/kotlin/payloads/Payloads.kt:149</span></li>
+</ul></div>
+</article>
+<article class="op" id="op-billing-get-tree">
+<div class="op-line"><span class="m m-get">GET</span><code class="path">/tree</code></div>
+<div class="panels">
+<div class="panel"><div class="label">Request</div>
+<div class="panel-head"><span class="state s-none">No body</span></div>
+<p class="why">The request sends no body.</p>
+</div>
+<div class="panel"><div class="label">Response</div>
+<div class="panel-head"><span class="type"><a class="t-ref" href="#model-payloads-node">Node</a></span><span class="media">Jackson</span></div>
+<ul class="fields"><li><span class="f-name">name</span><span class="f-type">String</span></li><li><span class="f-name">parent</span><span class="f-type"><a class="t-ref" href="#model-payloads-node">Node</a><span class="t-null" title="may be null">?</span></span></li><li><span class="f-name">children</span><span class="f-type">List&lt;<a class="t-ref" href="#model-payloads-node">Node</a>&gt;</span></li></ul>
+</div>
+</div>
+<div class="usedby"><span class="label">Called by</span><ul>
+<li><a class="act-chip" href="#activity-tree"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Tree</a> <span class="muted">in no workflow of these sources</span><span class="src">app/src/main/kotlin/payloads/Payloads.kt:154</span></li>
+</ul></div>
+</article>
+</div>
+</section>
+<section class="service" id="service-serviceclient">
+<div class="svc-head"><span class="svc-kind">Client · 2 operations</span>
+<h2>ServiceClient</h2>
+<a class="oas" href="ServiceClient.openapi.json">OpenAPI <code>ServiceClient.openapi.json</code></a>
+<p class="server"><span>Called as <code>ServiceClient.invoke(…)</code>, one operation per name it is asked for</span></p>
+</div>
+<div class="map-scroll"><svg class="map" viewBox="0 0 666 104" width="666" height="104" role="img" aria-label="The activities that call ServiceClient and the operations they call">
+<path class="edge" d="M244 28C286 28,286 21,328 21"/>
+<path class="edge" d="M244 76C286 76,286 47,328 47"/>
+<a href="#activity-client"><g class="act"><title>Client calls 1 operation of ServiceClient</title><rect class="act-card" x="8" y="8" width="236" height="40" rx="6"/><path class="act-tile" d="M14 8H38V48H14A6 6 0 0 1 8 42V14A6 6 0 0 1 14 8Z"/><svg x="14" y="19" width="18" height="18" viewBox="0 0 20 20" class="act-icon"><path d='M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z' fill='#fff'/></svg><text class="act-k" x="47" y="23">ACTIVITY</text><text class="act-name" x="47" y="39">Client</text></g></a>
+<a href="#activity-expected"><g class="act"><title>Expected calls 1 operation of ServiceClient</title><rect class="act-card" x="8" y="56" width="236" height="40" rx="6"/><path class="act-tile" d="M14 56H38V96H14A6 6 0 0 1 8 90V62A6 6 0 0 1 14 56Z"/><svg x="14" y="67" width="18" height="18" viewBox="0 0 20 20" class="act-icon"><path d='M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z' fill='#fff'/></svg><text class="act-k" x="47" y="71">ACTIVITY</text><text class="act-name" x="47" y="87">Expected</text></g></a>
+<a href="#op-serviceclient-book-fn"><g class="op-row"><title>FN book-fn</title><rect class="row-bg" x="328" y="9" width="330" height="24" rx="5"/><rect class="b-fn" x="336" y="13.5" width="23.2" height="15" rx="3"/><text class="bt t-fn" x="347.6" y="24.5" text-anchor="middle">FN</text><text class="row-t" x="365.2" y="25">book-fn</text></g></a>
+<a href="#op-serviceclient-count-fn"><g class="op-row"><title>FN count-fn</title><rect class="row-bg" x="328" y="35" width="330" height="24" rx="5"/><rect class="b-fn" x="336" y="39.5" width="23.2" height="15" rx="3"/><text class="bt t-fn" x="347.6" y="50.5" text-anchor="middle">FN</text><text class="row-t" x="365.2" y="51">count-fn</text></g></a>
+</svg></div>
+<div class="ops">
+<article class="op" id="op-serviceclient-book-fn">
+<div class="op-line"><span class="m m-fn">FN</span><code class="sig"><span class="sn">book-fn</span>(<span class="sp">payload</span>: <a class="t-ref" href="#model-payloads-charge">Charge</a>) → <a class="t-ref" href="#model-payloads-booking">Booking</a></code></div>
+<p class="const">Operation name from <code>payloads.PayloadsImpl.BOOK</code></p>
+<div class="panels">
+<div class="panel"><div class="label">Arguments</div>
+<div class="panel-head"><span class="sp">payload</span>: <span class="type"><a class="t-ref" href="#model-payloads-charge">Charge</a></span></div>
+<ul class="fields"><li><span class="f-name">orderId</span><span class="f-type">String</span></li><li><span class="f-name" title="Kotlin: amount">total</span><span class="f-type"><a class="t-ref" href="#model-payloads-money">Money</a></span></li><li><span class="f-name">method</span><span class="f-type"><a class="t-ref" href="#model-payloads-method">Method</a></span></li><li><span class="f-name">key</span><span class="f-type">UUID<span class="t-null" title="may be null">?</span><span class="opt">optional</span></span></li><li><span class="f-name">note</span><span class="f-type">String<span class="t-null" title="may be null">?</span><span class="opt">optional</span></span></li></ul>
+</div>
+<div class="panel"><div class="label">Returns</div>
+<div class="panel-head"><span class="type"><a class="t-ref" href="#model-payloads-booking">Booking</a></span></div>
+<ul class="fields"><li><span class="f-name" title="Kotlin: id">booking_id</span><span class="f-type">String</span></li><li><span class="f-name">level</span><span class="f-type"><a class="t-ref" href="#model-payloads-level">Level</a><span class="opt">optional</span></span></li></ul>
+</div>
+</div>
+<div class="usedby"><span class="label">Called by</span><ul>
+<li><a class="act-chip" href="#activity-client"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Client</a> <span class="muted">in no workflow of these sources</span><span class="src">app/src/main/kotlin/payloads/Payloads.kt:173</span></li>
+</ul></div>
+</article>
+<article class="op" id="op-serviceclient-count-fn">
+<div class="op-line"><span class="m m-fn">FN</span><code class="sig"><span class="sn">count-fn</span>(<span class="sp">payload</span>: String) → Int</code></div>
+<div class="panels">
+<div class="panel"><div class="label">Arguments</div>
+<div class="panel-head"><span class="sp">payload</span>: <span class="type">String</span></div>
+</div>
+<div class="panel"><div class="label">Returns</div>
+<div class="panel-head"><span class="type">Int</span></div>
+</div>
+</div>
+<div class="usedby"><span class="label">Called by</span><ul>
+<li><a class="act-chip" href="#activity-expected"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2L4.5 11h4.6l-1 7 7.4-9.4h-4.8z" fill="currentColor"/></svg>Expected</a> <span class="muted">in no workflow of these sources</span><span class="src">app/src/main/kotlin/payloads/Payloads.kt:176</span></li>
+</ul></div>
+</article>
+</div>
+</section>
+<section class="block" id="models">
+<div class="block-head"><h2>Models</h2><p>Every type a request sends or reads its answer as, and the types those reach. Names are those the library writes; a type whose source is not in the model is named but not read.</p></div>
+<div class="model-grid">
+<article class="model" id="model-kotlin-pair">
+<header><h3>Pair&lt;A, B&gt;</h3><span class="m-kind">object</span></header>
+<p class="m-svc"><code>kotlin.Pair</code></p>
+<ul class="fields"><li><span class="f-name">first</span><span class="f-type">A</span></li><li><span class="f-name">second</span><span class="f-type">B</span></li></ul>
+<div class="m-use">
+<div><a href="#op-billing-get-pair"><span class="m m-get">GET</span>billing /pair</a> <span>reads it</span></div>
+</div>
+</article>
+<article class="model" id="model-org-example-rates-rate">
+<header><h3>Rate</h3><span class="m-kind">not read</span></header>
+<p class="m-svc"><code>org.example.rates.Rate</code></p>
+<p class="why">Not read: the analysis did not have its source, which is in a library or not in the model, so its fields are not known.</p>
+<div class="m-use">
+<div>Part of <a href="#model-payloads-money">Money</a></div>
+</div>
+</article>
+<article class="model" id="model-payloads-booking">
+<header><h3>Booking</h3><span class="m-kind">object</span></header>
+<p class="m-svc"><code>payloads.Booking</code> · app/src/main/kotlin/payloads/Serial.kt:8</p>
+<ul class="fields"><li><span class="f-name" title="Kotlin: id">booking_id</span><span class="f-type">String</span></li><li><span class="f-name">level</span><span class="f-type"><a class="t-ref" href="#model-payloads-level">Level</a><span class="opt">optional</span></span></li></ul>
+<div class="m-use">
+<div><a href="#op-billing-put-bookings"><span class="m m-put">PUT</span>billing /bookings</a> <span>sends it</span></div>
+<div><a href="#op-billing-put-bookings"><span class="m m-put">PUT</span>billing /bookings</a> <span>reads it</span></div>
+<div><a href="#op-serviceclient-book-fn"><span class="m m-fn">FN</span>book-fn</a> <span>reads it</span></div>
+</div>
+</article>
+<article class="model" id="model-payloads-charge">
+<header><h3>Charge</h3><span class="m-kind">object</span></header>
+<p class="m-svc"><code>payloads.Charge</code> · app/src/main/kotlin/payloads/Models.kt:17</p>
+<ul class="fields"><li><span class="f-name">orderId</span><span class="f-type">String</span></li><li><span class="f-name" title="Kotlin: amount">total</span><span class="f-type"><a class="t-ref" href="#model-payloads-money">Money</a></span></li><li><span class="f-name">method</span><span class="f-type"><a class="t-ref" href="#model-payloads-method">Method</a></span></li><li><span class="f-name">key</span><span class="f-type">UUID<span class="t-null" title="may be null">?</span><span class="opt">optional</span></span></li><li><span class="f-name">note</span><span class="f-type">String<span class="t-null" title="may be null">?</span><span class="opt">optional</span></span></li></ul>
+<div class="m-use">
+<div><a href="#op-billing-post-charges"><span class="m m-post">POST</span>billing /charges</a> <span>sends it</span></div>
+<div><a href="#op-serviceclient-book-fn"><span class="m m-fn">FN</span>book-fn</a> <span>sends it</span></div>
+</div>
+</article>
+<article class="model" id="model-payloads-event">
+<header><h3>Event</h3><span class="m-kind">one of</span></header>
+<p class="m-svc"><code>payloads.Event</code> · app/src/main/kotlin/payloads/Models.kt:41</p>
+<ul class="fields"><li class="one">One of · <span class="muted">told apart by </span><code>kind</code></li><li><span class="f-name">placed</span><span class="f-type"><a class="t-ref" href="#model-payloads-event-placed">Placed</a></span></li><li><span class="f-name">dropped</span><span class="f-type"><a class="t-ref" href="#model-payloads-event-dropped">Dropped</a></span></li></ul>
+<div class="m-use">
+<div><a href="#op-billing-get-events"><span class="m m-get">GET</span>billing /events</a> <span>reads it</span></div>
+</div>
+</article>
+<article class="model" id="model-payloads-event-dropped">
+<header><h3>Dropped</h3><span class="m-kind">object</span></header>
+<p class="m-svc"><code>payloads.Event.Dropped</code> · app/src/main/kotlin/payloads/Models.kt:44</p>
+<ul class="fields"><li><span class="f-name">reason</span><span class="f-type">String<span class="t-null" title="may be null">?</span></span></li></ul>
+<div class="m-use">
+<div>Part of <a href="#model-payloads-event">Event</a></div>
+</div>
+</article>
+<article class="model" id="model-payloads-event-placed">
+<header><h3>Placed</h3><span class="m-kind">object</span></header>
+<p class="m-svc"><code>payloads.Event.Placed</code> · app/src/main/kotlin/payloads/Models.kt:42</p>
+<ul class="fields"><li><span class="f-name">at</span><span class="f-type">Instant</span></li></ul>
+<div class="m-use">
+<div>Part of <a href="#model-payloads-event">Event</a></div>
+</div>
+</article>
+<article class="model" id="model-payloads-level">
+<header><h3>Level</h3><span class="m-kind">enum</span></header>
+<p class="m-svc"><code>payloads.Level</code> · app/src/main/kotlin/payloads/Serial.kt:11</p>
+<ul class="values"><li>standard</li><li>express</li></ul>
+<div class="m-use">
+<div>Part of <a href="#model-payloads-booking">Booking</a></div>
+</div>
+</article>
+<article class="model" id="model-payloads-line">
+<header><h3>Line</h3><span class="m-kind">object</span></header>
+<p class="m-svc"><code>payloads.Line</code> · app/src/main/kotlin/payloads/Models.kt:32</p>
+<ul class="fields"><li><span class="f-name">sku</span><span class="f-type">String</span></li><li><span class="f-name">quantity</span><span class="f-type">Int</span></li></ul>
+<div class="m-use">
+<div><a href="#op-billing-patch-refunds-id"><span class="m m-patch">PATCH</span>billing /refunds/{id}</a> <span>sends it</span></div>
+<div><a href="#op-billing-get-lines-id"><span class="m m-get">GET</span>billing /lines/{id}</a> <span>reads it</span></div>
+<div><a href="#op-billing-patch-refunds-id"><span class="m m-patch">PATCH</span>billing /refunds/{id}</a> <span>reads it</span></div>
+<div>Part of <a href="#model-payloads-receipt">Receipt</a></div>
+</div>
+</article>
+<article class="model" id="model-payloads-method">
+<header><h3>Method</h3><span class="m-kind">enum</span></header>
+<p class="m-svc"><code>payloads.Method</code> · app/src/main/kotlin/payloads/Models.kt:15</p>
+<ul class="values"><li>CARD</li><li>bank-transfer</li></ul>
+<div class="m-use">
+<div>Part of <a href="#model-payloads-charge">Charge</a></div>
+</div>
+</article>
+<article class="model" id="model-payloads-money">
+<header><h3>Money</h3><span class="m-kind">object</span></header>
+<p class="m-svc"><code>payloads.Money</code> · app/src/main/kotlin/payloads/Models.kt:13</p>
+<ul class="fields"><li><span class="f-name">cents</span><span class="f-type">Long</span></li><li><span class="f-name">currency</span><span class="f-type">String<span class="opt">optional</span></span></li><li><span class="f-name">rate</span><span class="f-type"><a class="t-ref" href="#model-org-example-rates-rate">Rate</a><span class="t-null" title="may be null">?</span><span class="opt">optional</span></span></li></ul>
+<div class="m-use">
+<div>Part of <a href="#model-payloads-charge">Charge</a>, <a href="#model-payloads-receipt">Receipt</a></div>
+</div>
+</article>
+<article class="model" id="model-payloads-node">
+<header><h3>Node</h3><span class="m-kind">object</span></header>
+<p class="m-svc"><code>payloads.Node</code> · app/src/main/kotlin/payloads/Models.kt:47</p>
+<ul class="fields"><li><span class="f-name">name</span><span class="f-type">String</span></li><li><span class="f-name">parent</span><span class="f-type"><a class="t-ref" href="#model-payloads-node">Node</a><span class="t-null" title="may be null">?</span></span></li><li><span class="f-name">children</span><span class="f-type">List&lt;<a class="t-ref" href="#model-payloads-node">Node</a>&gt;</span></li></ul>
+<div class="m-use">
+<div><a href="#op-billing-get-tree"><span class="m m-get">GET</span>billing /tree</a> <span>reads it</span></div>
+</div>
+</article>
+<article class="model" id="model-payloads-page">
+<header><h3>Page&lt;T&gt;</h3><span class="m-kind">object</span></header>
+<p class="m-svc"><code>payloads.Page</code> · app/src/main/kotlin/payloads/Models.kt:34</p>
+<ul class="fields"><li><span class="f-name">items</span><span class="f-type">List&lt;T&gt;</span></li><li><span class="f-name">next</span><span class="f-type">String<span class="t-null" title="may be null">?</span></span></li></ul>
+<div class="m-use">
+<div><a href="#op-billing-get-lines-id"><span class="m m-get">GET</span>billing /lines/{id}</a> <span>reads it</span></div>
+</div>
+</article>
+<article class="model" id="model-payloads-receipt">
+<header><h3>Receipt</h3><span class="m-kind">object</span></header>
+<p class="m-svc"><code>payloads.Receipt</code> · app/src/main/kotlin/payloads/Models.kt:30</p>
+<ul class="fields"><li><span class="f-name" title="Kotlin: chargeId">charge-id</span><span class="f-type">String</span></li><li><span class="f-name" title="Kotlin: takenAt">taken-at</span><span class="f-type">Instant</span></li><li><span class="f-name">lines</span><span class="f-type">List&lt;<a class="t-ref" href="#model-payloads-line">Line</a>&gt;</span></li><li><span class="f-name">totals</span><span class="f-type">Map&lt;String, <a class="t-ref" href="#model-payloads-money">Money</a>&gt;</span></li></ul>
+<div class="m-use">
+<div><a href="#op-billing-post-charges"><span class="m m-post">POST</span>billing /charges</a> <span>reads it</span></div>
+<div><a href="#op-billing-get-deep-id"><span class="m m-get">GET</span>billing /deep/{id}</a> <span>reads it</span></div>
+</div>
+</article>
+<article class="model" id="model-payloads-scan">
+<header><h3>Scan</h3><span class="m-kind">one of</span></header>
+<p class="m-svc"><code>payloads.Scan</code> · app/src/main/kotlin/payloads/Serial.kt:14</p>
+<ul class="fields"><li class="one">One of · <span class="muted">told apart by </span><code>type</code></li><li><span class="f-name">seen</span><span class="f-type"><a class="t-ref" href="#model-payloads-scan-seen">Seen</a></span></li><li><span class="f-name">gone</span><span class="f-type"><a class="t-ref" href="#model-payloads-scan-gone">Gone</a></span></li></ul>
+<div class="m-use">
+<div><a href="#op-billing-get-scans"><span class="m m-get">GET</span>billing /scans</a> <span>reads it</span></div>
+</div>
+</article>
+<article class="model" id="model-payloads-scan-gone">
+<header><h3>Gone</h3><span class="m-kind">object</span></header>
+<p class="m-svc"><code>payloads.Scan.Gone</code> · app/src/main/kotlin/payloads/Serial.kt:21</p>
+<ul class="fields"><li><span class="f-name">at</span><span class="f-type">String</span></li></ul>
+<div class="m-use">
+<div>Part of <a href="#model-payloads-scan">Scan</a></div>
+</div>
+</article>
+<article class="model" id="model-payloads-scan-seen">
+<header><h3>Seen</h3><span class="m-kind">object</span></header>
+<p class="m-svc"><code>payloads.Scan.Seen</code> · app/src/main/kotlin/payloads/Serial.kt:17</p>
+<ul class="fields"><li><span class="f-name">at</span><span class="f-type">String</span></li></ul>
+<div class="m-use">
+<div>Part of <a href="#model-payloads-scan">Scan</a></div>
+</div>
+</article>
+</div>
+</section>
+<footer class="note">
+<p>An HTTP service is named after the first label of its host, or more labels where two hosts would share a name, or after the configuration key its targets start with where no host is configured. A client is one service per class named with <code>--client</code>, with one operation per name it is asked for.</p>
+<p>What is read: the body a request sends and how it is made, the type the answer is read as and with which library, the parameters of the target with the types of what gives them, the arguments of a client's call, and the shape of each model in the sources. What is not: the services' own code and descriptions, an <code>ObjectMapper</code> configured in code, and JSON written by hand, which is shown as text.</p>
+</footer>
+</main>
+</div>
+</div>
+</body>
+</html>

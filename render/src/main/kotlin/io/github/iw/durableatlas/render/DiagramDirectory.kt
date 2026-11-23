@@ -5,6 +5,7 @@ import io.github.iw.durableatlas.ir.IrFormatException
 import io.github.iw.durableatlas.ir.IrJson
 import io.github.iw.durableatlas.ir.withoutRequests
 import io.github.iw.durableatlas.ir.ModelMode
+import io.github.iw.durableatlas.render.endpoints.InventoryPart
 import io.github.iw.durableatlas.render.layout.LayoutBuilder
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
@@ -65,6 +66,8 @@ data class RenderSummary(
     val diagrams: List<RenderedDiagram>,
     /** JSON files in the input directory that are not workflow documents, by file name. */
     val skipped: List<String>,
+    /** The endpoints page and the OpenAPI documents, where an activity makes a request and requests are drawn. */
+    val endpoints: EndpointSummary? = null,
 )
 
 data class RenderedDiagram(
@@ -122,14 +125,20 @@ object DiagramDirectory {
         render(irDir, outDir, options, DrawingWatch(options.progress))
 
     internal fun render(irDir: Path, outDir: Path, options: DirectoryOptions, watch: DrawingWatch): RenderSummary {
-        val (read, skipped) = read(irDir)
-        val sources = if (options.requests) read else read.map { Source(it.file, it.document.withoutRequests()) }
+        val (read, skipped, inventory) = read(irDir)
+        val sources = if (options.requests) {
+            // Each request is named after its service as the endpoints page names it, also in documents written before services were named.
+            read.zip(EndpointPages.named(read.map { it.document }, inventory)) { source, document -> Source(source.file, document) }
+        } else {
+            read.map { Source(it.file, it.document.withoutRequests()) }
+        }
         val named = sources
             .map { it to options.fileNames.nameFor(it.file, it.document) }
             .sortedWith(compareBy({ it.first.document.workflowType }, { it.second }))
         checkNames(named)
         for ((source, _) in named) inFile(source) { LayoutBuilder.check(source.document) }
 
+        val endpoints = if (options.requests) EndpointPages.of(sources.map { it.document }, inventory) else null
         val render = RenderOptions(maxNodes = options.maxNodes)
         val pages = options.formats.associateWith { format ->
             fun fileOf(name: String) = "$name.${format.extension}"
@@ -138,6 +147,7 @@ object DiagramDirectory {
                 diagramFiles = named.groupBy({ it.first.document.workflowType }, { fileOf(it.second) }),
                 indexFile = IndexPage.FILE,
                 interfaceFiles = named.groupBy({ it.first.document.interfaceName }, { fileOf(it.second) }),
+                endpoints = endpoints?.links(format),
             )
         }
 
@@ -180,8 +190,15 @@ object DiagramDirectory {
             }
         }
 
-        DiagramFiles.write(outDir.resolve(IndexPage.FILE), IndexPage.render(diagrams.map { it.first }, options.formats.mapNotNull { it.indexSection() }))
-        return RenderSummary(outDir, IndexPage.FILE, diagrams.map { it.second }, skipped)
+        // The page links each workflow to the diagram of it that was written, in each format.
+        val written = options.formats.associateWith { format ->
+            diagrams.flatMap { (entry, _) -> entry.files.filter { it.format == format.name }.map { entry.workflowType to it.file } }
+                .groupBy({ it.first }, { it.second })
+        }
+        val endpointSummary = endpoints?.write(outDir, options.formats, written)
+        val sections = listOfNotNull(endpointSummary?.let(EndpointPages::indexSection)) + options.formats.mapNotNull { it.indexSection() }
+        DiagramFiles.write(outDir.resolve(IndexPage.FILE), IndexPage.render(diagrams.map { it.first }, sections))
+        return RenderSummary(outDir, IndexPage.FILE, diagrams.map { it.second }, skipped, endpointSummary)
     }
 
     /** Runs [work] on the document of [source]; what it finds wrong with the document names the file. */
@@ -194,16 +211,28 @@ object DiagramDirectory {
 
     private class Source(val file: String, val document: IrDocument)
 
-    private fun read(irDir: Path): Pair<List<Source>, List<String>> {
+    private data class Read(val sources: List<Source>, val skipped: List<String>, val inventory: InventoryPart?)
+
+    /**
+     * The workflow documents directly inside [irDir], the names of the other JSON files, and what
+     * the endpoints page takes from those of them that are inventories, all together.
+     */
+    private fun read(irDir: Path): Read {
         val files = Files.list(irDir).use { stream ->
             stream.filter { it.isRegularFile() && it.name.endsWith(".json") }.toList()
         }.sortedBy { it.name }
         val sources = mutableListOf<Source>()
         val skipped = mutableListOf<String>()
+        val inventories = mutableListOf<InventoryPart>()
         for (file in files) {
             val text = Files.readAllBytes(file).toString(Charsets.UTF_8)
             if (!file.name.endsWith(IR_SUFFIX) && !looksLikeWorkflowIr(text)) {
                 skipped += file.name
+                try {
+                    InventoryPart.read(text)?.let(inventories::add)
+                } catch (e: IllegalArgumentException) {
+                    throw IrFormatException("${file.name}: ${e.message}", e)
+                }
                 continue
             }
             val document = try {
@@ -213,7 +242,7 @@ object DiagramDirectory {
             }
             sources += Source(file.name, document)
         }
-        return sources to skipped
+        return Read(sources, skipped, InventoryPart.merged(inventories))
     }
 
     /** Tells workflow documents from other JSON files that live next to them, such as an inventory. */

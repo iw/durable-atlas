@@ -8,6 +8,11 @@ import io.github.iw.durableatlas.modelextractor.testing.SampleRepository
 import org.junit.jupiter.api.io.TempDir
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.int
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -48,7 +53,7 @@ class RequestCommandsTest {
 
     @Test
     fun `run reads the requests of an activity with the clients it is told of, and draws them unless told not to`() {
-        val result = run("--client", "PriceClient.invoke:functionName", "--client", "PriceClient.history:2")
+        val result = run("--client", "PriceClient.invoke:functionName", "--client", "PriceClient.history:2", "--json")
         assertEquals(ExitCode.SUCCESS, result.statusCode, result.stderr)
         val ir = out.resolve("ir").resolve(requesting)
         val requests = requests(ir)
@@ -59,13 +64,30 @@ class RequestCommandsTest {
         assertEquals(listOf("pricing.url"), http.keys)
         assertEquals("http://pricing.example.com", http.host)
         assertEquals(listOf("price-quote", "price-history"), requests.drop(1).map { it.operation })
+        // Each operation named by a constant says which.
+        assertEquals(
+            listOf("com.example.fixture.workflows.pricing.PricingActivitiesImpl.QUOTE", "com.example.fixture.workflows.pricing.PricingActivitiesImpl.HISTORY"),
+            requests.drop(1).map { it.constant },
+        )
         assertContains(result.stderr, "found 3 request(s) of 1 activity type(s) after ")
         assertFalse("--force makes it again" in result.stderr, result.stderr)
 
         val diagrams = out.resolve("diagrams").resolve(requesting)
         val page = Files.readString(diagrams.resolve("PricingWorkflow.md"))
         assertContains(page, "## Requests\n")
-        assertContains(page, "| `Quote` | `GET {pricing.url}/quotes/{sku}` | `http://pricing.example.com` | `String` |")
+        assertContains(page, "| `Quote` | [`GET {pricing.url}/quotes/{sku}`](endpoints/index.md#get-pricing-quotessku) | `http://pricing.example.com` | `String` |")
+        // The endpoints page and an OpenAPI document per service, which the summary counts.
+        val summary = Json.parseToJsonElement(result.stdout).jsonObject.getValue("endpoints").jsonObject
+        assertEquals(
+            listOf(diagrams.resolve("endpoints/index.html").toString(), diagrams.resolve("endpoints/index.md").toString()),
+            summary.getValue("pages").jsonArray.map { it.jsonPrimitive.content },
+        )
+        assertEquals(
+            listOf(diagrams.resolve("endpoints/pricing.openapi.json").toString(), diagrams.resolve("endpoints/PriceClient.openapi.json").toString()),
+            summary.getValue("openapi").jsonArray.map { it.jsonPrimitive.content },
+        )
+        assertEquals(listOf(2, 3), listOf("services", "operations").map { summary.getValue(it).jsonPrimitive.int })
+        assertContains(Files.readString(diagrams.resolve("endpoints/index.md")), "### FN price-quote\n")
         assertContains(Files.readString(diagrams.resolve("PricingWorkflow.svg")), "GET {pricing.url}/quotes/{sku} · host http://pricing.example.com")
 
         // Drawn without them, the diagrams are those of the document without requests; the IR still has them.
@@ -74,6 +96,7 @@ class RequestCommandsTest {
         val plainDiagrams = dir.resolve("plain").resolve("diagrams").resolve(requesting)
         assertFalse("## Requests" in Files.readString(plainDiagrams.resolve("PricingWorkflow.md")))
         assertFalse("pricing.url" in Files.readString(plainDiagrams.resolve("PricingWorkflow.svg")))
+        assertFalse(Files.exists(plainDiagrams.resolve("endpoints")))
         assertEquals(1, requests(dir.resolve("plain").resolve("ir").resolve(requesting)).size)
 
         val rendered = command("render", "--ir", ir.toString(), "--out", dir.resolve("rendered").toString(), "--no-requests")
@@ -128,8 +151,11 @@ class RequestCommandsTest {
             assertContains(help, "'ServiceClient.invoke:functionName'")
         }
         for (name in listOf("run", "render", "overlay")) {
-            assertContains(command(name, "--help").stdout.replace(Regex("\\s+"), " "), "--no-requests Draw activities without what they ask of other services")
+            val help = command(name, "--help").stdout.replace(Regex("\\s+"), " ")
+            assertContains(help, "--no-requests Draw activities without what they ask of other services")
+            assertContains(help, "and no endpoints page or OpenAPI documents.")
         }
+        assertContains(command("render", "--help").stdout.replace(Regex("\\s+"), " "), "an endpoints page with an OpenAPI document per service")
         assertTrue("--client" !in command("render", "--help").stdout)
     }
 

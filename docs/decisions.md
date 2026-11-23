@@ -241,9 +241,32 @@ are read from the code and drawn with the activity. The tool stays generic.
   computed is shown by the name it is written with, `{id}`; one from configuration by its
   key, `{services.inventory.url}`, with the host the configuration files give beside it and
   never instead of it. A value that cannot be read at all is left out, not guessed.
+- **What a request sends and reads is read as the code writes it**, never as the service
+  declares it: the static type of the object a library writes, the type the answer is read
+  as, the type of what gives each parameter and argument. The services' own code, their
+  annotations and their own OpenAPI documents are not read, so the page says what the
+  activities depend on, which is what changes break.
+- **The answer is followed forward, as far as the requests are found.** From the call that
+  sends it, into variables, into functions of the sources it is handed to and back out of a
+  helper into its caller, within `--max-depth`, into one function only and never into one it
+  is in already. Where the ways it goes disagree, or one is lost, it is unknown; a type is
+  never guessed. A JSON writer's output is never empty, so a helper that sends no body only
+  for an empty text sends the type.
+- **Only Jackson and kotlinx.serialization are libraries of their own.** Their writers,
+  readers and annotations are known by name, so that a degraded model, which lacks them,
+  reads them the same. JSON written by hand is text; an `ObjectMapper` configured in code is
+  not read; the naming strategy of Quarkus for Jackson is, from the configuration of the
+  module that makes the request.
+- **Models live once, in the inventory.** A document names the types its requests send and
+  read; their shapes are in the `types` table of `inventory.json`, so a type several
+  workflows use is described once, and the documents of a repository without requests stay
+  byte for byte as they were.
+- **A service is named by what a reader knows it by**: an HTTP service by the first label of
+  its host, with more where two would clash, else by its key; a client by its class, one
+  service per class `--client` names, with an operation per name it is asked for.
 - **Requests change nothing else.** A document without requests is drawn byte for byte as
-  before, and `--no-requests` draws one with requests as if it had none. `--detail` has no
-  bearing on them.
+  before, and `--no-requests` draws one with requests as if it had none: no line on a card,
+  no endpoints page, no OpenAPI document. `--detail` has no bearing on them.
 
 ## Drawing
 
@@ -276,6 +299,18 @@ are read from the code and drawn with the activity. The tool stays generic.
 - **Overlays never move anything.** An overlay is the plain diagram redrawn with
   decorations from the positions the file records, so a plain diagram and its overlays line
   up.
+- **The card of an activity says briefly what it calls**: the method and the service, or `FN`
+  and the operation of a client, and `+N` for the rest, in plain text, since colours carry
+  the construct in the notation. The tooltip says everything, and the card links to the
+  endpoints page: to the operation where there is one, to the activity's entry where there
+  are several. Cards of overlays link to no page, since an overlay's directory has none.
+- **The endpoints page is drawn from the documents and the inventory alone**, in the form of
+  the diagrams it is written with: one HTML file with no script and nothing to fetch for the
+  SVG diagrams, so that it opens on a locked-down machine, and a Markdown page for the
+  Mermaid diagrams whose headings have the same anchors on GitHub and GitLab. It goes to a
+  directory of its own, `endpoints/`, so no workflow's file can clash with it. The OpenAPI
+  documents beside it are for other tools; each says what the activities call of one
+  service, not what the service offers.
 
 ## Overlays
 
@@ -302,7 +337,11 @@ are read from the code and drawn with the activity. The tool stays generic.
 - **Fail types and options set outside the analysed sources** are not seen.
 - **Requests made inside libraries are not seen**: a REST client generated from an
   interface, an HTTP library other than `java.net.http`, a client the user does not name.
-  Of a client that is named, only the call is seen, not what it sends.
+  Of a client that is named, only the call and the types of its arguments and answer are
+  seen, not how it sends them.
+- **Models are read from their declarations**, not from how a library would write them: a
+  computed property that Jackson writes through its getter is left out, and a custom
+  serializer or a mix-in is not seen.
 - **A workflow type whose implementing class is not in the sources** has no document; a
   warning names it.
 - **Module scoping is by mention.** In Gradle mode a module is analysed if its sources

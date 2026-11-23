@@ -4,6 +4,7 @@ import io.github.iw.durableatlas.analyser.discovery.Discovery
 import io.github.iw.durableatlas.analyser.discovery.ImplementedEntryPoint
 import io.github.iw.durableatlas.ir.EntryPointKind
 import io.github.iw.durableatlas.ir.ModelMode
+import io.github.iw.durableatlas.ir.ModelType
 import io.github.iw.durableatlas.ir.Request
 import io.github.iw.durableatlas.ir.SourceLocation
 import kotlinx.serialization.EncodeDefault
@@ -29,13 +30,28 @@ data class Inventory(
     val workflows: List<InventoryWorkflow>,
     /** Ordered by interface. */
     val activityInterfaces: List<InventoryActivityInterface>,
+    /**
+     * The shape of each type that the requests of the activities send or receive, and of each type
+     * those types reach through their properties, by the fully qualified name of the class; a
+     * class whose source was not analysed by the name the sources write it with. Ordered by name.
+     */
+    val types: Map<String, ModelType> = emptyMap(),
 ) {
     companion object {
         /** Version of the JSON format written by this module. */
         const val SCHEMA_VERSION: Int = 1
 
-        /** @param requests what the implementation of each activity type asks of other services, by activity type */
-        fun of(discovery: Discovery, commit: String, modelMode: ModelMode, requests: Map<String, List<Request>> = emptyMap()): Inventory =
+        /**
+         * @param requests what the implementation of each activity type asks of other services, by activity type
+         * @param types the shapes of the types the requests name, by name
+         */
+        fun of(
+            discovery: Discovery,
+            commit: String,
+            modelMode: ModelMode,
+            requests: Map<String, List<Request>> = emptyMap(),
+            types: Map<String, ModelType> = emptyMap(),
+        ): Inventory =
             Inventory(
                 commit = commit,
                 modelMode = modelMode,
@@ -70,6 +86,7 @@ data class Inventory(
                         },
                     )
                 },
+                types = types.toSortedMap(),
             )
 
         private fun entryPoint(implemented: ImplementedEntryPoint): InventoryEntryPoint =

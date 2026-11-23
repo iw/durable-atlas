@@ -115,6 +115,31 @@ class IrValidationTest {
     }
 
     @Test
+    fun `a request says what it sends and receives as its kind allows`() {
+        val http = Request(kind = RequestKind.HTTP, method = "GET", target = "https://example.com", loc = SourceLocation("Orders.kt", 3))
+        val client = Request(kind = RequestKind.CLIENT, client = "ServiceClient", call = "invoke", loc = SourceLocation("Orders.kt", 4))
+        fun problems(request: Request) = document.copy(nodes = document.nodes.map { if (it.id == "n05") it.copy(requests = listOf(request)) else it }).validate()
+        val at = { line: Int -> "node 'n05' has a request at Orders.kt:$line that " }
+
+        assertEquals(emptyList(), problems(http.copy(sends = Payload(PayloadKind.TYPE, "a.B", format = PayloadFormat.JACKSON, naming = "SNAKE_CASE"), receives = Payload(PayloadKind.TEXT))))
+        assertEquals(emptyList(), problems(client.copy(arguments = listOf(RequestArgument("payload", 1, "a.B")), constant = "a.C.D", receives = Payload(PayloadKind.UNKNOWN))))
+        assertEquals(listOf(at(3) + "sends type with a type only where it is a type"), problems(http.copy(sends = Payload(PayloadKind.TYPE))))
+        assertEquals(listOf(at(3) + "receives text with a type only where it is a type"), problems(http.copy(receives = Payload(PayloadKind.TEXT, "a.B"))))
+        assertEquals(listOf(at(3) + "sends gives a naming strategy without Jackson"), problems(http.copy(sends = Payload(PayloadKind.TYPE, "a.B", format = PayloadFormat.KOTLINX, naming = "SNAKE_CASE"))))
+        assertEquals(listOf(at(3) + "sends what is not read"), problems(http.copy(sends = Payload(PayloadKind.NOT_READ))))
+        assertEquals(listOf(at(3) + "receives nothing, which is said as not read"), problems(http.copy(receives = Payload(PayloadKind.NONE))))
+        assertEquals(
+            listOf(at(4) + "is a call of a client and sends a body or has parameters of a target"),
+            problems(client.copy(parameters = listOf(RequestParameter("id", ParameterLocation.PATH)))),
+        )
+        assertEquals(listOf(at(3) + "is an HTTP request and has arguments or a constant of a client"), problems(http.copy(constant = "a.C.D")))
+        assertEquals(
+            listOf(at(4) + "has two arguments at one place"),
+            problems(client.copy(arguments = listOf(RequestArgument("a", 1), RequestArgument("b", 1)))),
+        )
+    }
+
+    @Test
     fun `only a parallel region says which lanes are waited for, and only an upsert with names that it writes more`() {
         val nodes = document.nodes
         val joined = document.copy(nodes = nodes.map { if (it.id == "n01") it.copy(join = Join.FIRST) else it })

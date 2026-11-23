@@ -155,6 +155,55 @@ class IrSchemaTest {
     }
 
     @Test
+    fun `what a request sends and receives, its parameters, arguments and hosts match the schema`() {
+        val http = Request(
+            kind = RequestKind.HTTP,
+            service = "orders",
+            method = "POST",
+            target = "{orders.url}/orders/{id}?page={page}",
+            parameters = listOf(RequestParameter("id", ParameterLocation.PATH, "kotlin.String"), RequestParameter("page", ParameterLocation.QUERY, "kotlin.Int", "{page}")),
+            sends = Payload(PayloadKind.TYPE, "com.example.Order", mediaType = "application/json", format = PayloadFormat.JACKSON, naming = "SNAKE_CASE"),
+            receives = Payload(PayloadKind.NOT_READ),
+            keys = listOf("orders.url"),
+            host = "http://orders.example.com",
+            hosts = listOf(
+                ConfiguredValue("orders.url", "http://orders.example.com", file = "orders/src/main/resources/application.yaml"),
+                ConfiguredValue("orders.url", "https://orders.prod.example.com", profile = "prod", file = "orders/src/main/resources/application.yaml"),
+            ),
+            loc = SourceLocation("orders/src/main/kotlin/Orders.kt", 12),
+        )
+        val client = Request(
+            kind = RequestKind.CLIENT,
+            service = "ServiceClient",
+            client = "ServiceClient",
+            call = "invoke",
+            operation = "order-fn",
+            constant = "com.example.Functions.ORDER",
+            arguments = listOf(RequestArgument("payload", 2, "com.example.Order")),
+            receives = Payload(PayloadKind.TYPE, "kotlin.collections.List<com.example.Order>"),
+            loc = SourceLocation("orders/src/main/kotlin/Orders.kt", 14),
+        )
+        val requesting = SampleDocuments.orderWorkflow.let { document ->
+            document.copy(nodes = document.nodes.map { if (it.id == "n05") it.copy(requests = listOf(http, client)) else it })
+        }
+        val text = IrJson.encode(requesting)
+        checker.assertValid(text)
+
+        val malformed = mapOf(
+            "a payload of an unknown kind" to text.replace("\"kind\": \"not-read\"", "\"kind\": \"maybe\""),
+            "a format of no library" to text.replace("\"format\": \"jackson\"", "\"format\": \"gson\""),
+            "a parameter in a header" to text.replace("\"in\": \"query\"", "\"in\": \"header\""),
+            "an argument at no place" to text.replace("\"position\": 2", "\"position\": -1"),
+            "a host without its value" to text.replace("\"value\": \"http://orders.example.com\",", ""),
+            "an empty constant" to text.replace("\"constant\": \"com.example.Functions.ORDER\"", "\"constant\": \"\""),
+        )
+        for ((description, changed) in malformed) {
+            assertTrue(changed != text, "$description: the sample was not changed")
+            assertTrue(checker.violations(changed).isNotEmpty(), "$description: expected a schema violation")
+        }
+    }
+
+    @Test
     fun `calls that were skipped match the schema where each has its place and its text`() {
         val skipping = SampleDocuments.orderWorkflow.copy(
             modelMode = ModelMode.DEGRADED,

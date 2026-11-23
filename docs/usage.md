@@ -58,7 +58,13 @@ Each kind of output has a directory named after the full SHA of the commit, howe
 <out>/diagrams/<sha>/<workflow>.md    a Markdown page with the Mermaid diagram
 <out>/diagrams/<sha>/<workflow>.html  with --html: a page that holds the SVG diagram
 <out>/diagrams/<sha>/index.md         links every diagram, and explains the Mermaid notation
+<out>/diagrams/<sha>/endpoints/index.html            the endpoints page, with the SVG diagrams
+<out>/diagrams/<sha>/endpoints/index.md              the endpoints page in Markdown, with the Mermaid diagrams
+<out>/diagrams/<sha>/endpoints/<service>.openapi.json   what the activities call of one service, as OpenAPI 3.1
 ```
+
+The `endpoints` directory is written only where an activity makes a request (see
+[The endpoints page](#the-endpoints-page)).
 
 Runs on other commits can share `<out>`; its `ir` directory is then what
 `overlay --version-map` reads. A run on a commit that is already there reuses its model
@@ -183,7 +189,10 @@ Two kinds of request are read:
 
 A request is written with its constant parts as the code has them, a part that comes from a
 configuration property as `{key}`, and any other part the code computes as `{name}`, by the
-name the code gives it: `PUT {billing.url}/v1/charges/{orderId}`.
+name the code gives it: `PUT {billing.url}/v1/charges/{orderId}`. Each request is also named
+after its service: an HTTP request after the first label of its host (`billing` for
+`http://billing.example.com`), with more labels where two hosts would share a name, or after
+its key where it has no host; a client after its class.
 
 #### Naming a client
 
@@ -214,6 +223,74 @@ tool. A place serves where the name of the parameter is not known: in a degraded
 jars do not hold the client, an argument given without its name cannot be matched with its
 parameter, so `ServiceClient.invoke:2` reads it where `:functionName` does not.
 
+#### What a request sends and reads
+
+Of each request the analysis also reads what it sends, what the code reads of the answer,
+the parameters of its target and the arguments of a client's call, each with its type
+(`sends`, `receives`, `parameters` and `arguments` in [the IR format](ir.md#requests)):
+
+- **The body.** `noBody()` sends none. `ofString(…)` and `ofByteArray(…)` of what
+  `writeValueAsString` or `writeValueAsBytes` of a Jackson `ObjectMapper`, or `encodeToString`
+  of kotlinx.serialization, write send the static type of the object written. Other text
+  sends text, with the media type of the `Content-Type` header where the chain sets one. A
+  body the code reads from elsewhere, such as a file, is unknown. A helper that sends no body
+  for an empty text and the text otherwise sends the text: the output of a writer is never
+  empty.
+- **The answer** is followed forward from the call that sends it: into the variables it is
+  kept in, into the functions of the sources it is handed to, and back out of a helper that
+  returns it into the code that called the helper, as deep as `--max-depth` allows, into one
+  function only and never into one it is already in. It is read as the type that `readValue`
+  of Jackson (with a class, a `TypeReference`, or the reified form of the Kotlin module), or
+  `decodeFromString` of kotlinx.serialization (with a serializer or a type argument), reads
+  it as, also from `ofInputStream()` and `ofByteArray()`. An answer kept or returned as text
+  is text; one that is thrown away, or whose body is never asked for, is not read; one that
+  goes where it cannot be followed is unknown. The answer of a client is its type argument,
+  or the type the code expects of the result.
+- **Parameters.** Each `{…}` of the path and each parameter of the query has the static type
+  of the expression that gives it.
+- **Arguments.** Each argument of a client's call has the static type of its expression;
+  the argument that names the operation is not one of them. Where a constant names the
+  operation, the request says which (`constant`).
+
+**Models.** Each type a request sends or reads, and each type those reach, is in the
+`types` table of `inventory.json`, by its fully qualified name, with its source: a class
+with the properties of its primary constructor and its public properties with a field,
+without those annotated `@JsonIgnore`, `@Transient` (Kotlin's or kotlinx.serialization's);
+nullable where its type is, optional where it has a default; an enum with its values; a
+sealed class with `@JsonTypeInfo` and `@JsonSubTypes`, or one of kotlinx.serialization, as
+the alternatives it stands for, with the property that tells them apart. A property's name
+on the wire comes from `@JsonProperty` on any use site, `@SerialName`, `@JsonNaming` with a
+standard strategy, or `quarkus.jackson.property-naming-strategy` in the configuration of the
+module that makes the request. Generic types keep their type parameters, which each use
+fills in. A type of a jar is read from the jar; one the model does not have is named and
+marked as not read. A type that holds itself is listed once. Standard types have no entry;
+the OpenAPI documents write them so:
+
+| Kotlin or Java type | OpenAPI `type` and `format` |
+| --- | --- |
+| `String`, `Char`, `CharSequence` | `string` |
+| `Boolean` | `boolean` |
+| `Byte`, `Short`, `Int`, `Long` | `integer`, `int8`, `int16`, `int32`, `int64` |
+| `UByte`, `UShort`, `UInt`, `ULong` | `integer`, `uint8`, `uint16`, `uint32`, `uint64` |
+| `Float`, `Double`, `BigDecimal` | `number`, `float`, `double`, `decimal` |
+| `BigInteger` | `integer` |
+| `UUID` (Java's and Kotlin's) | `string`, `uuid` |
+| `URI`, `URL` | `string`, `uri` |
+| `ByteArray` | `string` with `contentEncoding: base64` |
+| `Instant`, `OffsetDateTime`, `ZonedDateTime`, `Date` (and the `Instant` of `kotlin.time` and `kotlinx.datetime`) | `string`, `date-time` |
+| `LocalDate` (Java's and `kotlinx.datetime`'s) | `string`, `date` |
+| `OffsetTime` | `string`, `time` |
+| `Duration` (Java's and Kotlin's) | `string`, `duration` |
+| `LocalDateTime`, `LocalTime`, `Year`, `YearMonth`, `MonthDay`, `Period`, `ZoneId`, `ZoneOffset`, `DayOfWeek`, `Month`, `Currency`, `Locale` | `string` |
+| `List`, `Collection`, `Iterable`, `Array` and their Java and mutable kinds, the primitive arrays | `array` of the type argument |
+| `Set` and its kinds | `array` with `uniqueItems` |
+| `Map` and its kinds | `object` with `additionalProperties` of the value type |
+| `Any`, `JsonElement`, `JsonNode` | any value |
+| `JsonObject`, `ObjectNode` | `object` |
+
+In a degraded model, annotations and calls of Jackson and kotlinx.serialization that do not
+resolve are read by the names they are written with.
+
 #### Hosts
 
 A key is read in each of the three forms MicroProfile Config has:
@@ -238,6 +315,8 @@ the default the code gives counts: `defaultValue`, `@WithDefault`, `orElse(…)`
 
 The host is the value of the key a URI starts with. The diagrams and the IR show it beside the
 key, not in its place: `{billing.url}/v1/charges` with host `http://billing.example.com`.
+`hosts` lists the value without a profile and that of `%prod`, each with its file and
+profile; the endpoints page and the OpenAPI documents give each as a server.
 
 The model holds the configuration files. One made by an earlier version of the tool holds
 none: its requests keep their keys without hosts, and `analyse` says once that `--force`
@@ -256,6 +335,10 @@ What cannot be read is said, not guessed:
 - A computed part shows as `{name}`, and so does a computed method.
 - Requests made inside libraries, in calls that may run one of several functions, and with
   other HTTP clients are not seen, unless `--client` names the client.
+- The services' own code, their `@Path` annotations and their own OpenAPI documents are not
+  read: the operations are those the activities call, as their code calls them. Neither are
+  REST Client interfaces, JSON written by hand (it is text), or an `ObjectMapper` configured
+  in code.
 
 #### An example
 
@@ -290,13 +373,57 @@ class BillingActivitiesImpl(
 
 With `billing.url: http://billing.example.com` in `billing/src/main/resources/application.yaml`
 and `--client ServiceClient.invoke:functionName`, the card of `Charge` reads
-`PUT {billing.url}/… +1 more` below its name, its tooltip has both requests whole, and the
-workflow's page has this table:
+`PUT billing +1` below its name and links to its entry on the endpoints page, its tooltip has
+both requests whole, and the workflow's page has this table, whose requests link to their
+operations on the page:
 
 | Activity | Request | Host | Response | Source |
 |---|---|---|---|---|
-| `Charge` | `PUT {billing.url}/v1/charges/{orderId}` | `http://billing.example.com` | `String` | `billing/src/main/kotlin/com/example/billing/BillingActivitiesImpl.kt:20` |
-| `Charge` | `ServiceClient · pricing-quote` |  | `Long` | `billing/src/main/kotlin/com/example/billing/BillingActivitiesImpl.kt:21` |
+| `Charge` | [`PUT {billing.url}/v1/charges/{orderId}`](endpoints/index.md#put-billing-v1chargesorderid) | `http://billing.example.com` | `String` | `billing/src/main/kotlin/com/example/billing/BillingActivitiesImpl.kt:20` |
+| `Charge` | [`ServiceClient · pricing-quote`](endpoints/index.md#fn-pricing-quote) |  | `Long` | `billing/src/main/kotlin/com/example/billing/BillingActivitiesImpl.kt:21` |
+
+The request sends nothing and the code keeps the answer as text; the client's call has the
+argument `payload: String` and returns `Long`.
+
+### The endpoints page
+
+Where an activity makes a request, `run` and `render` write a page of every operation the
+activities call, next to the diagrams in `endpoints/`: `index.html` with the SVG diagrams,
+`index.md` with the Mermaid diagrams, both with `--format all`. It is drawn from the IR files
+and the `inventory.json` beside them, so activity types that no workflow runs are on it too.
+
+- At the top, the services and operations counted, then a table of which workflows reach
+  which services, and every activity type with the operations it calls.
+- A section per service: its servers (the key, its file and its profile, a `${…}` expression
+  kept as written), a small map of the activities that call it and its operations, then each
+  operation: its method and path, or its signature for a client
+  (`inventory-stock(payload: String) → List<Stock>`), where the name of a client's operation
+  comes from, its parameters, what it sends and what is read of its answer, field by field
+  with what is nullable and optional, and the activities that call it, with their workflows,
+  their class where several implement one, and the line of the source.
+- The models, each with its fields or values, the operations that send or read it, and the
+  types it is part of. A part that was not read says so.
+
+The HTML page holds everything it shows: it has no script and fetches nothing, and names the
+typeface as the diagrams' pages do (carried in the file only with `--embed-font`). Its links
+go to the diagrams of the same output, and to the sources with `--source-base-url`. The
+Markdown page links to headings whose anchors are the same on GitHub and GitLab, and to the
+Markdown pages of the workflows.
+
+Next to them is an OpenAPI 3.1 document per service, `<service>.openapi.json`, for other
+tools: its servers from the hosts (`x-config-key`, `x-config-file`, `x-profile`; a second key
+in a target is a server variable), its paths, parameters, bodies and responses as the code has
+them (an answer that is not read is a response without content), `x-used-by` on each
+operation with the activities, interface, class, workflows and source that call it, and the
+models in `components.schemas` with their names on the wire (`x-kotlin-type` and
+`x-kotlin-name` where the Kotlin name differs). A client is a document with
+`x-durable-atlas: {kind: client, …}` and one `post` path per operation, whose request body is
+the call's arguments. These documents describe what the activities call, not the services
+themselves.
+
+The card of an activity that makes one request links to its operation on the HTML page; one
+that makes several links to its entry, which lists them. `--no-requests` writes neither page
+nor document. A diagram drawn by `overlay` links to neither.
 
 ### Exit status
 
@@ -318,11 +445,11 @@ workflow's page has this table:
 | `--max-nodes <n>` | Draw the regions of a workflow with more nodes than this, 150 by default, as single nodes. |
 | `--wrap-width <n>` | Break the main flow of an SVG diagram into rows when it is wider than this, 1700 by default; `0` keeps it in one row. |
 | `--legend present\|full\|none` | What the legend below an SVG diagram explains: the constructs it shows (the default), all of them, or nothing. |
-| `--source-base-url <url>` | Link each card of an SVG diagram to `<url>/<file>#L<line>`. `{commit}` in the URL stands for the commit, as in `https://git.example.com/orders/blob/{commit}`. |
+| `--source-base-url <url>` | Link each card of an SVG diagram that links nowhere else, and each caller on the endpoints page, to `<url>/<file>#L<line>`. `{commit}` in the URL stands for the commit, as in `https://git.example.com/orders/blob/{commit}`. |
 | `--background paper\|transparent` | Background of the SVG diagrams. |
 | `--embed-font` | Put the typeface into each SVG file, so that it looks the same everywhere. Adds over a megabyte per file. |
 | `--svg-timeout <seconds>` | The time allowed for arranging one SVG diagram, 30 by default; `0` sets no limit. |
-| `--no-requests` | Draw activities without what they ask of other services: no line for it on a card, nothing in its tooltip, no table on the page. The IR files keep the requests. |
+| `--no-requests` | Draw activities without what they ask of other services: no line for it on a card, nothing in its tooltip, no table on the page, no endpoints page and no OpenAPI documents. The IR files keep the requests. |
 
 ### What the diagrams show
 
@@ -332,16 +459,18 @@ handlers in a band above the main flow, and a legend. Dotted green edges lead fr
 to the awaits it can end. Below the drawing it says what is worth knowing about it: calls
 that were skipped or left out of an overview, regions drawn as single nodes, a drawing made
 more simply. The card of an activity that makes requests of other services names the first
-below the activity, and how many more there are; its tooltip lists them all, each with its
-host, its response type and, where several classes implement the activity, the class that
+below the activity, briefly, by its method and service (`POST billing`) or by `FN` and the
+operation of a client (`FN pricing-quote`), and how many more there are (`+2`); it links to
+the endpoints page. Its tooltip lists them all in full, each with its host, what it sends and
+reads, its response type and, where several classes implement the activity, the class that
 makes it.
 
 The Mermaid diagram of the same workflow is a `flowchart TD` in a fenced block, which Git
 hosts draw in place. Its page also lists the workflow's properties, links the diagrams of its
 child workflows, says where each `unknown` node is, lists the calls that were skipped or
 left out of an overview, and has a table of the requests of its activities: activity,
-request, host, response type and source. A Mermaid node of an activity names its first
-request.
+request, host, response type and source, each request linked to the endpoints page. A
+Mermaid node of an activity names its first request as the card does.
 
 The same commit and options always give the same bytes.
 
@@ -487,7 +616,9 @@ characters, as long as only one directory under `out/ir` begins with them.
 
 With `--json`, a command prints one JSON object on stdout in place of its table: the
 directories and files it wrote and an entry per workflow or module. `run` and `overlay`,
-which can end with status 2 or 3, also give the `exitCode`. stderr is as without it.
+which can end with status 2 or 3, also give the `exitCode`. Where `run` or `render` wrote an
+endpoints page, `endpoints` lists its `pages` and the `openapi` documents, and counts the
+`services`, `operations` and `models`. stderr is as without it.
 
 The files the tool writes are described by JSON Schemas (draft 2020-12) in its sources:
 

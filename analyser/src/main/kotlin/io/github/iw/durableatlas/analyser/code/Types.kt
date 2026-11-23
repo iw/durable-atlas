@@ -61,7 +61,8 @@ private fun writtenAs(name: String, type: String): Boolean = name == type || nam
 /**
  * The annotations the analysis reads where their class does not resolve, by the name they are
  * written with ([findWritten]): those that MicroProfile Config and SmallRye Config give the keys
- * of configuration properties with. An annotation of the sources that does not resolve is worth
+ * of configuration properties with, and those that Jackson and kotlinx.serialization are told the
+ * names and shapes of models with. An annotation of the sources that does not resolve is worth
  * a warning, since what depends on it is not recognised, unless it is one of these.
  */
 object WrittenAnnotations {
@@ -70,7 +71,23 @@ object WrittenAnnotations {
     const val WITH_NAME = "io.smallrye.config.WithName"
     const val WITH_DEFAULT = "io.smallrye.config.WithDefault"
 
-    private val types = listOf(CONFIG_PROPERTY, CONFIG_MAPPING, WITH_NAME, WITH_DEFAULT)
+    // Those that Jackson and kotlinx.serialization are told the names and shapes of models with.
+    const val JSON_PROPERTY = "com.fasterxml.jackson.annotation.JsonProperty"
+    const val JSON_IGNORE = "com.fasterxml.jackson.annotation.JsonIgnore"
+    const val JSON_IGNORE_PROPERTIES = "com.fasterxml.jackson.annotation.JsonIgnoreProperties"
+    const val JSON_TYPE_INFO = "com.fasterxml.jackson.annotation.JsonTypeInfo"
+    const val JSON_SUB_TYPES = "com.fasterxml.jackson.annotation.JsonSubTypes"
+    const val JSON_TYPE_NAME = "com.fasterxml.jackson.annotation.JsonTypeName"
+    const val JSON_NAMING = "com.fasterxml.jackson.databind.annotation.JsonNaming"
+    const val SERIAL_NAME = "kotlinx.serialization.SerialName"
+    const val CLASS_DISCRIMINATOR = "kotlinx.serialization.json.JsonClassDiscriminator"
+    val TRANSIENT = listOf("kotlinx.serialization.Transient", "kotlin.jvm.Transient", "java.beans.Transient")
+
+    private val types = listOf(
+        CONFIG_PROPERTY, CONFIG_MAPPING, WITH_NAME, WITH_DEFAULT,
+        JSON_PROPERTY, JSON_IGNORE, JSON_IGNORE_PROPERTIES, JSON_TYPE_INFO, JSON_SUB_TYPES, JSON_TYPE_NAME, JSON_NAMING,
+        SERIAL_NAME, CLASS_DISCRIMINATOR,
+    ) + TRANSIENT
 
     /** Whether an annotation whose class does not resolve, written as [name], is read all the same. */
     fun isRead(name: String): Boolean = types.any { writtenAs(name, it) }

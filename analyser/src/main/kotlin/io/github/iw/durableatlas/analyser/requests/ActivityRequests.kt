@@ -6,8 +6,10 @@ import io.github.iw.durableatlas.analyser.code.SourceBackend
 import io.github.iw.durableatlas.analyser.discovery.ActivityType
 import io.github.iw.durableatlas.analyser.discovery.Discovery
 import io.github.iw.durableatlas.ir.IrDocument
+import io.github.iw.durableatlas.ir.ModelType
 import io.github.iw.durableatlas.ir.NodeKind
 import io.github.iw.durableatlas.ir.Request
+import io.github.iw.durableatlas.ir.ServiceNames
 
 /**
  * What the implementation of each activity type asks of other services: for every activity
@@ -41,8 +43,13 @@ internal class ActivityRequests(
                 }
             }
         }
-        return found.mapValues { it.value.toList() }
+        val services = ServiceNames.of(found.values.flatten())
+        return found.mapValues { (_, requests) -> requests.map { it.copy(service = services[it]) }.distinct() }
     }
+
+    /** The shapes of the types that [requests] send and receive, and of those they reach, by name. */
+    fun types(requests: Map<String, List<Request>>): Map<String, ModelType> =
+        if (requests.isEmpty()) emptyMap() else Models(backend, StaticTypes(backend)).of(requests.values.flatten())
 
     /** The function of the sources that runs for [activity] on an object of [implementation]. */
     private fun implementation(implementation: ClassDecl, activity: ActivityType): FunctionDecl? {

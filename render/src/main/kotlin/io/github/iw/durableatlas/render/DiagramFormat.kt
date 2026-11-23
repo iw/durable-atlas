@@ -85,12 +85,15 @@ data class PageFact(val name: String, val value: String)
  * @param interfaceFiles the same files by the fully qualified name of the workflow interface
  *   each diagram's workflow implements; a child workflow that names the interface of its stub
  *   is linked through it
+ * @param endpoints where the activities that make requests link to on the endpoints page written
+ *   with the diagram; `null` where none is
  */
 data class PageOptions(
     val render: RenderOptions = RenderOptions(),
     val diagramFiles: Map<String, List<String>> = emptyMap(),
     val indexFile: String? = null,
     val interfaceFiles: Map<String, List<String>> = emptyMap(),
+    val endpoints: EndpointLinks? = null,
 )
 
 /** The formats this tool can write. */

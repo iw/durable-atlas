@@ -140,26 +140,55 @@ activity type carries the same list, and `inventory.json` has it once for each a
 
 ```json
 "requests": [
-  { "kind": "http", "method": "PUT", "target": "{billing.url}/v1/charges/{orderId}",
-    "response": "String", "keys": ["billing.url"], "host": "http://billing.example.com",
+  { "kind": "http", "service": "billing", "method": "PUT", "target": "{billing.url}/v1/charges/{orderId}",
+    "parameters": [{ "name": "orderId", "in": "path", "type": "kotlin.String" }],
+    "sends": { "kind": "none" }, "response": "String", "receives": { "kind": "text" },
+    "keys": ["billing.url"], "host": "http://billing.example.com",
+    "hosts": [{ "key": "billing.url", "value": "http://billing.example.com",
+                "file": "billing/src/main/resources/application.yaml" }],
     "loc": { "file": "billing/src/main/kotlin/com/example/billing/BillingActivitiesImpl.kt", "line": 20 } },
-  { "kind": "client", "client": "ServiceClient", "call": "invoke", "operation": "pricing-quote",
-    "response": "Long", "loc": { "file": "billing/src/main/kotlin/com/example/billing/BillingActivitiesImpl.kt", "line": 21 } }
+  { "kind": "client", "service": "ServiceClient", "client": "ServiceClient", "call": "invoke",
+    "operation": "pricing-quote", "arguments": [{ "name": "payload", "position": 2, "type": "kotlin.String" }],
+    "response": "Long", "receives": { "kind": "type", "type": "kotlin.Long" },
+    "loc": { "file": "billing/src/main/kotlin/com/example/billing/BillingActivitiesImpl.kt", "line": 21 } }
 ]
 ```
 
 | Field | Says |
 | --- | --- |
 | `kind` | `http`: an HTTP request sent with `java.net.http.HttpClient`. `client`: a call of a client named with `--client`. |
+| `service` | The service the request goes to: for `http`, the first label of the host, with more labels where two hosts of the analysis would share a name, or the key where there is no host; for `client`, the client. |
 | `method` | The HTTP method, or `{name}` where the code computes it. Absent where the code that builds the request is not seen or does not say it. |
 | `target` | The URI: its constant parts as written, a part from a configuration property as `{key}`, any other computed part as `{name}`, by the name the code gives it. |
 | `client`, `call` | The simple name of the client's class, where it is known, and the function called. |
 | `operation` | What the client call asks for: the argument `--client` names, written as `target` is. Absent where no argument says it. |
+| `constant` | For `client`: the constant of the sources that gives `operation`, by its fully qualified name, where one does. |
+| `parameters` | For `http`: each `{…}` of the path (`in`: `path`) and each parameter of the query (`query`), in order, with the `type` of what gives it, fully qualified, and for a query parameter its `value` as `target` writes it. |
+| `arguments` | For `client`: the arguments of the call other than the one that gives `operation`, each with its `name` where known, its `position` from 1 and its `type`. |
+| `sends` | For `http`: what the request sends (see below). |
+| `receives` | What the code reads of the answer (see below). |
 | `response` | The type of what the request gives back, with simple names, where the code says it. |
 | `keys` | The configuration properties the request is made with, in the order the code uses them. |
 | `host` | The value configured for the key `target` starts with, as written, a `${…}` expression included. Absent where no configuration file of the model gives it. |
+| `hosts` | Each value configured for that key: the one without a profile and that of `%prod`, each with its `key`, `value`, `profile` (absent for none) and `file`. |
 | `class` | The class that makes the request, where several classes of the sources implement the activity type. |
 | `loc` | Where the request is made: the call that sends it, or the call of the client. |
+
+`sends` and `receives` are payloads. `kind` is `none` (no body), `text` (text whose structure
+is not read), `type` (an object of `type`, fully qualified with its type arguments), `not-read`
+(only `receives`: the code throws the answer away or never asks for its body) or `unknown`
+(the body is made, or the answer goes, where it cannot be followed). `format` is the library
+that writes or reads it, `jackson` or `kotlinx`; `mediaType` the `Content-Type` the request
+sets; `naming` the naming strategy of Quarkus for Jackson in the module that makes the
+request, where it sets one. A document from before these fields leaves them out, and a
+reader takes nothing for granted of what is absent.
+
+The models that `type` names are not in the document but in the `types` table of
+`inventory.json`, by fully qualified name: `kind` (`object`, `enum`, `alternatives`,
+`not-read`), `typeParameters`, `properties` (each with `name`, `type`, `optional`, `jsonName`,
+`serialName`), `values` of an enum, `subtypes` of alternatives with the property that tells
+them apart (`jsonDiscriminator`, `serialDiscriminator`), `jsonNaming`, `serialName`,
+`jsonName` and `loc`. Its schema is that of the inventory.
 
 ### Unknown nodes
 

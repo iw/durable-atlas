@@ -304,7 +304,7 @@ internal class SvgWriter(
         val style = ConstructStyles.of(node.kind)
         val decoration = decoration(node)
         val source = if (node.handler) node.nodes.firstNotNullOfOrNull { nodes[it]?.takeIf { start -> start.kind == NodeKind.START } } else nodes[node.id]
-        val link = childLink(source) ?: sourceLink(source)
+        val link = childLink(source) ?: endpointLink(source) ?: sourceLink(source)
         val shown = if (source?.interfaceName != null) "implementations of ${source.interfaceName}" else "this workflow type"
         val others = childDiagrams(source).size.takeIf { it > 1 }?.let { " ($it diagrams of $shown, none linked)" }.orEmpty()
         val box = node.box
@@ -564,6 +564,9 @@ internal class SvgWriter(
      * says which of them is started, and the card links none rather than the wrong one.
      */
     private fun childLink(node: IrNode?): String? = childDiagrams(node).singleOrNull()?.let(Links::encodePath)
+
+    /** The place on the endpoints page of what an activity card asks of other services, where the page is written with the diagram. */
+    private fun endpointLink(node: IrNode?): String? = node?.let { page.endpoints?.of(it) }
 
     /**
      * The diagrams written next to this one that show a workflow a child workflow card may

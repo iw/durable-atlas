@@ -1,5 +1,6 @@
 package io.github.iw.durableatlas.analyser.requests
 
+import io.github.iw.durableatlas.ir.ConfiguredValue
 import org.snakeyaml.engine.v2.api.LoadSettings
 import org.snakeyaml.engine.v2.api.lowlevel.Compose
 import org.snakeyaml.engine.v2.nodes.MappingNode
@@ -20,15 +21,31 @@ import kotlin.io.path.name
  *
  * @param files the files, the one whose values count most first
  */
-internal class Configuration private constructor(private val files: List<Map<String, String>>) {
+internal class Configuration private constructor(private val files: List<Map<String, String>>, private val names: List<String?>) {
     /** The value configured for [key]; `null` if no file gives one. */
     fun value(key: String): String? =
         files.firstNotNullOfOrNull { it[key] } ?: files.firstNotNullOfOrNull { it["$PROFILE$PRODUCTION.$key"] }
 
+    /**
+     * The values configured for [key]: the one without a profile and the one of the `prod`
+     * profile, each from the file whose values count most among those that give one.
+     */
+    fun values(key: String): List<ConfiguredValue> =
+        listOf(key to null, "$PROFILE$PRODUCTION.$key" to PRODUCTION).mapNotNull { (written, profile) ->
+            val index = files.indexOfFirst { written in it }
+            if (index < 0) null else ConfiguredValue(key, files[index].getValue(written), profile, names[index])
+        }
+
+    /** The naming strategy configured for the `ObjectMapper` that Quarkus makes, as written; `null` if none is. */
+    val jacksonNaming: String? get() = value(JACKSON_NAMING)?.trim()?.ifEmpty { null }
+
     val isEmpty: Boolean get() = files.all { it.isEmpty() }
 
     companion object {
-        val NONE = Configuration(emptyList())
+        val NONE = Configuration(emptyList(), emptyList())
+
+        /** The property that gives the naming strategy of the `ObjectMapper` Quarkus makes. */
+        const val JACKSON_NAMING = "quarkus.jackson.property-naming-strategy"
 
         /** The profile whose values count where a key has none without a profile. */
         const val PRODUCTION = "prod"
@@ -39,10 +56,17 @@ internal class Configuration private constructor(private val files: List<Map<Str
          * `application.properties` files, in the order in which their values count. A file that
          * cannot be read gives nothing, and [problems] is told why.
          */
-        fun read(files: List<Path>, problems: (String) -> Unit = {}): Configuration {
-            val ordered = files.sortedBy { rank(it.name) }
+        fun read(files: List<Path>, problems: (String) -> Unit = {}): Configuration = read(files.map { it to null }, problems)
+
+        /**
+         * Reads the files of [files], each named by its path relative to the root of the
+         * analysed repository, as [read] does.
+         */
+        @JvmName("readNamed")
+        fun read(files: List<Pair<Path, String?>>, problems: (String) -> Unit = {}): Configuration {
+            val ordered = files.sortedBy { rank(it.first.name) }
             return Configuration(
-                ordered.map { file ->
+                ordered.map { (file, _) ->
                     try {
                         val text = Files.readString(file)
                         if (file.name.endsWith(".properties")) properties(text) else yaml(text)
@@ -51,14 +75,15 @@ internal class Configuration private constructor(private val files: List<Map<Str
                         emptyMap()
                     }
                 },
+                ordered.map { it.second },
             )
         }
 
         /** A configuration of the texts of files named by [texts]' keys, for tests. */
         fun of(texts: Map<String, String>): Configuration =
-            Configuration(
-                texts.entries.sortedBy { rank(it.key) }.map { (name, text) -> if (name.endsWith(".properties")) properties(text) else yaml(text) },
-            )
+            texts.entries.sortedBy { rank(it.key) }.let { entries ->
+                Configuration(entries.map { (name, text) -> if (name.endsWith(".properties")) properties(text) else yaml(text) }, entries.map { it.key })
+            }
 
         /** YAML before properties, as their ordinals in Quarkus rank them. */
         private fun rank(name: String): Int = when {

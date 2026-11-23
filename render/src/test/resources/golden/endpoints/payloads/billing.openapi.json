@@ -1,0 +1,736 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "billing",
+    "version": "0000000000000000000000000000000000000000",
+    "description": "The operations of billing that the activities call, as their code calls them; written by Durable Atlas from the analysis of the sources. It is not the service's own description."
+  },
+  "servers": [
+    {
+      "url": "http://billing.example.com",
+      "description": "From billing.url in app/src/main/resources/application.yaml.",
+      "x-config-key": "billing.url",
+      "x-config-file": "app/src/main/resources/application.yaml"
+    },
+    {
+      "url": "https://billing.prod.example.com",
+      "description": "Profile prod. From billing.url in app/src/main/resources/application.yaml.",
+      "x-config-key": "billing.url",
+      "x-config-file": "app/src/main/resources/application.yaml",
+      "x-profile": "prod"
+    }
+  ],
+  "paths": {
+    "/bookings": {
+      "put": {
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Booking"
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "The code reads the answer as Booking.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Booking"
+                }
+              }
+            }
+          }
+        },
+        "x-used-by": [
+          {
+            "activity": "Serial",
+            "interface": "payloads.Payloads",
+            "workflows": [
+              "Paying"
+            ],
+            "source": "app/src/main/kotlin/payloads/Payloads.kt:94"
+          }
+        ]
+      }
+    },
+    "/charges": {
+      "post": {
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Charge"
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "The code reads the answer as Receipt.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Receipt"
+                }
+              }
+            }
+          }
+        },
+        "x-used-by": [
+          {
+            "activity": "Helper",
+            "interface": "payloads.Payloads",
+            "workflows": [],
+            "source": "app/src/main/kotlin/payloads/Payloads.kt:119"
+          },
+          {
+            "activity": "Jackson",
+            "interface": "payloads.Payloads",
+            "workflows": [
+              "Paying"
+            ],
+            "source": "app/src/main/kotlin/payloads/Payloads.kt:75"
+          }
+        ]
+      }
+    },
+    "/deep/{id}": {
+      "get": {
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-kotlin-type": "kotlin.String"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "The code reads the answer as Receipt.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Receipt"
+                }
+              }
+            }
+          }
+        },
+        "x-used-by": [
+          {
+            "activity": "Deep",
+            "interface": "payloads.Payloads",
+            "workflows": [],
+            "source": "app/src/main/kotlin/payloads/Payloads.kt:164"
+          }
+        ]
+      }
+    },
+    "/events": {
+      "get": {
+        "responses": {
+          "default": {
+            "description": "The code reads the answer as List<Event>.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Event"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-used-by": [
+          {
+            "activity": "Events",
+            "interface": "payloads.Payloads",
+            "workflows": [],
+            "source": "app/src/main/kotlin/payloads/Payloads.kt:144"
+          }
+        ]
+      }
+    },
+    "/files": {
+      "post": {
+        "requestBody": {
+          "description": "A body is sent, but where it comes from could not be followed.",
+          "required": true,
+          "content": {
+            "*/*": {}
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "The code does not read the answer: it is discarded, or its body is never asked for."
+          }
+        },
+        "x-used-by": [
+          {
+            "activity": "File",
+            "interface": "payloads.Payloads",
+            "workflows": [],
+            "source": "app/src/main/kotlin/payloads/Payloads.kt:139"
+          }
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "responses": {
+          "default": {
+            "description": "The code keeps the answer as text and does not convert it.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "description": "Kept as text."
+                }
+              }
+            }
+          }
+        },
+        "x-used-by": [
+          {
+            "activity": "Empty",
+            "interface": "payloads.Payloads",
+            "workflows": [],
+            "source": "app/src/main/kotlin/payloads/Payloads.kt:107"
+          }
+        ]
+      }
+    },
+    "/lines/{id}": {
+      "get": {
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-kotlin-type": "kotlin.String"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-kotlin-type": "kotlin.Int",
+            "x-value": "{page}"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "The code reads the answer as Page<Line>.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_Line"
+                }
+              }
+            }
+          }
+        },
+        "x-used-by": [
+          {
+            "activity": "Stream",
+            "interface": "payloads.Payloads",
+            "workflows": [],
+            "source": "app/src/main/kotlin/payloads/Payloads.kt:124"
+          }
+        ]
+      }
+    },
+    "/lost": {
+      "get": {
+        "responses": {
+          "default": {
+            "description": "What the code makes of the answer could not be followed."
+          }
+        },
+        "x-used-by": [
+          {
+            "activity": "Lost",
+            "interface": "payloads.Payloads",
+            "workflows": [],
+            "source": "app/src/main/kotlin/payloads/Payloads.kt:130"
+          }
+        ]
+      }
+    },
+    "/notes": {
+      "post": {
+        "requestBody": {
+          "description": "The code puts the body together as text; its structure is not read.",
+          "required": true,
+          "content": {
+            "text/plain": {
+              "schema": {
+                "type": "string",
+                "description": "Text the code puts together."
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "The code does not read the answer: it is discarded, or its body is never asked for."
+          }
+        },
+        "x-used-by": [
+          {
+            "activity": "Text",
+            "interface": "payloads.Payloads",
+            "workflows": [],
+            "source": "app/src/main/kotlin/payloads/Payloads.kt:102"
+          }
+        ]
+      }
+    },
+    "/pair": {
+      "get": {
+        "responses": {
+          "default": {
+            "description": "The code reads the answer as Pair<String, Int>.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pair_String_Int"
+                }
+              }
+            }
+          }
+        },
+        "x-used-by": [
+          {
+            "activity": "Pair",
+            "interface": "payloads.Payloads",
+            "workflows": [],
+            "source": "app/src/main/kotlin/payloads/Payloads.kt:159"
+          }
+        ]
+      }
+    },
+    "/refunds/{id}": {
+      "patch": {
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-kotlin-type": "kotlin.String"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Line"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "The code reads the answer as List<Line>.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Line"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-used-by": [
+          {
+            "activity": "Bytes",
+            "interface": "payloads.Payloads",
+            "workflows": [],
+            "source": "app/src/main/kotlin/payloads/Payloads.kt:84"
+          }
+        ]
+      }
+    },
+    "/scans": {
+      "get": {
+        "responses": {
+          "default": {
+            "description": "The code reads the answer as Scan.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Scan"
+                }
+              }
+            }
+          }
+        },
+        "x-used-by": [
+          {
+            "activity": "Scans",
+            "interface": "payloads.Payloads",
+            "workflows": [],
+            "source": "app/src/main/kotlin/payloads/Payloads.kt:149"
+          }
+        ]
+      }
+    },
+    "/tree": {
+      "get": {
+        "responses": {
+          "default": {
+            "description": "The code reads the answer as Node.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Node"
+                }
+              }
+            }
+          }
+        },
+        "x-used-by": [
+          {
+            "activity": "Tree",
+            "interface": "payloads.Payloads",
+            "workflows": [],
+            "source": "app/src/main/kotlin/payloads/Payloads.kt:154"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Booking": {
+        "type": "object",
+        "x-kotlin-type": "payloads.Booking",
+        "required": [
+          "booking_id"
+        ],
+        "properties": {
+          "booking_id": {
+            "type": "string",
+            "x-kotlin-name": "id"
+          },
+          "level": {
+            "$ref": "#/components/schemas/Level"
+          }
+        }
+      },
+      "Charge": {
+        "type": "object",
+        "x-kotlin-type": "payloads.Charge",
+        "required": [
+          "orderId",
+          "total",
+          "method"
+        ],
+        "properties": {
+          "orderId": {
+            "type": "string"
+          },
+          "total": {
+            "$ref": "#/components/schemas/Money",
+            "x-kotlin-name": "amount"
+          },
+          "method": {
+            "$ref": "#/components/schemas/Method"
+          },
+          "key": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "Event": {
+        "x-kotlin-type": "payloads.Event",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Event.Placed"
+          },
+          {
+            "$ref": "#/components/schemas/Event.Dropped"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "kind",
+          "mapping": {
+            "placed": "#/components/schemas/Event.Placed",
+            "dropped": "#/components/schemas/Event.Dropped"
+          }
+        }
+      },
+      "Event.Dropped": {
+        "type": "object",
+        "x-kotlin-type": "payloads.Event.Dropped",
+        "required": [
+          "reason"
+        ],
+        "properties": {
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "Event.Placed": {
+        "type": "object",
+        "x-kotlin-type": "payloads.Event.Placed",
+        "required": [
+          "at"
+        ],
+        "properties": {
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Level": {
+        "type": "string",
+        "x-kotlin-type": "payloads.Level",
+        "enum": [
+          "standard",
+          "express"
+        ]
+      },
+      "Line": {
+        "type": "object",
+        "x-kotlin-type": "payloads.Line",
+        "required": [
+          "sku",
+          "quantity"
+        ],
+        "properties": {
+          "sku": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Method": {
+        "type": "string",
+        "x-kotlin-type": "payloads.Method",
+        "enum": [
+          "CARD",
+          "bank-transfer"
+        ]
+      },
+      "Money": {
+        "type": "object",
+        "x-kotlin-type": "payloads.Money",
+        "required": [
+          "cents"
+        ],
+        "properties": {
+          "cents": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "rate": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Rate"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "Node": {
+        "type": "object",
+        "x-kotlin-type": "payloads.Node",
+        "required": [
+          "name",
+          "parent",
+          "children"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "parent": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Node"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Node"
+            }
+          }
+        }
+      },
+      "Page_Line": {
+        "type": "object",
+        "x-kotlin-type": "payloads.Page<payloads.Line>",
+        "required": [
+          "items",
+          "next"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Line"
+            }
+          },
+          "next": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "Pair_String_Int": {
+        "type": "object",
+        "x-kotlin-type": "kotlin.Pair<kotlin.String, kotlin.Int>",
+        "required": [
+          "first",
+          "second"
+        ],
+        "properties": {
+          "first": {
+            "type": "string"
+          },
+          "second": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Rate": {
+        "description": "Not read: the analysis did not have the source of Rate, so its fields are not known.",
+        "x-kotlin-type": "org.example.rates.Rate"
+      },
+      "Receipt": {
+        "type": "object",
+        "x-kotlin-type": "payloads.Receipt",
+        "required": [
+          "charge-id",
+          "taken-at",
+          "lines",
+          "totals"
+        ],
+        "properties": {
+          "charge-id": {
+            "type": "string",
+            "x-kotlin-name": "chargeId"
+          },
+          "taken-at": {
+            "type": "string",
+            "format": "date-time",
+            "x-kotlin-name": "takenAt"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Line"
+            }
+          },
+          "totals": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Money"
+            }
+          }
+        }
+      },
+      "Scan": {
+        "x-kotlin-type": "payloads.Scan",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Scan.Seen"
+          },
+          {
+            "$ref": "#/components/schemas/Scan.Gone"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "seen": "#/components/schemas/Scan.Seen",
+            "gone": "#/components/schemas/Scan.Gone"
+          }
+        }
+      },
+      "Scan.Gone": {
+        "type": "object",
+        "x-kotlin-type": "payloads.Scan.Gone",
+        "required": [
+          "at"
+        ],
+        "properties": {
+          "at": {
+            "type": "string"
+          }
+        }
+      },
+      "Scan.Seen": {
+        "type": "object",
+        "x-kotlin-type": "payloads.Scan.Seen",
+        "required": [
+          "at"
+        ],
+        "properties": {
+          "at": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

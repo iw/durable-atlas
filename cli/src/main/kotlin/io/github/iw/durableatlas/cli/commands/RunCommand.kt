@@ -155,6 +155,7 @@ class RunCommand : StageCommand(
                     }
                 },
             )
+            Summaries.endpoints(this, rendered)
             put("exitCode", status)
         }
 
@@ -182,6 +183,7 @@ class RunCommand : StageCommand(
             if (leaving) append("${Summaries.leftOut(rendered.diagrams.sumOf { it.leftOutCalls })}, listed on the page of each workflow\n")
             Summaries.shortfallLines(rendered.diagrams.mapIndexed { index, diagram -> Summaries.Shortfall(names[index], diagram.missing, diagram.simplified) })
                 .forEach { append(it).append('\n') }
+            Summaries.endpointsLine(rendered)?.let { append(it).append('\n') }
             append(rendered.outDir.resolve(rendered.index))
         }
 

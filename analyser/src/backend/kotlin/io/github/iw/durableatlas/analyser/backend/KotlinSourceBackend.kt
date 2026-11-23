@@ -9,6 +9,7 @@ import com.intellij.psi.PsiNewExpression
 import com.intellij.psi.util.PsiTreeUtil
 import io.github.iw.durableatlas.analyser.code.Block
 import io.github.iw.durableatlas.analyser.code.ClassDecl
+import io.github.iw.durableatlas.analyser.code.ClassShape
 import io.github.iw.durableatlas.analyser.code.Code
 import io.github.iw.durableatlas.analyser.code.Construction
 import io.github.iw.durableatlas.analyser.code.ConstructorDecl
@@ -64,6 +65,7 @@ internal class KotlinSourceBackend(
     private val classes = HashMap<String, ClassDecl?>()
     private val functionsByClass = HashMap<String, List<FunctionDecl>>()
     private val propertiesByClass = HashMap<String, List<PropertyDecl>>()
+    private val shapes = HashMap<String, ClassShape?>()
     private val functionDecls = HashMap<FunctionId, FunctionDecl?>()
     private val bodies = HashMap<FunctionId, Block?>()
     private val initializers = HashMap<PropertyId, Code?>()
@@ -238,6 +240,23 @@ internal class KotlinSourceBackend(
                 }
             }
         }
+
+    override fun shape(className: String): ClassShape? =
+        shapes.cached(className) {
+            val source = sourceClassIndex[className]
+            failures.guard({ "the shape of $className" }) {
+                if (source != null) {
+                    analyze(source.psi) { with(reader) { sourceShape(source.psi, location(source.psi as KtDeclaration)) } }
+                } else if (findClass(className) != null) {
+                    inLibrary(className) { symbol -> with(reader) { libraryShape(symbol) } }
+                } else {
+                    null
+                }
+            }
+        }
+
+    override fun imported(file: String, name: String): String? =
+        session.files.firstOrNull { it.path == file }?.let { with(reader) { imported(it.psi, name) } }
 
     private fun <T> libraryMembers(className: String, read: KaSession.(KaClassSymbol) -> List<T>): List<T> {
         if (findClass(className) == null) return emptyList()

@@ -2,6 +2,7 @@ package io.github.iw.durableatlas.ir.testing
 
 import com.networknt.schema.InputFormat
 import com.networknt.schema.Schema
+import com.networknt.schema.SchemaLocation
 import com.networknt.schema.SchemaRegistry
 import com.networknt.schema.SpecificationVersion
 import io.github.iw.durableatlas.ir.IrSchema
@@ -29,6 +30,16 @@ class JsonSchemaChecker private constructor(private val schema: Schema) {
         fun forSchema(schemaJson: String): JsonSchemaChecker =
             JsonSchemaChecker(
                 SchemaRegistry.withDefaultDialect(SpecificationVersion.DRAFT_2020_12).getSchema(schemaJson),
+            )
+
+        /**
+         * The schema at [iri], with every schema it refers to, each read by its IRI through
+         * [texts], which gives `null` for one it does not have. Nothing is fetched.
+         */
+        fun forSchemaAt(iri: String, texts: (String) -> String?): JsonSchemaChecker =
+            JsonSchemaChecker(
+                SchemaRegistry.withDefaultDialect(SpecificationVersion.DRAFT_2020_12) { builder -> builder.schemas { id -> texts(id) } }
+                    .getSchema(SchemaLocation.of(iri)),
             )
 
         /** Loads the schema from the classpath of the calling test. */

@@ -6,6 +6,7 @@ import io.github.iw.durableatlas.analyser.code.Callee
 import io.github.iw.durableatlas.analyser.code.CalleeKind
 import io.github.iw.durableatlas.analyser.code.ClassDecl
 import io.github.iw.durableatlas.analyser.code.ClassKind
+import io.github.iw.durableatlas.analyser.code.ClassShape
 import io.github.iw.durableatlas.analyser.code.Constant
 import io.github.iw.durableatlas.analyser.code.ConstructorDecl
 import io.github.iw.durableatlas.analyser.code.FunctionDecl
@@ -13,6 +14,8 @@ import io.github.iw.durableatlas.analyser.code.FunctionId
 import io.github.iw.durableatlas.analyser.code.ParameterDecl
 import io.github.iw.durableatlas.analyser.code.PropertyDecl
 import io.github.iw.durableatlas.analyser.code.PropertyId
+import io.github.iw.durableatlas.analyser.code.ShapeEntry
+import io.github.iw.durableatlas.analyser.code.ShapeProperty
 import io.github.iw.durableatlas.analyser.code.TypeRef
 import io.github.iw.durableatlas.analyser.code.WrittenAnnotations
 import io.github.iw.durableatlas.ir.SourceLocation
@@ -29,6 +32,7 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaEnumEntrySymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaJavaFieldSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaNamedClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
@@ -36,6 +40,7 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolLocation
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolModality
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolOrigin
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolVisibility
+import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.markers.KaNamedSymbol
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
@@ -49,12 +54,14 @@ import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtConstructor
 import org.jetbrains.kotlin.psi.KtDeclaration
+import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtNullableType
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.jetbrains.kotlin.psi.KtTypeElement
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtUserType
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
@@ -541,6 +548,135 @@ internal class SymbolReader(
         )
     }
 
+    // ---- what serialisers see of classes
+
+    /** What a serialiser sees of a class of the sources, as [psi] declares it. */
+    fun KaSession.sourceShape(psi: KtClassOrObject, location: SourceLocation?): ClassShape? {
+        val symbol = psi.classSymbol ?: return null
+        val constructorProperties = psi.primaryConstructorParameters.filter { it.hasValOrVar() }.mapNotNull { parameter ->
+            val property = (parameter.symbol as? KaValueParameterSymbol)?.generatedPrimaryConstructorProperty ?: return@mapNotNull null
+            shapeProperty(property, parameter, inConstructor = true, hasDefault = parameter.hasDefaultValue())
+        }
+        val bodyProperties = psi.declarations.filterIsInstance<KtProperty>().mapNotNull { declaration ->
+            val property = declaration.symbol as? KaPropertySymbol ?: return@mapNotNull null
+            shapeProperty(property, declaration, inConstructor = false, hasDefault = declaration.initializer != null || declaration.delegateExpression != null)
+        }
+        val entries = psi.declarations.filterIsInstance<KtEnumEntry>().map { entry ->
+            ShapeEntry(entry.name.orEmpty(), (annotationsOf(entry.symbol) + writtenAnnotations(entry, all = true)).distinctBy { it.type })
+        }
+        return shape(symbol, constructorProperties + bodyProperties, entries, location, annotationsOf(symbol) + writtenAnnotations(psi, all = false))
+    }
+
+    /**
+     * What a serialiser sees of a Kotlin class of a library, as its metadata tells it; `null`
+     * for a class of Java, whose properties are its getters and fields, which are not read.
+     */
+    fun KaSession.libraryShape(symbol: KaClassSymbol): ClassShape? {
+        if (symbol !is KaNamedClassSymbol || symbol.origin == KaSymbolOrigin.JAVA_LIBRARY || symbol.origin == KaSymbolOrigin.JAVA_SOURCE) return null
+        val primary = symbol.declaredMemberScope.constructors.firstOrNull { it.isPrimary }
+        val parameters = primary?.valueParameters.orEmpty().map { it.name.asString() }
+        val defaults = primary?.valueParameters.orEmpty().filter { it.hasDefaultValue }.map { it.name.asString() }.toSet()
+        val properties = symbol.declaredMemberScope.callables.filterIsInstance<KaPropertySymbol>().toList()
+            .map { property ->
+                val name = property.name.asString()
+                // A library's metadata does not always say that a property comes from the primary
+                // constructor; one named as a parameter of it does.
+                val inConstructor = property.isFromPrimaryConstructor || name in parameters
+                shapeProperty(property, null, inConstructor, hasDefault = inConstructor && name in defaults)
+            }
+            .sortedWith(compareBy({ if (it.inConstructor) parameters.indexOf(it.name) else Int.MAX_VALUE }, { it.name }))
+        val entries = symbol.staticDeclaredMemberScope.callables.filterIsInstance<KaEnumEntrySymbol>().toList()
+            .map { ShapeEntry(it.name.asString(), annotationsOf(it)) }
+        return shape(symbol, properties, entries, null, annotationsOf(symbol))
+    }
+
+    private fun KaSession.shape(
+        symbol: KaClassSymbol,
+        properties: List<ShapeProperty>,
+        entries: List<ShapeEntry>,
+        location: SourceLocation?,
+        annotations: List<AnnotationUse>,
+    ): ClassShape? {
+        val classId = symbol.classId ?: return null
+        if (symbol.classKind == KaClassKind.ANNOTATION_CLASS) return null
+        return ClassShape(
+            name = classId.asFqNameString(),
+            kind = when (symbol.classKind) {
+                KaClassKind.INTERFACE -> ClassKind.INTERFACE
+                KaClassKind.ENUM_CLASS -> ClassKind.ENUM
+                KaClassKind.OBJECT, KaClassKind.COMPANION_OBJECT, KaClassKind.ANONYMOUS_OBJECT -> ClassKind.OBJECT
+                else -> ClassKind.CLASS
+            },
+            isSealed = symbol.modality == KaSymbolModality.SEALED,
+            isAbstract = symbol.modality == KaSymbolModality.ABSTRACT || symbol.modality == KaSymbolModality.SEALED || symbol.classKind == KaClassKind.INTERFACE,
+            typeParameters = (symbol as? KaNamedClassSymbol)?.typeParameters.orEmpty().map { it.name.asString() },
+            annotations = annotations,
+            properties = properties,
+            entries = entries,
+            location = location,
+        )
+    }
+
+    private fun KaSession.shapeProperty(symbol: KaPropertySymbol, declaration: KtCallableDeclaration?, inConstructor: Boolean, hasDefault: Boolean): ShapeProperty =
+        ShapeProperty(
+            name = symbol.name.asString(),
+            type = declaredType(symbol.returnType, declaration?.typeReference),
+            annotations = (annotationsOf(symbol) + (symbol.backingFieldSymbol?.let { annotationsOf(it) }.orEmpty()) + writtenAnnotations(declaration, all = true))
+                .distinctBy { it.type },
+            inConstructor = inConstructor,
+            hasDefault = hasDefault,
+            isPublic = symbol.visibility == KaSymbolVisibility.PUBLIC,
+            hasBackingField = symbol.hasBackingField,
+        )
+
+    /**
+     * [type], which [reference] writes, with each class that does not resolve named by
+     * [TypeRef.unresolved] at every level: by the name an import of the file gives it, or else
+     * by the name as written. Where a class does not resolve, the type arguments written with it
+     * are read one by one.
+     */
+    fun KaSession.declaredType(type: KaType, reference: KtTypeReference?): TypeRef {
+        val resolved = typeRef(type)
+        val element = reference?.typeElement ?: return resolved
+        return written(resolved, element, reference.containingKtFile)
+    }
+
+    private fun KaSession.written(resolved: TypeRef, element: KtTypeElement, file: KtFile): TypeRef {
+        var inner: KtTypeElement? = element
+        var nullable = false
+        while (inner is KtNullableType) {
+            nullable = true
+            inner = inner.innerType
+        }
+        val user = inner as? KtUserType ?: return resolved
+        val written = user.typeArguments.map { it.typeReference }
+        if (resolved.name == null && resolved.arguments.isEmpty() && resolved.text.startsWith(ERROR_PREFIX)) {
+            val arguments = written.map { argument ->
+                if (argument == null) TypeRef(name = null, text = "*") else declaredType(argument.type, argument)
+            }
+            val name = qualifiedName(user, file)
+            val text = name + (if (arguments.isEmpty()) "" else arguments.joinToString(", ", "<", ">") { it.text }) + if (nullable) "?" else ""
+            return TypeRef(name = null, text = text, nullable = nullable, arguments = arguments, unresolved = name)
+        }
+        if (resolved.arguments.size != written.size) return resolved
+        return resolved.copy(
+            arguments = resolved.arguments.zip(written).map { (argument, reference) ->
+                reference?.typeElement?.let { written(argument, it, file) } ?: argument
+            },
+        )
+    }
+
+    /** The name [user] writes, qualified by the import that gives it where there is one. */
+    private fun qualifiedName(user: KtUserType, file: KtFile): String {
+        if (user.qualifier != null) return user.text.substringBefore('<').replace(" ", "")
+        val name = user.referencedName ?: return user.text
+        return imported(file, name) ?: name
+    }
+
+    /** The fully qualified name that an import of [file] gives [name]. */
+    fun imported(file: KtFile, name: String): String? =
+        file.importDirectives.firstOrNull { !it.isAllUnder && it.importedName?.asString() == name }?.importedFqName?.asString()
+
     /** The declaration of [symbol] in the analysed sources, if that is where it comes from. */
     private fun sourceDeclaration(symbol: KaSymbol): KtDeclaration? {
         // Asking a library symbol for its PSI would decompile the class it belongs to. Members
@@ -557,6 +693,9 @@ internal class SymbolReader(
 
         /** The parameter of an annotation that an argument without a name is given to. */
         const val VALUE = "value"
+
+        /** How the compiler renders a type whose class it could not find. */
+        const val ERROR_PREFIX = "ERROR"
 
         /** Where a symbol comes from that is written in the Kotlin or Java sources. */
         val SOURCE_ORIGINS = setOf(KaSymbolOrigin.SOURCE, KaSymbolOrigin.SOURCE_MEMBER_GENERATED, KaSymbolOrigin.JAVA_SOURCE)
