@@ -34,7 +34,7 @@ batik = "1.20"
 # Test only: the official JSON Schema of OpenAPI 3.1 (2022-10-07), which the tests check the OpenAPI
 # documents of the endpoints page against. Only its schema files are used, none of its classes, so
 # its dependencies stay out.
-vertx-openapi = "4.5.10"
+vertx-openapi = "5.2.3"
 # Reads the application.yaml files whose values the requests of activities are made with. YAML 1.2,
 # with no dependencies of its own.
 snakeyaml-engine = "3.2"
